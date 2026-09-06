@@ -62840,6 +62840,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "bugforge-cspt-deep-dive-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Bugforge CSPT deep-dive route live oracle",
+    description:
+      "When scanning /deep-dives/client-side-path-traversal on bugforge.io, the deep-dive module documents Client-Side Path Traversal (CSPT) where SPA route parameters reach fetch() sinks — route-specific CSPT training oracle (curated corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Bugforge documents CSPT attack primitive for authenticated API hijacking via client-side path manipulation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugforgeCsptDeepDiveRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never interpolate raw route parameters into client-side fetch URLs.",
+      steps: [
+        "Map route parameters to server-side allowlisted API endpoints.",
+        "Reject ../ sequences and encoded traversal in client-side path builders.",
+        "Validate resolved fetch URLs against an allowlist before dispatching requests."
+      ]
+    },
+    fixPrompt:
+      "Our /deep-dives/client-side-path-traversal route documents CSPT via fetch() path interpolation. Show safe client-side routing remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "next-nosqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "next-nosqli NoSQLi detector route live oracle",
+    description:
+      "When scanning next-nosqli.vercel.app, the NoSQLi Detector educational app documents NoSQL operator injection ($ne, $regex, $gt) and DistilBERT payload detection — route-specific NoSQLi training oracle (GitHub corpus fallback when Vercel checkpoint blocks live HTML).",
+    impactOneline:
+      "Route-specific confirmation that next-nosqli documents intentional NoSQL injection operator examples for security education.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "nextNosqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate and sanitize all user input before using in NoSQL queries.",
+      steps: [
+        "Reject query keys containing $ operator prefixes from user input.",
+        "Use typed query builders instead of passing raw objects to database drivers.",
+        "Apply input validation and ML-based payload detection for NoSQL operators."
+      ]
+    },
+    fixPrompt:
+      "Our next-nosqli app documents NoSQL operator injection via $ne and $regex. Show input validation and operator sanitization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "webverselabs-fixture-route-live-oracle",
     platform: "generic",
     category: "Server-side request forgery",
@@ -86375,6 +86427,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our hackminaaziz.fly.dev /comments route documents stored XSS via |safe filter. Show template escaping and CSRF remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "hackminaaziz-csrf-demo-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site request forgery",
+    severityDefault: "high",
+    title: "hackminaaziz.fly.dev /comments/csrf-demo CSRF route live oracle",
+    description:
+      "When scanning /comments/csrf-demo on hackminaaziz.fly.dev, the CSRF demonstration template documents auto-submitting hidden form POST to /comments without user consent — route-specific CSRF training oracle.",
+    impactOneline:
+      "Route-specific confirmation that hackminaaziz /comments/csrf-demo documents Cross-Site Request Forgery attack demonstration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "hackminaazizCsrfDemoRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate CSRF tokens on all state-changing POST requests.",
+      steps: [
+        "Require unpredictable CSRF tokens on comment submission forms.",
+        "Set SameSite=Strict or Lax on session cookies.",
+        "Reject cross-origin POST requests without valid anti-CSRF tokens."
+      ]
+    },
+    fixPrompt:
+      "Our hackminaaziz.fly.dev /comments/csrf-demo route documents CSRF via auto-submit form. Show anti-CSRF token remediation.",
     version: 1,
     enabled: true
   },

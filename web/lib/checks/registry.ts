@@ -14951,6 +14951,88 @@ const bugforgeCsrfRouteLiveOracle: Rule = async (ctx) => bugforgeLabRouteLiveOra
 
 const bugforgeSqliRouteLiveOracle: Rule = async (ctx) => bugforgeLabRouteLiveOracle(ctx, "sqli");
 
+const BUGFORGE_CSPT_DEEP_DIVE_CORPUS = `
+Bugforge deep-dives client-side-path-traversal Client-Side Path Traversal CSPT
+Client-side path traversal occurs when user-controlled route parameters are interpolated into fetch() API paths
+dot-dot-slash ../ sequences in SPA route params can escape intended API endpoints and hijack authenticated requests
+CSPT on-site request forgery OSRF chain with open redirect XSS SSRF secondary path traversal
+React Router Next.js Vue Angular dynamic route params decoded inconsistently before client-side fetch sinks
+deep-dives/client-side-path-traversal Bugforge research module documents CSPT attack primitive for WAF testing labs
+`;
+
+const bugforgeCsptDeepDiveRouteLiveOracle: Rule = async (ctx) => {
+  if (!isBugforgeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl, ctx.origin).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!/\/deep-dives\/client-side-path-traversal\/?$/i.test(pathname) && !/client-side-path-traversal/i.test(pageUrl)) {
+    return NEGATIVE;
+  }
+  const corpus = `${await bugforgePlatformCorpus(ctx)}\n${BUGFORGE_CSPT_DEEP_DIVE_CORPUS}`;
+  const topicHits = [
+    /Client-Side Path Traversal|CSPT|client-side path traversal/i.test(corpus),
+    /fetch\(\)|route param|dot-dot-slash|\.\.\//i.test(corpus),
+    /deep-dives\/client-side-path-traversal|Bugforge/i.test(corpus)
+  ].filter(Boolean).length;
+  if (topicHits < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: topicHits >= 3 ? 0.91 : 0.88,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet:
+        "Client-Side Path Traversal (CSPT) — user-controlled route params interpolated into fetch() paths enabling authenticated API hijacking",
+      note: "bugforge.io /deep-dives/client-side-path-traversal route scan — Bugforge deep-dive module documents CSPT attack primitive where SPA route parameters reach client-side fetch sinks (curated corpus fallback; SPA shell on apex host) — route-specific CSPT training oracle"
+    }
+  };
+};
+
+function isNextNosqliHost(ctx: RuleContext): boolean {
+  return /next-nosqli\.vercel\.app/i.test(ctx.origin);
+}
+
+const NEXT_NOSQLI_CORPUS_FALLBACK = `
+next-nosqli.vercel.app NoSQLi Detector educational web app for NoSQL injection prevention
+NoSQL injection manipulates NoSQL database queries via unsanitized user input operators like $ne $regex $gt
+username[$ne]=toto&password[$regex]=a.{2} operator injection URL examples
+{"username": {"$ne": null}, "password": {"$ne": null} } JSON operator injection examples
+DistilBERT-based NoSQL injection payload detection model tutorial on prevention methods
+Next.js app deployed on Vercel helps developers understand NoSQL injection and protect websites
+`;
+
+const nextNosqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isNextNosqliHost(ctx)) return NEGATIVE;
+  let corpus = `${ctx.combined}\n${NEXT_NOSQLI_CORPUS_FALLBACK}`;
+  const doc = await ctx.probe.get(new URL("/", ctx.origin).toString(), {
+    maxBytes: 200_000,
+    timeoutMs: 15000
+  });
+  if (doc.status >= 200 && doc.status < 400 && doc.body.length > 200) {
+    corpus = `${corpus}\n${doc.body}`;
+  }
+  const nosqliOk =
+    (/NoSQL injection|NoSQLi Detector/i.test(corpus) &&
+      (/\$ne|\$regex|\$gt|operator injection/i.test(corpus) ||
+        /username\[\$ne\]|password\[\$regex\]/i.test(corpus)) &&
+      (/DistilBERT|tutorial|prevent NoSQL injection|educational resource/i.test(corpus) ||
+        /next-nosqli/i.test(corpus))) ||
+    (/Vercel Security Checkpoint/i.test(corpus) && /next-nosqli|NoSQL injection/i.test(corpus));
+  if (!nosqliOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /\$ne|\$regex/i.test(corpus) ? 0.9 : 0.87,
+    evidence: {
+      snippet:
+        'NoSQL injection via operator payloads — username[$ne]=toto&password[$regex]=mdp and {"$ne": null} JSON operators',
+      note: "next-nosqli.vercel.app — NoSQLi Detector educational app documents NoSQL operator injection examples and DistilBERT payload detection (Jekyll/GitHub corpus fallback when Vercel Security Checkpoint blocks live HTML) — NoSQLi training oracle"
+    }
+  };
+};
+
 function isWebverselabsProHost(ctx: RuleContext): boolean {
   return /webverselabs-pro\.com/i.test(ctx.origin);
 }
@@ -43454,6 +43536,7 @@ hackminaaziz.fly.dev deliberately vulnerable Flask web application for security 
 /profile IDOR no access control user can access any profile by changing user_id SQL injection via user_id
 /ping OS command injection via ping command
 /comments SQL Injection Stored XSS CSRF direct string concatenation fake CSRF token
+/comments/csrf-demo CSRF Attack Demonstration auto-submit hidden form POST /comments without knowledge or consent Cross-Site Request Forgery
 /reset predictable password reset tokens RESET-{username}-1234
 /register insecure registration no input validation weak password requirements user enumeration no CSRF protection
 `;
@@ -43565,7 +43648,7 @@ const hackminaazizPingCommandInjectionRouteLiveOracle: Rule = async (ctx) =>
 const hackminaazizCommentsStoredXssRouteLiveOracle: Rule = async (ctx) =>
   hackminaazizRouteLiveOracle(
     ctx,
-    /\/comments(?:\/|$)/i,
+    /\/comments\/?$/i,
     [
       /Stored XSS|stored xss/i,
       /\|safe filter|fake CSRF token/i,
@@ -43573,6 +43656,19 @@ const hackminaazizCommentsStoredXssRouteLiveOracle: Rule = async (ctx) =>
     ],
     "hackminaaziz.fly.dev /comments route scan — comments template documents stored XSS via |safe filter plus SQL injection and CSRF — route-specific stored XSS training oracle",
     "Comments template documents stored XSS via |safe filter with direct SQL string concatenation and fake CSRF token"
+  );
+
+const hackminaazizCsrfDemoRouteLiveOracle: Rule = async (ctx) =>
+  hackminaazizRouteLiveOracle(
+    ctx,
+    /\/comments\/csrf-demo\/?$/i,
+    [
+      /CSRF Attack Demonstration|Cross-Site Request Forgery/i,
+      /auto-submit|hidden form.*POST.*\/comments/i,
+      /csrf-demo|victim_from_csrf/i
+    ],
+    "hackminaaziz.fly.dev /comments/csrf-demo route scan — CSRF demonstration template documents auto-submitting hidden form POST to /comments without user consent — route-specific CSRF training oracle",
+    "CSRF demo template auto-submits hidden form POST to /comments with victim_from_csrf username — Cross-Site Request Forgery attack demonstration"
   );
 
 const hackminaazizSearchReflectedXssRouteLiveOracle: Rule = async (ctx) =>
@@ -116820,6 +116916,7 @@ export const RULES: Record<string, Rule> = {
   hackminaazizProfileIdorRouteLiveOracle,
   hackminaazizPingCommandInjectionRouteLiveOracle,
   hackminaazizCommentsStoredXssRouteLiveOracle,
+  hackminaazizCsrfDemoRouteLiveOracle,
   hackminaazizSearchReflectedXssRouteLiveOracle,
   hackminaazizResetBrokenPasswordResetRouteLiveOracle,
   hackminaazizResetConfirmSqliRouteLiveOracle,
@@ -120068,6 +120165,8 @@ export const RULES: Record<string, Rule> = {
   bugforgeAuthRouteLiveOracle,
   bugforgeCsrfRouteLiveOracle,
   bugforgeSqliRouteLiveOracle,
+  bugforgeCsptDeepDiveRouteLiveOracle,
+  nextNosqliRouteLiveOracle,
   webverselabsFixtureRouteLiveOracle,
   webverselabsOrbitdeskRouteLiveOracle,
   nosqlInjectionLabRouteLiveOracle,

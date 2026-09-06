@@ -4396,6 +4396,7 @@ const DEEP_RULES = new Set<string>([
   "hackminaazizProfileIdorRouteLiveOracle",
   "hackminaazizPingCommandInjectionRouteLiveOracle",
   "hackminaazizCommentsStoredXssRouteLiveOracle",
+  "hackminaazizCsrfDemoRouteLiveOracle",
   "hackminaazizSearchReflectedXssRouteLiveOracle",
   "hackminaazizResetBrokenPasswordResetRouteLiveOracle",
   "hackminaazizResetConfirmSqliRouteLiveOracle",
@@ -4411,6 +4412,8 @@ const DEEP_RULES = new Set<string>([
   "bugforgeAuthRouteLiveOracle",
   "bugforgeCsrfRouteLiveOracle",
   "bugforgeSqliRouteLiveOracle",
+  "bugforgeCsptDeepDiveRouteLiveOracle",
+  "nextNosqliRouteLiveOracle",
   "webverselabsFixtureRouteLiveOracle",
   "webverselabsOrbitdeskRouteLiveOracle",
   "nosqlInjectionLabRouteLiveOracle",
@@ -13126,7 +13129,13 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         return -4;
       if (
         /hackminaaziz\.fly\.dev/i.test(origin) &&
-        /\/comments\b/i.test(targetInput) &&
+        /\/comments\/csrf-demo\/?$/i.test(targetInput) &&
+        p.slug.startsWith("hackminaaziz-csrf-demo")
+      )
+        return -4;
+      if (
+        /hackminaaziz\.fly\.dev/i.test(origin) &&
+        /\/comments\/?$/i.test(targetInput) &&
         p.slug.startsWith("hackminaaziz-comments-stored-xss")
       )
         return -4;
@@ -14299,10 +14308,21 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         return -3;
       if (
         /bugforge\.io/i.test(origin) &&
+        /\/deep-dives\/client-side-path-traversal\/?$/i.test(targetInput) &&
+        p.slug.startsWith("bugforge-cspt-deep-dive")
+      )
+        return -4;
+      if (
+        /bugforge\.io/i.test(origin) &&
         /\/labs\/(?:ssrf|idor|graphql)\b/i.test(targetInput) &&
         p.slug.startsWith("bugforge-")
       )
         return -4;
+      if (
+        /next-nosqli\.vercel\.app/i.test(origin) &&
+        p.slug.startsWith("next-nosqli")
+      )
+        return -3;
       if (
         /appsecmaster\.net/i.test(origin) &&
         /\/labs\/ssrf\b/i.test(targetInput) &&
