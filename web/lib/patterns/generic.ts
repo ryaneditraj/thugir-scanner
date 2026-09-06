@@ -86093,6 +86093,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "hackminaaziz-register-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "hackminaaziz.fly.dev /register insecure registration route live oracle",
+    description:
+      "When scanning /register on hackminaaziz.fly.dev, the registration template documents insecure registration with no input validation, weak password requirements, user enumeration, and missing CSRF protection — route-specific broken authentication training oracle.",
+    impactOneline:
+      "Route-specific confirmation that hackminaaziz /register documents insecure registration and weak account-creation controls.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "hackminaazizRegisterRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce strong registration validation, CSRF protection, and rate limiting.",
+      steps: [
+        "Validate and sanitize all registration inputs server-side.",
+        "Require strong passwords and protect registration with CSRF tokens.",
+        "Rate-limit registration attempts and avoid user-enumeration responses."
+      ]
+    },
+    fixPrompt:
+      "Our hackminaaziz.fly.dev /register route documents insecure registration with weak passwords and no CSRF. Show secure account-creation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "hackminaaziz-about-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "medium",
+    title: "hackminaaziz.fly.dev /about vulnerability catalog route live oracle",
+    description:
+      "When scanning /about on hackminaaziz.fly.dev, the about page documents all implemented training vulnerabilities with detailed sections for IDOR, XSS, SQLi, command injection, and broken authentication — route-specific vulnerability catalog oracle.",
+    impactOneline:
+      "Route-specific confirmation that hackminaaziz /about documents the full deliberately vulnerable Flask training catalog.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "hackminaazizAboutRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Run hackminaaziz labs only on isolated training infrastructure.",
+      steps: [
+        "Do not deploy deliberately vulnerable apps to production domains.",
+        "Restrict lab access to authorized trainees.",
+        "Use network isolation for training environments."
+      ]
+    },
+    fixPrompt:
+      "Our hackminaaziz.fly.dev /about route documents a full vulnerability catalog. Show training environment isolation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "hackminaaziz-home-route-live-oracle",
     platform: "generic",
     category: "Injection",

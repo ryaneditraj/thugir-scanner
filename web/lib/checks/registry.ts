@@ -43395,6 +43395,7 @@ hackminaaziz.fly.dev deliberately vulnerable Flask web application for security 
 /ping OS command injection via ping command
 /comments SQL Injection Stored XSS CSRF direct string concatenation fake CSRF token
 /reset predictable password reset tokens RESET-{username}-1234
+/register insecure registration no input validation weak password requirements user enumeration no CSRF protection
 `;
 
 async function hackminaazizCorpus(ctx: RuleContext, routePath?: string): Promise<string> {
@@ -43540,6 +43541,34 @@ const hackminaazizResetBrokenPasswordResetRouteLiveOracle: Rule = async (ctx) =>
     "Password reset template documents predictable reset tokens RESET-{username}-1234 with no token storage or validation"
   );
 
+const hackminaazizRegisterRouteLiveOracle: Rule = async (ctx) =>
+  hackminaazizRouteLiveOracle(
+    ctx,
+    /\/register(?:\/|$)/i,
+    [
+      /Insecure registration|No input validation/i,
+      /Weak password requirements|Minimum 3 characters/i,
+      /User enumeration|No CSRF protection/i,
+      /\/register/i
+    ],
+    "hackminaaziz.fly.dev /register route scan — registration template documents insecure registration with no input validation, weak passwords, user enumeration, and missing CSRF — route-specific broken authentication training oracle",
+    "Registration template documents insecure registration — no input validation, weak password requirements (3 char min), user enumeration, and no CSRF protection"
+  );
+
+const hackminaazizAboutRouteLiveOracle: Rule = async (ctx) =>
+  hackminaazizRouteLiveOracle(
+    ctx,
+    /\/about(?:\/|$)/i,
+    [
+      /Implemented Vulnerabilities|deliberately vulnerable/i,
+      /IDOR|Stored XSS|SQL Injection|Reflected XSS/i,
+      /OS command injection|Broken authentication/i,
+      /\/about/i
+    ],
+    "hackminaaziz.fly.dev /about route scan — about page documents all implemented training vulnerabilities with detailed walkthrough sections — route-specific vulnerability catalog oracle",
+    "About page documents comprehensive vulnerability catalog — IDOR, stored/reflected XSS, SQL injection, command injection, and broken authentication training modules"
+  );
+
 const hackminaazizHomeRouteLiveOracle: Rule = async (ctx) =>
   hackminaazizRouteLiveOracle(
     ctx,
@@ -43547,7 +43576,7 @@ const hackminaazizHomeRouteLiveOracle: Rule = async (ctx) =>
     [
       /deliberately vulnerable|7 active vulnerabilities/i,
       /SQL Injection|Reflected XSS|IDOR|command injection/i,
-      /\/login|\/search|\/profile|\/ping|\/comments|\/reset/i
+      /\/login|\/search|\/profile|\/ping|\/comments|\/reset|\/register/i
     ],
     "hackminaaziz.fly.dev / home route scan — landing page documents seven deliberate training vulnerabilities with linked lab routes — route-specific vulnerable-app hub oracle",
     "Home page documents deliberately vulnerable Flask lab with 7 active training routes including SQLi, XSS, IDOR, CSRF, and command injection"
@@ -116302,6 +116331,8 @@ export const RULES: Record<string, Rule> = {
   hackminaazizCommentsStoredXssRouteLiveOracle,
   hackminaazizSearchReflectedXssRouteLiveOracle,
   hackminaazizResetBrokenPasswordResetRouteLiveOracle,
+  hackminaazizRegisterRouteLiveOracle,
+  hackminaazizAboutRouteLiveOracle,
   hackminaazizHomeRouteLiveOracle,
   clientSideExploitLabEvidence,
   exploitLabHubRouteLiveOracle,

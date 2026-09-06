@@ -4385,6 +4385,8 @@ const DEEP_RULES = new Set<string>([
   "hackminaazizCommentsStoredXssRouteLiveOracle",
   "hackminaazizSearchReflectedXssRouteLiveOracle",
   "hackminaazizResetBrokenPasswordResetRouteLiveOracle",
+  "hackminaazizRegisterRouteLiveOracle",
+  "hackminaazizAboutRouteLiveOracle",
   "hackminaazizHomeRouteLiveOracle",
   "clientSideExploitLabEvidence",
   "exploitLabHubRouteLiveOracle",
@@ -12899,7 +12901,7 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         !/\/enumerate|\/bulk/i.test(targetInput) &&
         p.slug.startsWith("chimera-banking-accounts-search")
       )
-        return -3;
+        return -4;
       if (
         /chimera\.atlascrew\.dev/i.test(origin) &&
         /\/api\/v1\/banking\/accounts\b/i.test(targetInput) &&
@@ -12938,13 +12940,13 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /\/api\/v1\/insurance\/policies(?:\/(?:lookup|\d+))?\b/i.test(targetInput) &&
         p.slug.startsWith("chimera-insurance-policies-lookup")
       )
-        return -3;
+        return -4;
       if (
         /chimera\.atlascrew\.dev/i.test(origin) &&
         /\/api\/v1\/transactions\/history\b/i.test(targetInput) &&
         p.slug.startsWith("chimera-transactions-history")
       )
-        return -3;
+        return -4;
       if (
         /chimera\.atlascrew\.dev/i.test(origin) &&
         /\/api\/v1\/telecom\/(?:subscribers\/[^/]+\/)?sim-swap\b/i.test(targetInput) &&
@@ -13117,6 +13119,18 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /hackminaaziz\.fly\.dev/i.test(origin) &&
         /\/reset\b/i.test(targetInput) &&
         p.slug.startsWith("hackminaaziz-reset-broken-password-reset")
+      )
+        return -4;
+      if (
+        /hackminaaziz\.fly\.dev/i.test(origin) &&
+        /\/register\b/i.test(targetInput) &&
+        p.slug.startsWith("hackminaaziz-register")
+      )
+        return -4;
+      if (
+        /hackminaaziz\.fly\.dev/i.test(origin) &&
+        /\/about\b/i.test(targetInput) &&
+        p.slug.startsWith("hackminaaziz-about")
       )
         return -4;
       if (
@@ -13385,13 +13399,13 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /\/api\/v1\/insurance\/claims\/search\b/i.test(targetInput) &&
         p.slug.startsWith("chimera-insurance-claims-search")
       )
-        return -3;
+        return -4;
       if (
         /chimera\.atlascrew\.dev/i.test(origin) &&
         /\/api\/v1\/claims\/search\b/i.test(targetInput) &&
         p.slug.startsWith("chimera-claims-search-order-by")
       )
-        return -3;
+        return -4;
       if (
         /chimera\.atlascrew\.dev/i.test(origin) &&
         /\/api\/v1\/healthcare\/records(?:\?|$)/i.test(targetInput) &&
