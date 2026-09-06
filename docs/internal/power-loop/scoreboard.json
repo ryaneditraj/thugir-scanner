@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-06T00:16:11.192Z",
+  "updated_at": "2026-09-06T01:13:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 3312,
-  "total_findings": 38534,
+  "total_sites_scanned": 3321,
+  "total_findings": 38692,
   "critical_findings": 76,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2118,
-  "discovery_findings": 30413,
+  "discovery_urls_added": 2123,
+  "discovery_findings": 30518,
   "improvements_shipped": 1459,
-  "last_run": "2026-09-06T00:16:11.192Z",
+  "last_run": "2026-09-06T01:13:00.000Z",
   "last_run_summary": {
-    "hour_utc": "00",
+    "hour_utc": "01",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 53,
@@ -52,43 +52,39 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 7,
-      "urls_scanned": 11,
-      "findings": 93,
-      "focus": "restful-booker + vulnforge file-upload 16-18 + crAPI drain + vulnerable-ecommerce FakeShop + duck-store referral",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 105,
+      "focus": "wrongsecrets-63 + whgojp file-upload/sqli/ssrf/fastjson + drain SekuMart/VAmPI/FakeShop/oopssec XXE/seclab SSRF",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, primary Heroku first pass)",
-      "restful-booker.herokuapp.com/booking: 8 findings — restful-booker-auth-weak-creds + booking-unauth-access/create route live oracles",
-      "vulnforge-academy level16/17/18: 7 findings each — level16-double-extension + level17-content-type upload route live oracles",
-      "crapi.apisec.ai/identity/api/v2/admin/videos/1: 12 findings — crapi-admin-videos-bfla-route-live-oracle confirmed",
-      "crapi.apisec.ai/identity/api/v2/user/videos/1: 12 findings — crapi-user-videos-bola-route-live-oracle confirmed",
-      "vulnerable-ecommerce.vercel.app/products.php: 5 findings — fakeshop-products-reflected-xss-live-oracle",
-      "vulnerable-ecommerce.vercel.app/login.php: 6 findings — fakeshop-login-sqli-route-live-oracle",
-      "duck-store.escape.tech/api/v1/auth/register: 11 findings — duck-store-referral-code-abuse-route-live-oracle (corpus fallback)"
+      "sekumart.sekuripy.hr/members.php: 20 findings — sekumart-members-nosql-route-live-oracle + catalog ORDER BY SQLi",
+      "sekumart.sekuripy.hr/catalog.php: 20 findings — sekumart-catalog-orderby-sqli-live-oracle confirmed",
+      "urban-vampi-production.up.railway.app/users/v1/1/email: 15 findings — vampi-user-bola-route + debug-password live oracles",
+      "urban-vampi-production.up.railway.app/books/v1/bookTitle1: 15 findings — vampi-books-stale-catalog-live-oracle",
+      "vulnerable-ecommerce.vercel.app/: 8 findings — fakeshop-login-sqli-route-live-oracle",
+      "koadt.github.io/oss-oopssec-store/posts/xxe-supplier-order-import/: 13 findings — oopssec-xxe-supplier-import-route-live-oracle",
+      "seclab.vercel.app/labs/ssrf: 7 findings — seclab-ssrf-vulnerable-route-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "crapi.apisec.ai/community/api/posts thin hub without community-posts route-specific oracle",
-      "restful-booker /booking/1 shares parent-hub fingerprint without booking-by-ID route-specific oracle",
-      "duck-store.escape.tech register still HTTP 500 for live referral abuse probe — corpus fallback only",
-      "r2s-arena.fly.dev still unreachable from cloud agent"
+      "vulnerable-ecommerce.vercel.app/products.php: 7 findings with reflexion-escalated-ssti but no fakeshop-products route oracle this pass",
+      "newly queued wrongsecrets-63 + whgojp file-upload/sqli/ssrf/fastjson not yet drained",
+      "ist-edu-bd xss/idor + whgojp xss routes + wrongsecrets error-demo still queued behind 2170+ pending URLs",
+      "seclab /labs/ssrf page route dead-oracle signal — API /api/ssrf-vulnerable still live"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 53,
-    "vulnerable-ecommerce.vercel.app/products.php": 5,
-    "vulnerable-ecommerce.vercel.app/login.php": 6,
-    "duck-store.escape.tech/api/v1/auth/register": 11,
-    "bugstore.bugtraceai.com/api/cart/add": 25,
-    "chimera.atlascrew.dev/api/v1/auth/token/forge": 8,
-    "restful-booker.herokuapp.com/booking": 8,
-    "crapi.apisec.ai/identity/api/v2/admin/videos/1": 12,
-    "crapi.apisec.ai/identity/api/v2/user/videos/1": 12,
-    "vulnforge-academy.vercel.app/backend/includes/levels/medium/level16.php": 7,
-    "vulnforge-academy.vercel.app/backend/includes/levels/medium/level17.php": 7,
-    "vulnforge-academy.vercel.app/backend/includes/levels/medium/level18.php": 7,
-    "crapi.apisec.ai/community/api/posts": 11
+    "sekumart.sekuripy.hr/members.php": 20,
+    "sekumart.sekuripy.hr/catalog.php": 20,
+    "urban-vampi-production.up.railway.app/users/v1/1/email": 15,
+    "urban-vampi-production.up.railway.app/books/v1/bookTitle1": 15,
+    "vulnerable-ecommerce.vercel.app/": 8,
+    "koadt.github.io/oss-oopssec-store/posts/xxe-supplier-order-import/": 13,
+    "seclab.vercel.app/labs/ssrf": 7,
+    "vulnerable-ecommerce.vercel.app/products.php": 7
   }
 }

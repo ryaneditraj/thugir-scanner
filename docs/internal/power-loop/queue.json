@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-06T00:16:11.193Z",
+  "updated_at": "2026-09-06T01:10:00.000Z",
   "priority_discovery_urls": [
     {
       "url": "https://restful-booker.herokuapp.com/booking",
@@ -11499,8 +11499,33 @@
       "url": "https://ist-edu-bd.vercel.app/idor",
       "source": "zahidoverflow/damn-vulnerable-web-university — IDOR training route (Vercel live demo)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-63",
+      "source": "OWASP WrongSecrets — challenge-63 public Heroku demo (web search 01 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://whgojp.top/file/upload",
+      "source": "whgojp/JavaSecLab — arbitrary file upload lab route (public demo whgojp.top)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://whgojp.top/sqli/jdbc",
+      "source": "whgojp/JavaSecLab — JDBC SQL injection lab route (public demo whgojp.top)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://whgojp.top/ssrf/url",
+      "source": "whgojp/JavaSecLab — SSRF URL fetch lab route (public demo whgojp.top)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://whgojp.top/deserialize/fastjson",
+      "source": "whgojp/JavaSecLab — Fastjson deserialization RCE lab route (public demo whgojp.top)",
+      "auth": "public_demo"
     }
   ],
   "discovery_urls": [],
-  "discovery_urls_added": 2103
+  "discovery_urls_added": 2108
 }
