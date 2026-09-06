@@ -86119,6 +86119,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "hackminaaziz-reset-confirm-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "hackminaaziz.fly.dev /reset/confirm predictable token + SQLi route live oracle",
+    description:
+      "When scanning /reset/confirm on hackminaaziz.fly.dev, the confirmation template documents predictable RESET-{username}-1234 token acceptance without database lookup plus SQL injection in the password update query — route-specific broken authentication + SQLi training oracle.",
+    impactOneline:
+      "Route-specific confirmation that hackminaaziz /reset/confirm documents predictable reset tokens and unsafe SQL in password updates.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "hackminaazizResetConfirmSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate reset tokens server-side and use parameterized queries for password updates.",
+      steps: [
+        "Store hashed single-use reset tokens and verify against the database.",
+        "Use parameterized queries or ORM for all password update statements.",
+        "Rate-limit reset confirmation attempts."
+      ]
+    },
+    fixPrompt:
+      "Our hackminaaziz.fly.dev /reset/confirm route documents predictable tokens and SQL injection in password updates. Show secure reset confirmation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "hackminaaziz-register-route-live-oracle",
     platform: "generic",
     category: "Broken authentication",

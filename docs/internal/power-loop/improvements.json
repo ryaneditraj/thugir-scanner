@@ -8957,6 +8957,24 @@
       "slug": "fakeshop-products-reflexion-ssti-suppression",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: fakeshopPhpReflexionSuppressed skips reflexionEscalatedSsti on vulnerable-ecommerce products.php/login.php static PHP source routes; vulnerable-ecommerce.vercel.app/products.php findings 9→8 (-reflexion-escalated-ssti false positive, +fakeshop-products-reflected-xss-route-live-oracle retained); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "websec-level17-timing-attack-scan-scope-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: websecLevel17TimingAttackLiveOracle now gates on ctx.scanUrl level (not per-crawl pageUrl) — websec.fr/level18/ findings 7→6 (-websec-level17-timing-attack-live-oracle cross-level FP during /level17/ crawl); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:hackminaaziz.fly.dev",
+      "slug": "hackminaaziz-reset-confirm-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /reset/confirm HTML documents predictable RESET-{username}-1234 token validation + SQL injection in password update; hackminaaziz.fly.dev/reset/confirm findings 7→7 (+hackminaaziz-reset-confirm-sqli-route-live-oracle, -hackminaaziz-reset-broken-password-reset-route-live-oracle generic overlap); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io",
+      "slug": "oopssec-plaintext-password-vanity-slug-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: oopssecPlaintextPasswordLogsRouteLiveOracle accepts /posts/plaintext-password vanity slug and fetches canonical plaintext-password-in-logs walkthrough; koadt.github.io/oss-oopssec-store/posts/plaintext-password/ findings 7 (+oopssec-plaintext-password-logs-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
     }
   ]
 }

@@ -7485,12 +7485,21 @@ const clientSideOopssecPlaintextPasswordLogsEvidence: Rule = async (ctx) => {
   };
 };
 
+const OOPSSEC_PLAINTEXT_PASSWORD_LOGS_CANONICAL_POST =
+  "https://koadt.github.io/oss-oopssec-store/posts/plaintext-password-in-logs/";
+
 const oopssecPlaintextPasswordLogsRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/posts\/plaintext-password-in-logs/i.test(pageUrl)) return NEGATIVE;
+  const routeOk =
+    /\/posts\/plaintext-password-in-logs/i.test(pageUrl) ||
+    /\/posts\/plaintext-password\/?$/i.test(pageUrl);
+  if (!routeOk) return NEGATIVE;
+  const fetchUrl = /\/posts\/plaintext-password\/?$/i.test(pageUrl)
+    ? OOPSSEC_PLAINTEXT_PASSWORD_LOGS_CANONICAL_POST
+    : pageUrl;
   const result = await oopssecWalkthroughEvidenceWithFetch(
     ctx,
-    pageUrl,
+    fetchUrl,
     clientSideOopssecPlaintextPasswordLogsEvidence
   );
   if (!result.fired) return NEGATIVE;
@@ -7500,7 +7509,9 @@ const oopssecPlaintextPasswordLogsRouteLiveOracle: Rule = async (ctx) => {
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: "OopsSec Store /posts/plaintext-password-in-logs route scan — walkthrough documents POST /api/auth/login logging plaintext passwords readable via /monitoring/siem"
+      note: /\/posts\/plaintext-password\/?$/i.test(pageUrl)
+        ? "OopsSec Store /posts/plaintext-password route scan — vanity slug 404; canonical plaintext-password-in-logs walkthrough documents POST /api/auth/login debug logging plaintext passwords readable via /monitoring/siem"
+        : "OopsSec Store /posts/plaintext-password-in-logs route scan — walkthrough documents POST /api/auth/login logging plaintext passwords readable via /monitoring/siem"
     }
   };
 };
@@ -26698,9 +26709,9 @@ const websecLevel17TimingAttackRouteLiveOracle: Rule = async (ctx) => {
 
 const websecLevel17TimingAttackLiveOracle: Rule = async (ctx) => {
   if (!/websec\.fr/i.test(ctx.origin)) return NEGATIVE;
-  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  const level = websecSpecificLevelFromUrl(pageUrl, ctx.origin);
-  if (level !== null && level !== 17) return NEGATIVE;
+  const scanUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const scanLevel = websecSpecificLevelFromUrl(scanUrl, ctx.origin);
+  if (scanLevel !== null && scanLevel !== 17) return NEGATIVE;
   const postUrl = new URL("/level17/", ctx.origin).toString();
   const wrongBody = "flag=thugir-wrong-flag-probe&submit=Go";
   const wrongDoc = await ctx.probe.get(postUrl, {
@@ -43579,7 +43590,7 @@ const hackminaazizSearchReflectedXssRouteLiveOracle: Rule = async (ctx) =>
 const hackminaazizResetBrokenPasswordResetRouteLiveOracle: Rule = async (ctx) =>
   hackminaazizRouteLiveOracle(
     ctx,
-    /\/reset(?:\/|$)/i,
+    /\/reset\/?$/i,
     [
       /predictable.*reset token|RESET-\{username\}-1234/i,
       /Broken password reset|password reset tokens/i,
@@ -43587,6 +43598,19 @@ const hackminaazizResetBrokenPasswordResetRouteLiveOracle: Rule = async (ctx) =>
     ],
     "hackminaaziz.fly.dev /reset route scan — password reset template documents predictable RESET-{username}-1234 tokens with no database validation — route-specific broken authentication training oracle",
     "Password reset template documents predictable reset tokens RESET-{username}-1234 with no token storage or validation"
+  );
+
+const hackminaazizResetConfirmSqliRouteLiveOracle: Rule = async (ctx) =>
+  hackminaazizRouteLiveOracle(
+    ctx,
+    /\/reset\/confirm/i,
+    [
+      /Predictable token validation.*SQL Injection|password update.*unsafe SQL/i,
+      /RESET-\{username\}-1234|Test Predictable Tokens/i,
+      /\/reset\/confirm/i
+    ],
+    "hackminaaziz.fly.dev /reset/confirm route scan — confirmation template documents predictable RESET-{username}-1234 token acceptance without database lookup plus SQL injection in password update — route-specific broken authentication + SQLi training oracle",
+    "Reset confirmation template documents predictable token validation and unsafe SQL in password update"
   );
 
 const hackminaazizRegisterRouteLiveOracle: Rule = async (ctx) =>
@@ -116379,6 +116403,7 @@ export const RULES: Record<string, Rule> = {
   hackminaazizCommentsStoredXssRouteLiveOracle,
   hackminaazizSearchReflectedXssRouteLiveOracle,
   hackminaazizResetBrokenPasswordResetRouteLiveOracle,
+  hackminaazizResetConfirmSqliRouteLiveOracle,
   hackminaazizRegisterRouteLiveOracle,
   hackminaazizAboutRouteLiveOracle,
   hackminaazizHomeRouteLiveOracle,

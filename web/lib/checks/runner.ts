@@ -4386,6 +4386,7 @@ const DEEP_RULES = new Set<string>([
   "hackminaazizCommentsStoredXssRouteLiveOracle",
   "hackminaazizSearchReflectedXssRouteLiveOracle",
   "hackminaazizResetBrokenPasswordResetRouteLiveOracle",
+  "hackminaazizResetConfirmSqliRouteLiveOracle",
   "hackminaazizRegisterRouteLiveOracle",
   "hackminaazizAboutRouteLiveOracle",
   "hackminaazizHomeRouteLiveOracle",
@@ -13125,7 +13126,13 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         return -4;
       if (
         /hackminaaziz\.fly\.dev/i.test(origin) &&
-        /\/reset\b/i.test(targetInput) &&
+        /\/reset\/confirm\b/i.test(targetInput) &&
+        p.slug.startsWith("hackminaaziz-reset-confirm-sqli")
+      )
+        return -4;
+      if (
+        /hackminaaziz\.fly\.dev/i.test(origin) &&
+        /\/reset\/?$/i.test(targetInput) &&
         p.slug.startsWith("hackminaaziz-reset-broken-password-reset")
       )
         return -4;
@@ -14585,6 +14592,12 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
         /\/posts\/(?:jwt-weak-secret-admin-bypass|weak-jwt-secret)\/?$/i.test(targetInput) &&
         p.slug.startsWith("oopssec-jwt-weak-secret")
+      )
+        return -4;
+      if (
+        /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
+        /\/posts\/(?:plaintext-password-in-logs|plaintext-password)\/?$/i.test(targetInput) &&
+        p.slug.startsWith("oopssec-plaintext-password-logs")
       )
         return -4;
       if (

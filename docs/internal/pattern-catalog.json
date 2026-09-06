@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-06T07:09:50.207Z",
-  "total": 3374,
-  "uniqueSlugs": 3366,
+  "generatedAt": "2026-09-06T08:07:12.316Z",
+  "total": 3375,
+  "uniqueSlugs": 3367,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3356,
+    "generic": 3357,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3289,
+    "deep": 3290,
     "continuous": 0
   },
   "byCategory": {
@@ -27,7 +27,7 @@
     "Information disclosure": 155,
     "Security misconfiguration": 288,
     "Broken authentication": 213,
-    "Injection": 556,
+    "Injection": 557,
     "Cross-site scripting": 804,
     "Open redirect": 29,
     "general": 20,
@@ -2021,6 +2021,7 @@
     "hackminaaziz-profile-idor-route-live-oracle",
     "hackminaaziz-register-route-live-oracle",
     "hackminaaziz-reset-broken-password-reset-route-live-oracle",
+    "hackminaaziz-reset-confirm-sqli-route-live-oracle",
     "hackminaaziz-search-reflected-xss-route-live-oracle",
     "hacksplaining-session-fixation-live-oracle",
     "hacksplaining-session-fixation-route-live-oracle",
