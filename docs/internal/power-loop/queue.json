@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-06T13:15:00.000Z",
+  "updated_at": "2026-09-06T14:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://bac-vulnerability-lab.onrender.com/claim-airdrop",
+      "source": "Abhi005shek/idor_vulnerability_lab — IDOR airdrop claim oracle POST /claim-airdrop (onrender.com public demo; web search 14 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://auth-vulnerable.onrender.com/profile?id=1",
+      "source": "darkroot192 auth-security-project — IDOR profile oracle GET /profile?id= (onrender.com public demo; web search 14 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://idor-vulnerability-lab.onrender.com/",
+      "source": "Abhi005shek/idor_vulnerability_lab — web3 airdrop IDOR training lab homepage (GitHub homepage onrender.com; web search 14 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-fauxbank.vercel.app/api/transfer",
+      "source": "alfredang/pentest — missing CSRF on wire transfer API oracle POST /api/transfer (README scenario #7; web search 14 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://restful-booker.herokuapp.com/booking",
+      "source": "mwinteringham/restful-booker — CRUD API playground with intentional auth/BOLA bugs (VWAD-style API testing lab; web search 14 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://code-breaking.fly.dev/puzzle/6/",
       "source": "code-breaking.fly.dev — medium javacon Java deserialization/source-audit CTF puzzle (public Fly deploy; web search 13 UTC)",
