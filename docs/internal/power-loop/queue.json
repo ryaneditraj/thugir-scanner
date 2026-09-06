@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-06T00:12:00.000Z",
+  "updated_at": "2026-09-06T00:16:11.193Z",
   "priority_discovery_urls": [
     {
       "url": "https://restful-booker.herokuapp.com/booking",
@@ -25,6 +25,16 @@
       "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/medium/level18.php",
       "source": "webspoilt/vulnforge-academy — Level 18 file-upload validation bypass (README Medium tier 16-18; web search 00 UTC)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnerable-ecommerce.vercel.app/products.php",
+      "source": "FakeShop PHP lab — reflected XSS msg parameter oracle (vulnerable-ecommerce.vercel.app; power-loop 00 UTC)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://bugstore.bugtraceai.com/api/health",
+      "source": "BugTraceAI/BugStore — health check RCE oracle GET /api/health?cmd= (V-021; queue drain 00 UTC)",
+      "auth": "public_demo"
     },
     {
       "url": "https://crapi.apisec.ai/identity/api/v2/admin/videos/1",
@@ -114,11 +124,6 @@
     {
       "url": "https://bugstore.bugtraceai.com/api/reviews/create",
       "source": "BugTraceAI/BugStore — stored XSS via product reviews oracle POST /api/reviews/create (32-vuln shop playground; web search 20 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://seclab.vercel.app/labs/ssrf",
-      "source": "DaniSam-STU/security-lab — interactive SSRF lab page with live exploit UI (seclab.vercel.app; web search 20 UTC)",
       "auth": "public_demo"
     },
     {
@@ -402,11 +407,6 @@
       "auth": "public_demo"
     },
     {
-      "url": "https://bugstore.bugtraceai.com/api/health",
-      "source": "BugTraceAI/BugStore — V-021 RCE health endpoint oracle GET /api/health (routes/health.py; GitHub README; web search 08 UTC)",
-      "auth": "public_demo"
-    },
-    {
       "url": "https://vaultapp-omega.vercel.app/api/users/42",
       "source": "MRMcyber/vaultapp — player account sequential IDOR oracle GET /api/users/42 (README test creds user_id=42; vaultapp-omega canonical deploy; web search 08 UTC)",
       "auth": "public_demo"
@@ -507,11 +507,6 @@
       "auth": "public_demo"
     },
     {
-      "url": "https://owaspbased-lessons.vercel.app/api/lessons",
-      "source": "OWASP GenAI Security Lab — lesson index API (10 OWASP LLM Top 10 modules; web search 05 UTC)",
-      "auth": "public_demo"
-    },
-    {
       "url": "http://zero.webappsecurity.com/signup.html",
       "source": "Watchfire Zero Bank — registration/account-enumeration training surface (VWAD companion demo; web search 05 UTC)",
       "auth": "public_demo"
@@ -602,11 +597,6 @@
       "auth": "public_demo"
     },
     {
-      "url": "https://chimera.atlascrew.dev/api/v1/admin/attack/xxe",
-      "source": "atlas-crew/Chimera — admin attack XXE route on 456+ endpoint honeypot (queued prior runs, not in queue)",
-      "auth": "public_demo"
-    },
-    {
       "url": "https://bugstore.bugtraceai.com/api/products/search",
       "source": "BugTraceAI/bugstore — product search SQLi API route (OSS vulnerable e-commerce demo)",
       "auth": "public_demo"
@@ -692,11 +682,6 @@
       "auth": "public_demo"
     },
     {
-      "url": "https://koadt.github.io/oss-oopssec-store/posts/xxe-supplier-order-import/",
-      "source": "kOaDT/oss-oopssec-store — Challenge 22 XXE supplier order import walkthrough (challenges.json scrape 23 UTC)",
-      "auth": "public_demo"
-    },
-    {
       "url": "https://koadt.github.io/oss-oopssec-store/posts/mcp-malicious-server/",
       "source": "kOaDT/oss-oopssec-store — Challenge 33 malicious MCP server agent poisoning walkthrough (challenges.json scrape 23 UTC)",
       "auth": "public_demo"
@@ -734,11 +719,6 @@
     {
       "url": "https://koadt.github.io/oss-oopssec-store/posts/insecure-randomness-gift-card/",
       "source": "kOaDT/oss-oopssec-store — LCG gift-card code prediction from millisecond timestamp walkthrough (scoreboard gap 21 UTC; oracles shipped, queue drain)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://koadt.github.io/oss-oopssec-store/posts/jwt-algorithm-confusion-partner-api/",
-      "source": "kOaDT/oss-oopssec-store — JWT HS256/RS256 algorithm confusion on partner API walkthrough (scoreboard gap 21 UTC; oracles shipped, queue drain)",
       "auth": "public_demo"
     },
     {
@@ -3402,11 +3382,6 @@
       "auth": "oss_deploy"
     },
     {
-      "url": "https://pentest-fauxbank.vercel.app/instructor",
-      "source": "alfredang/pentest FauxBank — instructor dashboard / vuln toggles (GitHub README)",
-      "auth": "oss_deploy"
-    },
-    {
       "url": "https://pentest-fauxbank.vercel.app/report",
       "source": "alfredang/pentest FauxBank — pentest report generator module (GitHub README)",
       "auth": "oss_deploy"
@@ -5095,11 +5070,6 @@
     {
       "url": "https://security-showcase.vercel.app/",
       "source": "Security Showcase — intentionally vulnerable login/comments SQLi+XSS training app (Vercel)",
-      "auth": "oss_deploy"
-    },
-    {
-      "url": "https://vulnerable-ecommerce.vercel.app/",
-      "source": "Vulnerable e-commerce — PHP-style SQLi/XSS training storefront (Vercel OSS deploy)",
       "auth": "oss_deploy"
     },
     {
@@ -6886,11 +6856,6 @@
       "url": "https://cyberdefenders.org/labs",
       "source": "CyberDefenders Blue Team Labs — public hands-on defensive security lab catalog (distinct from root homepage)",
       "auth": "public_demo"
-    },
-    {
-      "url": "https://zero-health.vercel.app/",
-      "source": "aligorithm/Zero-Health — deliberately vulnerable healthcare portal with OWASP Web/API/LLM flaws (Vercel deploy)",
-      "auth": "oss_deploy"
     },
     {
       "url": "https://sqli-lab.vercel.app/",

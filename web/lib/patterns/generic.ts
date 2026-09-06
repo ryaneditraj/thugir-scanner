@@ -85649,5 +85649,83 @@ export const genericPatterns: Pattern[] = [
       "Our BugStore /api/redirect route scan confirms unvalidated open redirect. Show route-specific redirect allowlist remediation.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "fakeshop-products-reflected-xss-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "FakeShop products.php reflected XSS live oracle",
+    description:
+      "GET vulnerable-ecommerce.vercel.app/products.php?msg= reflects query parameter inside HTML without encoding — FakeShop reflected XSS training oracle.",
+    impactOneline:
+      "Unescaped msg parameter in products.php enables reflected cross-site scripting on the FakeShop PHP lab.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fakeshopProductsReflectedXssLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "FakeShop is intentional training software — HTML-encode all reflected output.",
+      steps: [
+        "Use htmlspecialchars() on all user-controlled output in PHP templates.",
+        "Validate msg parameter length and reject HTML markup.",
+        "Run FakeShop only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FakeShop products.php reflects msg without encoding. Show htmlspecialchars remediation for reflected XSS.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "fakeshop-products-reflected-xss-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "FakeShop /products.php route reflected XSS live oracle",
+    description:
+      "When scanning vulnerable-ecommerce.vercel.app/products.php, GET ?msg= reflects HTML markup unescaped — route-specific reflected XSS training oracle.",
+    impactOneline:
+      "Route scans on /products.php should confirm live reflected XSS for FakeShop msg parameter.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fakeshopProductsReflectedXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "HTML-encode reflected output on FakeShop product routes.",
+      steps: [
+        "Use htmlspecialchars() on msg and other query parameters.",
+        "Reject script tags in reflected contexts.",
+        "Run FakeShop labs only on isolated staging infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FakeShop /products.php route reflects msg without encoding. Show route-specific XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "fakeshop-login-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "FakeShop /login.php route SQLi live oracle",
+    description:
+      "When scanning vulnerable-ecommerce.vercel.app/login.php, page source documents SELECT * FROM users WHERE username='$username' AND password='$password' string concatenation — route-specific SQLi training oracle.",
+    impactOneline:
+      "Route scans on /login.php should confirm unparameterized login SQL concatenation on the FakeShop PHP lab.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fakeshopLoginSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use prepared statements for FakeShop login queries.",
+      steps: [
+        "Replace string-concatenated SQL with mysqli prepared statements.",
+        "Never embed raw username/password into SQL strings.",
+        "Run FakeShop only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FakeShop login.php concatenates credentials into SQL. Show prepared statement remediation.",
+    version: 1,
+    enabled: true
   }
 ];

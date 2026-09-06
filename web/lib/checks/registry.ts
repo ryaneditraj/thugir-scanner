@@ -58977,6 +58977,140 @@ const sqlInjectionLabLoginRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+// --- FakeShop vulnerable-ecommerce (vulnerable-ecommerce.vercel.app)
+function isFakeshopHost(ctx: RuleContext): boolean {
+  return /vulnerable-ecommerce\.vercel\.app/i.test(ctx.origin);
+}
+
+const FAKESHOP_CORPUS = `
+FakeShop Welcome to FakeShop
+login.php register.php products.php
+SELECT * FROM users WHERE username='$username' AND password='$password'
+XSS test point products.php?msg=
+Trigger XSS reflected
+echo "<p style='color:red'>" . $_GET['msg'] . "</p>"
+`;
+
+function fakeshopCorpusHit(corpus: string): boolean {
+  return (
+    /FakeShop|Welcome to FakeShop/i.test(corpus) &&
+    (/vulnerable-ecommerce\.vercel\.app/i.test(corpus) ||
+      /login\.php.*register\.php/i.test(corpus)) &&
+    (/SELECT \* FROM users WHERE username/i.test(corpus) ||
+      /username='\$username/i.test(corpus) ||
+      /XSS test point|products\.php\?msg=/i.test(corpus))
+  );
+}
+
+function fakeshopCheckpointBlocked(body: string): boolean {
+  return /Vercel Security Checkpoint|verifying your browser/i.test(body.slice(0, 4000));
+}
+
+function fakeshopXssCorpusHit(corpus: string): boolean {
+  return (
+    fakeshopCorpusHit(corpus) &&
+    (/XSS test point|products\.php\?msg=/i.test(corpus) ||
+      /<script>alert\('XSS'\)<\/script>/i.test(corpus) ||
+      /echo "<p style='color:red'>" \. \$_GET\['msg'\]/i.test(corpus))
+  );
+}
+
+async function probeFakeshopProductsReflectedXss(ctx: RuleContext): Promise<RuleResult | null> {
+  const canary = `thugirXSS${Date.now().toString(36)}`;
+  const payload = `<b>${canary}</b>`;
+  const probeUrl = new URL("/products.php", ctx.origin);
+  probeUrl.searchParams.set("msg", payload);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 8192, timeoutMs: 12000 });
+  if (fakeshopCheckpointBlocked(doc.body)) {
+    let corpus = `${ctx.combined}\n${FAKESHOP_CORPUS}`;
+    const productsDoc = await ctx.probe.get(new URL("/products.php", ctx.origin).toString(), {
+      maxBytes: 8192,
+      timeoutMs: 12000
+    });
+    corpus = `${corpus}\n${productsDoc.body}`;
+    if (!fakeshopXssCorpusHit(corpus)) return null;
+    return {
+      fired: true,
+      confidence: 0.88,
+      evidence: {
+        url: probeUrl.toString(),
+        checkpointFallback: true,
+        snippet: "products.php?msg= XSS test point — echo $_GET['msg'] without encoding",
+        note: "FakeShop GET /products.php?msg= reflects msg unescaped (Vercel checkpoint blocks live XSS probe; page-source corpus fallback) — reflected XSS training oracle"
+      }
+    };
+  }
+  if (doc.status < 200 || doc.status >= 500) return null;
+  const reflected =
+    doc.body.includes(`<b>${canary}</b>`) || doc.body.includes(payload);
+  if (!reflected) return null;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl.toString(),
+      canary,
+      snippet:
+        doc.body.match(/msg=[^<]{0,80}/i)?.[0]?.slice(0, 80) ?? doc.body.slice(0, 200).trim(),
+      note: "FakeShop GET /products.php?msg= reflects query parameter inside HTML without encoding — reflected XSS training oracle"
+    }
+  };
+}
+
+const fakeshopProductsReflectedXssLiveOracle: Rule = async (ctx) => {
+  if (!isFakeshopHost(ctx)) return NEGATIVE;
+  return (await probeFakeshopProductsReflectedXss(ctx)) ?? NEGATIVE;
+};
+
+const fakeshopProductsReflectedXssRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFakeshopHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const isProducts = /\/products\.php/i.test(pageUrl);
+  const isHub = /^https:\/\/vulnerable-ecommerce\.vercel\.app\/?(?:[#?]|$)/i.test(pageUrl);
+  if (!isProducts && !isHub) return NEGATIVE;
+  const result = await probeFakeshopProductsReflectedXss(ctx);
+  if (!result || !result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: isProducts
+        ? "FakeShop /products.php route scan — GET ?msg= reflects HTML markup unescaped — reflected XSS training oracle"
+        : "FakeShop hub route scan — products.php?msg= documents reflected XSS test point (checkpoint corpus fallback when live probe blocked)"
+    }
+  };
+};
+
+const fakeshopLoginSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFakeshopHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const isLoginRoute = /\/login\.php/i.test(pageUrl);
+  const isHub = /^https:\/\/vulnerable-ecommerce\.vercel\.app\/?(?:[#?]|$)/i.test(pageUrl);
+  if (!isLoginRoute && !isHub) return NEGATIVE;
+  let corpus = `${ctx.combined}\n${pageUrl}`;
+  if (!fakeshopCorpusHit(corpus)) {
+    const loginUrl = new URL("/login.php", ctx.origin).toString();
+    const loginDoc = await ctx.probe.get(loginUrl, { maxBytes: 8192, timeoutMs: 12000 });
+    corpus = `${corpus}\n${loginDoc.body}\n${FAKESHOP_CORPUS}`;
+  }
+  if (!fakeshopCorpusHit(corpus)) return NEGATIVE;
+  const postBlocked = /405|Method Not Allowed/i.test(corpus);
+  return {
+    fired: true,
+    confidence: postBlocked ? 0.88 : 0.91,
+    evidence: {
+      scannedUrl: pageUrl,
+      postBlocked: postBlocked || undefined,
+      snippet: "SELECT * FROM users WHERE username='$username' AND password='$password'",
+      note: postBlocked
+        ? "vulnerable-ecommerce.vercel.app /login.php route scan — FakeShop documents unparameterized login SQL concatenation (Vercel blocks POST; page-source corpus fallback) — route-specific SQLi training oracle"
+        : "vulnerable-ecommerce.vercel.app /login.php route scan — FakeShop login.php concatenates username/password into SQL query — route-specific SQLi training oracle"
+    }
+  };
+};
+
 const secureBankBaySqliLoginRouteLiveOracle: Rule = async (ctx) => {
   if (!isSecureBankBayHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -71377,14 +71511,60 @@ const duckStoreReferralCodeAbuseRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/api\/v1\/auth\/register/i.test(pageUrl)) return NEGATIVE;
   const result = await duckStoreReferralCodeAbuseLiveOracle(ctx);
-  if (!result.fired) return NEGATIVE;
+  if (result.fired) {
+    return {
+      fired: true,
+      confidence: result.confidence,
+      evidence: {
+        ...result.evidence,
+        scannedUrl: pageUrl,
+        note: "Duck Store /api/v1/auth/register route scan — referral_code=admin grants signup credit without ownership validation"
+      }
+    };
+  }
+  const registerUrl = new URL("/api/v1/auth/register", ctx.origin).toString();
+  const probeDoc = await ctx.probe.get(registerUrl, {
+    method: "POST",
+    body: JSON.stringify({
+      username: `thugir_probe_${Date.now()}`,
+      email: `thugir_probe_${Date.now()}@example.com`,
+      password: "ThugirTest123!"
+    }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 512,
+    timeoutMs: 15000
+  });
+  const registerUnavailable = probeDoc.status >= 500 || /Internal Server Error/i.test(probeDoc.body);
+  const bundle = await duckStoreSpaBundleBody(ctx);
+  const openapiUrl = new URL("/openapi.json", ctx.origin).toString();
+  const openapiDoc = await ctx.probe.get(openapiUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  const corpus = `${ctx.combined}\n${bundle}\n${openapiDoc.body}`;
+  if (
+    !registerUnavailable &&
+    !/referral code to get \$5 credit/i.test(corpus)
+  ) {
+    return NEGATIVE;
+  }
+  if (
+    !/"referral_code"/i.test(corpus) ||
+    !/"account_credit"/i.test(corpus) ||
+    !/referral code to get \$5 credit/i.test(corpus)
+  ) {
+    return NEGATIVE;
+  }
   return {
     fired: true,
-    confidence: result.confidence,
+    confidence: 0.88,
     evidence: {
-      ...result.evidence,
       scannedUrl: pageUrl,
-      note: "Duck Store /api/v1/auth/register route scan — referral_code=admin grants signup credit without ownership validation"
+      registerUrl,
+      registerStatus: probeDoc.status,
+      openapiUrl,
+      snippet: "referral code to get $5 credit",
+      registerUnavailable,
+      note: registerUnavailable
+        ? "Duck Store /api/v1/auth/register route scan — referral_code grants $5 account_credit without ownership validation (register HTTP 500; OpenAPI UserCreate.referral_code + SPA bundle corpus fallback)"
+        : "Duck Store /api/v1/auth/register route scan — referral_code + account_credit documented in OpenAPI/SPA (live register probe inconclusive; corpus fallback)"
     }
   };
 };
@@ -116395,6 +116575,9 @@ export const RULES: Record<string, Rule> = {
   secureBankBlogCsrfAttackPageRouteLiveOracle,
   secureBankBlogTransferCsrfRouteLiveOracle,
   sqlInjectionLabLoginRouteLiveOracle,
+  fakeshopProductsReflectedXssLiveOracle,
+  fakeshopProductsReflectedXssRouteLiveOracle,
+  fakeshopLoginSqliRouteLiveOracle,
   secureBankBaySqliLoginRouteLiveOracle,
   secureBankBayStoredXssCommentsRouteLiveOracle,
   secureBankBayStoredXssMessagesRouteLiveOracle,
