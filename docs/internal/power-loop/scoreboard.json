@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-06T22:10:00.000Z",
+  "updated_at": "2026-09-06T22:35:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,27 @@
       ]
     }
   },
-  "total_sites_scanned": 2924,
-  "total_findings": 29695,
+  "total_sites_scanned": 2936,
+  "total_findings": 29917,
   "critical_findings": 86,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2163,
-  "discovery_findings": 24348,
+  "discovery_urls_added": 2168,
+  "discovery_findings": 24464,
   "improvements_shipped": 1521,
-  "last_run": "2026-09-06T22:10:00.000Z",
+  "last_run": "2026-09-06T22:35:00.000Z",
   "last_run_summary": {
     "hour_utc": "22",
     "benchmark": {
-      "oracle_url": "https://juice-shop.herokuapp.com",
+      "oracle_url": "https://juice-shop-staging.herokuapp.com",
+      "primary_url": "https://juice-shop.herokuapp.com",
+      "primary_status": "error \u2014 scan timeout after 600000ms",
       "oracle_findings": 53,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 602,
+      "probes_run": 597,
+      "live_oracles": 40,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,36 +51,44 @@
           ]
         }
       },
-      "note": "6/6 on primary Heroku (53 findings validation pass; secret-resend + jwt-alg-none + captcha-bypass present)"
+      "note": "Primary Heroku timed out; staging fallback 6/6 (53 findings, 40 live oracles)"
     },
-    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped \u2014 nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "urls_ok": 3,
-      "findings": 33,
-      "focus": "22 UTC engine: wrongsecrets-ctf challenge-13 CI/CD oracle CTF forkable-actions markers + hub seeds 13/14 + oopssec path-traversal vanity + xxe-supplier runner priority",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 13,
+      "urls_ok": 10,
+      "findings": 116,
+      "focus": "22 UTC: +5 demo.testfire.net Altoro Mutual route oracles (login/search/apply/feedback) + queue drain wrongsecrets-ctf 11/12 + seclab ssrf + oopssec xxe + vulnerable-ecommerce",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings validation; gap=[])",
-      "wrongsecrets-ctf.herokuapp.com/challenge/challenge-13: 14→15 findings (+wrongsecrets-challenge-13-cicd-route-live-oracle; CTF forkable-actions markers)",
-      "koadt.github.io/oss-oopssec-store/posts/path-traversal/: 0→7 findings (+oopssec-path-traversal-route-live-oracle vanity canonical fallback)",
-      "koadt.github.io/oss-oopssec-store/posts/xxe-supplier-order-import/: 11 findings (+oopssec-xxe-supplier-import-route-live-oracle; runner -4 priority)"
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (53 findings; primary Heroku timeout \u2192 staging fallback)",
+      "demo.testfire.net/login.jsp: 12 findings (+testfire-login-sqli-route-live-oracle +testfire-login-sqli-live-oracle)",
+      "demo.testfire.net/bank/login.aspx: 11 findings \u2014 testfire-login-sqli-live-oracle",
+      "demo.testfire.net/search.jsp: 11 findings \u2014 testfire-login-sqli-live-oracle (search route gap)",
+      "wrongsecrets-ctf.herokuapp.com/challenge/challenge-11: 15 findings \u2014 wrongsecrets hub oracle",
+      "wrongsecrets-ctf.herokuapp.com/challenge/challenge-12: 15 findings \u2014 wrongsecrets-challenge-12-docker-route-live-oracle",
+      "seclab.vercel.app/labs/ssrf: 7 findings \u2014 seclab-ssrf-route-live-oracle",
+      "koadt.github.io/oss-oopssec-store/posts/xxe-supplier-order-import: 13 findings \u2014 oopssec walkthrough oracle"
     ],
     "learning_gaps": [
-      "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "qa.brokencrystals.com/api/file/aws 48h skip until ~2026-09-08T18:14Z",
+      "teacher_delta blocked \u2014 nuclei/engine unavailable in cloud agent",
+      "primary juice-shop.herokuapp.com Heroku cold-start exceeds 600s benchmark timeout \u2014 trigger staging fallback sooner",
+      "demo.testfire.net/bank/apply.aspx + feedback.jsp + search.jsp lack route-specific XSS/SQLi oracles (generic testfire-login-sqli only)",
       "vapi.roottusk.com + PentestForge dvwa/tomcat unreachable (dead hosts in queue)",
-      "oopssec path-traversal/xxe vanity slugs still need periodic queue drain"
+      "qa.brokencrystals.com/api/file/aws 48h skip until ~2026-09-08T18:14Z"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 53,
-    "wrongsecrets-ctf.herokuapp.com/challenge/challenge-13": 15,
-    "koadt.github.io/oss-oopssec-store/posts/path-traversal": 7,
-    "koadt.github.io/oss-oopssec-store/posts/xxe-supplier-order-import": 11,
-    "wrongsecrets-ctf.herokuapp.com/challenge/challenge-14": 13,
-    "nodegoat-websec.herokuapp.com/contributions": 17
+    "juice-shop-staging.herokuapp.com": 53,
+    "demo.testfire.net/login.jsp": 12,
+    "demo.testfire.net/bank/login.aspx": 11,
+    "demo.testfire.net/search.jsp?query=test": 11,
+    "wrongsecrets-ctf.herokuapp.com/challenge/challenge-11": 15,
+    "wrongsecrets-ctf.herokuapp.com/challenge/challenge-12": 15,
+    "seclab.vercel.app/labs/ssrf": 7,
+    "koadt.github.io/oss-oopssec-store/posts/xxe-supplier-order-import": 13,
+    "vulnerable-ecommerce.vercel.app": 10
   }
 }
