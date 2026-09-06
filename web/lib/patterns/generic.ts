@@ -75061,7 +75061,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "IST Edu newsletter CRLF injection route live oracle",
     description:
-      "When scanning /csrf, /labs/csrf, or /newsletter, POST /api/newsletter with CRLF in the email field triggers HTTP response splitting — IST Edu header injection training oracle.",
+      "When scanning /csrf, /labs/csrf, /newsletter, or /api/newsletter, POST /api/newsletter with CRLF in the email field triggers HTTP response splitting — IST Edu header injection training oracle.",
     impactOneline:
       "CRLF injection in newsletter subscriptions lets attackers inject forged email headers or poison HTTP responses.",
     detectorKind: "rule_ref",
@@ -75087,7 +75087,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "IST Edu CSRF state-change route live oracle",
     description:
-      "When scanning /csrf, /labs/csrf, or /newsletter, POST /api/newsletter subscribes an email without anti-CSRF token or session — IST Edu cross-site request forgery state-change oracle.",
+      "When scanning /csrf, /labs/csrf, /newsletter, or /api/newsletter, POST /api/newsletter subscribes an email without anti-CSRF token or session — IST Edu cross-site request forgery state-change oracle.",
     impactOneline:
       "Missing CSRF protections let attackers trick visitors into performing unwanted newsletter subscriptions or other state changes.",
     detectorKind: "rule_ref",
@@ -75217,7 +75217,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "IST Edu redirect whitelist bypass SSRF route live oracle",
     description:
-      "When scanning /labs/ssrf or /ssrf on ist-edu-bd.vercel.app, GET /api/redirect?url= accepts //https:/// malformed bypass while blocking AWS metadata — IST Edu SSRF/open redirect training oracle.",
+      "When scanning /labs/ssrf, /ssrf, or /api/redirect on ist-edu-bd.vercel.app, GET /api/redirect?url= accepts //https:/// malformed bypass while blocking AWS metadata — IST Edu SSRF/open redirect training oracle.",
     impactOneline:
       "Broken redirect allow-lists let attackers chain open redirects toward internal or attacker-controlled targets.",
     detectorKind: "rule_ref",

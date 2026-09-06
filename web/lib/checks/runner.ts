@@ -8891,7 +8891,39 @@ function extractIstEduVulnPortalSeeds(html: string, pageUrl: string): string[] {
     "/ssti",
     "/files",
     "/api/comments",
+    "/api/newsletter",
+    "/api/redirect",
     "/newsletter"
+  ]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** hackminaaziz.fly.dev — seed deliberate vulnerability lab routes from hub crawl. */
+function extractHackminaazizSeeds(html: string, pageUrl: string): string[] {
+  if (!/hackminaaziz\.fly\.dev|deliberately vulnerable Flask/i.test(`${html}\n${pageUrl}`)) {
+    return [];
+  }
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of [
+    "/login",
+    "/register",
+    "/search",
+    "/profile/1",
+    "/ping",
+    "/comments",
+    "/comments/csrf-demo",
+    "/reset",
+    "/reset/confirm",
+    "/about"
   ]) {
     try {
       const u = new URL(p, pageUrl);
@@ -10048,7 +10080,11 @@ function extractOopssecStoreSeeds(html: string, pageUrl: string): string[] {
     "/posts/client-side-price-manipulation/",
     "/posts/client-side-price-manipulation",
     "/posts/stored-xss-product-reviews/",
-    "/posts/live-stream-hijack/"
+    "/posts/live-stream-hijack/",
+    "/posts/react2shell-cve-2025-55182/",
+    "/posts/react2shell/",
+    "/posts/jwt-weak-secret-admin-bypass/",
+    "/posts/weak-jwt-secret/"
   ]) {
     try {
       const u = new URL(p, pageUrl);
@@ -11180,6 +11216,7 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
   const airtAcademySeeds = extractAirtAcademySeeds(home.body, home.finalUrl);
   const appsecMasterLabSeeds = extractAppsecMasterLabSeeds(home.body, origin);
   const istEduVulnPortalSeeds = extractIstEduVulnPortalSeeds(home.body, home.finalUrl);
+  const hackminaazizSeeds = extractHackminaazizSeeds(home.body, home.finalUrl);
   const dvwuVulnPortalSeeds = extractDvwuVulnPortalSeeds(home.body, home.finalUrl);
   const vulnforgeSeeds = extractVulnforgeSeeds(home.body, home.finalUrl);
   const vulnforgeAcademySeeds = extractVulnforgeAcademySeeds(home.body, home.finalUrl);
@@ -12116,6 +12153,7 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
       ...airtAcademySeeds,
       ...appsecMasterLabSeeds,
       ...istEduVulnPortalSeeds,
+      ...hackminaazizSeeds,
       ...dvwuVulnPortalSeeds,
       ...vulnforgeSeeds,
       ...vulnforgeAcademySeeds,
@@ -14328,7 +14366,7 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         return -3;
       if (
         /ist-edu-bd\.vercel\.app/i.test(origin) &&
-        /\/(?:admin|register|login|search|dashboard|portal|sqli|xss|idor|csrf|api\/comments|(?:labs\/)?(?:csrf|ssrf|lfi|sqli|xss|idor|xxe|cmdi|command-injection|path-traversal|open-redirect|ssti|graphql|deserialization|file-upload|jwt)|files|newsletter)\b/i.test(
+        /\/(?:admin|register|login|search|dashboard|portal|sqli|xss|idor|csrf|api\/(?:comments|newsletter|redirect)|(?:labs\/)?(?:csrf|ssrf|lfi|sqli|xss|idor|xxe|cmdi|command-injection|path-traversal|open-redirect|ssti|graphql|deserialization|file-upload|jwt)|files|newsletter)\b/i.test(
           targetInput
         ) &&
         p.slug.startsWith("ist-edu-")

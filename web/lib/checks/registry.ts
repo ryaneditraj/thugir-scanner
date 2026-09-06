@@ -113112,25 +113112,32 @@ async function probeNewsletterCrlfInjection(ctx: RuleContext): Promise<RuleResul
   };
 }
 
+function newsletterRouteMatches(pageUrl: string): boolean {
+  if (/\/api\/newsletter\b/i.test(pageUrl)) return true;
+  try {
+    const pathname = new URL(pageUrl).pathname;
+    return /\/(?:labs\/)?(?:csrf|newsletter)\b/i.test(pathname);
+  } catch {
+    return false;
+  }
+}
+
 const istEduNewsletterCrlfRouteLiveOracle: Rule = async (ctx) => {
   if (!isIstEduHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  let pathname = "";
-  try {
-    pathname = new URL(pageUrl, ctx.origin).pathname;
-  } catch {
-    return NEGATIVE;
-  }
-  if (!/\/(?:labs\/)?(?:csrf|newsletter)\b/i.test(pathname)) return NEGATIVE;
+  if (!newsletterRouteMatches(pageUrl)) return NEGATIVE;
   const result = await probeNewsletterCrlfInjection(ctx);
   if (!result?.fired) return NEGATIVE;
+  const apiRoute = /\/api\/newsletter\b/i.test(pageUrl);
   return {
     fired: true,
     confidence: result.confidence,
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: "IST Edu /csrf, /labs/csrf, or /newsletter route scan — POST /api/newsletter CRLF injection confirms HTTP response splitting / forged email header oracle"
+      note: apiRoute
+        ? "IST Edu /api/newsletter route scan — POST CRLF in email confirms HTTP response splitting / forged email header oracle"
+        : "IST Edu /csrf, /labs/csrf, or /newsletter route scan — POST /api/newsletter CRLF injection confirms HTTP response splitting / forged email header oracle"
     }
   };
 };
@@ -113163,22 +113170,19 @@ async function probeNewsletterCsrfStateChange(ctx: RuleContext): Promise<RuleRes
 const istEduCsrfStateChangeLiveOracle: Rule = async (ctx) => {
   if (!isIstEduHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  let pathname = "";
-  try {
-    pathname = new URL(pageUrl, ctx.origin).pathname;
-  } catch {
-    return NEGATIVE;
-  }
-  if (!/\/(?:labs\/)?(?:csrf|newsletter)\/?$/i.test(pathname)) return NEGATIVE;
+  if (!newsletterRouteMatches(pageUrl)) return NEGATIVE;
   const result = await probeNewsletterCsrfStateChange(ctx);
   if (!result?.fired) return NEGATIVE;
+  const apiRoute = /\/api\/newsletter\b/i.test(pageUrl);
   return {
     fired: true,
     confidence: result.confidence,
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: "IST Edu /csrf, /labs/csrf, or /newsletter route scan — POST /api/newsletter subscribes without anti-CSRF token — cross-site request forgery state-change oracle"
+      note: apiRoute
+        ? "IST Edu /api/newsletter route scan — POST subscribes email without anti-CSRF token — cross-site request forgery state-change oracle"
+        : "IST Edu /csrf, /labs/csrf, or /newsletter route scan — POST /api/newsletter subscribes without anti-CSRF token — cross-site request forgery state-change oracle"
     }
   };
 };
@@ -114345,19 +114349,27 @@ async function probeRedirectWhitelistBypass(ctx: RuleContext): Promise<RuleResul
   };
 }
 
+function redirectSsrfRouteMatches(pageUrl: string): boolean {
+  if (/\/api\/redirect\b/i.test(pageUrl)) return true;
+  return /\/(?:labs\/ssrf|ssrf)\b/i.test(pageUrl);
+}
+
 const istEduSsrfRedirectRouteLiveOracle: Rule = async (ctx) => {
   if (!isIstEduHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/(?:labs\/ssrf|ssrf|redirect)\b/i.test(pageUrl)) return NEGATIVE;
+  if (!redirectSsrfRouteMatches(pageUrl)) return NEGATIVE;
   const result = await probeRedirectWhitelistBypass(ctx);
   if (!result?.fired) return NEGATIVE;
+  const apiRoute = /\/api\/redirect\b/i.test(pageUrl);
   return {
     fired: true,
     confidence: result.confidence,
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: "IST Edu /labs/ssrf or /ssrf route scan — GET /api/redirect?url= accepts //https:/// whitelist bypass while blocking internal metadata — SSRF/open redirect route oracle"
+      note: apiRoute
+        ? "IST Edu /api/redirect route scan — GET ?url= accepts //https:/// whitelist bypass while blocking internal metadata — SSRF/open redirect API oracle"
+        : "IST Edu /labs/ssrf or /ssrf route scan — GET /api/redirect?url= accepts //https:/// whitelist bypass while blocking internal metadata — SSRF/open redirect route oracle"
     }
   };
 };

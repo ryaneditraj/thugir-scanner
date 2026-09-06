@@ -9101,6 +9101,24 @@
       "slug": "duck-store-cart-negative-quantity-500-corpus-fallback",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: POST /api/v1/auth/register returns HTTP 500; duckStoreCartOpenApiCorpus supplies CartAddItem quantity from /openapi.json; duck-store.escape.tech/api/v1/cart/add findings 10→14 (+duck-store-cart-negative-quantity-live-oracle +route); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ist-edu-bd.vercel.app",
+      "slug": "ist-edu-newsletter-api-route-match",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/newsletter CRLF email=test%0d%0aBcc:thugir-crlf-probe@evil.example returns CRLF Injection Detected; POST JSON {email} subscribes without CSRF token; ist-edu-bd.vercel.app/api/newsletter findings 0→8 (+ist-edu-newsletter-crlf-route-live-oracle +ist-edu-csrf-state-change-live-oracle); benchmark juice-shop staging 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ist-edu-bd.vercel.app",
+      "slug": "ist-edu-redirect-api-route-match",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/redirect?url=//https:///google.com/.. returns HTTP 302 Location: //https:///google.com/.. while metadata URL returns 403; ist-edu-bd.vercel.app/api/redirect findings 0→7 (+ist-edu-ssrf-redirect-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:hackminaaziz.fly.dev",
+      "slug": "hackminaaziz-discovery-hub-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractHackminaazizSeeds seeds /login /register /search /profile/1 /ping /comments /reset /about from hub crawl; 15 UTC thin-hub gap — accelerates queue drain for route-specific live oracles; benchmark 6/6 maintained"
     }
   ]
 }

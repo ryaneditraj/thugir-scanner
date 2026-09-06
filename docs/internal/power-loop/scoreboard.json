@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-06T17:08:34.495Z",
+  "updated_at": "2026-09-06T17:22:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,12 +22,12 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2143,
   "discovery_findings": 24002,
-  "improvements_shipped": 1503,
-  "last_run": "2026-09-06T17:08:34.495Z",
+  "improvements_shipped": 1506,
+  "last_run": "2026-09-06T17:22:00.000Z",
   "last_run_summary": {
     "hour_utc": "17",
     "benchmark": {
-      "oracle_url": "https://juice-shop.herokuapp.com",
+      "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": 52,
       "oracle_recall": "6/6",
       "gap": [],
@@ -48,40 +48,37 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (52 findings, 39 juice-shop live oracles; gap=[]; secret-resend + jwt-alg-none + captcha-bypass present)"
+      "note": "6/6 on staging fallback (52 findings; primary Heroku timed out 600s)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
       "findings": 99,
-      "focus": "+5 WrongSecrets CTF challenges 0/3/5/8 + VAmPI staging _debug; drained ist-edu newsletter/redirect + todoer register",
-      "improvements_shipped_this_run": 0
+      "focus": "17 UTC: ist-edu-bd /api/newsletter + /api/redirect API route oracle matchers (15 UTC queue gap)",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, 39 live oracles; gap=[])",
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (52 findings; gap=[])",
+      "ist-edu-bd.vercel.app/api/newsletter: 0→8 (+ist-edu-newsletter-crlf-route-live-oracle +ist-edu-csrf-state-change-live-oracle)",
+      "ist-edu-bd.vercel.app/api/redirect: 0→7 (+ist-edu-ssrf-redirect-route-live-oracle)",
       "wrongsecrets-ctf.herokuapp.com/challenge/challenge-0: 15 findings — wrongsecrets-challenge-0-opening-route-live-oracle",
-      "wrongsecrets-ctf.herokuapp.com/challenge/challenge-3: 15 findings — wrongsecrets-challenge-3-docker-env-route-live-oracle",
-      "wrongsecrets-ctf.herokuapp.com/challenge/challenge-5: 15 findings — wrongsecrets-challenge-5-configmap-route-live-oracle",
-      "urban-vampi-staging.up.railway.app/users/v1/_debug: 17 findings — vampi-debug-password-route-live-oracle + vampi-user-bola-route-live-oracle",
-      "ist-edu-bd.vercel.app/api/newsletter: 8 findings — ist-edu-newsletter-crlf-route-live-oracle",
-      "ist-edu-bd.vercel.app/api/redirect: 7 findings — ist-edu-ssrf-redirect-route-live-oracle"
+      "urban-vampi-staging.up.railway.app/users/v1/_debug: 17 findings — vampi-debug-password-route-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "ist-edu-bd /api/redirect lacks dedicated open-redirect oracle (SSRF route oracle only)",
       "todoer.site register/forgot-password share todoer-tasks-idor-live-oracle without route-specific signup oracle",
       "appsec-ci-pipeline /search still queued — no SQLi route oracle",
-      "qa.brokencrystals.com/api/file/aws 48h skip until ~2026-09-08T18:14Z"
+      "qa.brokencrystals.com/api/file/aws 48h skip until ~2026-09-08T18:14Z",
+      "primary Heroku juice-shop timed out — staging fallback 6/6"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 52,
+    "ist-edu-bd.vercel.app/api/newsletter": 8,
+    "ist-edu-bd.vercel.app/api/redirect": 7,
     "urban-vampi-staging.up.railway.app/users/v1/_debug": 17,
     "wrongsecrets-ctf.herokuapp.com/challenge/challenge-0": 15,
-    "wrongsecrets-ctf.herokuapp.com/challenge/challenge-3": 15,
-    "wrongsecrets-ctf.herokuapp.com/challenge/challenge-5": 15,
-    "wrongsecrets-ctf.herokuapp.com/challenge/challenge-8": 15,
-    "ist-edu-bd.vercel.app/api/newsletter": 8
+    "brokencrystals.com/api/process_numbers": 85
   }
 }
