@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-06T10:08:00.000Z",
+  "updated_at": "2026-09-06T11:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://next-nosqli.vercel.app/",
+      "source": "ankush-003/next-nosqli — NoSQL injection training app (GitHub homepage; web search 11 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://hackminaaziz.fly.dev/comments/csrf-demo",
+      "source": "hackminaaziz.fly.dev — CSRF auto-submit demo page (homepage quick-start; web search 11 UTC)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://ucu-owasp-ctf.vercel.app/access/",
+      "source": "allaboutapps/owasp-ctf-2025 — A01 broken access control admin panel + directory traversal (web search 11 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ucu-owasp-ctf.vercel.app/ssrf/",
+      "source": "allaboutapps/owasp-ctf-2025 — A10 SSRF + internal service access lab (web search 11 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ucu-owasp-ctf.vercel.app/injection/",
+      "source": "allaboutapps/owasp-ctf-2025 — A03 injection hub (SQLi/XSS/command; web search 11 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://bugforge.io/labs/auth",
       "source": "bugforge.io — authentication bypass hands-on lab module (complements idor/graphql/sqli; web search 10 UTC)",

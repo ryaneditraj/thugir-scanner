@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-06T10:12:00.000Z",
+  "updated_at": "2026-09-06T11:06:52.512Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,19 +15,19 @@
       ]
     }
   },
-  "total_sites_scanned": 2813,
-  "total_findings": 27838,
+  "total_sites_scanned": 2822,
+  "total_findings": 27957,
   "critical_findings": 84,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1998,
-  "discovery_findings": 23390,
+  "discovery_urls_added": 2003,
+  "discovery_findings": 23456,
   "improvements_shipped": 1488,
-  "last_run": "2026-09-06T10:12:00.000Z",
+  "last_run": "2026-09-06T11:06:52.512Z",
   "last_run_summary": {
-    "hour_utc": "10",
+    "hour_utc": "11",
     "benchmark": {
-      "oracle_url": "https://juice-shop-staging.herokuapp.com",
+      "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 53,
       "oracle_recall": "6/6",
       "gap": [],
@@ -48,40 +48,43 @@
           ]
         }
       },
-      "note": "6/6 stable on staging fallback (53 findings; primary Heroku timeout)"
+      "note": "6/6 stable first-pass recall on primary Heroku (53 findings, 40 live oracles; secret-resend + iac-terraform-tls-key present)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 2,
-      "findings": 4,
-      "focus": "Prompt Airlines AI CTF chat prompt-injection + challenge route oracles + Dreadnode Crucible platform oracles",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 66,
+      "focus": "next-nosqli NoSQL lab + hackminaaziz CSRF demo + UCU OWASP CTF access/ssrf/injection hubs + drained wrongsecrets-64 + fauxbank transfer + websec level17",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (53 findings)",
-      "promptairlines.com/chat: 7 findings — promptairlines-chat-prompt-injection-live-oracle +route shipped",
-      "crucible.dreadnode.io/: 5 findings — dreadnode-crucible-platform-live-oracle +route shipped"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, 40 live oracles)",
+      "ucu-owasp-ctf.vercel.app/access/: 4 findings — ucu-owasp-ctf-access-route-live-oracle confirmed",
+      "ucu-owasp-ctf.vercel.app/ssrf/: 4 findings — ucu-owasp-ctf-ssrf-route-live-oracle confirmed",
+      "ucu-owasp-ctf.vercel.app/injection/: 4 findings — ucu-owasp-ctf-injection-route-live-oracle confirmed",
+      "wrongsecrets.herokuapp.com/challenge/challenge-64: 19 findings — wrongsecrets-challenge-64-swift-binary-route-live-oracle",
+      "pentest-fauxbank.vercel.app/transfer: 18 findings — fauxbank-transfer-route-live-oracle",
+      "websec.fr/level17/: 6 findings — websec-level17-timing-attack-route-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "juice-shop Heroku+staging intermittent timeout — staging fallback required on degraded passes",
+      "next-nosqli.vercel.app thin pass (4 findings) — no dedicated NoSQLi route oracle",
+      "hackminaaziz /comments/csrf-demo inherits /comments oracles — no CSRF-specific route oracle",
       "qa.brokencrystals.com/api/file/aws still queued (48h skip)",
       "oopssec react2shell/weak-jwt vanity slugs still queued",
-      "duck-store cart/checkout route oracles blocked when register API returns 500",
       "wrongsecrets challenge-68 not deployed on Heroku (404)"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 53,
-    "promptairlines.com/chat": 7,
-    "crucible.dreadnode.io/": 5,
-    "bugforge.io/labs/auth": 7,
-    "bugforge.io/labs/csrf": 7,
-    "bugforge.io/labs/xss": 7,
-    "bugforge.io/labs/ssrf": 7,
-    "apparatus.atlascrew.dev/": 9,
-    "vulnapi.testinvicti.com/api/fetch": 14,
-    "www.wrongsecrets.com/mcp": 16
+    "ucu-owasp-ctf.vercel.app/access/": 4,
+    "ucu-owasp-ctf.vercel.app/ssrf/": 4,
+    "ucu-owasp-ctf.vercel.app/injection/": 4,
+    "wrongsecrets.herokuapp.com/challenge/challenge-64": 19,
+    "pentest-fauxbank.vercel.app/transfer": 18,
+    "websec.fr/level17/": 6,
+    "hackminaaziz.fly.dev/comments/csrf-demo": 7,
+    "next-nosqli.vercel.app/": 4
   }
 }
