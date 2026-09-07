@@ -35333,6 +35333,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnlab-dev-results-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "vulnlab.dev scanner results route live oracle",
+    description:
+      "When scanning vulnlab.dev/results/, the page publishes hit/miss verdict tables comparing Nuclei and Semgrep DAST output against each live lab — scanner benchmark ground-truth oracle.",
+    impactOneline:
+      "Public scanner benchmark pages document which vulnerability classes commercial tools miss on intentionally vulnerable labs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnlabDevResultsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "vulnlab.dev results are intentional training artifacts — use them to tune scanner recall, not as production targets.",
+      steps: [
+        "Run scanner benchmarks only on isolated lab infrastructure.",
+        "Track hit/miss tables to prioritize detection gaps in your own engine.",
+        "Do not expose internal scanner evaluation data on public production hosts."
+      ]
+    },
+    fixPrompt:
+      "Our vulnlab.dev/results route scan exposes public DAST benchmark tables. Show how to keep scanner evaluation data internal.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "ssrf-vulnlab-basic-live-oracle",
     platform: "generic",
     category: "Server-side request forgery",

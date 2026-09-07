@@ -89619,6 +89619,48 @@ const vulnlabDevHubRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const vulnlabDevResultsRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnlabDevRootHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/results\/?(?:\?|#|$)/i.test(pageUrl)) return NEGATIVE;
+  let corpus = ctx.combined;
+  if (
+    !/Scanner results|off-the-shelf scanners|scanner-results/i.test(corpus) ||
+    corpus.length < 800
+  ) {
+    const doc = await ctx.probe.get(new URL("/results/", ctx.origin).toString(), {
+      maxBytes: 200_000,
+      timeoutMs: 15000
+    });
+    if (doc.status >= 200 && doc.status < 400 && doc.body.length > 500) {
+      corpus = `${corpus}\n${doc.body}`;
+    }
+  }
+  const resultsOk =
+    /Scanner results|what off-the-shelf scanners caught/i.test(corpus) &&
+    (/table\.results|class="verdict hit"|class="verdict miss"/i.test(corpus) ||
+      /Nuclei.*DAST|scanner-results/i.test(corpus)) &&
+    (/ssrf\.vulnlab\.dev|sqli\.vulnlab\.dev|xss\.vulnlab\.dev|ssti\.vulnlab\.dev/i.test(corpus) ||
+      /semgrep:.*ssrf|python\.flask\.security/i.test(corpus));
+  if (!resultsOk) return NEGATIVE;
+  const missCount = (corpus.match(/class="verdict miss"/gi) || []).length;
+  const hitCount = (corpus.match(/class="verdict hit"/gi) || []).length;
+  return {
+    fired: true,
+    confidence: hitCount + missCount >= 4 ? 0.91 : 0.88,
+    evidence: {
+      scannedUrl: pageUrl,
+      hitCount,
+      missCount,
+      snippet:
+        corpus.match(/what off-the-shelf scanners caught[\s\S]{0,120}/i)?.[0]?.slice(0, 100) ??
+        "Scanner benchmark results table",
+      note:
+        "vulnlab.dev /results route scan — public scanner benchmark table documents hit/miss verdicts per lab against Nuclei/Semgrep DAST ground truth"
+    }
+  };
+};
+
 function isSqliVulnlabHost(ctx: RuleContext): boolean {
   const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
   return /sqli\.vulnlab\.dev/i.test(corpus);
@@ -107977,15 +108019,31 @@ async function probeBrokencrystalsFetchSsrf(ctx: RuleContext): Promise<RuleResul
   });
   if (r.status < 200 || r.status >= 300) return null;
   if (!bodyReflectsSsrfCanary(r.body)) return null;
+  const imdsUrl = new URL("/api/fetch", ctx.origin);
+  imdsUrl.searchParams.set("url", "http://169.254.169.254/latest/meta-data/");
+  const imdsProbe = await ctx.probe.get(imdsUrl.toString(), {
+    maxBytes: 4096,
+    redirect: "manual"
+  });
+  const imdsHit =
+    imdsProbe.status >= 200 &&
+    imdsProbe.status < 400 &&
+    /ami-id|instance-id|local-ipv4/i.test(imdsProbe.body);
   return {
     fired: true,
-    confidence: 0.93,
+    confidence: imdsHit ? 0.95 : 0.93,
     evidence: {
       url: fetchUrl.toString(),
       param: "url",
       status: r.status,
       snippet: r.body.slice(0, 180).trim(),
-      note: "Broken Crystals GET /api/fetch?url= fetches remote URL server-side — README SSRF oracle"
+      imdsProbeUrl: imdsUrl.toString(),
+      imdsProbeStatus: imdsProbe.status,
+      imdsProbeHit: imdsHit,
+      imdsProbeSnippet: imdsProbe.body.slice(0, 120).trim(),
+      note: imdsHit
+        ? "Broken Crystals GET /api/fetch?url= fetches remote URLs and reaches AWS IMDS ami-id/instance-id — cloud metadata SSRF oracle"
+        : "Broken Crystals GET /api/fetch?url= fetches remote URL server-side — README SSRF oracle (IMDS probe attempted)"
     }
   };
 }
@@ -119505,6 +119563,7 @@ export const RULES: Record<string, Rule> = {
   ssrfDefensePlatformAllowlistBypassRouteLiveOracle,
   vulnlabDevHubLiveOracle,
   vulnlabDevHubRouteLiveOracle,
+  vulnlabDevResultsRouteLiveOracle,
   sqliVulnlabErrorLiveOracle,
   sqliVulnlabErrorRouteLiveOracle,
   sqliVulnlabSecondOrderLiveOracle,

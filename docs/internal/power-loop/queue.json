@@ -1,6 +1,26 @@
 {
-  "updated_at": "2026-09-07T05:05:00.000Z",
+  "updated_at": "2026-09-07T05:15:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://vulnlab.dev/results/",
+      "source": "sampsonc/vulnlab.dev — scanner benchmark results table comparing Nuclei/Semgrep hit-miss per lab (scoreboard gap 05 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssrf.vulnlab.dev/metadata-gcp/",
+      "source": "sampsonc/vulnlab.dev — mock GCP metadata SSRF lab (scoreboard gap: metadata-gcp not yet priority-queued)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssrf.vulnlab.dev/metadata-azure/",
+      "source": "sampsonc/vulnlab.dev — mock Azure IMDS SSRF lab (scoreboard gap: metadata-azure not yet priority-queued)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssrf.vulnlab.dev/blind/",
+      "source": "sampsonc/vulnlab.dev — blind SSRF lab (scoreboard gap: blind variant not yet priority-queued)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://brokencrystals.com/api/fetch?url=https://httpbin.org/get",
       "source": "NeuraLegion/brokencrystals README — /api/fetch SSRF oracle (url param fetches arbitrary targets)",

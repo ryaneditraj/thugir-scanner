@@ -2867,6 +2867,7 @@ const DEEP_RULES = new Set<string>([
   "ssrfDefensePlatformAllowlistBypassRouteLiveOracle",
   "vulnlabDevHubLiveOracle",
   "vulnlabDevHubRouteLiveOracle",
+  "vulnlabDevResultsRouteLiveOracle",
   "sqliVulnlabErrorLiveOracle",
   "sqliVulnlabErrorRouteLiveOracle",
   "sqliVulnlabSecondOrderLiveOracle",
