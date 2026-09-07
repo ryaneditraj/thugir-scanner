@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-07T18:30:00.000Z",
+  "updated_at": "2026-09-07T18:37:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,25 +15,29 @@
       ]
     }
   },
-  "total_sites_scanned": 2859,
-  "total_findings": 29632,
+  "total_sites_scanned": 2871,
+  "total_findings": 29796,
   "critical_findings": 54,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2033,
-  "discovery_findings": 25010,
+  "discovery_urls_added": 2036,
+  "discovery_findings": 25120,
   "improvements_shipped": 1581,
-  "last_run": "2026-09-07T18:30:00.000Z",
+  "last_run": "2026-09-07T18:37:00.000Z",
   "last_run_summary": {
     "hour_utc": "18",
     "benchmark": {
-      "oracle_url": "https://juice-shop.demo.escape.tech",
-      "oracle_findings": 54,
+      "oracle_url": "https://juice-shop-staging.herokuapp.com",
+      "fallback_oracle_url": "https://juice-shop.demo.escape.tech",
+      "primary_url": "https://juice-shop.herokuapp.com",
+      "primary_status": "error — scan timeout after 600000ms (parallel run: 503 on escape.tech fallback chain)",
+      "oracle_findings": 52,
+      "fallback_findings": 54,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 603,
-      "live_oracles": 40,
+      "probes_run": 599,
+      "live_oracles": 39,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -49,39 +53,55 @@
           ]
         }
       },
-      "note": "Primary Heroku 503 — fallback juice-shop.demo.escape.tech stable 6/6 (54 findings; gap=[])"
+      "note": "Primary Heroku timeout; staging fallback stable 6/6 (52 findings; 39 live oracles). escape.tech alternate 6/6 (54 findings) from parallel engine run."
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 2,
-      "urls_scanned": 3,
-      "findings": 13,
-      "focus": "18 UTC: securebank-blog IDOR route oracle + UCU OWASP CTF /auth/ + /xss/ queue priority",
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 101,
+      "focus": "18 UTC: UCU xss/auth + wrongsecrets-29 + fauxbank homepage + GenAI lab + queue drain wrongsecrets 16/17/18; route oracles shipped for securebank IDOR + UCU auth/xss",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.demo.escape.tech: benchmark recall 6/6 (54 findings, gap=[]; Heroku primary 503)",
-      "securebank-blog.vercel.app/idor: 3→5 (+securebank-blog-idor-route-live-oracle)",
-      "ucu-owasp-ctf.vercel.app/auth/: 3→4 (+ucu-owasp-ctf-auth-route-live-oracle)",
-      "ucu-owasp-ctf.vercel.app/xss/: 3→4 (+ucu-owasp-ctf-xss-route-live-oracle)"
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (52 findings, gap=[]; 39 live oracles; primary Heroku timeout)",
+      "juice-shop.demo.escape.tech: benchmark recall 6/6 (54 findings; parallel escape.tech fallback)",
+      "securebank-blog.vercel.app/idor: 5 (+securebank-blog-idor-route-live-oracle)",
+      "ucu-owasp-ctf.vercel.app/xss/: 4 (+ucu-owasp-ctf-xss-route-live-oracle)",
+      "ucu-owasp-ctf.vercel.app/auth/: 4 (+ucu-owasp-ctf-auth-route-live-oracle)",
+      "wrongsecrets.herokuapp.com/challenge/challenge-29: 19 (+wrongsecrets-challenge-29-screenshot-log-route-live-oracle)",
+      "pentest-fauxbank.vercel.app/: 15 (fauxbank admin/loans/CSRF/SQLi live oracles)",
+      "owaspbased-lessons.vercel.app/: 3 (+client-side-owasp-genai-lab-evidence)",
+      "wrongsecrets.herokuapp.com/challenge/challenge-16/17/18: 19 each (queue drain)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "juice-shop.herokuapp.com primary dyno intermittently 503 — escape.tech fallback maintains 6/6",
-      "securebank-blog /idor oracle uses article corpus (no live /idor route on blog host)",
-      "UCU OWASP CTF vanity /auth/ and /xss/ paths return 404 — bundle corpus fallback required"
+      "juice-shop.herokuapp.com primary oracle timing out (600s) — staging/escape.tech fallbacks required",
+      "owaspbased-lessons.vercel.app GenAI lab thin pass — no per-lesson route oracles yet",
+      "UCU OWASP CTF /crypto/ subroute still unqueued",
+      "securebank-blog /idor oracle uses article corpus (no live /idor route on blog host)"
     ]
   },
   "discovery_highlights": {
     "preview.owasp-juice.shop": 55,
     "juice-shop.demo.escape.tech": 54,
     "juice-shop.herokuapp.com": 53,
+    "juice-shop-staging.herokuapp.com": 52,
     "pwnshop.ctfsecurity.com/chat": 53,
+    "pwnshop.ctfsecurity.com/download": 52,
+    "pwnshop.ctfsecurity.com/vulnerabilities": 50,
+    "qa.brokencrystals.com/graphql": 93,
+    "pentest-fauxbank.vercel.app": 15,
     "securebank-blog.vercel.app/idor": 5,
-    "ucu-owasp-ctf.vercel.app/auth": 4,
+    "wrongsecrets.herokuapp.com/challenge/challenge-29": 19,
+    "wrongsecrets.herokuapp.com/challenge/challenge-16": 19,
+    "wrongsecrets.herokuapp.com/challenge/challenge-17": 19,
+    "wrongsecrets.herokuapp.com/challenge/challenge-18": 19,
     "ucu-owasp-ctf.vercel.app/xss": 4,
+    "ucu-owasp-ctf.vercel.app/auth": 4,
     "ucu-owasp-ctf.vercel.app/injection": 4,
     "ucu-owasp-ctf.vercel.app/access": 4,
-    "ucu-owasp-ctf.vercel.app/ssrf": 4
+    "ucu-owasp-ctf.vercel.app/ssrf": 4,
+    "owaspbased-lessons.vercel.app": 3
   }
 }
