@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-07T07:05:00.000Z",
+  "updated_at": "2026-09-07T08:05:00.000Z",
   "priority_discovery_urls": [
     {
       "url": "https://crapi.lab.pentest-forge.com/workshop/api/mechanic/mechanic_report?report_id=1",
@@ -10740,6 +10740,31 @@
     {
       "url": "https://duck-store.escape.tech/api/v1/auth/login/totp",
       "source": "Devroxana Duck Store writeup — TOTP bypass step after weak 2FA oracle",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/admin/orders",
+      "source": "Escape Duck Store OpenAPI — admin orders BFLA oracle (benchmark 20-vuln blog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/admin/stats",
+      "source": "Escape Duck Store OpenAPI — unauthenticated admin stats disclosure oracle",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/orders/referrer",
+      "source": "Escape Duck Store OpenAPI — referrer/coupon business-logic oracle",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/reviews/product/1",
+      "source": "Escape Duck Store OpenAPI — product reviews XSS/BOLA oracle",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/auth/register",
+      "source": "Escape Duck Store OpenAPI — mass-assignment register oracle (coupon chain)",
       "auth": "public_demo"
     }
   ]

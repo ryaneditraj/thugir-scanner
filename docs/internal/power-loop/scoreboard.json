@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-07T07:30:00.000Z",
+  "updated_at": "2026-09-07T08:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,25 +15,25 @@
       ]
     }
   },
-  "total_sites_scanned": 2758,
-  "total_findings": 27280,
+  "total_sites_scanned": 2762,
+  "total_findings": 27390,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1975,
-  "discovery_findings": 23155,
+  "discovery_urls_added": 1980,
+  "discovery_findings": 23212,
   "improvements_shipped": 1548,
-  "last_run": "2026-09-07T07:30:00.000Z",
+  "last_run": "2026-09-07T08:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "07",
+    "hour_utc": "08",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 52,
+      "oracle_findings": 53,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 599,
-      "live_oracles": 39,
+      "probes_run": 597,
+      "live_oracles": 38,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -49,7 +49,7 @@
           ]
         }
       },
-      "note": "Stable 6/6 on primary Heroku (52 findings, 39 live oracles); secret-resend present via bridge"
+      "note": "Stable 6/6 on primary Heroku (53 findings, 38 live oracles); resend-key + iac-terraform-tls-key live oracles present"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
@@ -57,29 +57,28 @@
       "urls_scanned": 3,
       "urls_errored": 5,
       "findings": 57,
-      "focus": "duck-store admin/users + testimonials/29 + auth/login OpenAPI corpus fallbacks (auth register HTTP 500)",
-      "improvements_shipped_this_run": 3
+      "focus": "duck-store OpenAPI admin/orders+stats+referrer+reviews+register oracles queued; queue drain wrongsecrets 38/39/23",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, 39 live oracles; gap=[])",
-      "duck-store.escape.tech/api/v1/admin/users: 15→19 (+admin-users-bfla corpus fallback)",
-      "duck-store.escape.tech/api/v1/testimonials/29: 15→19 (+testimonials-unauth-put corpus fallback)",
-      "duck-store.escape.tech/api/v1/auth/login: 15→19 (+auth-totp-bypass corpus fallback)",
-      "wrongsecrets.herokuapp.com/challenge/challenge-38: 19 findings — challenge-38-git-notes-route-live-oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, 38 live oracles; gap=[])",
+      "wrongsecrets.herokuapp.com/challenge/challenge-38: 19 findings — git-notes route oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-39: 19 findings — aes-filename-key route oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-23: 19 findings — base64-frontend route oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "duck-store POST /api/v1/auth/register intermittently returns HTTP 500 — live oracles depend on OpenAPI corpus fallbacks",
-      "lab.pentest-forge.com crAPI/VAmPI/DVGA routes unreachable from cloud agent (DNS/connectivity)",
-      "wrongsecrets challenge-63/67 + duck-store vulnerabilities hub still queued for drain"
+      "lab.pentest-forge.com crAPI/VAmPI/DVGA routes unreachable from cloud agent (5 queue errors)",
+      "wrongsecrets challenge-63/67 + duck-store vulnerabilities hub + new admin/orders routes still queued at tail",
+      "DVS DeployBro has no public live demo — local-only install"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 52,
-    "duck-store.escape.tech/api/v1/admin/users": 19,
-    "duck-store.escape.tech/api/v1/testimonials/29": 19,
-    "duck-store.escape.tech/api/v1/auth/login": 19,
+    "juice-shop.herokuapp.com": 53,
     "wrongsecrets.herokuapp.com/challenge/challenge-38": 19,
+    "wrongsecrets.herokuapp.com/challenge/challenge-39": 19,
+    "wrongsecrets.herokuapp.com/challenge/challenge-23": 19,
+    "duck-store.escape.tech/api/v1/admin/users": 19,
     "juice-shop.demo.escape.tech": 54,
     "brokencrystals.com/api/fetch": 86,
     "ssrf.vulnlab.dev/metadata-azure": 18
