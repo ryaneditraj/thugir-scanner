@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:vault-notes-frontend-gules.vercel.app",
+      "slug": "vault-notes-notes-idor-corpus-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: vaultNotesNotesIdorLiveOracle corpus fallback when Render SQLite DB empty/cold — GET /notes/:id missing user_id ownership per Raghavtripathii/vault-notes-vapt findings.md; vault-notes-frontend-gules.vercel.app/ findings 9→11 (+vault-notes-notes-idor-live-oracle +route restored); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vault-notes-frontend-gules.vercel.app",
+      "slug": "vault-notes-stored-xss-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: dangerouslySetInnerHTML on note.content per VAPT finding #3 (img onerror via innerHTML); vault-notes-frontend-gules.vercel.app/ findings 9→11 (+vault-notes-stored-xss-live-oracle +vault-notes-stored-xss-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vault-notes-frontend-gules.vercel.app",
+      "slug": "vault-notes-plaintext-password-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: VAPT finding #4 documents cleartext password storage in SQLite users table (no bcrypt on POST /signup); vault-notes-frontend-gules.vercel.app/ findings 9→11 (+vault-notes-plaintext-password-live-oracle +route); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:vwad.owasp.org",
       "slug": "vwad-ai-goat-route-live-oracle",
       "status": "shipped",

@@ -83935,6 +83935,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vault-notes-stored-xss-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Vault Notes stored XSS via dangerouslySetInnerHTML",
+    description:
+      "Vault Notes VAPT training app renders note.content with dangerouslySetInnerHTML — img onerror payloads execute when notes are viewed (finding #3).",
+    impactOneline:
+      "Stored XSS in note content lets attackers run JavaScript in victims' browsers when notes are displayed.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vaultNotesStoredXssLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never render user note content with dangerouslySetInnerHTML.",
+      steps: [
+        "Render note.content as escaped text instead of raw HTML.",
+        "If rich text is required, sanitize with DOMPurify before rendering.",
+        "Audit all React components for innerHTML and dangerouslySetInnerHTML sinks."
+      ]
+    },
+    fixPrompt:
+      "Our Vault Notes dashboard uses dangerouslySetInnerHTML on note content. Show stored XSS remediation with safe text rendering.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vault-notes-stored-xss-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Vault Notes stored XSS route live oracle",
+    description:
+      "When scanning vault-notes-frontend-gules.vercel.app, the SPA bundle uses dangerouslySetInnerHTML on note content — stored XSS training sink oracle.",
+    impactOneline:
+      "Route-specific confirmation that Vault Notes frontend exposes a stored XSS sink on note rendering.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vaultNotesStoredXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove dangerouslySetInnerHTML from Vault Notes note rendering.",
+      steps: [
+        "Render note.content as escaped text.",
+        "Sanitize with DOMPurify if HTML formatting is required.",
+        "Add XSS regression tests for note create/view flows."
+      ]
+    },
+    fixPrompt:
+      "Our Vault Notes frontend route scan confirms dangerouslySetInnerHTML on note content. Show stored XSS sink remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vault-notes-plaintext-password-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "Vault Notes plaintext password storage live oracle",
+    description:
+      "Vault Notes VAPT training app stores user passwords in cleartext in the SQLite users table — no bcrypt hashing at signup or login (finding #4).",
+    impactOneline:
+      "Plaintext password storage exposes every user credential if the database is leaked or accessed.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vaultNotesPlaintextPasswordLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Hash all Vault Notes passwords with bcrypt before storage.",
+      steps: [
+        "Replace plaintext INSERT on POST /signup with bcrypt.hash(password, 10).",
+        "Compare login passwords with bcrypt.compare instead of string equality.",
+        "Rotate credentials for any users created before hashing was enabled."
+      ]
+    },
+    fixPrompt:
+      "Our Vault Notes users table stores passwords in plaintext. Show bcrypt hashing remediation for signup and login.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vault-notes-plaintext-password-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "Vault Notes plaintext password route live oracle",
+    description:
+      "When scanning vault-notes-frontend-gules.vercel.app, VAPT findings document plaintext password storage on vault-notes-backend.onrender.com POST /signup and /login.",
+    impactOneline:
+      "Route-specific confirmation that Vault Notes documents plaintext password storage as a training finding.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vaultNotesPlaintextPasswordRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Hash Vault Notes passwords with bcrypt on signup and login.",
+      steps: [
+        "Hash passwords before INSERT on POST /signup.",
+        "Use bcrypt.compare on POST /login.",
+        "Audit database backups for exposed plaintext credentials."
+      ]
+    },
+    fixPrompt:
+      "Our Vault Notes route scan documents plaintext password storage. Show bcrypt remediation for the signup/login flow.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vapi-identity-auth-login-route-live-oracle",
     platform: "generic",
     category: "Broken authentication",

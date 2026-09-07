@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-07T14:05:47.384Z",
-  "total": 3426,
-  "uniqueSlugs": 3418,
+  "generatedAt": "2026-09-07T15:09:46.140Z",
+  "total": 3430,
+  "uniqueSlugs": 3422,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3408,
+    "generic": 3412,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3341,
+    "deep": 3345,
     "continuous": 0
   },
   "byCategory": {
@@ -26,9 +26,9 @@
     "Information exposure": 1,
     "Information disclosure": 159,
     "Security misconfiguration": 288,
-    "Broken authentication": 220,
+    "Broken authentication": 222,
     "Injection": 568,
-    "Cross-site scripting": 809,
+    "Cross-site scripting": 811,
     "Open redirect": 29,
     "general": 20,
     "SSRF": 19,
@@ -2906,6 +2906,10 @@
     "vault-notes-login-sqli-route-live-oracle",
     "vault-notes-notes-idor-live-oracle",
     "vault-notes-notes-idor-route-live-oracle",
+    "vault-notes-plaintext-password-live-oracle",
+    "vault-notes-plaintext-password-route-live-oracle",
+    "vault-notes-stored-xss-live-oracle",
+    "vault-notes-stored-xss-route-live-oracle",
     "vaultapp-account-export-apikey-live-oracle",
     "vaultapp-account-export-apikey-route-live-oracle",
     "vaultapp-admin-audit-logs-idor-live-oracle",

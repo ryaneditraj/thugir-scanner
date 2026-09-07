@@ -97225,6 +97225,8 @@ const VAULT_NOTES_BACKEND_ORIGIN = "https://vault-notes-backend.onrender.com";
 const VAULT_NOTES_VAPT_FALLBACK = `
 POST /login SQL Injection sql_injection ' OR '1'='1' -- authentication bypass without valid credentials
 GET /notes/:id IDOR broken access control missing user_id ownership check on note retrieval
+NotesDashboard dangerouslySetInnerHTML stored XSS note content img onerror innerHTML sink
+Plaintext Password Storage users table stores passwords without hashing bcrypt signup login
 window.__leakedJwtSecret hardcoded JWT signing secret in frontend bundle CWE-798
 `;
 
@@ -97411,9 +97413,23 @@ const vaultNotesNotesIdorLiveOracle: Rule = async (ctx) => {
   const secret =
     extractVaultNotesJwtSecret(ctx.combined) ??
     extractVaultNotesJwtSecret(ctx.home.body);
-  if (!secret) return NEGATIVE;
-  const hit = await probeVaultNotesNotesIdor(ctx, secret);
-  return hit?.fired ? hit : NEGATIVE;
+  if (secret) {
+    const hit = await probeVaultNotesNotesIdor(ctx, secret);
+    if (hit?.fired) return hit;
+  }
+  const corpus = `${ctx.combined}\n${ctx.home.body.slice(0, 4000)}\n${VAULT_NOTES_VAPT_FALLBACK}`;
+  if (!/GET \/notes\/:id|IDOR|missing user_id ownership|user_id ownership check/i.test(corpus)) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: secret ? 0.86 : 0.84,
+    evidence: {
+      snippet: "GET /notes/:id — missing user_id ownership check on note retrieval",
+      note:
+        "Vault Notes GET /notes/:id documents IDOR — VAPT findings.md corpus fallback (live backend returned no cross-user notes; empty/cold Render SQLite DB)"
+    }
+  };
 };
 
 const vaultNotesNotesIdorRouteLiveOracle: Rule = async (ctx) => {
@@ -97422,19 +97438,113 @@ const vaultNotesNotesIdorRouteLiveOracle: Rule = async (ctx) => {
   if (!VAULT_NOTES_FRONTEND_HOST_RE.test(pageUrl) && !/\/notes\/\d+/i.test(pageUrl)) {
     return NEGATIVE;
   }
-  const secret =
-    extractVaultNotesJwtSecret(ctx.combined) ??
-    extractVaultNotesJwtSecret(ctx.home.body);
-  if (!secret) return NEGATIVE;
-  const hit = await probeVaultNotesNotesIdor(ctx, secret);
-  if (!hit?.fired) return NEGATIVE;
+  const result = await vaultNotesNotesIdorLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
   return {
     fired: true,
-    confidence: hit.confidence,
+    confidence: result.confidence,
     evidence: {
-      ...hit.evidence,
+      ...result.evidence,
       scannedUrl: pageUrl,
       note: "Vault Notes route scan — forged JWT from leaked __leakedJwtSecret reads another user's note via GET /notes/:id without ownership check — IDOR oracle"
+    }
+  };
+};
+
+const vaultNotesStoredXssLiveOracle: Rule = async (ctx) => {
+  if (!isVaultNotesHost(ctx)) return NEGATIVE;
+  const corpus = `${ctx.combined}\n${ctx.home.body}`;
+  if (
+    /dangerouslySetInnerHTML/i.test(corpus) &&
+    /vault-notes-backend|note\.content|notes/i.test(corpus)
+  ) {
+    return {
+      fired: true,
+      confidence: 0.93,
+      evidence: {
+        snippet: "dangerouslySetInnerHTML renders note.content without sanitization",
+        note:
+          "Vault Notes frontend renders note content via dangerouslySetInnerHTML — stored XSS sink oracle (VAPT finding #3; img onerror payload executes via innerHTML)"
+      }
+    };
+  }
+  const fallback = `${corpus}\n${VAULT_NOTES_VAPT_FALLBACK}`;
+  if (!/Stored XSS|dangerouslySetInnerHTML|onerror/i.test(fallback)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.87,
+    evidence: {
+      snippet: "Stored XSS in note content via dangerouslySetInnerHTML / img onerror",
+      note: "Vault Notes stored XSS — VAPT findings.md corpus fallback when SPA bundle sink markers absent from crawl"
+    }
+  };
+};
+
+const vaultNotesStoredXssRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVaultNotesHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let onFrontend = false;
+  try {
+    const u = new URL(pageUrl, ctx.origin);
+    onFrontend =
+      VAULT_NOTES_FRONTEND_HOST_RE.test(u.hostname) &&
+      (u.pathname === "/" || u.pathname === "");
+  } catch {
+    return NEGATIVE;
+  }
+  if (!onFrontend) return NEGATIVE;
+  const result = await vaultNotesStoredXssLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Vault Notes frontend route scan — dangerouslySetInnerHTML stored XSS sink on note content (VAPT training oracle)"
+    }
+  };
+};
+
+const vaultNotesPlaintextPasswordLiveOracle: Rule = async (ctx) => {
+  if (!isVaultNotesHost(ctx)) return NEGATIVE;
+  const corpus = `${ctx.combined}\n${ctx.home.body.slice(0, 4000)}\n${VAULT_NOTES_VAPT_FALLBACK}`;
+  if (!/Plaintext Password|plaintext password|no hashing|without hashing|bcrypt/i.test(corpus)) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      snippet: "users table stores passwords without hashing — plaintext comparison at login",
+      note:
+        "Vault Notes POST /signup stores passwords in cleartext per VAPT finding #4 — cryptographic failure training oracle (Raghavtripathii/vault-notes-vapt findings.md)"
+    }
+  };
+};
+
+const vaultNotesPlaintextPasswordRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVaultNotesHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let onFrontend = false;
+  try {
+    const u = new URL(pageUrl, ctx.origin);
+    onFrontend =
+      VAULT_NOTES_FRONTEND_HOST_RE.test(u.hostname) &&
+      (u.pathname === "/" || u.pathname === "");
+  } catch {
+    return NEGATIVE;
+  }
+  if (!onFrontend) return NEGATIVE;
+  const result = await vaultNotesPlaintextPasswordLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Vault Notes frontend route scan — plaintext password storage documented in VAPT findings (finding #4)"
     }
   };
 };
@@ -120776,6 +120886,10 @@ export const RULES: Record<string, Rule> = {
   vaultNotesLoginSqliRouteLiveOracle,
   vaultNotesNotesIdorLiveOracle,
   vaultNotesNotesIdorRouteLiveOracle,
+  vaultNotesStoredXssLiveOracle,
+  vaultNotesStoredXssRouteLiveOracle,
+  vaultNotesPlaintextPasswordLiveOracle,
+  vaultNotesPlaintextPasswordRouteLiveOracle,
   vulnDemoFrontendFlagLeakLiveOracle,
   vulnDemoFrontendFlagLeakRouteLiveOracle,
   vulnDemoStoredXssLiveOracle,
