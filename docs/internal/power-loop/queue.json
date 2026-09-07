@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-07T04:05:00.000Z",
+  "updated_at": "2026-09-07T05:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://brokencrystals.com/api/fetch?url=https://httpbin.org/get",
+      "source": "NeuraLegion/brokencrystals README — /api/fetch SSRF oracle (url param fetches arbitrary targets)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/upload/parse",
+      "source": "NeuraLegion/brokencrystals README — XXE via XML file upload POST /api/upload/parse",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssrf.vulnlab.dev/allowlist",
+      "source": "sampsonc/vulnlab.dev — SSRF substring allowlist bypass lab (requests.get validator)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssrf.vulnlab.dev/scheme",
+      "source": "sampsonc/vulnlab.dev — SSRF scheme abuse lab (file:// and arbitrary schemes via urllib)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssrf.vulnlab.dev/webhook",
+      "source": "sampsonc/vulnlab.dev — semi-blind SSRF webhook lab (leaks status/headers from attacker URL)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://vulnlab.dev/",
       "source": "sampsonc/vulnlab.dev — intentionally vulnerable DAST lab index (GitHub README live hosts)",
@@ -10621,6 +10646,31 @@
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-67",
       "source": "OWASP WrongSecrets README — Heroku demo challenge 67 (secrets management)",
       "auth": "public_benchmark"
+    },
+    {
+      "url": "https://brokencrystals.com/api/fetch?url=https://httpbin.org/get",
+      "source": "NeuraLegion/brokencrystals README — /api/fetch SSRF oracle (url param fetches arbitrary targets)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/upload/parse",
+      "source": "NeuraLegion/brokencrystals README — XXE via XML file upload POST /api/upload/parse",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssrf.vulnlab.dev/allowlist",
+      "source": "sampsonc/vulnlab.dev — SSRF substring allowlist bypass lab (requests.get validator)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssrf.vulnlab.dev/scheme",
+      "source": "sampsonc/vulnlab.dev — SSRF scheme abuse lab (file:// and arbitrary schemes via urllib)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssrf.vulnlab.dev/webhook",
+      "source": "sampsonc/vulnlab.dev — semi-blind SSRF webhook lab (leaks status/headers from attacker URL)",
+      "auth": "public_demo"
     }
   ]
 }
