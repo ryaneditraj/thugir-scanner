@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-07T02:08:00.000Z",
+  "updated_at": "2026-09-07T03:05:00.000Z",
   "discovery_urls": [
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-55",
@@ -10543,6 +10543,31 @@
     {
       "url": "http://whgojp.top/file/upload",
       "source": "whgojp/JavaSecLab — unrestricted file upload route oracle (public demo README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnlab.dev/",
+      "source": "sampsonc/vulnlab.dev — intentionally vulnerable DAST lab index (GitHub README live hosts)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://sqli.vulnlab.dev/error/",
+      "source": "sampsonc/vulnlab.dev — SQL error-based injection lab (sqli.vulnlab.dev live)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://xss.vulnlab.dev/reflected/",
+      "source": "sampsonc/vulnlab.dev — reflected XSS lab (xss.vulnlab.dev live)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssti.vulnlab.dev/basic/",
+      "source": "sampsonc/vulnlab.dev — Jinja2 SSTI lab (ssti.vulnlab.dev live)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssrf.vulnlab.dev/gopher/",
+      "source": "sampsonc/vulnlab.dev — gopher:// SSRF scheme lab (ssrf.vulnlab.dev README)",
       "auth": "public_demo"
     }
   ]
