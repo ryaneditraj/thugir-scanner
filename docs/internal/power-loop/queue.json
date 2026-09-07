@@ -2,6 +2,7 @@
   "updated_at": "2026-09-07T09:05:00.000Z",
   "priority_discovery_urls": [
     {
+<<<<<<< HEAD
       "url": "https://qa.brokencrystals.com/api/file/aws",
       "source": "NeuraLegion/brokencrystals QA — AWS metadata SSRF oracle /api/file/aws (scoreboard gap: qa host not yet queued)",
       "auth": "public_demo"
@@ -24,6 +25,30 @@
     {
       "url": "https://vapi.apisec.ai/identity/api/v2/user/1",
       "source": "roottusk/vAPI public demo — BOLA user profile oracle GET /identity/api/v2/user/{id} (APIsec hosted lab)",
+=======
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-63",
+      "source": "OWASP WrongSecrets README — Heroku demo challenge 63 hardcoded AES key (scoreboard drain gap 08 UTC)",
+      "auth": "public_benchmark"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-67",
+      "source": "OWASP WrongSecrets README — Heroku demo challenge 67 undeployed-challenge oracle (scoreboard drain gap 08 UTC)",
+      "auth": "public_benchmark"
+    },
+    {
+      "url": "https://duck-store.escape.tech/vulnerabilities",
+      "source": "Escape Duck Store blog — vulnerability index hub (scoreboard drain gap 08 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/uploads/import-from-url",
+      "source": "Escape Duck Store OpenAPI — authenticated import-from-url SSRF oracle (DB recovery corpus fallback gap 09 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/cart/items",
+      "source": "Escape Duck Store OpenAPI — cart negative-quantity route oracle path expansion (09 UTC)",
+>>>>>>> c6f2ebab (engine: duck-store import-from-url SSRF corpus fallback + cart route path expansion)
       "auth": "public_demo"
     },
     {

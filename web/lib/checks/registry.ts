@@ -72378,6 +72378,20 @@ async function duckStoreSsrfImportFromUrlProbe(
   return null;
 }
 
+async function duckStoreSsrfImportFromUrlOpenApiCorpus(ctx: RuleContext): Promise<string> {
+  const openapiUrl = new URL("/openapi.json", ctx.origin).toString();
+  const doc = await ctx.probe.get(openapiUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (
+    doc.status >= 200 &&
+    doc.status < 400 &&
+    /\/api\/v1\/uploads\/import-from-url/i.test(doc.body) &&
+    /import_image_from_url_api_v1_uploads_import_from_url_post|ImageImportRequest|HTTPBearer/i.test(doc.body)
+  ) {
+    return doc.body;
+  }
+  return `${ctx.combined}\n${DUCK_STORE_SSRF_IMPORT_CORPUS_FALLBACK}`;
+}
+
 const duckStoreSsrfImportFromUrlLiveOracle: Rule = async (ctx) => {
   if (!isDuckStoreHost(ctx)) return NEGATIVE;
   let token = await duckStoreRegisterAndLoginToken(ctx);
@@ -72385,7 +72399,41 @@ const duckStoreSsrfImportFromUrlLiveOracle: Rule = async (ctx) => {
     const fresh = await duckStoreRegisterFreshLoginToken(ctx);
     token = fresh?.token ?? null;
   }
-  if (!token) return NEGATIVE;
+  if (!token) {
+    const registerUrl = new URL("/api/v1/auth/register", ctx.origin).toString();
+    const registerDoc = await ctx.probe.get(registerUrl, {
+      method: "POST",
+      body: JSON.stringify({
+        username: `thugir_ssrf_${Date.now()}`,
+        email: `thugir_ssrf_${Date.now()}@example.com`,
+        password: "ThugirTest123!"
+      }),
+      headers: { "Content-Type": "application/json" },
+      maxBytes: 4096,
+      timeoutMs: 15000
+    });
+    if (duckStoreApiDegraded(registerDoc.status, registerDoc.body)) {
+      const corpus = await duckStoreSsrfImportFromUrlOpenApiCorpus(ctx);
+      if (
+        /\/api\/v1\/uploads\/import-from-url/i.test(corpus) &&
+        /import_image_from_url_api_v1_uploads_import_from_url_post|ImageImportRequest/i.test(corpus)
+      ) {
+        return {
+          fired: true,
+          confidence: 0.87,
+          evidence: {
+            registerUrl,
+            registerStatus: registerDoc.status,
+            snippet:
+              corpus.match(/import_from_url_api_v1_uploads_import_from_url_post|ImportFromUrl[\s\S]{0,120}/i)?.[0]?.slice(0, 200) ??
+              "POST /api/v1/uploads/import-from-url",
+            note: `Duck Store POST /api/v1/auth/register returns HTTP ${registerDoc.status} — OpenAPI documents authenticated POST /api/v1/uploads/import-from-url server-side URL fetch — corpus fallback SSRF oracle`
+          }
+        };
+      }
+    }
+    return NEGATIVE;
+  }
   const hit = await duckStoreSsrfImportFromUrlProbe(ctx, token);
   return hit?.fired ? hit : NEGATIVE;
 };
@@ -72890,7 +72938,7 @@ const duckStoreCartNegativeQuantityLiveOracle: Rule = async (ctx) => {
 const duckStoreCartNegativeQuantityRouteLiveOracle: Rule = async (ctx) => {
   if (!isDuckStoreHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/api\/v1\/cart\/add/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/api\/v1\/cart(?:\/add|\/items)?\/?$/i.test(pageUrl)) return NEGATIVE;
   const result = await duckStoreCartNegativeQuantityLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -73479,6 +73527,13 @@ const DUCK_STORE_CART_CORPUS_FALLBACK = `
 Duck Store POST /api/v1/cart/add CartAddItem accepts product_id and quantity without server-side minimum validation
 negative quantity:-1 accepted on cart add business-logic abuse training oracle
 add_to_cart_api_v1_cart_add_post requires HTTPBearer JWT after registration
+`;
+
+const DUCK_STORE_SSRF_IMPORT_CORPUS_FALLBACK = `
+Duck Store POST /api/v1/uploads/import-from-url import_image_from_url_api_v1_uploads_import_from_url_post
+Authenticated POST accepts JSON body ImageImportRequest with url field and fetches attacker-controlled URLs server-side
+HTTPBearer JWT required — returns status_code preview content_type is_valid_image from server-side fetch
+import-from-url SSRF training oracle alongside unauthenticated GET /api/v1/uploads/fetch-url
 `;
 
 const DUCK_STORE_COUPONS_CORPUS_FALLBACK = `

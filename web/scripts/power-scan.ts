@@ -191,6 +191,27 @@ function recentlyScanned(url: string, runs: ScanRunResult[], hours = 48): boolea
   });
 }
 
+/** Skip discovery URLs on hosts that failed in the last 24h (e.g. lab.pentest-forge.com unreachable from cloud). */
+function isRecentlyDeadDiscoveryHost(url: string, runs: ScanRunResult[], hours = 24): boolean {
+  let hostname: string;
+  try {
+    hostname = new URL(url).hostname;
+  } catch {
+    return false;
+  }
+  if (!/\.lab\.pentest-forge\.com$/i.test(hostname)) return false;
+  const cutoff = Date.now() - hours * 60 * 60 * 1000;
+  return runs.some((r) => {
+    if (r.scan_kind !== "discovery" || r.status !== "error") return false;
+    if (new Date(r.scanned_at).getTime() <= cutoff) return false;
+    try {
+      return new URL(r.url).hostname === hostname;
+    } catch {
+      return false;
+    }
+  });
+}
+
 function juiceShopLiveOracleSlugCount(findings: BenchmarkFinding[]): number {
   return findings.filter((f) => /^juice-shop-/i.test(f.slug)).length;
 }
@@ -373,6 +394,7 @@ async function main() {
       if (!key || seenQueueKeys.has(key)) continue;
       seenQueueKeys.add(key);
       if (recentlyScanned(canonicalUrl, priorRuns)) continue;
+      if (isRecentlyDeadDiscoveryHost(canonicalUrl, priorRuns)) continue;
       targets.push({ entry: { ...u, url: canonicalUrl }, kind: "discovery" });
     }
   }

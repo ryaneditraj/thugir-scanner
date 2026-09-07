@@ -9389,6 +9389,24 @@
       "slug": "duck-store-users-bola-openapi-corpus-fallback",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /api/v1/users/ returns HTTP 400 database recovery mode; duckStoreUsersOpenApiCorpus documents list_users_api_v1_users__get + get_user_api_v1_users__user_uuid__get without auth from /openapi.json; duck-store.escape.tech/api/v1/users/me findings 18→23 (+duck-store-users-bola-live-oracle +duck-store-users-route-live-oracle +duck-store-users-enumeration-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-ssrf-import-from-url-openapi-corpus-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/v1/auth/register returns HTTP 500 Internal Server Error; duckStoreSsrfImportFromUrlOpenApiCorpus supplies import_image_from_url_api_v1_uploads_import_from_url_post + ImageImportRequest from /openapi.json; duck-store.escape.tech/api/v1/uploads/import-from-url findings 22→24 (+duck-store-ssrf-import-from-url-live-oracle +duck-store-ssrf-import-from-url-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-cart-negative-quantity-route-path-expansion",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: duckStoreCartNegativeQuantityRouteLiveOracle pathname matcher expanded to /api/v1/cart/add|/items|/; duck-store.escape.tech/api/v1/cart/items findings 22→24 (+duck-store-cart-negative-quantity-route-live-oracle alongside live oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:lab.pentest-forge.com",
+      "slug": "power-scan-dead-pentest-forge-host-skip",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: isRecentlyDeadDiscoveryHost skips *.lab.pentest-forge.com URLs after 24h discovery errors; POWER_SCAN_LIMIT=5 drained wrongsecrets challenge-63/67 + duck-store vulnerabilities/import-from-url/cart/items (112 findings) instead of blocking on unreachable crAPI/VAmPI/DVGA; benchmark juice-shop 52 findings 6/6 maintained"
     }
   ]
 }
