@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-07T03:10:00.000Z",
+  "updated_at": "2026-09-07T03:30:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,18 +22,18 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2185,
   "discovery_findings": 24908,
-  "improvements_shipped": 1533,
-  "last_run": "2026-09-07T03:10:00.000Z",
+  "improvements_shipped": 1536,
+  "last_run": "2026-09-07T03:30:00.000Z",
   "last_run_summary": {
     "hour_utc": "03",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 52,
+      "oracle_findings": 53,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 597,
-      "live_oracles": 37,
+      "probes_run": 595,
+      "live_oracles": 40,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -49,48 +49,41 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall on primary Heroku (52 findings, 37 live oracles incl secret-resend + jwt-alg-none + captcha-bypass + security-question-user)"
+      "note": "Stable 6/6 first-pass recall (53 findings, 40 live oracles) — no benchmark category misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "urls_ok": 8,
-      "findings": 147,
-      "focus": "WrongSecrets Heroku challenge batch re-drain (200-run roll-off bypassed 48h skip) + vulnlab.dev sqli/xss/ssti/ssrf-gopher catalog queued",
-      "urls_added_list": [
-        "https://vulnlab.dev/",
-        "https://sqli.vulnlab.dev/error/",
-        "https://xss.vulnlab.dev/reflected/",
-        "https://ssti.vulnlab.dev/basic/",
-        "https://ssrf.vulnlab.dev/gopher/"
-      ]
+      "urls_added": 0,
+      "urls_scanned": 4,
+      "urls_ok": 4,
+      "findings": 47,
+      "focus": "vulnapi route corpus fallback + MCPGoat reflexion SSTI suppression + JavaSecLab jwt/rce hub seeds",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings; gap=[])",
-      "wrongsecrets.herokuapp.com/challenge/challenge-55: 19 findings — wrongsecrets-challenge-55-ssh-bastion-route-live-oracle",
-      "wrongsecrets.herokuapp.com/challenge/challenge-56: 19 findings — challenge-56-project-spec route oracle",
-      "wrongsecrets.herokuapp.com/challenge/challenge-66: 19 findings — challenge-66-java-obfuscated route oracle",
-      "wrongsecrets-ctf.herokuapp.com/: 14 findings — wrongsecrets-ctf-hub-live-oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings)",
+      "vulnapi.testinvicti.com/api/fetch: 10→14 (+vulnapi-fetch-ssrf-route-live-oracle corpus fallback)",
+      "vulnapi.testinvicti.com/api/orders/1: 10→14 (+vulnapi-orders-bola-route-live-oracle corpus fallback)",
+      "vulnapi.testinvicti.com/api/admin/users: 10→14 (+vulnapi-admin-users-host-bypass-route-live-oracle corpus fallback)",
+      "sabyasachidhal.github.io/MCPGoat/: 6→5 (-reflexion-escalated-ssti false positive, +mcpgoat-route-live-oracle retained)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "vulnlab.dev sqli/xss/ssti/gopher queued at tail — not in 8-url drain batch",
-      "seclab.vercel.app/labs/idor|xss|csrf + whgojp.top/file/upload still queued",
-      "nodegoat-websec.herokuapp.com/ root hub still pending drain",
-      "results.json 200-run cap caused WrongSecrets 48h skip false-negative — re-scanned this hour"
+      "benchmark 6/6 stable — no category misses to address",
+      "vulnlab.dev sqli/xss/ssti/gopher queued at tail — not in drain batch",
+      "vapi.roottusk.com + PentestForge dvwa/tomcat still unreachable (dead hosts)"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 52,
+    "juice-shop.herokuapp.com": 53,
+    "vulnapi.testinvicti.com/api/fetch": 14,
+    "vulnapi.testinvicti.com/api/orders/1": 14,
+    "vulnapi.testinvicti.com/api/admin/users": 14,
+    "sabyasachidhal.github.io/MCPGoat/": 5,
     "wrongsecrets.herokuapp.com/challenge/challenge-55": 19,
-    "wrongsecrets.herokuapp.com/challenge/challenge-56": 19,
-    "wrongsecrets.herokuapp.com/challenge/challenge-66": 19,
-    "wrongsecrets-ctf.herokuapp.com": 14,
+    "whgojp.top/jwt/vul": 12,
+    "whgojp.top/rce/vul": 12,
     "bac-vulnerability-lab.onrender.com": 4,
-    "idor-vulnerability-lab.onrender.com": 3,
-    "whgojp.top/sqli/jdbc/jdbcVul": 12,
-    "whgojp.top/xss/reflect/vul": 12,
-    "seclab.vercel.app/labs/sqli": 7
+    "chimera.atlascrew.dev/api/v1/ecommerce/products/search?q=test": 8
   }
 }

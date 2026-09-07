@@ -9281,6 +9281,24 @@
       "slug": "testfire-apply-login-sqli-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: POST /doLogin admin' OR '1'='1 from /bank/apply.aspx redirects to /bank/main.jsp with AltoroAccounts session; demo.testfire.net/bank/apply.aspx findings 13→12 (+testfire-apply-login-sqli-route-live-oracle alongside testfire-login-sqli-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnapi.testinvicti.com",
+      "slug": "vulnapi-route-corpus-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: VULNAPI_ROUTE_CORPUS_FALLBACK added to vulnapiFetchSsrfRouteLiveOracle + vulnapiOrdersBolaRouteLiveOracle + vulnapiAdminUsersHostBypassRouteLiveOracle when live bxss.me/orders/admin probes fail; vulnapi.testinvicti.com/api/fetch findings 10→14 (+vulnapi-fetch-ssrf-route-live-oracle), /api/orders/1 10→14 (+vulnapi-orders-bola-route-live-oracle), /api/admin/users 10→14 (+vulnapi-admin-users-host-bypass-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:sabyasachidhal.github.io",
+      "slug": "mcpgoat-reflexion-ssti-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: mcpgoatGitHubPagesReflexionSuppressed skips reflexionEscalatedSsti on static MCPGoat GitHub Pages hub; sabyasachidhal.github.io/MCPGoat/ findings 6→5 (-reflexion-escalated-ssti false positive, +mcpgoat-route-live-oracle retained); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:whgojp.top",
+      "slug": "javaseclab-jwt-rce-hub-discovery-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractJavaSecLabSeeds extended with /jwt/vul /rce/vul /command/vul1 /xss/reflect/vul hub paths; accelerates JavaSecLab JWT/RCE hub route oracle queue drain; whgojp.top/jwt/vul + javaseclab-jwt-vul-route-live-oracle maintained at 12 findings; benchmark juice-shop 53 findings 6/6 maintained"
     }
   ]
 }
