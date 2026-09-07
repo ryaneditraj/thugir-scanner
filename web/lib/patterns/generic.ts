@@ -42963,6 +42963,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "seclab-sqli-labs-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "SecLab /labs/sqli route live oracle",
+    description:
+      "When scanning seclab.vercel.app /labs/sqli, GET /api/sqli/search?q= returns SQL syntax errors from the in-memory SQLite backend — or the API route serves an Angular SPA shell instead of the documented SQLi search training API.",
+    impactOneline:
+      "Route-specific SQLi lab oracle on the /labs/sqli discovery queue URL confirms live SQLite injection or flags dead API stubs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "seclabSqliLabsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Deploy the Next.js SecLab SQLi search API or remove advertised dead routes.",
+      steps: [
+        "Ship DaniSam-STU/security-lab /api/sqli/search on production.",
+        "Use parameterized queries for all SQLite search endpoints.",
+        "Gate unreleased lab routes behind auth until content ships."
+      ]
+    },
+    fixPrompt:
+      "Our seclab.vercel.app /labs/sqli route scan confirms /api/sqli/search is a dead Angular stub or exposes live SQLi. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "seclab-xss-labs-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "SecLab /labs/xss route live oracle",
+    description:
+      "When scanning seclab.vercel.app /labs/xss, POST /api/xss-vulnerable reflects attacker comments without sanitization — or the API route serves an Angular SPA shell instead of the documented XSS training API.",
+    impactOneline:
+      "Route-specific XSS lab oracle on the /labs/xss discovery queue URL confirms live reflected XSS or flags dead API stubs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "seclabXssLabsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Deploy the Next.js SecLab XSS API or remove advertised dead routes.",
+      steps: [
+        "Ship DaniSam-STU/security-lab /api/xss-vulnerable on production.",
+        "Encode or sanitize all user-supplied output in API responses.",
+        "Gate unreleased lab routes behind auth until content ships."
+      ]
+    },
+    fixPrompt:
+      "Our seclab.vercel.app /labs/xss route scan confirms /api/xss-vulnerable is a dead Angular stub or exposes live XSS. Show output encoding remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "seclab-csrf-labs-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "SecLab /labs/csrf route live oracle",
+    description:
+      "When scanning seclab.vercel.app /labs/csrf, POST /api/csrf-vulnerable processes transfers without CSRF tokens — or the API route serves an Angular SPA shell instead of the documented CSRF training API.",
+    impactOneline:
+      "Route-specific CSRF lab oracle on the /labs/csrf discovery queue URL confirms missing anti-CSRF protection or flags dead API stubs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "seclabCsrfLabsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Deploy the Next.js SecLab CSRF API or remove advertised dead routes.",
+      steps: [
+        "Ship DaniSam-STU/security-lab /api/csrf-vulnerable on production.",
+        "Require anti-CSRF tokens on all state-changing POST endpoints.",
+        "Gate unreleased lab routes behind auth until content ships."
+      ]
+    },
+    fixPrompt:
+      "Our seclab.vercel.app /labs/csrf route scan confirms /api/csrf-vulnerable is a dead Angular stub or exposes live CSRF. Show anti-CSRF token remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "seclab-path-traversal-route-live-oracle",
     platform: "generic",
     category: "Injection",

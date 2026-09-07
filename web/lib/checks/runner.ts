@@ -3721,6 +3721,9 @@ const DEEP_RULES = new Set<string>([
   "seclabXssVulnerableRouteLiveOracle",
   "seclabUsersVulnerableRouteLiveOracle",
   "seclabIdorLabsRouteLiveOracle",
+  "seclabSqliLabsRouteLiveOracle",
+  "seclabXssLabsRouteLiveOracle",
+  "seclabCsrfLabsRouteLiveOracle",
   "seclabIdorVulnerableRouteLiveOracle",
   "seclabPathTraversalRouteLiveOracle",
   "seclabSsrfVulnerableRouteLiveOracle",
@@ -15508,7 +15511,7 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         return -3;
       if (
         /riglabs-cyber-lab\.vercel\.app/i.test(origin) &&
-        /\/(sqli|xss|csrf|idor|ssrf)\b/i.test(targetInput) &&
+        /\/(sqli|xss|csrf|idor|ssrf|crypto|http-headers)\b/i.test(targetInput) &&
         p.slug.startsWith("riglabs-cyber-lab-dead-route")
       )
         return -3;
@@ -15554,6 +15557,24 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /(?:^|\.)seclab\.vercel\.app$/i.test(origin) &&
         /\/labs\/idor\b/i.test(targetInput) &&
         p.slug === "seclab-idor-labs-route-live-oracle"
+      )
+        return -3;
+      if (
+        /(?:^|\.)seclab\.vercel\.app$/i.test(origin) &&
+        /\/labs\/sqli\b/i.test(targetInput) &&
+        p.slug === "seclab-sqli-labs-route-live-oracle"
+      )
+        return -3;
+      if (
+        /(?:^|\.)seclab\.vercel\.app$/i.test(origin) &&
+        /\/labs\/xss\b/i.test(targetInput) &&
+        p.slug === "seclab-xss-labs-route-live-oracle"
+      )
+        return -3;
+      if (
+        /(?:^|\.)seclab\.vercel\.app$/i.test(origin) &&
+        /\/labs\/csrf\b/i.test(targetInput) &&
+        p.slug === "seclab-csrf-labs-route-live-oracle"
       )
         return -3;
       if (

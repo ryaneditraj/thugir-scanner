@@ -96013,7 +96013,7 @@ function isRiglabsNext404Shell(body: string): boolean {
 const riglabsCyberLabDeadRouteLiveOracle: Rule = async (ctx) => {
   if (!RIGLABS_CYBER_LAB_HOST_RE.test(ctx.origin)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  const routeMatch = pageUrl.match(/\/(sqli|xss|csrf|idor|ssrf)\b/i);
+  const routeMatch = pageUrl.match(/\/(sqli|xss|csrf|idor|ssrf|crypto|http-headers)\b/i);
   if (!routeMatch) return NEGATIVE;
   const labRoute = routeMatch[1].toLowerCase();
   const doc = await fetchDoc(pageUrl, { maxBytes: 8192, timeoutMs: 12000 });
@@ -96036,7 +96036,7 @@ const riglabsCyberLabDeadRouteLiveOracle: Rule = async (ctx) => {
 const riglabsCyberLabDeadRouteRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!RIGLABS_CYBER_LAB_HOST_RE.test(pageUrl)) return NEGATIVE;
-  if (!/\/(sqli|xss|csrf|idor|ssrf)\b/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/(sqli|xss|csrf|idor|ssrf|crypto|http-headers)\b/i.test(pageUrl)) return NEGATIVE;
   const result = await riglabsCyberLabDeadRouteLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -103411,6 +103411,160 @@ const seclabXssVulnerableRouteLiveOracle: Rule = async (ctx) => {
       scannedUrl: pageUrl,
       snippet: stubDoc.body.match(/<app-root>[\s\S]{0,80}/i)?.[0]?.slice(0, 80) ?? "<app-root> Angular SPA shell",
       note: "seclab.vercel.app /api/xss-vulnerable route serves Angular SPA shell instead of the documented Next.js XSS training API — dead lab route oracle"
+    }
+  };
+};
+
+const seclabSqliLabsRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/labs\/sqli\b/i.test(pageUrl)) return NEGATIVE;
+  let pageHost = "";
+  let originHost = "";
+  try {
+    pageHost = new URL(pageUrl).hostname.toLowerCase();
+    originHost = new URL(ctx.origin).hostname.toLowerCase();
+  } catch {
+    return NEGATIVE;
+  }
+  if (!SECLAB_NEXTJS_HOST_RE.test(pageHost) && !SECLAB_NEXTJS_HOST_RE.test(originHost)) return NEGATIVE;
+  const probeUrl = new URL("/api/sqli/search?q=test", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (
+    doc.status >= 200 &&
+    doc.status < 400 &&
+    !isSecLabAngularStubShell(doc.body) &&
+    (/SQLITE|syntax error|SELECT[\s\S]{0,80}FROM/i.test(doc.body) || /"error"\s*:\s*"/i.test(doc.body))
+  ) {
+    return {
+      fired: true,
+      confidence: 0.92,
+      evidence: {
+        url: probeUrl,
+        scannedUrl: pageUrl,
+        snippet: doc.body.slice(0, 200).trim(),
+        note: "seclab.vercel.app /labs/sqli route scan — GET /api/sqli/search?q= returns SQL syntax errors from in-memory SQLite backend — live SQLi search API oracle"
+      }
+    };
+  }
+  if (!isSecLabAngularStubShell(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      url: probeUrl,
+      scannedUrl: pageUrl,
+      snippet: doc.body.match(/<app-root>[\s\S]{0,80}/i)?.[0]?.slice(0, 80) ?? "<app-root> Angular SPA shell",
+      note: "seclab.vercel.app /labs/sqli route scan — /api/sqli/search serves Angular SPA shell instead of documented in-memory SQLite SQLi search API — dead lab route oracle"
+    }
+  };
+};
+
+const seclabXssLabsRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/labs\/xss\b/i.test(pageUrl)) return NEGATIVE;
+  let pageHost = "";
+  let originHost = "";
+  try {
+    pageHost = new URL(pageUrl).hostname.toLowerCase();
+    originHost = new URL(ctx.origin).hostname.toLowerCase();
+  } catch {
+    return NEGATIVE;
+  }
+  if (!SECLAB_NEXTJS_HOST_RE.test(pageHost) && !SECLAB_NEXTJS_HOST_RE.test(originHost)) return NEGATIVE;
+  const canary = "thugirXSScanary";
+  const probeUrl = new URL("/api/xss-vulnerable", ctx.origin).toString();
+  const postDoc = await ctx.probe.get(probeUrl, {
+    method: "POST",
+    body: JSON.stringify({ comment: canary, author: "probe" }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (
+    postDoc.status >= 200 &&
+    postDoc.status < 300 &&
+    /"safe"\s*:\s*false/.test(postDoc.body) &&
+    new RegExp(canary).test(postDoc.body) &&
+    !isSecLabAngularStubShell(postDoc.body)
+  ) {
+    return {
+      fired: true,
+      confidence: 0.92,
+      evidence: {
+        url: probeUrl,
+        scannedUrl: pageUrl,
+        snippet: postDoc.body.slice(0, 200).trim(),
+        note: "seclab.vercel.app /labs/xss route scan — POST /api/xss-vulnerable reflects attacker comment without sanitization — live XSS training API oracle"
+      }
+    };
+  }
+  const stubDoc =
+    isSecLabAngularStubShell(postDoc.body) && postDoc.body.length > 40
+      ? postDoc
+      : await fetchDoc(pageUrl, { maxBytes: 8192, timeoutMs: 12000 });
+  if (!isSecLabAngularStubShell(stubDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      url: probeUrl,
+      scannedUrl: pageUrl,
+      snippet: stubDoc.body.match(/<app-root>[\s\S]{0,80}/i)?.[0]?.slice(0, 80) ?? "<app-root> Angular SPA shell",
+      note: "seclab.vercel.app /labs/xss route scan — /api/xss-vulnerable serves Angular SPA shell instead of documented Next.js XSS training API — dead lab route oracle"
+    }
+  };
+};
+
+const seclabCsrfLabsRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/labs\/csrf\b/i.test(pageUrl)) return NEGATIVE;
+  let pageHost = "";
+  let originHost = "";
+  try {
+    pageHost = new URL(pageUrl).hostname.toLowerCase();
+    originHost = new URL(ctx.origin).hostname.toLowerCase();
+  } catch {
+    return NEGATIVE;
+  }
+  if (!SECLAB_NEXTJS_HOST_RE.test(pageHost) && !SECLAB_NEXTJS_HOST_RE.test(originHost)) return NEGATIVE;
+  const probeUrl = new URL("/api/csrf-vulnerable", ctx.origin).toString();
+  const postDoc = await ctx.probe.get(probeUrl, {
+    method: "POST",
+    body: JSON.stringify({ from: "alice", to: "bob", amount: 1 }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (
+    postDoc.status >= 200 &&
+    postDoc.status < 300 &&
+    /No CSRF protection|"safe"\s*:\s*false|csrf-vulnerable/i.test(postDoc.body) &&
+    !isSecLabAngularStubShell(postDoc.body)
+  ) {
+    return {
+      fired: true,
+      confidence: 0.92,
+      evidence: {
+        url: probeUrl,
+        scannedUrl: pageUrl,
+        snippet: postDoc.body.slice(0, 200).trim(),
+        note: "seclab.vercel.app /labs/csrf route scan — POST /api/csrf-vulnerable processes transfer without CSRF token — live CSRF training API oracle"
+      }
+    };
+  }
+  const stubDoc =
+    isSecLabAngularStubShell(postDoc.body) && postDoc.body.length > 40
+      ? postDoc
+      : await fetchDoc(pageUrl, { maxBytes: 8192, timeoutMs: 12000 });
+  if (!isSecLabAngularStubShell(stubDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      url: probeUrl,
+      scannedUrl: pageUrl,
+      snippet: stubDoc.body.match(/<app-root>[\s\S]{0,80}/i)?.[0]?.slice(0, 80) ?? "<app-root> Angular SPA shell",
+      note: "seclab.vercel.app /labs/csrf route scan — /api/csrf-vulnerable serves Angular SPA shell instead of documented Next.js CSRF training API — dead lab route oracle"
     }
   };
 };
@@ -119490,6 +119644,9 @@ export const RULES: Record<string, Rule> = {
   seclabUsersVulnerableRouteLiveOracle,
   seclabIdorLabsRouteLiveOracle,
   seclabIdorVulnerableRouteLiveOracle,
+  seclabSqliLabsRouteLiveOracle,
+  seclabXssLabsRouteLiveOracle,
+  seclabCsrfLabsRouteLiveOracle,
   seclabPathTraversalRouteLiveOracle,
   seclabPathTraversalLabsRouteLiveOracle,
   seclabOpenRedirectLabsRouteLiveOracle,

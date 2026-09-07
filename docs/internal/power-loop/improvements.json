@@ -9227,6 +9227,24 @@
       "slug": "testfire-bank-login-sqli-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /bank/login.aspx route scan confirms POST /doLogin admin' OR '1'='1 redirects to /bank/main.jsp; demo.testfire.net/bank/login.aspx findings 11→14 (+testfire-bank-login-sqli-route-live-oracle alongside testfire-login-sqli-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:riglabs-cyber-lab.vercel.app",
+      "slug": "riglabs-cyber-lab-crypto-http-headers-dead-route",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /crypto and /http-headers return Next.js 404 Cyber Lab | Riglabs Collective shell (HTTP 404); riglabsCyberLabDeadRouteLiveOracle regex extended to crypto|http-headers; riglabs-cyber-lab.vercel.app/crypto findings 5→7 (+riglabs-cyber-lab-dead-route-live-oracle +riglabs-cyber-lab-dead-route-route-live-oracle); http-headers 5→7; benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:seclab.vercel.app",
+      "slug": "seclab-sqli-labs-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/sqli/search?q=test from /labs/sqli route scan returns Angular <app-root> SPA shell (HTTP 200) instead of DaniSam-STU/security-lab SQLite SQLi search API; seclab.vercel.app/labs/sqli findings 6→7 (+seclab-sqli-labs-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:seclab.vercel.app",
+      "slug": "seclab-xss-csrf-labs-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/xss-vulnerable and /api/csrf-vulnerable return HTTP 405; /labs/xss and /labs/csrf route scans fall back to Angular <app-root> stub and fire seclabXssLabsRouteLiveOracle + seclabCsrfLabsRouteLiveOracle; seclab.vercel.app/labs/xss findings 6→7 (+seclab-xss-labs-route-live-oracle), /labs/csrf 6→7 (+seclab-csrf-labs-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
     }
   ]
 }
