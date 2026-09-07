@@ -3698,6 +3698,7 @@ const DEEP_RULES = new Set<string>([
   "owaspGenaiExcessiveAgencyRouteLiveOracle",
   "owaspGenaiVectorEmbeddingRouteLiveOracle",
   "owaspGenaiUnboundedConsumptionRouteLiveOracle",
+  "owaspGenaiHubRouteLiveOracle",
   "owaspGenaiLessonsApiRouteLiveOracle",
   "sqlInjectionChallengeLoginSqliLiveOracle",
   "sqlInjectionChallengeLoginSqliRouteLiveOracle",
@@ -14700,6 +14701,12 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
       )
         return -3;
       if (/ai-security-platform-iota\.vercel\.app/i.test(origin) && p.slug.startsWith("ai-security-")) return -2;
+      if (
+        /owaspbased-lessons\.vercel\.app/i.test(origin) &&
+        /^https?:\/\/[^/]+\/?(?:\?|#|$)/i.test(targetInput) &&
+        p.slug === "owasp-genai-hub-route-live-oracle"
+      )
+        return -4;
       if (
         /owaspbased-lessons\.vercel\.app/i.test(origin) &&
         (/\/api\/lessons\/?$/i.test(targetInput) ||

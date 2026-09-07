@@ -42547,6 +42547,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "owasp-genai-hub-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "medium",
+    title: "OWASP GenAI Security Lab hub route live oracle",
+    description:
+      "When scanning the homepage on owaspbased-lessons.vercel.app, the onboarding form and unauthenticated /api/lessons catalog confirm the OWASP LLM Top 10 interactive GenAI training lab.",
+    impactOneline:
+      "Route scans on the GenAI lab homepage should confirm LLM01–LLM10 lesson catalog and onboarding goals without relying on generic security-header findings alone.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspGenaiHubRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "GenAI security labs are intentional training — isolate interactive LLM demos from production deployments.",
+      steps: [
+        "Require authentication before serving interactive LLM vulnerability lessons.",
+        "Do not expose full training curriculum indexes without access control.",
+        "Rate-limit unauthenticated GenAI lab enumeration."
+      ]
+    },
+    fixPrompt:
+      "Our owaspbased-lessons.vercel.app homepage route scan confirms OWASP GenAI Security Lab onboarding and lesson catalog. Show route-specific GenAI demo isolation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "owasp-genai-lessons-api-route-live-oracle",
     platform: "generic",
     category: "AI security",

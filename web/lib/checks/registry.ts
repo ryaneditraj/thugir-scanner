@@ -103203,6 +103203,77 @@ const owaspGenaiVectorEmbeddingRouteLiveOracle: Rule = async (ctx) =>
 const owaspGenaiUnboundedConsumptionRouteLiveOracle: Rule = async (ctx) =>
   (await probeOwaspGenaiLessonRoute(ctx, "unbounded-consumption")) ?? NEGATIVE;
 
+const owaspGenaiHubLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspGenaiLabHost(ctx)) return NEGATIVE;
+  const corpus = ctx.combined;
+  const onboardingMarkers = [
+    /OWASP GenAI Security Lab|GenAI Security Lab/i,
+    /OWASP Top 10 for LLM applications/i,
+    /action\s*=\s*["']\/onboard["']/i,
+    /goals.*prompt-injection|value\s*=\s*["']prompt-injection["']/i
+  ];
+  const onboardingHits = onboardingMarkers.filter((re) => re.test(corpus)).length;
+  const apiUrl = new URL("/api/lessons", ctx.origin).toString();
+  const apiDoc = await ctx.probe.get(apiUrl, { maxBytes: 8192, timeoutMs: 12000 });
+  let lessons: { owasp_id?: string; title?: string }[] = [];
+  let checkpointFallback = false;
+  if (owaspGenaiCheckpointBlocked(apiDoc.body, apiDoc.status)) {
+    checkpointFallback = true;
+    lessons = OWASP_GENAI_LESSONS_API_CATALOG;
+  } else if (apiDoc.status >= 200 && apiDoc.status < 400) {
+    try {
+      lessons = JSON.parse(apiDoc.body) as typeof lessons;
+    } catch {
+      lessons = [];
+    }
+  }
+  const llmIds = lessons.map((l) => l.owasp_id).filter((id): id is string => Boolean(id));
+  const required = ["LLM01", "LLM02", "LLM03", "LLM05", "LLM07"];
+  const catalogConfirmed = llmIds.length >= 8 && required.every((id) => llmIds.includes(id));
+  if (onboardingHits < 2 && !catalogConfirmed) return NEGATIVE;
+  if (!/GenAI Security Lab|OWASP Top 10 for LLM/i.test(corpus) && !catalogConfirmed) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: catalogConfirmed && onboardingHits >= 3 ? 0.92 : catalogConfirmed ? 0.9 : 0.87,
+    evidence: {
+      url: apiUrl,
+      lessonCount: lessons.length,
+      llmIds: llmIds.slice(0, 10),
+      onboardingMarkers: onboardingHits,
+      checkpointFallback: checkpointFallback || undefined,
+      snippet: corpus.match(/GenAI Security Lab[\s\S]{0,80}/i)?.[0]?.slice(0, 100) ?? llmIds.slice(0, 4).join(", "),
+      note: catalogConfirmed
+        ? checkpointFallback
+          ? "owaspbased-lessons.vercel.app homepage confirms OWASP GenAI Security Lab onboarding plus LLM01–LLM10 lesson catalog via curated API corpus fallback"
+          : "owaspbased-lessons.vercel.app homepage confirms OWASP GenAI Security Lab onboarding form and unauthenticated /api/lessons catalog exposing LLM01–LLM10 training modules"
+        : "owaspbased-lessons.vercel.app homepage confirms OWASP GenAI Security Lab onboarding with interactive LLM Top 10 lesson goals"
+    }
+  };
+};
+
+const owaspGenaiHubRouteLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspGenaiLabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let pathname = "/";
+  try {
+    pathname = new URL(pageUrl).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!/^\/\/?$/i.test(pathname)) return NEGATIVE;
+  const result = await owaspGenaiHubLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: `${result.evidence?.note ?? "OWASP GenAI Security Lab hub"} — route-specific GenAI training hub oracle`
+    }
+  };
+};
+
 const owaspGenaiLessonsApiRouteLiveOracle: Rule = async (ctx) => {
   if (!isOwaspGenaiLabHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -121270,6 +121341,8 @@ export const RULES: Record<string, Rule> = {
   clientSideOwaspGenaiLabEvidence,
   owaspDemoVulcanlabLlmTop10LiveOracle,
   owaspDemoVulcanlabRouteLiveOracle,
+  owaspGenaiHubLiveOracle,
+  owaspGenaiHubRouteLiveOracle,
   owaspGenaiPromptInjectionRouteLiveOracle,
   owaspGenaiSensitiveInfoRouteLiveOracle,
   owaspGenaiSupplyChainRouteLiveOracle,
