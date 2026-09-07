@@ -1,461 +1,6 @@
 {
   "runs": [
     {
-      "run_id": "2026-09-06T10:08:19.710Z",
-      "url": "https://bugforge.io/labs/auth",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 7,
-      "findings": [
-        {
-          "slug": "tech-stack-disclosure",
-          "title": "Server/framework version disclosed in headers",
-          "severity": "low",
-          "confidence": 0.85,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "client-side-ctf-challange-3-middleware-bypass-evidence",
-          "title": "CTF Challenge 3 Next.js middleware auth bypass lab disclosed",
-          "severity": "critical",
-          "confidence": 0.91,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "client-side-bugforge-lab-evidence",
-          "title": "Bugforge web exploitation lab platform disclosed",
-          "severity": "medium",
-          "confidence": 0.89,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "bugforge-auth-route-live-oracle",
-          "title": "Bugforge auth lab route live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "vibe-weak-csp",
-          "title": "Content-Security-Policy allows unsafe-inline or unsafe-eval",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 562,
-      "status": "ok",
-      "scanned_at": "2026-09-06T10:08:19.710Z"
-    },
-    {
-      "run_id": "2026-09-06T10:08:33.178Z",
-      "url": "https://bugforge.io/labs/csrf",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 7,
-      "findings": [
-        {
-          "slug": "tech-stack-disclosure",
-          "title": "Server/framework version disclosed in headers",
-          "severity": "low",
-          "confidence": 0.85,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "client-side-ctf-challange-3-middleware-bypass-evidence",
-          "title": "CTF Challenge 3 Next.js middleware auth bypass lab disclosed",
-          "severity": "critical",
-          "confidence": 0.91,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "client-side-bugforge-lab-evidence",
-          "title": "Bugforge web exploitation lab platform disclosed",
-          "severity": "medium",
-          "confidence": 0.89,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "bugforge-csrf-route-live-oracle",
-          "title": "Bugforge CSRF lab route live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Cross-site request forgery"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "vibe-weak-csp",
-          "title": "Content-Security-Policy allows unsafe-inline or unsafe-eval",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 562,
-      "status": "ok",
-      "scanned_at": "2026-09-06T10:08:33.178Z"
-    },
-    {
-      "run_id": "2026-09-06T10:08:45.935Z",
-      "url": "https://bugforge.io/labs/xss",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 7,
-      "findings": [
-        {
-          "slug": "tech-stack-disclosure",
-          "title": "Server/framework version disclosed in headers",
-          "severity": "low",
-          "confidence": 0.85,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "client-side-ctf-challange-3-middleware-bypass-evidence",
-          "title": "CTF Challenge 3 Next.js middleware auth bypass lab disclosed",
-          "severity": "critical",
-          "confidence": 0.91,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "client-side-bugforge-lab-evidence",
-          "title": "Bugforge web exploitation lab platform disclosed",
-          "severity": "medium",
-          "confidence": 0.89,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "bugforge-xss-route-live-oracle",
-          "title": "Bugforge XSS lab route live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "vibe-weak-csp",
-          "title": "Content-Security-Policy allows unsafe-inline or unsafe-eval",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 562,
-      "status": "ok",
-      "scanned_at": "2026-09-06T10:08:45.935Z"
-    },
-    {
-      "run_id": "2026-09-06T10:08:58.823Z",
-      "url": "https://bugforge.io/labs/ssrf",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 7,
-      "findings": [
-        {
-          "slug": "bugforge-ssrf-route-live-oracle",
-          "title": "Bugforge SSRF lab route live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "tech-stack-disclosure",
-          "title": "Server/framework version disclosed in headers",
-          "severity": "low",
-          "confidence": 0.85,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "client-side-ctf-challange-3-middleware-bypass-evidence",
-          "title": "CTF Challenge 3 Next.js middleware auth bypass lab disclosed",
-          "severity": "critical",
-          "confidence": 0.91,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "client-side-bugforge-lab-evidence",
-          "title": "Bugforge web exploitation lab platform disclosed",
-          "severity": "medium",
-          "confidence": 0.89,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "vibe-weak-csp",
-          "title": "Content-Security-Policy allows unsafe-inline or unsafe-eval",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 562,
-      "status": "ok",
-      "scanned_at": "2026-09-06T10:08:58.823Z"
-    },
-    {
-      "run_id": "2026-09-06T10:09:10.643Z",
-      "url": "https://apparatus.atlascrew.dev/",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 9,
-      "findings": [
-        {
-          "slug": "apparatus-redteam-autopilot-route-live-oracle",
-          "title": "Apparatus AI red-team autopilot route live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "apparatus-chaos-engineering-route-live-oracle",
-          "title": "Apparatus chaos engineering route live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "permissive-cors",
-          "title": "CORS allows any origin",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "client-side-idor-evidence",
-          "title": "Client bundle documents IDOR-prone API routes",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "client-side-nosql-evidence",
-          "title": "Client bundle documents NoSQL injection via MongoDB operators",
-          "severity": "high",
-          "confidence": 0.86,
-          "category": "Injection"
-        },
-        {
-          "slug": "client-side-atlas-crew-inferno-lab-evidence",
-          "title": "Atlas Crew Inferno Lab security testing platform disclosed",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "client-side-ctf-challange-3-middleware-bypass-evidence",
-          "title": "CTF Challenge 3 Next.js middleware auth bypass lab disclosed",
-          "severity": "critical",
-          "confidence": 0.91,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "vibe-sitemap-sensitive-paths",
-          "title": "sitemap.xml lists sensitive routes",
-          "severity": "medium",
-          "confidence": 0.82,
-          "category": "Information disclosure"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 502,
-      "status": "ok",
-      "scanned_at": "2026-09-06T10:09:10.643Z"
-    },
-    {
-      "run_id": "2026-09-06T10:09:17.411Z",
-      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/medium/level18.php",
-      "auth": "oss_deploy",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 7,
-      "findings": [
-        {
-          "slug": "vulnforge-academy-level-file-upload-route-live-oracle",
-          "title": "VulnForge Academy level 16–18 file upload route live oracle",
-          "severity": "high",
-          "confidence": 0.86,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "vulnforge-academy-level18-extension-bypass-route-live-oracle",
-          "title": "VulnForge Academy level 18 extension blacklist bypass route live oracle",
-          "severity": "high",
-          "confidence": 0.86,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "sql-error-disclosure",
-          "title": "SQL syntax error disclosed on search/query input",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "vulnforge-academy-level-ssrf-live-oracle",
-          "title": "VulnForge Academy level SSRF live oracle",
-          "severity": "high",
-          "confidence": 0.86,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "client-side-ctf-challange-3-middleware-bypass-evidence",
-          "title": "CTF Challenge 3 Next.js middleware auth bypass lab disclosed",
-          "severity": "critical",
-          "confidence": 0.91,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 464,
-      "status": "ok",
-      "scanned_at": "2026-09-06T10:09:17.411Z"
-    },
-    {
-      "run_id": "2026-09-06T10:09:24.636Z",
-      "url": "https://websec.fr/level18/",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 6,
-      "findings": [
-        {
-          "slug": "websec-level18-php-unserialize-cookie-route-live-oracle",
-          "title": "WebSec.fr level18 PHP unserialize cookie route live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "client-side-websec-php-unserialize-cookie-challenge-evidence",
-          "title": "WebSec.fr PHP unserialize cookie gadget lab disclosed",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "insecure-cookies",
-          "title": "Cookies set without the Secure flag",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "tech-stack-disclosure",
-          "title": "Server/framework version disclosed in headers",
-          "severity": "low",
-          "confidence": 0.85,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "client-side-ctf-challange-3-middleware-bypass-evidence",
-          "title": "CTF Challenge 3 Next.js middleware auth bypass lab disclosed",
-          "severity": "critical",
-          "confidence": 0.91,
-          "category": "Broken authentication"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 572,
-      "status": "ok",
-      "scanned_at": "2026-09-06T10:09:24.636Z"
-    },
-    {
       "run_id": "2026-09-06T10:10:17.174Z",
       "url": "https://hackminaaziz.fly.dev/reset/confirm",
       "auth": "oss_deploy",
@@ -937,7 +482,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -1262,7 +807,7 @@
       "findings": [
         {
           "slug": "vulnforge-academy-level-file-upload-route-live-oracle",
-          "title": "VulnForge Academy level 16–18 file upload route live oracle",
+          "title": "VulnForge Academy level 16\u201318 file upload route live oracle",
           "severity": "high",
           "confidence": 0.86,
           "category": "Security misconfiguration"
@@ -2998,7 +2543,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -6025,7 +5570,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -6039,7 +5584,7 @@
         },
         {
           "slug": "ssrf-endpoint-fetch",
-          "title": "SSRF — server fetches attacker-controlled URL",
+          "title": "SSRF \u2014 server fetches attacker-controlled URL",
           "severity": "high",
           "confidence": 0.92,
           "category": "Server-side request forgery"
@@ -7403,7 +6948,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-09-06T15:07:44.577Z",
-      "error": "We couldn't reach vapi.roottusk.com. Check the address is public and live, then try again — include https:// if it only serves one protocol."
+      "error": "We couldn't reach vapi.roottusk.com. Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-09-06T16:03:17.851Z",
@@ -7805,7 +7350,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-09-06T16:04:24.964Z",
-      "error": "We couldn't reach vapi.roottusk.com. Check the address is public and live, then try again — include https:// if it only serves one protocol."
+      "error": "We couldn't reach vapi.roottusk.com. Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-09-06T16:04:25.093Z",
@@ -7820,7 +7365,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-09-06T16:04:25.093Z",
-      "error": "We couldn't reach dvwa.lab.pentest-forge.com. Check the address is public and live, then try again — include https:// if it only serves one protocol."
+      "error": "We couldn't reach dvwa.lab.pentest-forge.com. Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-09-06T16:04:56.490Z",
@@ -7835,7 +7380,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-09-06T16:04:56.490Z",
-      "error": "We couldn't reach tomcat.lab.pentest-forge.com. Check the address is public and live, then try again — include https:// if it only serves one protocol."
+      "error": "We couldn't reach tomcat.lab.pentest-forge.com. Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-09-06T16:05:27.969Z",
@@ -7911,7 +7456,7 @@
       "findings": [
         {
           "slug": "vulnforge-academy-level-file-upload-route-live-oracle",
-          "title": "VulnForge Academy level 16–18 file upload route live oracle",
+          "title": "VulnForge Academy level 16\u201318 file upload route live oracle",
           "severity": "high",
           "confidence": 0.86,
           "category": "Security misconfiguration"
@@ -9447,7 +8992,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -9567,7 +9112,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -9687,7 +9232,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -9941,7 +9486,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -10654,7 +10199,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -10774,7 +10319,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -10894,7 +10439,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -11014,7 +10559,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -11134,7 +10679,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -11322,7 +10867,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-09-06T18:13:38.548Z",
-      "error": "We couldn't reach vapi.roottusk.com. Check the address is public and live, then try again — include https:// if it only serves one protocol."
+      "error": "We couldn't reach vapi.roottusk.com. Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-09-06T19:03:02.955Z",
@@ -11777,7 +11322,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -11897,7 +11442,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -12383,7 +11928,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -12475,7 +12020,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -12567,7 +12112,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -12659,7 +12204,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -12765,7 +12310,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -12832,7 +12377,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-09-07T00:22:37.428Z",
-      "error": "We couldn't reach vapi.roottusk.com. Check the address is public and live, then try again — include https:// if it only serves one protocol."
+      "error": "We couldn't reach vapi.roottusk.com. Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-09-07T00:22:37.538Z",
@@ -12847,7 +12392,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-09-07T00:22:37.538Z",
-      "error": "We couldn't reach dvwa.lab.pentest-forge.com. Check the address is public and live, then try again — include https:// if it only serves one protocol."
+      "error": "We couldn't reach dvwa.lab.pentest-forge.com. Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-09-07T00:23:08.923Z",
@@ -12862,7 +12407,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-09-07T00:23:08.923Z",
-      "error": "We couldn't reach tomcat.lab.pentest-forge.com. Check the address is public and live, then try again — include https:// if it only serves one protocol."
+      "error": "We couldn't reach tomcat.lab.pentest-forge.com. Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-09-07T01:03:19.839Z",
@@ -13289,7 +12834,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -13388,7 +12933,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -14638,7 +14183,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -14786,7 +14331,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -14934,7 +14479,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -15075,7 +14620,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -15223,7 +14768,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -15371,7 +14916,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -15519,7 +15064,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -15702,7 +15247,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -17126,7 +16671,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -17140,7 +16685,7 @@
         },
         {
           "slug": "ssrf-endpoint-fetch",
-          "title": "SSRF — server fetches attacker-controlled URL",
+          "title": "SSRF \u2014 server fetches attacker-controlled URL",
           "severity": "high",
           "confidence": 0.92,
           "category": "Server-side request forgery"
@@ -17617,7 +17162,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -18349,7 +17894,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -18497,7 +18042,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -18645,7 +18190,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -18776,7 +18321,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-09-07T05:21:39.693Z",
-      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
+      "error": "Juice Shop Heroku dyno unavailable (503) \u2014 use staging fallback."
     },
     {
       "run_id": "2026-09-07T05:22:20.587Z",
@@ -18792,7 +18337,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-09-07T05:22:20.587Z",
-      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
+      "error": "Juice Shop Heroku dyno unavailable (503) \u2014 use staging fallback."
     },
     {
       "run_id": "2026-09-07T05:22:40.923Z",
@@ -19202,7 +18747,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-09-07T06:01:54.139Z",
-      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
+      "error": "Juice Shop Heroku dyno unavailable (503) \u2014 use staging fallback."
     },
     {
       "run_id": "2026-09-07T06:02:35.052Z",
@@ -19218,7 +18763,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-09-07T06:02:35.052Z",
-      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
+      "error": "Juice Shop Heroku dyno unavailable (503) \u2014 use staging fallback."
     },
     {
       "run_id": "2026-09-07T06:02:55.315Z",
@@ -19644,7 +19189,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-09-07T06:12:24.571Z",
-      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
+      "error": "Juice Shop Heroku dyno unavailable (503) \u2014 use staging fallback."
     },
     {
       "run_id": "2026-09-07T06:13:05.362Z",
@@ -19660,7 +19205,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-09-07T06:13:05.362Z",
-      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
+      "error": "Juice Shop Heroku dyno unavailable (503) \u2014 use staging fallback."
     },
     {
       "run_id": "2026-09-07T06:13:05.434Z",
@@ -19676,7 +19221,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-09-07T06:13:05.434Z",
-      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
+      "error": "Juice Shop Heroku dyno unavailable (503) \u2014 use staging fallback."
     },
     {
       "run_id": "2026-09-07T06:13:25.625Z",
@@ -20935,7 +20480,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -21083,7 +20628,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -21231,7 +20776,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -21379,7 +20924,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -22849,7 +22394,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -22863,7 +22408,7 @@
         },
         {
           "slug": "ssrf-endpoint-fetch",
-          "title": "SSRF — server fetches attacker-controlled URL",
+          "title": "SSRF \u2014 server fetches attacker-controlled URL",
           "severity": "high",
           "confidence": 0.92,
           "category": "Server-side request forgery"
@@ -23682,7 +23227,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-09-07T09:11:01.367Z",
-      "error": "We couldn't reach crapi.lab.pentest-forge.com. Check the address is public and live, then try again — include https:// if it only serves one protocol."
+      "error": "We couldn't reach crapi.lab.pentest-forge.com. Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-09-07T09:12:00.000Z",
@@ -23690,7 +23235,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok — 52 findings, 6/6 recall on primary Heroku first pass (pages_crawled=6 probes_run=597; gap=[]; 39 juice-shop live oracles incl secret-resend + iac-terraform-tls-key)",
+      "benchmark_status": "ok \u2014 52 findings, 6/6 recall on primary Heroku first pass (pages_crawled=6 probes_run=597; gap=[]; 39 juice-shop live oracles incl secret-resend + iac-terraform-tls-key)",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -23707,7 +23252,7 @@
           ]
         }
       },
-      "notes": "No teacher tools available. 09 UTC run: stable 6/6 first-pass recall (52 findings, 39 live oracles). Discovery: +5 URLs (qa.brokencrystals AWS SSRF, DVGA GraphQL, crAPI2 BOLA vehicle, vAPI BOLA user; crAPI BFLA admin/videos skipped 48h) + pentest-forge retry error → 139 findings across 4 URLs. Route oracles: brokencrystals-file-aws-route on QA host, DVGA GraphQL introspection, crAPI2 vehicle location BOLA, vAPI user profile BOLA.",
+      "notes": "No teacher tools available. 09 UTC run: stable 6/6 first-pass recall (52 findings, 39 live oracles). Discovery: +5 URLs (qa.brokencrystals AWS SSRF, DVGA GraphQL, crAPI2 BOLA vehicle, vAPI BOLA user; crAPI BFLA admin/videos skipped 48h) + pentest-forge retry error \u2192 139 findings across 4 URLs. Route oracles: brokencrystals-file-aws-route on QA host, DVGA GraphQL introspection, crAPI2 vehicle location BOLA, vAPI user profile BOLA.",
       "scanned_at": "2026-09-07T09:12:00.000Z"
     },
     {
@@ -24742,7 +24287,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -24897,7 +24442,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -25210,7 +24755,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok — 53 findings, 6/6 recall on primary Heroku first pass (pages_crawled=6 probes_run=597; gap=[]; 38 juice-shop live oracles incl secret-resend + iac-terraform-tls-key)",
+      "benchmark_status": "ok \u2014 53 findings, 6/6 recall on primary Heroku first pass (pages_crawled=6 probes_run=597; gap=[]; 38 juice-shop live oracles incl secret-resend + iac-terraform-tls-key)",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -25227,7 +24772,7 @@
           ]
         }
       },
-      "notes": "No teacher tools available. 10 UTC run: stable 6/6 first-pass recall (53 findings, 38 live oracles). Discovery: +5 URLs (nodegoat, seclab SQLi, vulnforge L13 SSRF, duck-store testimonials/admin) + queue drain wrongsecrets 63/67 + duck-store vulnerabilities hub → 141 findings across 8 URLs. Fixed queue.json merge conflict.",
+      "notes": "No teacher tools available. 10 UTC run: stable 6/6 first-pass recall (53 findings, 38 live oracles). Discovery: +5 URLs (nodegoat, seclab SQLi, vulnforge L13 SSRF, duck-store testimonials/admin) + queue drain wrongsecrets 63/67 + duck-store vulnerabilities hub \u2192 141 findings across 8 URLs. Fixed queue.json merge conflict.",
       "scanned_at": "2026-09-07T10:12:00.000Z"
     },
     {
@@ -26333,7 +25878,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -26354,7 +25899,7 @@
         },
         {
           "slug": "ssrf-endpoint-fetch",
-          "title": "SSRF — server fetches attacker-controlled URL",
+          "title": "SSRF \u2014 server fetches attacker-controlled URL",
           "severity": "high",
           "confidence": 0.92,
           "category": "Server-side request forgery"
@@ -27060,7 +26605,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-09-07T11:25:44.629Z",
-      "error": "We couldn't reach vampi.lab.pentest-forge.com. Check the address is public and live, then try again — include https:// if it only serves one protocol."
+      "error": "We couldn't reach vampi.lab.pentest-forge.com. Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-09-07T11:26:16.000Z",
@@ -27068,7 +26613,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok — 53 findings, 6/6 recall on staging fallback (primary Heroku timed out 600s; pages_crawled=6 probes_run=597; gap=[]; 40 juice-shop live oracles incl secret-resend + iac-terraform-tls-key)",
+      "benchmark_status": "ok \u2014 53 findings, 6/6 recall on staging fallback (primary Heroku timed out 600s; pages_crawled=6 probes_run=597; gap=[]; 40 juice-shop live oracles incl secret-resend + iac-terraform-tls-key)",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -27085,7 +26630,7 @@
           ]
         }
       },
-      "notes": "No teacher tools available. 11 UTC run: staging fallback 6/6 (53 findings, 40 live oracles). Primary Heroku timeout. Discovery: +5 URLs (vaultapp users/documents IDOR, FinBot vendor agentic AI, duck-store cart business-logic, qa.brokencrystals SSTI render) + queue drain crAPI2 vehicle + vAPI api2 user → 187 findings across 7 URLs (1 pentest-forge error).",
+      "notes": "No teacher tools available. 11 UTC run: staging fallback 6/6 (53 findings, 40 live oracles). Primary Heroku timeout. Discovery: +5 URLs (vaultapp users/documents IDOR, FinBot vendor agentic AI, duck-store cart business-logic, qa.brokencrystals SSTI render) + queue drain crAPI2 vehicle + vAPI api2 user \u2192 187 findings across 7 URLs (1 pentest-forge error).",
       "scanned_at": "2026-09-07T11:26:16.000Z"
     },
     {
@@ -27955,7 +27500,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-09-07T12:07:10.819Z",
-      "error": "We couldn't reach dvga.lab.pentest-forge.com. Check the address is public and live, then try again — include https:// if it only serves one protocol."
+      "error": "We couldn't reach dvga.lab.pentest-forge.com. Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-09-07T12:07:41.941Z",
@@ -27988,7 +27533,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -28136,7 +27681,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -28259,7 +27804,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok — 53 findings, 6/6 recall on primary Heroku (pages_crawled=6 probes_run=597; gap=[]; 40 juice-shop live oracles incl secret-resend + iac-terraform-tls-key)",
+      "benchmark_status": "ok \u2014 53 findings, 6/6 recall on primary Heroku (pages_crawled=6 probes_run=597; gap=[]; 40 juice-shop live oracles incl secret-resend + iac-terraform-tls-key)",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -28276,7 +27821,7 @@
           ]
         }
       },
-      "notes": "No teacher tools available. 12 UTC run: primary Heroku stable 6/6 (53 findings, 40 live oracles). Discovery: +5 URLs (seclab idor/xss/csrf, CVE-2025-55182 RSC SaaS PoC, duck-store import-from-url SSRF) + queue drain wrongsecrets 38/39 → 94 findings across 7 URLs (1 pentest-forge DVGA error).",
+      "notes": "No teacher tools available. 12 UTC run: primary Heroku stable 6/6 (53 findings, 40 live oracles). Discovery: +5 URLs (seclab idor/xss/csrf, CVE-2025-55182 RSC SaaS PoC, duck-store import-from-url SSRF) + queue drain wrongsecrets 38/39 \u2192 94 findings across 7 URLs (1 pentest-forge DVGA error).",
       "scanned_at": "2026-09-07T12:08:46.000Z"
     },
     {
@@ -29432,6 +28977,846 @@
       "probes_run": 597,
       "status": "ok",
       "scanned_at": "2026-09-07T13:20:38.442Z"
+    },
+    {
+      "run_id": "2026-09-07T13:15:21.255Z",
+      "url": "https://pwnshop.ctfsecurity.com/seller/preview",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 28,
+      "findings": [
+        {
+          "slug": "pwnshop-seller-preview-ssti-route-live-oracle",
+          "title": "Pwnshop seller preview SSTI route live oracle (PWN-040)",
+          "severity": "critical",
+          "confidence": 0.89,
+          "category": "Injection"
+        },
+        {
+          "slug": "client-side-pwnshop-ssti-oracle",
+          "title": "Pwnshop seller preview SSTI oracle (PWN-040)",
+          "severity": "critical",
+          "confidence": 0.91,
+          "category": "Injection"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "cors-reflect-origin",
+          "title": "CORS reflects arbitrary Origin",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "tech-stack-disclosure",
+          "title": "Server/framework version disclosed in headers",
+          "severity": "low",
+          "confidence": 0.85,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "sql-error-disclosure",
+          "title": "SQL syntax error disclosed on search/query input",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "client-side-prototype-pollution-evidence",
+          "title": "Client bundle documents prototype pollution via __proto__ merge",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Injection"
+        },
+        {
+          "slug": "reflected-xss-query-param",
+          "title": "Reflected XSS via query parameter",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-api-security-lab-evidence",
+          "title": "Client bundle documents OWASP API Security Top 10 lab",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "client-side-pwnshop-evidence",
+          "title": "Pwnshop OWASP Top 10 2025 e-commerce lab disclosed",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "client-side-pwnshop-review-xss-oracle",
+          "title": "Pwnshop product review stored XSS oracle (PWN-011)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-pwnshop-avatar-xss-oracle",
+          "title": "Pwnshop avatar upload stored XSS oracle (PWN-012)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-pwnshop-wallet-topup-oracle",
+          "title": "Pwnshop wallet top-up credited_amount oracle (PWN-042)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Business logic"
+        },
+        {
+          "slug": "client-side-pwnshop-export-orders-oracle",
+          "title": "Pwnshop CSV order export formula injection oracle (PWN-013)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "client-side-pwnshop-path-traversal-oracle",
+          "title": "Pwnshop invoice download path traversal oracle (PWN-038)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "client-side-pwnshop-prototype-pollution-oracle",
+          "title": "Pwnshop lodash prototype pollution oracle (PWN-041)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "pwnshop-debug-info-live-oracle",
+          "title": "Pwnshop debug info endpoint leaks secrets (PWN-018)",
+          "severity": "critical",
+          "confidence": 0.93,
+          "category": "Sensitive data exposure"
+        },
+        {
+          "slug": "pwnshop-events-audit-live-oracle",
+          "title": "Pwnshop events API exposes unauthenticated audit logs (PWN-005)",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "pwnshop-track-idor-live-oracle",
+          "title": "Pwnshop order tracking IDOR live oracle (PWN-002)",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "pwnshop-product-search-sqli-live-oracle",
+          "title": "Pwnshop product search SQL injection live oracle (PWN-010)",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "pwnshop-vulnerabilities-index-live-oracle",
+          "title": "Pwnshop vulnerability index live oracle",
+          "severity": "medium",
+          "confidence": 0.93,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "pwnshop-chat-order-idor-live-oracle",
+          "title": "Pwnshop AI chat order lookup IDOR live oracle (PWN-035)",
+          "severity": "medium",
+          "confidence": 0.88,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "client-side-ctf-challange-3-middleware-bypass-evidence",
+          "title": "CTF Challenge 3 Next.js middleware auth bypass lab disclosed",
+          "severity": "critical",
+          "confidence": 0.91,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "reflexion-escalated-xss",
+          "title": "Reflected XSS confirmed via encoding escalation probe",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Injection"
+        },
+        {
+          "slug": "reflexion-escalated-sqli",
+          "title": "SQL injection indicated by escalated error-based probe",
+          "severity": "critical",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "vibe-hardcoded-demo-credentials",
+          "title": "Hardcoded demo credentials in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "vibe-unauthenticated-api-routes",
+          "title": "JSON API routes return data without authentication",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 1023,
+      "status": "ok",
+      "scanned_at": "2026-09-07T13:15:21.255Z"
+    },
+    {
+      "run_id": "2026-09-07T13:19:46.900Z",
+      "url": "https://vwad.owasp.org/app/ai-goat/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 5,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "client-side-owasp-vwad-evidence",
+          "title": "OWASP Vulnerable Web Applications Directory disclosed",
+          "severity": "medium",
+          "confidence": 0.89,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "client-side-ctf-challange-3-middleware-bypass-evidence",
+          "title": "CTF Challenge 3 Next.js middleware auth bypass lab disclosed",
+          "severity": "critical",
+          "confidence": 0.91,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 556,
+      "status": "ok",
+      "scanned_at": "2026-09-07T13:19:46.900Z"
+    },
+    {
+      "run_id": "2026-09-07T13:19:58.037Z",
+      "url": "https://vwad.owasp.org/app/vulnerable-mcp-servers-lab/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 6,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "client-side-owasp-vwad-evidence",
+          "title": "OWASP Vulnerable Web Applications Directory disclosed",
+          "severity": "medium",
+          "confidence": 0.92,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "client-side-ctf-challange-3-middleware-bypass-evidence",
+          "title": "CTF Challenge 3 Next.js middleware auth bypass lab disclosed",
+          "severity": "critical",
+          "confidence": 0.91,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "client-side-vwad-mcp-servers-lab-evidence",
+          "title": "OWASP VWAD Vulnerable MCP Servers Lab disclosed",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "AI security"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 557,
+      "status": "ok",
+      "scanned_at": "2026-09-07T13:19:58.037Z"
+    },
+    {
+      "run_id": "2026-09-07T13:20:05.990Z",
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/ssrf-internal-page-access/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 9,
+      "findings": [
+        {
+          "slug": "oopssec-live-stream-bfla-live-oracle",
+          "title": "OopsSec Store live-stream BFLA live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "oopssec-ssrf-route-live-oracle",
+          "title": "OopsSec Store SSRF support-form route live oracle",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "oopssec-next-public-env-live-oracle",
+          "title": "OopsSec Store NEXT_PUBLIC_ env leak live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "client-side-oopssec-store-evidence",
+          "title": "OopsSec Store CTF walkthrough roadmap disclosed",
+          "severity": "medium",
+          "confidence": 0.89,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "client-side-oopssec-price-manipulation-evidence",
+          "title": "OopsSec Store price-manipulation walkthrough disclosed",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "client-side-ctf-challange-3-middleware-bypass-evidence",
+          "title": "CTF Challenge 3 Next.js middleware auth bypass lab disclosed",
+          "severity": "critical",
+          "confidence": 0.91,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "thugir-sensitive-js-endpoints",
+          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
+          "severity": "medium",
+          "confidence": 0.82,
+          "category": "Information disclosure"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 478,
+      "status": "ok",
+      "scanned_at": "2026-09-07T13:20:05.990Z"
+    },
+    {
+      "run_id": "2026-09-07T13:20:09.770Z",
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-65",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 19,
+      "findings": [
+        {
+          "slug": "wrongsecrets-challenge-65-java-plain-cli-route-live-oracle",
+          "title": "OWASP WrongSecrets challenge-65 plain Java CLI route live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "spring-boot-actuator-exposed",
+          "title": "Spring Boot actuator endpoints exposed",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "postmessage-dom-xss-evidence",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
+          "severity": "high",
+          "confidence": 0.86,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-wrongsecrets-evidence",
+          "title": "OWASP WrongSecrets secrets-management CTF disclosed",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "client-side-wrongsecrets-challenge-evidence",
+          "title": "OWASP WrongSecrets challenge walkthrough page disclosed",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-challenge-live-oracle",
+          "title": "OWASP WrongSecrets challenge live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-challenge-route-live-oracle",
+          "title": "OWASP WrongSecrets challenge route live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-challenge-28-github-issue-live-oracle",
+          "title": "OWASP WrongSecrets challenge-28 GitHub issue live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-challenge-29-screenshot-log-live-oracle",
+          "title": "OWASP WrongSecrets challenge-29 screenshot log live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-challenge-30-localstorage-live-oracle",
+          "title": "OWASP WrongSecrets challenge-30 localStorage live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-error-demo-database-connection-live-oracle",
+          "title": "OWASP WrongSecrets database connection error live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-mcp-execute-command-live-oracle",
+          "title": "OWASP WrongSecrets MCP execute_command env leak live oracle",
+          "severity": "critical",
+          "confidence": 0.96,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-mcp62-google-sa-live-oracle",
+          "title": "OWASP WrongSecrets MCP62 Google SA live oracle",
+          "severity": "critical",
+          "confidence": 0.96,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "client-side-ctf-challange-3-middleware-bypass-evidence",
+          "title": "CTF Challenge 3 Next.js middleware auth bypass lab disclosed",
+          "severity": "critical",
+          "confidence": 0.91,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "thugir-sensitive-js-endpoints",
+          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
+          "severity": "medium",
+          "confidence": 0.82,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "vibe-weak-csp",
+          "title": "Content-Security-Policy allows unsafe-inline or unsafe-eval",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "stack-database-url-in-bundle",
+          "title": "Database connection string in client bundle",
+          "severity": "critical",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 573,
+      "status": "ok",
+      "scanned_at": "2026-09-07T13:20:09.770Z"
+    },
+    {
+      "run_id": "2026-09-07T13:20:41.810Z",
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-23",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 19,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "spring-boot-actuator-exposed",
+          "title": "Spring Boot actuator endpoints exposed",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "postmessage-dom-xss-evidence",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
+          "severity": "high",
+          "confidence": 0.86,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-wrongsecrets-evidence",
+          "title": "OWASP WrongSecrets secrets-management CTF disclosed",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "client-side-wrongsecrets-challenge-evidence",
+          "title": "OWASP WrongSecrets challenge walkthrough page disclosed",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-challenge-live-oracle",
+          "title": "OWASP WrongSecrets challenge live oracle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-challenge-route-live-oracle",
+          "title": "OWASP WrongSecrets challenge route live oracle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-challenge-23-base64-frontend-route-live-oracle",
+          "title": "OWASP WrongSecrets challenge-23 Base64 front-end route live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-challenge-28-github-issue-live-oracle",
+          "title": "OWASP WrongSecrets challenge-28 GitHub issue live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-challenge-29-screenshot-log-live-oracle",
+          "title": "OWASP WrongSecrets challenge-29 screenshot log live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-challenge-30-localstorage-live-oracle",
+          "title": "OWASP WrongSecrets challenge-30 localStorage live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-error-demo-database-connection-live-oracle",
+          "title": "OWASP WrongSecrets database connection error live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-mcp-execute-command-live-oracle",
+          "title": "OWASP WrongSecrets MCP execute_command env leak live oracle",
+          "severity": "critical",
+          "confidence": 0.96,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-mcp62-google-sa-live-oracle",
+          "title": "OWASP WrongSecrets MCP62 Google SA live oracle",
+          "severity": "critical",
+          "confidence": 0.96,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "client-side-ctf-challange-3-middleware-bypass-evidence",
+          "title": "CTF Challenge 3 Next.js middleware auth bypass lab disclosed",
+          "severity": "critical",
+          "confidence": 0.91,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "thugir-sensitive-js-endpoints",
+          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
+          "severity": "medium",
+          "confidence": 0.82,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "vibe-weak-csp",
+          "title": "Content-Security-Policy allows unsafe-inline or unsafe-eval",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "stack-database-url-in-bundle",
+          "title": "Database connection string in client bundle",
+          "severity": "critical",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 576,
+      "status": "ok",
+      "scanned_at": "2026-09-07T13:20:41.810Z"
+    },
+    {
+      "run_id": "2026-09-07T13:21:14.139Z",
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-24",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 19,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "spring-boot-actuator-exposed",
+          "title": "Spring Boot actuator endpoints exposed",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "postmessage-dom-xss-evidence",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
+          "severity": "high",
+          "confidence": 0.86,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-wrongsecrets-evidence",
+          "title": "OWASP WrongSecrets secrets-management CTF disclosed",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "client-side-wrongsecrets-challenge-evidence",
+          "title": "OWASP WrongSecrets challenge walkthrough page disclosed",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-challenge-live-oracle",
+          "title": "OWASP WrongSecrets challenge live oracle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-challenge-route-live-oracle",
+          "title": "OWASP WrongSecrets challenge route live oracle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-challenge-24-hmac-cryptography-route-live-oracle",
+          "title": "OWASP WrongSecrets challenge-24 HMAC cryptography route live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-challenge-28-github-issue-live-oracle",
+          "title": "OWASP WrongSecrets challenge-28 GitHub issue live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-challenge-29-screenshot-log-live-oracle",
+          "title": "OWASP WrongSecrets challenge-29 screenshot log live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-challenge-30-localstorage-live-oracle",
+          "title": "OWASP WrongSecrets challenge-30 localStorage live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-error-demo-database-connection-live-oracle",
+          "title": "OWASP WrongSecrets database connection error live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-mcp-execute-command-live-oracle",
+          "title": "OWASP WrongSecrets MCP execute_command env leak live oracle",
+          "severity": "critical",
+          "confidence": 0.96,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-mcp62-google-sa-live-oracle",
+          "title": "OWASP WrongSecrets MCP62 Google SA live oracle",
+          "severity": "critical",
+          "confidence": 0.96,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "client-side-ctf-challange-3-middleware-bypass-evidence",
+          "title": "CTF Challenge 3 Next.js middleware auth bypass lab disclosed",
+          "severity": "critical",
+          "confidence": 0.91,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "thugir-sensitive-js-endpoints",
+          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
+          "severity": "medium",
+          "confidence": 0.82,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "vibe-weak-csp",
+          "title": "Content-Security-Policy allows unsafe-inline or unsafe-eval",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "stack-database-url-in-bundle",
+          "title": "Database connection string in client bundle",
+          "severity": "critical",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 573,
+      "status": "ok",
+      "scanned_at": "2026-09-07T13:21:14.139Z"
     }
   ]
 }

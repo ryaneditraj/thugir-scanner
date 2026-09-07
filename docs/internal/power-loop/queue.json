@@ -1,6 +1,21 @@
 {
-  "updated_at": "2026-09-07T13:15:00.000Z",
+  "updated_at": "2026-09-07T13:25:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://vwad.owasp.org/app/ai-goat/",
+      "source": "OWASP VWAD — AI Goat LLM attack lab directory (13 UTC power-scan discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vwad.owasp.org/app/vulnerable-mcp-servers-lab/",
+      "source": "OWASP VWAD — vulnerable MCP servers lab directory (13 UTC power-scan discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/ssrf-internal-page-access/",
+      "source": "kOaDT/oss-oopssec-store — Ch.8 SSRF internal page access walkthrough (13 UTC power-scan discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://pwnshop.ctfsecurity.com/debug/info",
       "source": "r007sec/pwnshop — PWN-018 intentionally public debug endpoint (13 UTC queue drain)",

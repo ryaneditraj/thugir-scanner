@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-07T13:20:00.000Z",
+  "updated_at": "2026-09-07T13:25:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 2807,
-  "total_findings": 28410,
+  "total_sites_scanned": 2814,
+  "total_findings": 28515,
   "critical_findings": 54,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2008,
-  "discovery_findings": 24048,
+  "discovery_urls_added": 2011,
+  "discovery_findings": 24153,
   "improvements_shipped": 1566,
-  "last_run": "2026-09-07T13:20:00.000Z",
+  "last_run": "2026-09-07T13:25:00.000Z",
   "last_run_summary": {
     "hour_utc": "13",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 52,
+      "oracle_findings": 53,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -49,33 +49,41 @@
           ]
         }
       },
-      "note": "Primary Heroku stable 6/6 (52 findings, gap=[])"
+      "note": "Primary Heroku stable 6/6 (53 findings power-scan; 52 validation; gap=[])"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 3,
-      "urls_scanned": 1,
-      "findings": 13,
-      "focus": "13 UTC engine: finbot vendor session CSRF bootstrap + chat SSE reliability + invoices route on /vendor; pwnshop debug/seller queue drain",
+      "urls_added": 8,
+      "urls_scanned": 8,
+      "findings": 218,
+      "focus": "13 UTC combined: finbot vendor CSRF/chat oracles + pwnshop debug/register-seller/seller/preview + VWAD ai-goat/mcp-lab + oopssec SSRF Ch.8 + wrongsecrets 65/23/24 queue drain",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings; gap=[])",
-      "owasp-finbot-ctf.org/vendor: 10→13 (+finbot-vendor-chat-live-oracle +route +finbot-vendor-invoices-route-live-oracle)",
-      "pwnshop.ctfsecurity.com/debug/info: queue drain — 47 findings with pwnshop-debug-info-route-live-oracle",
-      "pwnshop.ctfsecurity.com/register-seller: queue drain — 52 findings with pwnshop-register-seller-ssti-route-live-oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (gap=[])",
+      "owasp-finbot-ctf.org/vendor: 13 (+finbot-vendor-chat-live-oracle +finbot-vendor-invoices-route-live-oracle)",
+      "pwnshop.ctfsecurity.com/debug/info: 47-49 (+pwnshop-debug-info-route-live-oracle)",
+      "pwnshop.ctfsecurity.com/register-seller: 52 (+pwnshop-register-seller-ssti-route-live-oracle)",
+      "pwnshop.ctfsecurity.com/seller/preview: 28 (+pwnshop-seller-preview-ssti-route-live-oracle PWN-040)",
+      "koadt.github.io/.../ssrf-internal-page-access/: 9 (+oopssec-ssrf-route-live-oracle)",
+      "vwad.owasp.org/app/ai-goat/: 5 (+client-side-owasp-vwad-evidence)",
+      "vwad.owasp.org/app/vulnerable-mcp-servers-lab/: 6 (+client-side-vwad-mcp-servers-lab-evidence)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "lab.pentest-forge.com DVGA still unreachable",
+      "lab.pentest-forge.com DVGA still unreachable from cloud agent",
+      "VWAD ai-goat/mcp-lab are directory listings — live exploit oracles need hosted instance URLs",
+      "oopssec Ch.8 SSRF walkthrough documents /support/submit SSRF — live app oracle not yet reproducible on GitHub Pages alone",
       "vulnapi /api/users/search returns User not found for all queries — search BOLA live exploit not reproducible"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 52,
-    "owasp-finbot-ctf.org/vendor": 13,
-    "pwnshop.ctfsecurity.com/debug/info": 47,
+    "juice-shop.herokuapp.com": 53,
     "pwnshop.ctfsecurity.com/register-seller": 52,
+    "pwnshop.ctfsecurity.com/debug/info": 49,
+    "pwnshop.ctfsecurity.com/seller/preview": 28,
+    "owasp-finbot-ctf.org/vendor": 13,
+    "koadt.github.io/oss-oopssec-store/posts/ssrf-internal-page-access": 9,
     "demo-of-cve-2025-55182-saas.vercel.app": 8,
     "vulnapi.testinvicti.com/api/users/search": 15,
     "qa.brokencrystals.com/api/render": 93,
