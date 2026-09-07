@@ -89568,6 +89568,57 @@ const ssrfDefensePlatformAllowlistBypassRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+function isVulnlabDevRootHost(ctx: RuleContext): boolean {
+  const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
+  return /(?:^|\/\/)(?:www\.)?vulnlab\.dev(?:\/|$|\?|#)/i.test(corpus);
+}
+
+const vulnlabDevHubLiveOracle: Rule = async (ctx) => {
+  if (!isVulnlabDevRootHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (/\.vulnlab\.dev/i.test(pageUrl) && !/^https?:\/\/(?:www\.)?vulnlab\.dev\/?(?:\?|#|$)/i.test(pageUrl)) {
+    return NEGATIVE;
+  }
+  const body = ctx.home.body;
+  if (!/intentionally vulnerable/i.test(body)) return NEGATIVE;
+  if (!/vulnlab\.dev/i.test(body)) return NEGATIVE;
+  const labHosts = ["ssrf.vulnlab.dev", "xss.vulnlab.dev", "sqli.vulnlab.dev", "ssti.vulnlab.dev"];
+  const linked = labHosts.filter((h) => new RegExp(h.replace(/\./g, "\\."), "i").test(body));
+  if (linked.length < 4) return NEGATIVE;
+  const cardLinks = body.match(/href=["']https?:\/\/[a-z]+\.vulnlab\.dev\/?["']/gi) ?? [];
+  if (cardLinks.length < 4) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: ctx.origin,
+      labHosts: linked,
+      cardLinks: cardLinks.length,
+      snippet: body.match(/reference target for security tools/i)?.[0] ?? "vulnlab.dev DAST lab index",
+      note:
+        "vulnlab.dev homepage lists ssrf/xss/sqli/ssti intentionally-vulnerable training subdomains — DAST benchmark hub oracle"
+    }
+  };
+};
+
+const vulnlabDevHubRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnlabDevRootHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/^https?:\/\/(?:www\.)?vulnlab\.dev\/?(?:\?|#|$)/i.test(pageUrl)) return NEGATIVE;
+  const result = await vulnlabDevHubLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note:
+        "vulnlab.dev hub route scan — homepage catalogs four live vulnerability-class subdomains for scanner evaluation"
+    }
+  };
+};
+
 function isSqliVulnlabHost(ctx: RuleContext): boolean {
   const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
   return /sqli\.vulnlab\.dev/i.test(corpus);
@@ -119452,6 +119503,8 @@ export const RULES: Record<string, Rule> = {
   ssrfDefensePlatformScanRouteLiveOracle,
   ssrfDefensePlatformAllowlistBypassLiveOracle,
   ssrfDefensePlatformAllowlistBypassRouteLiveOracle,
+  vulnlabDevHubLiveOracle,
+  vulnlabDevHubRouteLiveOracle,
   sqliVulnlabErrorLiveOracle,
   sqliVulnlabErrorRouteLiveOracle,
   sqliVulnlabSecondOrderLiveOracle,

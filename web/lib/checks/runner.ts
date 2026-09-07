@@ -2865,6 +2865,8 @@ const DEEP_RULES = new Set<string>([
   "ssrfDefensePlatformScanRouteLiveOracle",
   "ssrfDefensePlatformAllowlistBypassLiveOracle",
   "ssrfDefensePlatformAllowlistBypassRouteLiveOracle",
+  "vulnlabDevHubLiveOracle",
+  "vulnlabDevHubRouteLiveOracle",
   "sqliVulnlabErrorLiveOracle",
   "sqliVulnlabErrorRouteLiveOracle",
   "sqliVulnlabSecondOrderLiveOracle",
@@ -11798,6 +11800,16 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         "https://ssrf-defense-platform.onrender.com/api/webhook-config"
       ]
     : [];
+  const vulnlabDevPrioritySeeds = /^https?:\/\/(?:www\.)?vulnlab\.dev\/?(?:\?|#|$)/i.test(home.finalUrl)
+    ? [
+        "https://ssrf.vulnlab.dev/basic",
+        "https://xss.vulnlab.dev/reflected/",
+        "https://sqli.vulnlab.dev/error/",
+        "https://ssti.vulnlab.dev/basic/",
+        "https://ssrf.vulnlab.dev/gopher/",
+        "https://vulnlab.dev/results/"
+      ]
+    : [];
   const ssrfVulnlabPrioritySeeds = /ssrf\.vulnlab\.dev/i.test(home.finalUrl)
     ? [
         "https://ssrf.vulnlab.dev/r/?to=https://example.com",
@@ -12089,6 +12101,7 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
       ...vwadCatalogLiveSeeds,
       ...wrongSecretsHubPrioritySeeds,
       ...ssrfDefensePlatformPrioritySeeds,
+      ...vulnlabDevPrioritySeeds,
       ...ssrfVulnlabPrioritySeeds,
       ...sstiVulnlabPrioritySeeds,
       ...sqliVulnlabPrioritySeeds,
@@ -12850,6 +12863,12 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /wrongsecrets-ctf\.herokuapp\.com/i.test(origin) &&
         (targetInput === origin || targetInput === `${origin}/`) &&
         p.slug.startsWith("wrongsecrets-ctf-hub")
+      )
+        return -4;
+      if (
+        /vulnlab\.dev/i.test(origin) &&
+        /^https?:\/\/(?:www\.)?vulnlab\.dev\/?(?:\?|#|$)/i.test(targetInput) &&
+        p.slug.startsWith("vulnlab-dev-hub")
       )
         return -4;
       if (/ssrf-defense-platform\.onrender\.com/i.test(origin) && p.slug.startsWith("ssrf-defense-platform")) return -2;

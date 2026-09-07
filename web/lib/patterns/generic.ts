@@ -35281,6 +35281,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnlab-dev-hub-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "vulnlab.dev DAST lab hub live oracle",
+    description:
+      "vulnlab.dev homepage catalogs intentionally vulnerable SSRF, XSS, SQLi, and SSTI training subdomains — the sampsonc/vulnlab.dev scanner evaluation hub oracle.",
+    impactOneline:
+      "Public DAST lab indexes document exploitable training targets attackers use to benchmark security scanners.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnlabDevHubLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "vulnlab.dev is intentional training software — isolate scanner evaluation from production apps.",
+      steps: [
+        "Run DAST benchmarks only against isolated lab infrastructure.",
+        "Never point production scanners at customer data without authorization.",
+        "Use lab ground-truth metadata at /meta/<slug> to validate scanner recall."
+      ]
+    },
+    fixPrompt:
+      "We host a vulnlab.dev-style DAST evaluation hub. Show how to isolate scanner benchmarks from production targets.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnlab-dev-hub-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "vulnlab.dev hub route live oracle",
+    description:
+      "When scanning vulnlab.dev/, the homepage lists four live vulnerability-class subdomains (ssrf, xss, sqli, ssti) — route-specific DAST benchmark hub oracle.",
+    impactOneline:
+      "Route-scoped scans should flag vulnlab.dev hub pages that catalog intentionally vulnerable training labs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnlabDevHubRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "vulnlab.dev is intentional training software — isolate scanner evaluation from production apps.",
+      steps: [
+        "Run DAST benchmarks only against isolated lab infrastructure.",
+        "Never point production scanners at customer data without authorization.",
+        "Use lab ground-truth metadata at /meta/<slug> to validate scanner recall."
+      ]
+    },
+    fixPrompt:
+      "Our vulnlab.dev route scan exposes the DAST lab catalog. Show how to gate benchmark hubs from production monitoring.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "ssrf-vulnlab-basic-live-oracle",
     platform: "generic",
     category: "Server-side request forgery",
