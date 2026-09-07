@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-07T19:06:51.653Z",
-  "total": 3436,
-  "uniqueSlugs": 3428,
+  "generatedAt": "2026-09-07T20:14:12.089Z",
+  "total": 3437,
+  "uniqueSlugs": 3429,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3418,
+    "generic": 3419,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3351,
+    "deep": 3352,
     "continuous": 0
   },
   "byCategory": {
@@ -32,7 +32,7 @@
     "Open redirect": 29,
     "general": 20,
     "SSRF": 19,
-    "Server-side request forgery": 128,
+    "Server-side request forgery": 129,
     "Sensitive data exposure": 109,
     "AI security": 151,
     "Business logic": 43,
@@ -3075,6 +3075,7 @@
     "vulnforge-academy-level20-final-boss-route-live-oracle",
     "vulnforge-academy-level4-sqli-route-live-oracle",
     "vulnforge-academy-level6-sqli-route-live-oracle",
+    "vulnforge-spa-challenge-ssrf-route-live-oracle",
     "vulnlab-admin-secrets-live-oracle",
     "vulnlab-auth-login-enumeration-live-oracle",
     "vulnlab-auth-session-live-oracle",

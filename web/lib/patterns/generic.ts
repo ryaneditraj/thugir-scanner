@@ -56471,6 +56471,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnforge-spa-challenge-ssrf-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "VulnForge SPA /challenges/N SSRF route live oracle",
+    description:
+      "When scanning /challenges/13–15 on vulnforge.vercel.app, the discovery queue maps to VulnForge Academy level 13–15 SSRF training labs documented in webspoilt/vulnforge-academy.",
+    impactOneline:
+      "VulnForge Academy SSRF levels expose server-side fetch with weak URL blocklists bypassable via IP encoding.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnforgeSpaChallengeSsrfRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VulnForge Academy is intentional training — validate and restrict outbound fetch destinations in production apps.",
+      steps: [
+        "Resolve URLs and deny link-local, loopback, and metadata IP ranges.",
+        "Use an allowlist of permitted fetch destinations.",
+        "Run VulnForge Academy only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our vulnforge.vercel.app /challenges/13 route maps to VulnForge Academy SSRF training. Show SSRF egress control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vulnforge-academy-level-rce-route-live-oracle",
     platform: "generic",
     category: "Injection",

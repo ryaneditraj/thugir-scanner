@@ -82,6 +82,12 @@ function canonicalDiscoveryUrl(url: string): string {
       u.hostname = "dvai.vercel.app";
       return u.toString();
     }
+    const vfChallenge = u.pathname.match(/^\/challenges\/(\d{1,2})\/?$/i);
+    if (/^vulnforge\.vercel\.app$/i.test(u.hostname) && vfChallenge) {
+      u.hostname = "vulnforge-academy.vercel.app";
+      u.pathname = `/backend/includes/levels/medium/level${vfChallenge[1]}.php`;
+      return u.toString();
+    }
   } catch {
     /* ignore */
   }

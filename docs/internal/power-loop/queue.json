@@ -2,6 +2,16 @@
   "updated_at": "2026-09-07T20:06:00.000Z",
   "priority_discovery_urls": [
     {
+      "url": "https://vaultapp-omega.vercel.app/api/account/export",
+      "source": "MRMcyber/vaultapp — API-key impersonation via GET /api/account/export (20 UTC discovery gap)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owaspbased-lessons.vercel.app/lesson/sensitive-information",
+      "source": "OWASP GenAI Security Lab — LLM02 sensitive-information vanity slug alias (20 UTC discovery gap)",
+      "auth": "public_demo"
+    },
+    {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-30",
       "source": "OWASP WrongSecrets — Challenge 30 localStorage sensitive-data oracle (19 UTC discovery)",
       "auth": "public_demo"
@@ -22,8 +32,8 @@
       "auth": "public_demo"
     },
     {
-      "url": "https://vulnforge.vercel.app/challenges/13",
-      "source": "webspoilt/vulnforge-academy — Level 13 SSRF challenge route (Vercel deploy; web search 19 UTC discovery)",
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/medium/level13.php",
+      "source": "webspoilt/vulnforge-academy — Level 13 SSRF challenge route (canonical academy host; vulnforge.vercel.app/challenges/13 maps via spa oracle)",
       "auth": "public_demo"
     },
     {

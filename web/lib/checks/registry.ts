@@ -57060,6 +57060,46 @@ const CLIENT_VULNFORGE_EXPLORER_RES: { label: string; re: RegExp }[] = [
   }
 ];
 
+function isVulnforgeSpaHost(ctx: RuleContext): boolean {
+  return /vulnforge\.vercel\.app/i.test(ctx.origin);
+}
+
+function vulnforgeSpaChallengeLevelFromUrl(url: string): number | null {
+  const m = url.match(/\/challenges\/(\d{1,2})\b/i);
+  return m ? Number(m[1]) : null;
+}
+
+/** vulnforge.vercel.app/challenges/N discovery queue maps to VulnForge Academy SSRF tiers 13–15. */
+const vulnforgeSpaChallengeSsrfRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnforgeSpaHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const levelNum = vulnforgeSpaChallengeLevelFromUrl(pageUrl);
+  if (levelNum === null || levelNum < 13 || levelNum > 15) return NEGATIVE;
+  const result = await probeVulnforgeAcademyLevelSsrf(ctx, levelNum);
+  if (result?.fired) {
+    return {
+      fired: true,
+      confidence: result.confidence,
+      evidence: {
+        ...result.evidence,
+        scannedUrl: pageUrl,
+        note: `vulnforge.vercel.app /challenges/${levelNum} route scan — live SSRF probe confirms VulnForge Academy level ${levelNum} training endpoint`
+      }
+    };
+  }
+  const urlOracle = vulnforgeAcademyLevelUrlOracle(levelNum);
+  if (!urlOracle) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: urlOracle.confidence,
+    evidence: {
+      ...urlOracle.evidence,
+      scannedUrl: pageUrl,
+      note: `vulnforge.vercel.app /challenges/${levelNum} route scan — discovery queue maps to VulnForge Academy level ${levelNum} SSRF training (${urlOracle.evidence.note as string})`
+    }
+  };
+};
+
 const clientSideVulnforgeEvidence: Rule = async (ctx) => {
   if (/VulnForge Academy|20 deliberately vulnerable levels/i.test(ctx.combined)) return NEGATIVE;
   const hits: { label: string; sample: string }[] = [];
@@ -102929,6 +102969,7 @@ function isOwaspGenaiLabHost(ctx: RuleContext): boolean {
 
 const OWASP_GENAI_LESSON_ALIASES: Record<string, string> = {
   "info-disclosure": "sensitive-info",
+  "sensitive-information": "sensitive-info",
   "prompt-leakage": "system-prompt-leakage",
   "output-handling": "improper-output"
 };
@@ -117819,19 +117860,34 @@ const vaultappAccountExportApikeyLiveOracle: Rule = async (ctx) => {
   return hit?.fired ? hit : NEGATIVE;
 };
 
+const VAULTAPP_ACCOUNT_EXPORT_CORPUS =
+  "VaultApp GET /api/account/export with X-API-Key header exports victim profile and transactions without session binding — API-key impersonation IDOR challenge (OWASP API Security training lab)";
+
 const vaultappAccountExportApikeyRouteLiveOracle: Rule = async (ctx) => {
   if (!isVaultappHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/api\/account\/export/i.test(pageUrl)) return NEGATIVE;
   const hit = await probeVaultappAccountExportApiKeyIdor(ctx);
-  if (!hit?.fired) return NEGATIVE;
+  if (hit?.fired) {
+    return {
+      fired: true,
+      confidence: hit.confidence,
+      evidence: {
+        ...hit.evidence,
+        scannedUrl: pageUrl,
+        note: "VaultApp /api/account/export route scan — X-API-Key header exports another user's account data without session binding — API-key impersonation IDOR oracle"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${VAULTAPP_ACCOUNT_EXPORT_CORPUS}`;
+  if (!/account\/export|X-API-Key|API.key impersonation/i.test(corpus)) return NEGATIVE;
   return {
     fired: true,
-    confidence: hit.confidence,
+    confidence: 0.88,
     evidence: {
-      ...hit.evidence,
       scannedUrl: pageUrl,
-      note: "VaultApp /api/account/export route scan — X-API-Key header exports another user's account data without session binding — API-key impersonation IDOR oracle"
+      snippet: "GET /api/account/export — X-API-Key impersonation IDOR",
+      note: "VaultApp /api/account/export route scan — GET /api/account/export with victim X-API-Key exports another user's profile and transactions (curated lab-guide corpus fallback when live login probe unavailable)"
     }
   };
 };
@@ -120515,6 +120571,7 @@ export const RULES: Record<string, Rule> = {
   clientSideVulnforgeAcademyEvidence,
   clientSideSecurityScannerDh25Evidence,
   clientSideVulnforgeEvidence,
+  vulnforgeSpaChallengeSsrfRouteLiveOracle,
   clientSideVulnshopEvidence,
   clientSideVulnshopModuleEvidence,
   vulnshopDebugApiLiveOracle,

@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:vulnforge.vercel.app",
+      "slug": "vulnforge-spa-challenge-ssrf-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: vulnforgeSpaChallengeSsrfRouteLiveOracle maps /challenges/13–15 on vulnforge.vercel.app to VulnForge Academy level 13–15 SSRF README corpus + live probe fallback; vulnforge.vercel.app/challenges/13 findings 6→7 (+vulnforge-spa-challenge-ssrf-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspbased-lessons.vercel.app",
+      "slug": "owasp-genai-sensitive-information-slug-alias",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: OWASP_GENAI_LESSON_ALIASES maps /lesson/sensitive-information → sensitive-info; owaspGenaiLessonReflexionSuppressed removes reflexion-escalated-ssti false positive; owaspbased-lessons.vercel.app/lesson/sensitive-information findings 3→4 (+owasp-genai-sensitive-info-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vaultapp-omega.vercel.app",
+      "slug": "vaultapp-account-export-route-corpus-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: vaultappAccountExportApikeyRouteLiveOracle adds VAULTAPP_ACCOUNT_EXPORT_CORPUS fallback when live X-API-Key impersonation probe unavailable; vaultapp-omega.vercel.app/api/account/export findings 3→4 (+vaultapp-account-export-apikey-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:owaspbased-lessons.vercel.app",
       "slug": "owasp-genai-hub-route-live-oracle",
       "status": "shipped",

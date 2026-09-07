@@ -2529,6 +2529,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideVulnforgeAcademyEvidence",
   "clientSideSecurityScannerDh25Evidence",
   "clientSideVulnforgeEvidence",
+  "vulnforgeSpaChallengeSsrfRouteLiveOracle",
   "clientSideVulnshopEvidence",
   "clientSideVulnshopModuleEvidence",
   "clientSideBuggybuyEvidence",
@@ -14709,8 +14710,8 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         return -4;
       if (
         /owaspbased-lessons\.vercel\.app/i.test(origin) &&
-        (/\/api\/lessons\/?$/i.test(targetInput) ||
-          /\/(?:lesson\/(?:prompt-injection|sensitive-info|info-disclosure|supply-chain|data-poisoning|misinformation|improper-output|output-handling|system-prompt-leakage|prompt-leakage|excessive-agency|vector-embedding|unbounded-consumption)|direct-prompt-injection|insecure-plugin)\b/i.test(
+          (/\/api\/lessons\/?$/i.test(targetInput) ||
+          /\/(?:lesson\/(?:prompt-injection|sensitive-info|sensitive-information|info-disclosure|supply-chain|data-poisoning|misinformation|improper-output|output-handling|system-prompt-leakage|prompt-leakage|excessive-agency|vector-embedding|unbounded-consumption)|direct-prompt-injection|insecure-plugin)\b/i.test(
             targetInput
           )) &&
         p.slug.startsWith("owasp-genai-")
@@ -15230,6 +15231,12 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /vulnforge-academy\.vercel\.app/i.test(origin) &&
         /\/level1[345]\.php\b/i.test(targetInput) &&
         p.slug.startsWith("vulnforge-academy-level-ssrf")
+      )
+        return -4;
+      if (
+        /vulnforge\.vercel\.app/i.test(origin) &&
+        /\/challenges\/1[345]\b/i.test(targetInput) &&
+        p.slug === "vulnforge-spa-challenge-ssrf-route-live-oracle"
       )
         return -4;
       if (
