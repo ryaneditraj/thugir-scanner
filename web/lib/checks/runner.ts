@@ -2171,6 +2171,7 @@ const DEEP_RULES = new Set<string>([
   "websecLevel31OpenBasedirEvalRouteLiveOracle",
   "clientSideWebsecDynamicFunctionCallChallengeEvidence",
   "clientSideSixHackCtfLabEvidence",
+  "sixhackPlatformRouteLiveOracle",
   "clientSideRootMeChallengeEvidence",
   "clientSidePentesterLabEvidence",
   "clientSidePentesterlabWebForPentesterEvidence",
@@ -3642,6 +3643,8 @@ const DEEP_RULES = new Set<string>([
   "aiSecuritySupplyChainRouteLiveOracle",
   "aiSecurityVulnerableDepsRouteLiveOracle",
   "aiSecurityHackedNpmPackagesLiveOracle",
+  "aiSecurityPromptInjectionLiveOracle",
+  "aiSecurityAiPhishingLiveOracle",
   "aiSecurityHackedNpmPackagesRouteLiveOracle",
   "aiSecurityVulnerableNpmRouteLiveOracle",
   "aiSecuritySecurityHeadersRouteLiveOracle",
@@ -14664,6 +14667,28 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /\/login\b/i.test(targetInput) &&
         (p.slug === "ai-security-rate-limiting-bruteforce-live-oracle" ||
           p.slug === "ai-security-login-route-live-oracle")
+      )
+        return -3;
+      if (
+        /ai-security-platform-iota\.vercel\.app/i.test(origin) &&
+        /\/challenges\/prompt-injection\b/i.test(targetInput) &&
+        (p.slug === "ai-security-prompt-injection-live-oracle" ||
+          p.slug === "ai-security-prompt-injection-route-live-oracle")
+      )
+        return -3;
+      if (
+        /ai-security-platform-iota\.vercel\.app/i.test(origin) &&
+        /\/challenges\/(?:ai-phishing|phishing)\b/i.test(targetInput) &&
+        (p.slug === "ai-security-ai-phishing-live-oracle" ||
+          p.slug === "ai-security-ai-phishing-route-live-oracle")
+      )
+        return -3;
+      if (
+        /platform\.sixhackacademy\.com/i.test(origin) &&
+        /^https?:\/\/[^/]+\/?(?:es\/accounts\/(?:login|register)|accounts\/(?:login|register))?\/?$/i.test(
+          targetInput.replace(/[#?].*$/, "")
+        ) &&
+        p.slug.startsWith("sixhack-platform")
       )
         return -3;
       if (/ai-security-platform-iota\.vercel\.app/i.test(origin) && p.slug.startsWith("ai-security-")) return -2;

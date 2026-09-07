@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-07T16:10:13.487Z",
+  "updated_at": "2026-09-07T16:30:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2844,
-  "total_findings": 29288,
+  "total_sites_scanned": 2849,
+  "total_findings": 29451,
   "critical_findings": 54,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2026,
-  "discovery_findings": 24768,
-  "improvements_shipped": 1572,
-  "last_run": "2026-09-07T16:10:13.487Z",
+  "discovery_findings": 24931,
+  "improvements_shipped": 1575,
+  "last_run": "2026-09-07T16:30:00.000Z",
   "last_run_summary": {
     "hour_utc": "16",
     "benchmark": {
@@ -49,47 +49,50 @@
           ]
         }
       },
-      "note": "Primary Heroku stable 6/6 (53 findings; gap=[]; 40 live oracles incl secret-resend + iac-terraform-tls-key + privacy-requests-bola)"
+      "note": "Primary Heroku stable 6/6 (53 findings; gap=[]; 40 live oracles incl secret-resend + iac-terraform-tls-key)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 163,
-      "focus": "16 UTC: pwnshop /vulnerabilities + /chat + wrongsecrets-57 + idor-website + securebank-blog/csrf + wrongsecrets 20/21/22 queue drain",
-      "improvements_shipped_this_run": 0
+      "urls_scanned": 13,
+      "findings": 285,
+      "focus": "16 UTC: SixHack platform hub + AI Security prompt-injection/ai-phishing live oracles + pwnshop vulnerabilities/chat + wrongsecrets 20-22/57 + idor-website + securebank-blog/csrf",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, gap=[])",
+      "platform.sixhackacademy.com: +sixhack-platform-route-live-oracle (Django login hub + Turnstile gate)",
+      "ai-security-platform-iota.vercel.app/challenges/prompt-injection: +ai-security-prompt-injection-live-oracle alongside route oracle",
+      "ai-security-platform-iota.vercel.app/challenges/ai-phishing: +ai-security-ai-phishing-live-oracle alongside route oracle",
       "pwnshop.ctfsecurity.com/vulnerabilities: 50 (+pwnshop-vulnerabilities-index-route-live-oracle)",
-      "pwnshop.ctfsecurity.com/chat: 27 (+pwnshop-chat-prompt-injection-route-live-oracle + chat-order-idor)",
+      "pwnshop.ctfsecurity.com/chat: 27 (+pwnshop-chat-prompt-injection-route-live-oracle)",
       "wrongsecrets.herokuapp.com/challenge/challenge-57: 19 (+wrongsecrets-challenge-57-browser-llm-route-live-oracle)",
       "idor-website.vercel.app: 6 (+idor-website-mock-api-idor-live-oracle)",
-      "securebank-blog.vercel.app/csrf: 4 (+securebank-blog-csrf-attack-page-route-live-oracle corpus fallback)",
-      "wrongsecrets.herokuapp.com/challenge/challenge-20: 19 (queue drain)",
-      "wrongsecrets.herokuapp.com/challenge/challenge-21: 19 (queue drain)",
-      "wrongsecrets.herokuapp.com/challenge/challenge-22: 19 (queue drain)"
+      "wrongsecrets.herokuapp.com/challenge/challenge-20: 19 (queue drain)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "idor-website.vercel.app is frontend-only mock API — live IDOR oracle fires on client bundle, no backend session",
-      "securebank-blog.vercel.app/csrf Vercel checkpoint blocks live CSRF probe — corpus fallback only",
-      "pwnshop /vulnerabilities index is catalog oracle — individual PWN slugs need dedicated route scans",
-      "wrongsecrets 20/21/22 queue drain confirms hub oracles; K8s/Vault execution not testable on Heroku"
+      "SixHack CTF lab instances still login-gated — hub route oracle confirms platform catalog",
+      "AI Security auth-gated challenges (sqli/broken-auth/ssrf) still route-oracle only",
+      "idor-website.vercel.app is frontend-only mock API — live IDOR oracle fires on client bundle",
+      "pwnshop /vulnerabilities index is catalog oracle — individual PWN slugs need dedicated route scans"
     ]
   },
   "discovery_highlights": {
+    "preview.owasp-juice.shop": 55,
+    "juice-shop.herokuapp.com": 53,
+    "pwnshop.ctfsecurity.com/download": 52,
     "pwnshop.ctfsecurity.com/vulnerabilities": 50,
     "pwnshop.ctfsecurity.com/chat": 27,
-    "juice-shop.herokuapp.com": 53,
-    "preview.owasp-juice.shop": 55,
-    "pwnshop.ctfsecurity.com/download": 52,
     "qa.brokencrystals.com/graphql": 93,
+    "qa.brokencrystals.com/api/render": 93,
+    "ai-security-platform-iota.vercel.app/challenges/prompt-injection": 9,
+    "ai-security-platform-iota.vercel.app/challenges/ai-phishing": 9,
+    "platform.sixhackacademy.com": 5,
+    "vault-notes-frontend-gules.vercel.app": 11,
     "wrongsecrets.herokuapp.com/challenge/challenge-57": 19,
-    "wrongsecrets.herokuapp.com/challenge/challenge-20": 19,
-    "wrongsecrets.herokuapp.com/challenge/challenge-21": 19,
-    "wrongsecrets.herokuapp.com/challenge/challenge-22": 19,
-    "idor-website.vercel.app": 6,
-    "securebank-blog.vercel.app/csrf": 4
+    "wrongsecrets.herokuapp.com/challenge/challenge-64": 19,
+    "dvwu.vercel.app/labs/path-traversal": 12,
+    "idor-website.vercel.app": 6
   }
 }

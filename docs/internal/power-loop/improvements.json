@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:platform.sixhackacademy.com",
+      "slug": "sixhack-platform-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET platform.sixhackacademy.com/ returns Django login hub with csrfmiddlewaretoken, Turnstile captcha gate, Google/GitHub social login, and SixHack Academy OWASP Top 10 CTF Labs markers; platform.sixhackacademy.com/ findings gain +sixhack-platform-route-live-oracle (hub route oracle alongside client-side-sixhack-ctf-lab-evidence); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ai-security-platform-iota.vercel.app",
+      "slug": "ai-security-prompt-injection-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenges/prompt-injection returns HTTP 307 Location /login?next=%2Fchallenges%2Fprompt-injection; /learn + corpus fallback documents LLM01 Prompt Injection training; ai-security-platform-iota.vercel.app/challenges/prompt-injection gains +ai-security-prompt-injection-live-oracle alongside route oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ai-security-platform-iota.vercel.app",
+      "slug": "ai-security-ai-phishing-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /learn documents AI-Assisted Phishing CWE-1021 cloned login pages and email spoofing attacks; ai-security-platform-iota.vercel.app/challenges/ai-phishing gains +ai-security-ai-phishing-live-oracle alongside route oracle; benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:vault-notes-frontend-gules.vercel.app",
       "slug": "vault-notes-notes-idor-corpus-fallback",
       "status": "shipped",

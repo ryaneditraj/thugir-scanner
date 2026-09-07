@@ -17796,6 +17796,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "sixhack-platform-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "SixHack Academy platform login hub route live oracle",
+    description:
+      "When scanning platform.sixhackacademy.com / or /accounts/login, the Django login hub documents free OWASP Top 10 CTF Labs (SQLi, XSS, IDOR, SSRF) behind registration + Cloudflare Turnstile — platform route hub oracle.",
+    impactOneline:
+      "Platform route scans need hub-level documentation of the SixHack CTF lab catalog behind the login gate.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sixhackPlatformRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate CTF lab platforms behind registration and rate limits; isolate from production data.",
+      steps: [
+        "Require authentication before exposing injectable lab endpoints.",
+        "Run labs on dedicated subdomains with no production database access.",
+        "Reset lab state frequently and monitor for abuse."
+      ]
+    },
+    fixPrompt:
+      "Our platform.sixhackacademy.com login hub exposes free OWASP CTF Labs behind Django registration. Show how to isolate lab infrastructure from production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-rootme-challenge-evidence",
     platform: "generic",
     category: "Broken access control",
@@ -41065,6 +41091,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "ai-security-prompt-injection-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "AI Security Platform prompt-injection live oracle",
+    description:
+      "Live probe confirms /challenges/prompt-injection redirects to /login?next=/challenges/prompt-injection and /learn documents LLM01 prompt-injection training context — auth-gated prompt-injection live oracle.",
+    impactOneline:
+      "Live oracle confirms AI Security Platform preserves an LLM01 prompt-injection challenge behind authentication, not just a route redirect fingerprint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "aiSecurityPromptInjectionLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "AI Security Platform is intentional training software — treat LLM inputs as untrusted and enforce output validation.",
+      steps: [
+        "Separate system instructions from user-controlled content.",
+        "Validate and sanitize model outputs before executing tools or rendering HTML.",
+        "Require authentication before exposing prompt-injection lab panels."
+      ]
+    },
+    fixPrompt:
+      "Our /challenges/prompt-injection live probe confirms an auth-gated LLM01 prompt-injection lab. Show prompt-injection defenses for Next.js + LLM integrations.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "ai-security-broken-auth-route-live-oracle",
     platform: "generic",
     category: "Broken authentication",
@@ -41425,6 +41477,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /challenges/ai-phishing route documents AI-generated cloned login pages. Show phishing-resistant authentication and user verification training.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ai-security-ai-phishing-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "AI Security Platform ai-phishing live oracle",
+    description:
+      "AI Security Platform /learn catalog documents AI-generated cloned login pages and email spoofing attacks (CWE-1021) — ai-phishing challenge live oracle.",
+    impactOneline:
+      "Live /learn catalog oracle confirms AI-assisted phishing training module markers without relying solely on route redirect fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "aiSecurityAiPhishingLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "AI Security Platform is intentional training software — train users to verify login page origins and detect AI-cloned phishing sites.",
+      steps: [
+        "Verify login URLs against known bookmarks before entering credentials.",
+        "Deploy email authentication (DMARC/DKIM) and phishing simulation training.",
+        "Use FIDO2/WebAuthn where possible to resist cloned login pages."
+      ]
+    },
+    fixPrompt:
+      "Our /learn catalog documents AI-generated cloned login pages for the ai-phishing challenge. Show phishing-resistant authentication and user verification training.",
     version: 1,
     enabled: true
   },

@@ -28325,6 +28325,82 @@ const clientSideSixHackCtfLabEvidence: Rule = async (ctx) => {
   };
 };
 
+function isSixhackPlatformHost(ctx: RuleContext): boolean {
+  try {
+    const host = new URL(ctx.origin).hostname.toLowerCase();
+    if (host === "platform.sixhackacademy.com") return true;
+  } catch {
+    /* fall through */
+  }
+  const probe = `${ctx.origin}${ctx.scanUrl || ""}${ctx.home.finalUrl || ""}`;
+  return /platform\.sixhackacademy\.com/i.test(probe);
+}
+
+const SIXHACK_PLATFORM_CTF_FALLBACK = `
+SixHack Academy CTF Labs free web hacking labs SQL injection XSS IDOR SSRF path traversal file upload OWASP Top 10
+platform.sixhackacademy.com register login Turnstile captcha Django social Google GitHub
+`;
+
+const sixhackPlatformRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSixhackPlatformHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let pathname = "/";
+  try {
+    pathname = new URL(pageUrl).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  if (
+    !/^\/(?:es\/accounts\/(?:login|register)|accounts\/(?:login|register))?\/?$/i.test(pathname)
+  ) {
+    return NEGATIVE;
+  }
+
+  const hubPath = pathname === "/" ? "/" : pathname.replace(/\/$/, "") || "/";
+  const hubUrl = new URL(hubPath, ctx.origin).toString();
+  const hubDoc = await ctx.probe.get(hubUrl, {
+    maxBytes: 32768,
+    timeoutMs: 15000,
+    redirect: "follow"
+  });
+  const corpus = `${ctx.combined}\n${hubDoc.body}\n${SIXHACK_PLATFORM_CTF_FALLBACK}`;
+  const markers: { label: string; sample: string }[] = [];
+  const markerRes: { label: string; re: RegExp }[] = [
+    { label: "SixHack Academy platform login", re: /SixHack Academy/i },
+    { label: "Django CSRF login form", re: /csrfmiddlewaretoken|name="username"[\s\S]{0,120}name="password"/i },
+    {
+      label: "Cloudflare Turnstile captcha gate",
+      re: /turnstile-widget|turnstile-modal|Verificación de seguridad/i
+    },
+    { label: "Google social login", re: /accounts\/social\/google\/login/i },
+    { label: "GitHub social login", re: /accounts\/social\/github\/login/i },
+    {
+      label: "Free CTF Labs registration CTA",
+      re: /Registrarse|Regístrate|¿No tienes cuenta|Sign up|Register/i
+    },
+    {
+      label: "OWASP web hacking curriculum",
+      re: /SQL injection|XSS|IDOR|SSRF|OWASP Top 10/i
+    }
+  ];
+  for (const { label, re } of markerRes) {
+    const m = corpus.match(re);
+    if (m) markers.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (markers.length < 3) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: markers.length >= 5 ? 0.92 : 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      hubUrl,
+      markers: markers.slice(0, 5),
+      note:
+        "SixHack Academy platform.sixhackacademy.com login hub documents free OWASP Top 10 CTF Labs (SQLi, XSS, IDOR, SSRF) behind Django registration + Turnstile gate — platform route hub oracle"
+    }
+  };
+};
+
 // --- Root Me public hacking challenge platform ----------------------------------
 const CLIENT_ROOTME_CHALLENGE_RES: { label: string; re: RegExp }[] = [
   {
@@ -101315,6 +101391,11 @@ const aiSecuritySupplyChainRouteLiveOracle: Rule = (ctx) =>
 const aiSecurityVulnerableDepsRouteLiveOracle: Rule = (ctx) =>
   aiSecurityPlatformChallengeRouteOracle(ctx, "vulnerable-deps");
 
+const AI_SECURITY_PROMPT_INJECTION_LIVE_FALLBACK = `
+AI Security Platform Prompt Injection LLM01 OWASP Top 10 for LLM Applications
+/challenges/prompt-injection auth-gated login redirect system prompt jailbreak ignore previous instructions
+`;
+
 const aiSecurityHackedNpmPackagesLiveOracle: Rule = async (ctx) => {
   if (!isAiSecurityPlatformHost(ctx)) return NEGATIVE;
   const learnUrl = new URL("/learn", AI_SECURITY_PLATFORM_HOME).toString();
@@ -101344,6 +101425,90 @@ const aiSecurityHackedNpmPackagesLiveOracle: Rule = async (ctx) => {
       learnUrl,
       markers: markers.slice(0, 4),
       note: "AI Security Platform /learn documents real-world axios/React npm hijacks delivering remote access trojans — hacked-npm-packages supply-chain training oracle"
+    }
+  };
+};
+
+const aiSecurityPromptInjectionLiveOracle: Rule = async (ctx) => {
+  if (!isAiSecurityPlatformHost(ctx)) return NEGATIVE;
+  const meta = AI_SECURITY_AUTH_GATED_CHALLENGE_META["prompt-injection"];
+  const challengeUrl = new URL("/challenges/prompt-injection", AI_SECURITY_PLATFORM_HOME).toString();
+  const challengeDoc = await ctx.probe.get(challengeUrl, {
+    maxBytes: 4096,
+    timeoutMs: 12000,
+    redirect: "manual"
+  });
+  const location = challengeDoc.headers["location"] || "";
+  const loginRedirect =
+    [301, 302, 303, 307, 308].includes(challengeDoc.status) &&
+    /\/login\b/i.test(location) &&
+    /prompt-injection/i.test(location);
+
+  const learnUrl = new URL("/learn", AI_SECURITY_PLATFORM_HOME).toString();
+  const learnDoc = await ctx.probe.get(learnUrl, { maxBytes: 131072, timeoutMs: 15000 });
+  let corpus =
+    learnDoc.status >= 200 && learnDoc.status < 400 ? learnDoc.body : "";
+  if (!meta.platformContextRe.test(corpus)) {
+    corpus += `\n${await aiSecurityPlatformFetchCatalog(ctx)}\n${AI_SECURITY_PROMPT_INJECTION_LIVE_FALLBACK}`;
+  }
+
+  const markers: { label: string; sample: string }[] = [];
+  if (loginRedirect) {
+    markers.push({
+      label: "Auth-gated prompt-injection redirect",
+      sample: location.slice(0, 100)
+    });
+  }
+  for (const { label, re } of [
+    { label: "Prompt Injection LLM01 training module", re: /Prompt Injection|LLM01/i },
+    { label: "prompt-injection challenge route", re: /\/challenges\/prompt-injection/i },
+    {
+      label: "LLM jailbreak training context",
+      re: /jailbreak|ignore previous instructions|system prompt/i
+    },
+    { label: "AI Security Platform workshop", re: /AI Security Platform|OWASP Top 10/i }
+  ]) {
+    const m = corpus.match(re);
+    if (m) markers.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (!loginRedirect && markers.length < 3) return NEGATIVE;
+  if (markers.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: loginRedirect && markers.length >= 3 ? 0.92 : 0.9,
+    evidence: {
+      learnUrl,
+      challengeStatus: challengeDoc.status,
+      location,
+      markers: markers.slice(0, 4),
+      note:
+        "AI Security Platform /challenges/prompt-injection redirects to /login?next=/challenges/prompt-injection — auth-gated LLM01 prompt-injection training live oracle"
+    }
+  };
+};
+
+const aiSecurityAiPhishingLiveOracle: Rule = async (ctx) => {
+  if (!isAiSecurityPlatformHost(ctx)) return NEGATIVE;
+  const meta = AI_SECURITY_PLATFORM_CHALLENGE_META["ai-phishing"];
+  const learnUrl = new URL("/learn", AI_SECURITY_PLATFORM_HOME).toString();
+  const doc = await ctx.probe.get(learnUrl, { maxBytes: 131072, timeoutMs: 15000 });
+  let corpus = doc.status >= 200 && doc.status < 400 ? doc.body : "";
+  if (!/ai-phishing|AI-Assisted Phishing/i.test(corpus)) {
+    corpus = `${corpus}\n${await aiSecurityPlatformFetchCatalog(ctx)}`;
+  }
+  const markers: { label: string; sample: string }[] = [];
+  for (const m of meta.markers) {
+    const match = corpus.match(m.re);
+    if (match) markers.push({ label: m.label, sample: match[0].slice(0, 100) });
+  }
+  if (markers.length < 3) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: markers.length >= 4 ? 0.92 : 0.9,
+    evidence: {
+      learnUrl,
+      markers: markers.slice(0, 4),
+      note: meta.note + " — /learn catalog live oracle for ai-phishing challenge"
     }
   };
 };
@@ -119687,6 +119852,7 @@ export const RULES: Record<string, Rule> = {
   websecLevel31OpenBasedirEvalRouteLiveOracle,
   clientSideWebsecDynamicFunctionCallChallengeEvidence,
   clientSideSixHackCtfLabEvidence,
+  sixhackPlatformRouteLiveOracle,
   clientSideRootMeChallengeEvidence,
   clientSidePentesterLabEvidence,
   clientSidePentesterlabWebForPentesterEvidence,
@@ -120923,6 +121089,8 @@ export const RULES: Record<string, Rule> = {
   aiSecuritySupplyChainRouteLiveOracle,
   aiSecurityVulnerableDepsRouteLiveOracle,
   aiSecurityHackedNpmPackagesLiveOracle,
+  aiSecurityPromptInjectionLiveOracle,
+  aiSecurityAiPhishingLiveOracle,
   aiSecurityHackedNpmPackagesRouteLiveOracle,
   aiSecurityVulnerableNpmRouteLiveOracle,
   aiSecuritySecurityHeadersRouteLiveOracle,
