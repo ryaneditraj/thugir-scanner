@@ -9371,6 +9371,24 @@
       "slug": "duck-store-auth-totp-bypass-openapi-corpus-fallback",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: POST /api/v1/auth/register returns HTTP 500; duckStoreAuthOpenApiCorpus documents LoginResponse requires_totp/temp_token + login_with_totp from /openapi.json; duck-store.escape.tech/api/v1/auth/login findings 15→19 (+duck-store-auth-totp-bypass-live-oracle +duck-store-auth-totp-bypass-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-products-filter-sqli-openapi-corpus-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/v1/products/filter/by-color?color=Yellow&sort=name returns HTTP 400 {\"detail\":\"Query error: the database system is in recovery mode\"}; duckStoreProductsFilterSqliOpenApiCorpus supplies filter_by_color sort→raw SQL ORDER BY from /openapi.json; duck-store.escape.tech/api/v1/products/filter/by-color findings 10→23 (+duck-store-products-filter-sqli-live-oracle +duck-store-products-filter-sqli-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-products-bola-openapi-corpus-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/v1/products/1 returns HTTP 400 database recovery mode; duckStoreProductsOpenApiCorpus documents update_product_api_v1_products__product_id__put without security from /openapi.json; duck-store.escape.tech/api/v1/products/1 findings 18→23 (+duck-store-products-bola-live-oracle +duck-store-products-bola-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-users-bola-openapi-corpus-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/v1/users/ returns HTTP 400 database recovery mode; duckStoreUsersOpenApiCorpus documents list_users_api_v1_users__get + get_user_api_v1_users__user_uuid__get without auth from /openapi.json; duck-store.escape.tech/api/v1/users/me findings 18→23 (+duck-store-users-bola-live-oracle +duck-store-users-route-live-oracle +duck-store-users-enumeration-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
     }
   ]
 }

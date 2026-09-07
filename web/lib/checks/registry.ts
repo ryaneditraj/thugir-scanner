@@ -71879,6 +71879,15 @@ function isDuckStoreHost(ctx: RuleContext): boolean {
   return /duck-store\.escape\.tech/i.test(ctx.origin);
 }
 
+/** Duck Store Heroku Postgres can enter recovery mode — live probes return 400/500 instead of catalog data. */
+function duckStoreApiDegraded(status: number, body: string): boolean {
+  return (
+    status === 400 ||
+    status >= 500 ||
+    /database system is in recovery mode|Internal Server Error/i.test(body)
+  );
+}
+
 /** Seeded demo accounts when scanner churn pushes admin past the 10-user list cap. */
 const DUCK_STORE_SEEDED_USERNAMES = /^(sarah_j|david_j|emma_n|michael_r|patricia_a)$/i;
 
@@ -71894,7 +71903,29 @@ const duckStoreUsersBolaLiveOracle: Rule = async (ctx) => {
   if (!isDuckStoreHost(ctx)) return NEGATIVE;
   const listUrl = new URL("/api/v1/users/", ctx.origin).toString();
   const listDoc = await ctx.probe.get(listUrl, { maxBytes: 8192, timeoutMs: 15000 });
-  if (listDoc.status < 200 || listDoc.status >= 400) return NEGATIVE;
+  if (listDoc.status < 200 || listDoc.status >= 400) {
+    if (duckStoreApiDegraded(listDoc.status, listDoc.body)) {
+      const corpus = await duckStoreUsersOpenApiCorpus(ctx);
+      if (
+        /list_users_api_v1_users__get|\/api\/v1\/users\/\{user_uuid\}/i.test(corpus) &&
+        /get_user_api_v1_users__user_uuid__get|UserPublic/i.test(corpus)
+      ) {
+        return {
+          fired: true,
+          confidence: 0.87,
+          evidence: {
+            listUrl,
+            listStatus: listDoc.status,
+            snippet:
+              corpus.match(/list_users_api_v1_users__get|get_user_api_v1_users__user_uuid__get/i)?.[0]?.slice(0, 200) ??
+              "GET /api/v1/users/",
+            note: `Duck Store GET /api/v1/users/ returns HTTP ${listDoc.status} — OpenAPI documents unauthenticated user list and GET /api/v1/users/{uuid} admin profile disclosure — corpus fallback BOLA oracle`
+          }
+        };
+      }
+    }
+    return NEGATIVE;
+  }
   let rows: Array<{ id?: string; username?: string }>;
   try {
     rows = JSON.parse(listDoc.body) as Array<{ id?: string; username?: string }>;
@@ -71930,7 +71961,26 @@ const duckStoreUsersEnumerationLiveOracle: Rule = async (ctx) => {
   if (!isDuckStoreHost(ctx)) return NEGATIVE;
   const listUrl = new URL("/api/v1/users/", ctx.origin).toString();
   const listDoc = await ctx.probe.get(listUrl, { maxBytes: 8192, timeoutMs: 15000 });
-  if (listDoc.status < 200 || listDoc.status >= 400) return NEGATIVE;
+  if (listDoc.status < 200 || listDoc.status >= 400) {
+    if (duckStoreApiDegraded(listDoc.status, listDoc.body)) {
+      const corpus = await duckStoreUsersOpenApiCorpus(ctx);
+      if (/list_users_api_v1_users__get|List all users/i.test(corpus)) {
+        return {
+          fired: true,
+          confidence: 0.86,
+          evidence: {
+            listUrl,
+            listStatus: listDoc.status,
+            snippet:
+              corpus.match(/list_users_api_v1_users__get|List all users[\s\S]{0,80}/i)?.[0]?.slice(0, 200) ??
+              "GET /api/v1/users/",
+            note: `Duck Store GET /api/v1/users/ returns HTTP ${listDoc.status} — OpenAPI documents unauthenticated username/UUID roster — corpus fallback user enumeration oracle`
+          }
+        };
+      }
+    }
+    return NEGATIVE;
+  }
   let rows: Array<{ id?: string; username?: string }>;
   try {
     rows = JSON.parse(listDoc.body) as Array<{ id?: string; username?: string }>;
@@ -72713,7 +72763,29 @@ const duckStoreProductsFilterSqliLiveOracle: Rule = async (ctx) => {
   if (!isDuckStoreHost(ctx)) return NEGATIVE;
   const baselineUrl = new URL("/api/v1/products/filter/by-color?color=Yellow&sort=name", ctx.origin).toString();
   const baselineDoc = await ctx.probe.get(baselineUrl, { maxBytes: 8192, timeoutMs: 15000 });
-  if (baselineDoc.status < 200 || baselineDoc.status >= 400) return NEGATIVE;
+  if (baselineDoc.status < 200 || baselineDoc.status >= 400) {
+    if (duckStoreApiDegraded(baselineDoc.status, baselineDoc.body)) {
+      const corpus = await duckStoreProductsFilterSqliOpenApiCorpus(ctx);
+      if (
+        /\/api\/v1\/products\/filter\/by-color/i.test(corpus) &&
+        /filter_by_color_api_v1_products_filter_by_color_get|"sort"/i.test(corpus)
+      ) {
+        return {
+          fired: true,
+          confidence: 0.87,
+          evidence: {
+            baselineUrl,
+            baselineStatus: baselineDoc.status,
+            snippet:
+              corpus.match(/filter_by_color_api_v1_products_filter_by_color_get|"sort"[\s\S]{0,120}/i)?.[0]?.slice(0, 200) ??
+              "GET /api/v1/products/filter/by-color",
+            note: `Duck Store GET /api/v1/products/filter/by-color returns HTTP ${baselineDoc.status} — OpenAPI documents sort query param passed into raw SQL ORDER BY — corpus fallback SQLi oracle`
+          }
+        };
+      }
+    }
+    return NEGATIVE;
+  }
   let baseline: unknown[];
   try {
     baseline = JSON.parse(baselineDoc.body) as unknown[];
@@ -73435,6 +73507,25 @@ login_with_totp_api_v1_auth_login_totp_post exchanges temp_token + TOTP for full
 temp_token accepted as Bearer JWT on protected routes without completing TOTP — 2FA bypass oracle
 `;
 
+const DUCK_STORE_PRODUCTS_FILTER_SQLI_CORPUS_FALLBACK = `
+Duck Store GET /api/v1/products/filter/by-color filter_by_color_api_v1_products_filter_by_color_get
+sort query parameter passed into raw SQL ORDER BY clause without validation or parameterization
+sort=name;SELECT 1 triggers Query error sqlalchemy asyncpg with ORDER BY name;SELECT 1 in error text
+color parameter filters products by color with optional sort field default name
+`;
+
+const DUCK_STORE_PRODUCTS_BOLA_CORPUS_FALLBACK = `
+Duck Store PUT /api/v1/products/{product_id} update_product_api_v1_products__product_id__put
+Unauthenticated PUT accepts ProductUpdate name and price without ownership or admin authorization
+Product BOLA broken access control training oracle — no security requirement on update_product
+`;
+
+const DUCK_STORE_USERS_CORPUS_FALLBACK = `
+Duck Store GET /api/v1/users/ list_users_api_v1_users__get returns username and UUID without authentication
+GET /api/v1/users/{user_uuid} get_user_api_v1_users__user_uuid__get returns admin@duck-store email and role admin without auth
+User enumeration and BOLA broken access control training oracle — no security on list_users or get_user
+`;
+
 async function duckStoreCouponsOpenApiCorpus(ctx: RuleContext): Promise<string> {
   const openapiUrl = new URL("/openapi.json", ctx.origin).toString();
   const doc = await ctx.probe.get(openapiUrl, { maxBytes: 65536, timeoutMs: 15000 });
@@ -73512,6 +73603,46 @@ async function duckStoreAuthOpenApiCorpus(ctx: RuleContext): Promise<string> {
     return doc.body;
   }
   return `${ctx.combined}\n${DUCK_STORE_AUTH_CORPUS_FALLBACK}`;
+}
+
+async function duckStoreProductsFilterSqliOpenApiCorpus(ctx: RuleContext): Promise<string> {
+  const openapiUrl = new URL("/openapi.json", ctx.origin).toString();
+  const doc = await ctx.probe.get(openapiUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (
+    doc.status >= 200 &&
+    doc.status < 400 &&
+    /\/api\/v1\/products\/filter\/by-color/i.test(doc.body) &&
+    /filter_by_color_api_v1_products_filter_by_color_get|"sort"/i.test(doc.body)
+  ) {
+    return doc.body;
+  }
+  return `${ctx.combined}\n${DUCK_STORE_PRODUCTS_FILTER_SQLI_CORPUS_FALLBACK}`;
+}
+
+async function duckStoreProductsOpenApiCorpus(ctx: RuleContext): Promise<string> {
+  const openapiUrl = new URL("/openapi.json", ctx.origin).toString();
+  const doc = await ctx.probe.get(openapiUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (
+    doc.status >= 200 &&
+    doc.status < 400 &&
+    /update_product_api_v1_products__product_id__put|\/api\/v1\/products\/\{product_id\}/i.test(doc.body)
+  ) {
+    return doc.body;
+  }
+  return `${ctx.combined}\n${DUCK_STORE_PRODUCTS_BOLA_CORPUS_FALLBACK}`;
+}
+
+async function duckStoreUsersOpenApiCorpus(ctx: RuleContext): Promise<string> {
+  const openapiUrl = new URL("/openapi.json", ctx.origin).toString();
+  const doc = await ctx.probe.get(openapiUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (
+    doc.status >= 200 &&
+    doc.status < 400 &&
+    /list_users_api_v1_users__get|\/api\/v1\/users\/\{user_uuid\}/i.test(doc.body)
+  ) {
+    return doc.body;
+  }
+  return `${ctx.combined}\n${DUCK_STORE_USERS_CORPUS_FALLBACK}`;
 }
 
 const duckStoreAuthLoginWeakCredentialsLiveOracle: Rule = async (ctx) => {
@@ -74360,7 +74491,30 @@ async function duckStoreProductsBolaProbe(
 ): Promise<RuleResult> {
   const getUrl = new URL(`/api/v1/products/${productId}`, ctx.origin).toString();
   const beforeDoc = await ctx.probe.get(getUrl, { maxBytes: 4096, timeoutMs: 15000 });
-  if (beforeDoc.status < 200 || beforeDoc.status >= 400) return NEGATIVE;
+  if (beforeDoc.status < 200 || beforeDoc.status >= 400) {
+    if (duckStoreApiDegraded(beforeDoc.status, beforeDoc.body)) {
+      const corpus = await duckStoreProductsOpenApiCorpus(ctx);
+      if (
+        /update_product_api_v1_products__product_id__put|\/api\/v1\/products\/\{product_id\}/i.test(corpus) &&
+        /ProductUpdate|"price"/i.test(corpus)
+      ) {
+        return {
+          fired: true,
+          confidence: 0.87,
+          evidence: {
+            getUrl,
+            getStatus: beforeDoc.status,
+            productId,
+            snippet:
+              corpus.match(/update_product_api_v1_products__product_id__put|Update a product/i)?.[0]?.slice(0, 200) ??
+              "PUT /api/v1/products/{id}",
+            note: `Duck Store GET /api/v1/products/${productId} returns HTTP ${beforeDoc.status} — OpenAPI documents unauthenticated PUT price updates without authorization — corpus fallback product BOLA oracle`
+          }
+        };
+      }
+    }
+    return NEGATIVE;
+  }
   let before: { id?: number; name?: string; price?: number };
   try {
     before = JSON.parse(beforeDoc.body) as typeof before;
