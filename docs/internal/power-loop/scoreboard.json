@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-07T01:40:00.000Z",
+  "updated_at": "2026-09-07T02:11:26.976Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,25 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2968,
-  "total_findings": 30285,
-  "critical_findings": 92,
+  "total_sites_scanned": 2739,
+  "total_findings": 26841,
+  "critical_findings": 55,
   "teacher_delta_count": 0,
-  "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2180,
-  "discovery_findings": 24727,
-  "improvements_shipped": 1530,
-  "last_run": "2026-09-07T01:40:00.000Z",
+  "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+  "discovery_urls_added": 1961,
+  "discovery_findings": 22773,
+  "improvements_shipped": 1161,
+  "last_run": "2026-09-07T02:11:26.976Z",
   "last_run_summary": {
-    "hour_utc": "01",
+    "hour_utc": "02",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 53,
+      "oracle_findings": 47,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 595,
-      "live_oracles": 40,
+      "probes_run": 590,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -49,51 +48,46 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (53 findings, 40 live oracles, 595 probes) — secret-resend still absent but sensitive_data covered via other slugs"
+      "note": "Stable 6/6 first-pass recall (47 findings, 36 juice-shop live oracles incl jwt-alg-none + captcha-bypass + security-question-user); secret-resend slug still absent"
     },
-    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 2,
-      "urls_scanned": 11,
-      "urls_ok": 11,
-      "findings": 103,
-      "focus": "JavaSecLab JDBC/XSS/JWT/RCE route oracles + MCPGoat/Chimera queue drain + Testfire apply.aspx SQLi",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 120,
+      "focus": "wrongsecrets challenges 50-52 + 55-56 + 64-66 (SSH bastion, project-spec, Swift binary, plain/obfuscated Java CLI oracles) + whgojp JavaSecLab ssrf/idor/sqli/xss/upload queued",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, 40 live oracles; gap=[])",
-      "whgojp.top/jwt/vul: 11→12 (+javaseclab-jwt-vul-route-live-oracle)",
-      "whgojp.top/rce/vul: 11→12 (+javaseclab-rce-vul-route-live-oracle)",
-      "whgojp.top/sqli/jdbc/jdbcVul: 12 findings — javaseclab-jdbc-sqli-vul1-route-live-oracle",
-      "whgojp.top/xss/reflect/vul: 12 findings — javaseclab-reflected-xss-route-live-oracle",
-      "demo.testfire.net/bank/apply.aspx: 13→12 (+testfire-apply-login-sqli-route-live-oracle)",
-      "sabyasachidhal.github.io/MCPGoat/: 6 findings (+mcpgoat-route-live-oracle)",
-      "chimera.atlascrew.dev/api/v1/ecommerce/products/search: 8 findings (+chimera-ecommerce-products-search-xss-route-live-oracle)",
-      "chimera.atlascrew.dev/api/v1/ecommerce/products: 8 findings (+chimera-ecommerce-products-catalog-sqli-route-live-oracle)",
-      "koadt.github.io/oss-oopssec-store/path-traversal: 7 findings — oopssec-path-traversal-route-live-oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings, 36 live oracles) — full rich pass on primary Heroku",
+      "wrongsecrets.herokuapp.com/challenge/challenge-55: 15 findings — SSH private-key route oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-56: 15 findings — project-spec secrets route oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-64: 15 findings — Swift binary route oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-65: 15 findings — plain Java CLI route oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-66: 15 findings — obfuscated Java CLI route oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-50: 15 findings — challenge-50 route oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-51: 15 findings — challenge-51 route oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-52: 15 findings — challenge-52 route oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark",
-      "vapi.roottusk.com + PentestForge dvwa/tomcat unreachable (dead hosts)",
-      "seclab.vercel.app/labs/idor|xss|csrf still queued — not in drain batch",
-      "nodegoat-websec + wrongsecrets-ctf priority queue still pending drain"
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "whgojp JavaSecLab ssrf/idor/sqli/xss/upload routes queued but not yet drained (at queue tail)",
+      "wrongsecrets challenges 50-52/55-56/64-66: route oracles confirm walkthrough text; cloud-only execution not testable on Heroku"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 53,
-    "whgojp.top/jwt/vul": 12,
-    "whgojp.top/rce/vul": 12,
-    "whgojp.top/sqli/jdbc/jdbcVul": 12,
-    "whgojp.top/xss/reflect/vul": 12,
-    "whgojp.top/xxe/vul1": 12,
-    "whgojp.top/spel/vul": 12,
-    "whgojp.top/csrf/vul": 12,
-    "demo.testfire.net/bank/apply.aspx": 12,
-    "sabyasachidhal.github.io/MCPGoat/": 6,
-    "chimera.atlascrew.dev/api/v1/ecommerce/products/search?q=test": 8,
-    "chimera.atlascrew.dev/api/v1/ecommerce/products": 8,
-    "riglabs-cyber-lab.vercel.app/crypto": 7,
-    "seclab.vercel.app/labs/sqli": 7
+    "juice-shop.herokuapp.com": 47,
+    "wrongsecrets.herokuapp.com/challenge/challenge-55": 15,
+    "wrongsecrets.herokuapp.com/challenge/challenge-56": 15,
+    "wrongsecrets.herokuapp.com/challenge/challenge-64": 15,
+    "wrongsecrets.herokuapp.com/challenge/challenge-65": 15,
+    "wrongsecrets.herokuapp.com/challenge/challenge-66": 15,
+    "wrongsecrets.herokuapp.com/challenge/challenge-50": 15,
+    "wrongsecrets.herokuapp.com/challenge/challenge-51": 15,
+    "wrongsecrets.herokuapp.com/challenge/challenge-52": 15,
+    "wrongsecrets.herokuapp.com/challenge/challenge-44": 15,
+    "duck-store.escape.tech/api/v1/users/me/profile": 33,
+    "pwnshop.ctfsecurity.com/verify-otp": 27
   }
 }
