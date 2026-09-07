@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-07T08:30:00.000Z",
+  "updated_at": "2026-09-07T09:12:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2763,
-  "total_findings": 27459,
+  "total_sites_scanned": 2768,
+  "total_findings": 27650,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1980,
-  "discovery_findings": 23281,
+  "discovery_urls_added": 1985,
+  "discovery_findings": 23420,
   "improvements_shipped": 1551,
-  "last_run": "2026-09-07T08:30:00.000Z",
+  "last_run": "2026-09-07T09:12:00.000Z",
   "last_run_summary": {
-    "hour_utc": "08",
+    "hour_utc": "09",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 52,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 599,
+      "probes_run": 597,
       "live_oracles": 39,
       "benchmark_recall": {
         "juice-shop": {
@@ -49,41 +49,40 @@
           ]
         }
       },
-      "note": "Stable 6/6 on primary Heroku (52 findings, 39 live oracles); secret-resend present via bridge"
+      "note": "Stable 6/6 on primary Heroku (52 findings, 39 live oracles); secret-resend + iac-terraform-tls-key present"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "urls_errored": 5,
-      "findings": 69,
-      "focus": "duck-store DB recovery mode — OpenAPI corpus fallbacks for SQLi filter, products BOLA, users BOLA/enumeration",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 4,
+      "urls_skipped_48h": 1,
+      "urls_errored": 1,
+      "findings": 139,
+      "focus": "qa.brokencrystals AWS SSRF + DVGA GraphQL + crAPI2/vAPI BOLA oracles from public APIsec/Escape demos",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, 39 live oracles; gap=[])",
-      "duck-store.escape.tech/api/v1/products/filter/by-color: 10→23 (+products-filter-sqli corpus fallback when DB in recovery mode)",
-      "duck-store.escape.tech/api/v1/products/1: 18→23 (+products-bola corpus fallback)",
-      "duck-store.escape.tech/api/v1/users/me: 18→23 (+users-bola/enumeration corpus fallback)",
-      "wrongsecrets.herokuapp.com/challenge/challenge-38: 19 findings — git-notes route oracle"
+      "qa.brokencrystals.com/api/file/aws: 90 findings — AWS metadata SSRF route oracle on QA host",
+      "dvga.tools.escape.tech/graphql: 19 findings — GraphQL introspection/injection oracle",
+      "crapi2.apisec.ai/identity/api/v2/vehicle/1/location: 14 findings — vehicle BOLA location oracle",
+      "vapi.apisec.ai/identity/api/v2/user/1: 16 findings — user profile BOLA oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "duck-store Postgres intermittently in recovery mode — corpus fallbacks now cover SQLi/BOLA/users when live probes fail",
-      "lab.pentest-forge.com crAPI/VAmPI/DVGA routes unreachable from cloud agent (5 queue errors)",
-      "wrongsecrets challenge-63/67 + duck-store vulnerabilities hub still queued for drain"
+      "crapi.apisec.ai/identity/api/v2/admin/videos/1 skipped — scanned within 48h",
+      "lab.pentest-forge.com still unreachable from cloud agent (pentest-forge retry error)",
+      "wrongsecrets challenge-63/67 + duck-store admin/stats/referrer/reviews/register still queued for drain"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 52,
-    "duck-store.escape.tech/api/v1/products/filter/by-color": 23,
-    "duck-store.escape.tech/api/v1/products/1": 23,
-    "duck-store.escape.tech/api/v1/users/me": 23,
-    "duck-store.escape.tech/api/v1/admin/users": 19,
-    "duck-store.escape.tech/api/v1/testimonials/29": 19,
-    "duck-store.escape.tech/api/v1/auth/login": 19,
-    "wrongsecrets.herokuapp.com/challenge/challenge-38": 19,
+    "qa.brokencrystals.com/api/file/aws": 90,
     "brokencrystals.com/api/fetch": 86,
-    "ssrf.vulnlab.dev/metadata-azure": 18
+    "duck-store.escape.tech/api/v1/products/filter/by-color": 23,
+    "dvga.tools.escape.tech/graphql": 19,
+    "vapi.apisec.ai/identity/api/v2/user/1": 16,
+    "crapi2.apisec.ai/identity/api/v2/vehicle/1/location": 14,
+    "wrongsecrets.herokuapp.com/challenge/challenge-38": 19
   }
 }

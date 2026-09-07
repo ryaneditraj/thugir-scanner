@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-07T08:05:00.000Z",
+  "updated_at": "2026-09-07T09:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://qa.brokencrystals.com/api/file/aws",
+      "source": "NeuraLegion/brokencrystals QA — AWS metadata SSRF oracle /api/file/aws (scoreboard gap: qa host not yet queued)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvga.tools.escape.tech/graphql",
+      "source": "dosolihah/DVGA Escape hosted demo — GraphQL introspection/injection oracle (VWAD online app)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://crapi.apisec.ai/identity/api/v2/admin/videos/1",
+      "source": "OWASP crAPI public demo — BFLA privilege-tier path substitution oracle DELETE /identity/api/v2/admin/videos/{id} (ASTF traceability live-confirmed)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://crapi2.apisec.ai/identity/api/v2/vehicle/1/location",
+      "source": "OWASP crAPI2 public demo — BOLA vehicle location oracle GET /identity/api/v2/vehicle/{id}/location (OWASPLA 2025 guide)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vapi.apisec.ai/identity/api/v2/user/1",
+      "source": "roottusk/vAPI public demo — BOLA user profile oracle GET /identity/api/v2/user/{id} (APIsec hosted lab)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://crapi.lab.pentest-forge.com/workshop/api/mechanic/mechanic_report?report_id=1",
       "source": "PentestForge crAPI — Challenge 2 mechanic report BOLA oracle GET /workshop/api/mechanic/mechanic_report (OWASP crAPI challenges.md)",
