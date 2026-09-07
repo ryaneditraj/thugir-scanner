@@ -2,6 +2,31 @@
   "updated_at": "2026-09-07T14:25:00.000Z",
   "priority_discovery_urls": [
     {
+      "url": "https://vault-notes-frontend-gules.vercel.app/",
+      "source": "Raghavtripathii/vault-notes-vapt — 5-vuln notes app with SQLi/IDOR/XSS/plaintext/exposed JWT (GitHub homepage; 14 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/hacked-npm-packages",
+      "source": "AI Security Platform — hacked npm supply-chain challenge (axios RAT, React RCE; 14 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/ai-phishing",
+      "source": "AI Security Platform — AI-assisted phishing clone challenge CWE-1021 (14 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/privacy-policy",
+      "source": "AI Security Platform — deceptive privacy policy dark-patterns challenge (14 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://qa.brokencrystals.com/graphql",
+      "source": "Broken Crystals QA — GraphQL introspection/injection oracle (Escape.tech public QA deploy; 14 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
       "url": "https://vwad.owasp.org/app/ai-goat/",
       "source": "OWASP VWAD — AI Goat LLM attack lab directory (13 UTC power-scan discovery)",
       "auth": "public_demo"

@@ -15,13 +15,13 @@
       ]
     }
   },
-  "total_sites_scanned": 2817,
-  "total_findings": 28532,
+  "total_sites_scanned": 2826,
+  "total_findings": 28816,
   "critical_findings": 54,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2011,
-  "discovery_findings": 24170,
+  "discovery_urls_added": 2016,
+  "discovery_findings": 24401,
   "improvements_shipped": 1569,
   "last_run": "2026-09-07T14:25:00.000Z",
   "last_run_summary": {
@@ -32,7 +32,7 @@
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 597,
+      "probes_run": 602,
       "live_oracles": 40,
       "benchmark_recall": {
         "juice-shop": {
@@ -49,37 +49,50 @@
           ]
         }
       },
-      "note": "Primary Heroku stable 6/6 (53 findings power-scan validation; gap=[])"
+      "note": "Primary Heroku stable 6/6 (53 findings; gap=[]; 40 live oracles incl secret-resend + iac-terraform-tls-key)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 24,
-      "focus": "14 UTC: VWAD ai-goat + MCP servers lab route oracles + OopsSec SSRF walkthrough corpus live oracle",
+      "urls_added": 5,
+      "urls_scanned": 11,
+      "findings": 248,
+      "focus": "14 UTC combined: vault-notes VAPT + AI Security hacked-npm/ai-phishing/privacy-policy + qa.brokencrystals GraphQL + pwnshop debug/register-seller + wrongsecrets-25 + VWAD ai-goat/mcp-lab route oracles + OopsSec SSRF corpus",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, gap=[])",
-      "vwad.owasp.org/app/ai-goat/: 5→7 (+client-side-vwad-ai-goat-evidence +vwad-ai-goat-route-live-oracle)",
+      "vault-notes-frontend-gules.vercel.app: 9 (+vault-notes-jwt-secret-leak-live-oracle +vault-notes-login-sqli-live-oracle)",
+      "ai-security-platform-iota.vercel.app/challenges/hacked-npm-packages: 10 (+ai-security-hacked-npm-packages-route-live-oracle)",
+      "ai-security-platform-iota.vercel.app/challenges/ai-phishing: 9 (+ai-security-ai-phishing-route-live-oracle)",
+      "ai-security-platform-iota.vercel.app/challenges/privacy-policy: 5 (+ai-security-privacy-policy-route-live-oracle)",
+      "qa.brokencrystals.com/graphql: 93 (+brokencrystals-graphql-introspection-route-live-oracle)",
+      "vwad.owasp.org/app/ai-goat/: 5→7 (+vwad-ai-goat-route-live-oracle)",
       "vwad.owasp.org/app/vulnerable-mcp-servers-lab/: 6→7 (+vwad-mcp-servers-lab-route-live-oracle)",
-      "koadt.github.io/.../ssrf-internal-page-access/: 9→10 (+oopssec-ssrf-walkthrough-corpus-live-oracle)"
+      "koadt.github.io/.../ssrf-internal-page-access/: 9→10 (+oopssec-ssrf-walkthrough-corpus-live-oracle)",
+      "pwnshop.ctfsecurity.com/debug/info: 52 (queue re-drain)",
+      "wrongsecrets.herokuapp.com/challenge/challenge-25: 19 (queue drain)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "OopsSec Store live /api/support SSRF oracle requires local Docker instance (leogra/oss-oopssec-store) — walkthrough corpus oracle shipped",
+      "vault-notes IDOR/XSS/plaintext-password oracles need authenticated Render backend session — frontend-only pass surfaces JWT leak + SQLi route evidence",
+      "AI Security Platform challenges login-gated — route oracles fire on catalog/redirect but live exploit demos need session",
+      "OopsSec Store live /api/support SSRF oracle requires local Docker instance — walkthrough corpus oracle shipped",
       "VWAD ai-goat/mcp-lab are offline container listings — route oracles confirm GitHub repos but live exploit needs local deploy",
-      "lab.pentest-forge.com DVGA still unreachable from cloud agent"
+      "pwnshop download/forgot-password/vulnerabilities still queued"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 53,
+    "qa.brokencrystals.com/graphql": 93,
+    "qa.brokencrystals.com/api/render": 93,
+    "pwnshop.ctfsecurity.com/debug/info": 52,
+    "pwnshop.ctfsecurity.com/register-seller": 27,
     "vwad.owasp.org/app/ai-goat": 7,
     "vwad.owasp.org/app/vulnerable-mcp-servers-lab": 7,
     "koadt.github.io/oss-oopssec-store/posts/ssrf-internal-page-access": 10,
-    "pwnshop.ctfsecurity.com/register-seller": 52,
-    "pwnshop.ctfsecurity.com/debug/info": 49,
-    "owasp-finbot-ctf.org/vendor": 13,
-    "qa.brokencrystals.com/api/render": 93
+    "ai-security-platform-iota.vercel.app/challenges/hacked-npm-packages": 10,
+    "vault-notes-frontend-gules.vercel.app": 9,
+    "ai-security-platform-iota.vercel.app/challenges/ai-phishing": 9,
+    "wrongsecrets.herokuapp.com/challenge/challenge-25": 19
   }
 }
