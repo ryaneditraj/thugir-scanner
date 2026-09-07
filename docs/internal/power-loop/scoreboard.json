@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-07T03:30:00.000Z",
+  "updated_at": "2026-09-07T04:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,25 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2979,
-  "total_findings": 30570,
-  "critical_findings": 92,
+  "total_sites_scanned": 2739,
+  "total_findings": 26879,
+  "critical_findings": 55,
   "teacher_delta_count": 0,
-  "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2185,
-  "discovery_findings": 24908,
-  "improvements_shipped": 1536,
-  "last_run": "2026-09-07T03:30:00.000Z",
+  "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+  "discovery_urls_added": 1961,
+  "discovery_findings": 22805,
+  "improvements_shipped": 1161,
+  "last_run": "2026-09-07T04:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "03",
+    "hour_utc": "04",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 53,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 595,
-      "live_oracles": 40,
+      "probes_run": 597,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -49,41 +48,51 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (53 findings, 40 live oracles) — no benchmark category misses"
+      "note": "Rich 6/6 pass — 53 findings incl. secret-resend + juice-shop-resend-key-live-oracle; 30+ live oracles active"
     },
-    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 4,
-      "urls_ok": 4,
-      "findings": 47,
-      "focus": "vulnapi route corpus fallback + MCPGoat reflexion SSTI suppression + JavaSecLab jwt/rce hub seeds",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 152,
+      "focus": "WrongSecrets challenges 35-43 (Docker/K8s secrets) + duck-store vulnerabilities/openapi/coupons queued for next run",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings)",
-      "vulnapi.testinvicti.com/api/fetch: 10→14 (+vulnapi-fetch-ssrf-route-live-oracle corpus fallback)",
-      "vulnapi.testinvicti.com/api/orders/1: 10→14 (+vulnapi-orders-bola-route-live-oracle corpus fallback)",
-      "vulnapi.testinvicti.com/api/admin/users: 10→14 (+vulnapi-admin-users-host-bypass-route-live-oracle corpus fallback)",
-      "sabyasachidhal.github.io/MCPGoat/: 6→5 (-reflexion-escalated-ssti false positive, +mcpgoat-route-live-oracle retained)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, rich live-oracle pass incl. secret-resend)",
+      "wrongsecrets.herokuapp.com/challenge/challenge-40: 19 findings — challenge route + MCP execute_command oracles",
+      "wrongsecrets.herokuapp.com/challenge/challenge-41: 19 findings — challenge route + database connection error oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-42: 19 findings — challenge route + MCP62 Google SA oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-43: 19 findings — challenge route + stack-database-url-in-bundle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-35: 19 findings — secrets-management CTF evidence",
+      "wrongsecrets.herokuapp.com/challenge/challenge-36: 19 findings — secrets-management CTF evidence",
+      "wrongsecrets.herokuapp.com/challenge/challenge-37: 19 findings — secrets-management CTF evidence",
+      "wrongsecrets.herokuapp.com/challenge/challenge-38: 19 findings — secrets-management CTF evidence"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "benchmark 6/6 stable — no category misses to address",
-      "vulnlab.dev sqli/xss/ssti/gopher queued at tail — not in drain batch",
-      "vapi.roottusk.com + PentestForge dvwa/tomcat still unreachable (dead hosts)"
+      "duck-store.escape.tech vulnerabilities/openapi/coupons/validate + WrongSecrets 63/67 queued but not scanned this run (queue priority)",
+      "wrongsecrets 35-43: route oracles fire but challenge-specific secret extraction still needs per-challenge tuning",
+      "vapi.roottusk.com + pentest-forge labs returned 0 findings — may be down or blocking scanner egress"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 53,
-    "vulnapi.testinvicti.com/api/fetch": 14,
-    "vulnapi.testinvicti.com/api/orders/1": 14,
-    "vulnapi.testinvicti.com/api/admin/users": 14,
-    "sabyasachidhal.github.io/MCPGoat/": 5,
+    "wrongsecrets.herokuapp.com/challenge/challenge-40": 19,
+    "wrongsecrets.herokuapp.com/challenge/challenge-41": 19,
+    "wrongsecrets.herokuapp.com/challenge/challenge-42": 19,
+    "wrongsecrets.herokuapp.com/challenge/challenge-43": 19,
+    "wrongsecrets.herokuapp.com/challenge/challenge-35": 19,
+    "wrongsecrets.herokuapp.com/challenge/challenge-36": 19,
+    "wrongsecrets.herokuapp.com/challenge/challenge-37": 19,
+    "wrongsecrets.herokuapp.com/challenge/challenge-38": 19,
     "wrongsecrets.herokuapp.com/challenge/challenge-55": 19,
-    "whgojp.top/jwt/vul": 12,
-    "whgojp.top/rce/vul": 12,
-    "bac-vulnerability-lab.onrender.com": 4,
-    "chimera.atlascrew.dev/api/v1/ecommerce/products/search?q=test": 8
+    "wrongsecrets.herokuapp.com/challenge/challenge-56": 19,
+    "duck-store.escape.tech/api/v1/users/me/profile": 33,
+    "demo.owasp-juice.shop/rest/memories": 27,
+    "duck-store.escape.tech/api/v1/products/filter/by-color": 31,
+    "pwnshop.ctfsecurity.com/verify-otp": 27,
+    "vulnbank.org/sup3r_s3cr3t_admin": 20,
+    "brokencrystals.com/userlogin?logobgcolor=red": 52
   }
 }

@@ -10569,6 +10569,31 @@
       "url": "https://ssrf.vulnlab.dev/gopher/",
       "source": "sampsonc/vulnlab.dev — gopher:// SSRF scheme lab (ssrf.vulnlab.dev README)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/vulnerabilities",
+      "source": "Escape Duck Store blog — interactive vulnerability index (2026 expansion)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/openapi.json",
+      "source": "Escape Duck Store — unauthenticated OpenAPI spec documents all API routes (Devroxana writeup)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/orders/coupons/validate",
+      "source": "Escape Duck Store OpenAPI — coupon validation business-logic oracle",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-63",
+      "source": "OWASP WrongSecrets README — Heroku demo challenge 63 (secrets management)",
+      "auth": "public_benchmark"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-67",
+      "source": "OWASP WrongSecrets README — Heroku demo challenge 67 (secrets management)",
+      "auth": "public_benchmark"
     }
   ]
 }
