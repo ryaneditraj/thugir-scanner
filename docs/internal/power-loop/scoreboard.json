@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-07T00:25:00.000Z",
+  "updated_at": "2026-09-07T01:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2956,
-  "total_findings": 30129,
+  "total_sites_scanned": 2965,
+  "total_findings": 30249,
   "critical_findings": 86,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2178,
-  "discovery_findings": 24624,
+  "discovery_urls_added": 2180,
+  "discovery_findings": 24691,
   "improvements_shipped": 1527,
-  "last_run": "2026-09-07T00:25:00.000Z",
+  "last_run": "2026-09-07T01:15:00.000Z",
   "last_run_summary": {
-    "hour_utc": "00",
+    "hour_utc": "01",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 53,
@@ -49,46 +49,44 @@
           ]
         }
       },
-      "note": "Rich 6/6 first-pass recall (53 findings, 40 live oracles, 595 probes) — secret-resend still absent but sensitive_data covered via other slugs"
+      "note": "Stable 6/6 first-pass recall (53 findings, 40 live oracles, 595 probes) — primary Heroku responded without timeout"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 5,
-      "urls_ok": 5,
-      "findings": 58,
-      "focus": "whgojp/JavaSecLab public demo — XXE, SpEL, JWT, RCE, CSRF lab routes (web search 00 UTC); riglabs/seclab route oracles shipped earlier same hour",
-      "improvements_shipped_this_run": 3
+      "urls_added": 2,
+      "urls_scanned": 8,
+      "urls_ok": 8,
+      "findings": 67,
+      "focus": "whgojp/JavaSecLab JDBC SQLi + reflected XSS route oracles (web search 01 UTC); queue drain MCPGoat/Chimera/riglabs/oopssec path-traversal",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, 40 live oracles; gap=[])",
-      "whgojp.top/xxe/vul1: 12 findings — javaseclab-xxe-vul1-live-oracle + route oracle",
-      "whgojp.top/spel/vul: 12 findings — javaseclab-spel-vul-route-live-oracle",
-      "whgojp.top/csrf/vul: 12 findings — javaseclab-csrf-vul-live-oracle + route oracle",
-      "whgojp.top/jwt/vul: 11 findings — druid-monitor-exposed (no jwt-specific live oracle yet)",
-      "whgojp.top/rce/vul: 11 findings — druid-monitor-exposed (no rce-specific live oracle yet)",
-      "riglabs-cyber-lab.vercel.app/crypto: 5→7 (+riglabs-cyber-lab-dead-route-live-oracle)",
-      "seclab.vercel.app/labs/sqli: 6→7 (+seclab-sqli-labs-route-live-oracle)"
+      "whgojp.top/sqli/jdbc/jdbcVul: 12 findings — javaseclab-jdbc-sqli-vul1-route-live-oracle",
+      "whgojp.top/xss/reflect/vul: 12 findings — javaseclab-reflected-xss-route-live-oracle",
+      "sabyasachidhal.github.io/MCPGoat: 6 findings — mcpgoat-route-live-oracle",
+      "chimera.atlascrew.dev ecommerce search/catalog: 8 findings each — route oracles confirmed",
+      "riglabs-cyber-lab.vercel.app/crypto + http-headers: 7 findings each",
+      "koadt.github.io/oss-oopssec-store path-traversal: 7 findings — oopssec-path-traversal-route-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
+      "seclab.vercel.app/labs/idor|xss|csrf still queued — not in 8-url drain batch",
       "whgojp.top/jwt/vul + /rce/vul: route oracles missing — only generic druid/javaseclab bundle hits",
-      "vapi.roottusk.com + PentestForge dvwa/tomcat unreachable (dead hosts drained as errors)",
+      "vapi.roottusk.com + PentestForge dvwa/tomcat unreachable (dead hosts)",
       "secret-resend slug still absent on juice-shop benchmark",
-      "demo.testfire.net/bank/apply.aspx returns 404 — ccApply POST endpoint may need separate oracle",
       "nodegoat-websec + wrongsecrets-ctf priority queue still pending drain"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 53,
+    "whgojp.top/sqli/jdbc/jdbcVul": 12,
+    "whgojp.top/xss/reflect/vul": 12,
     "whgojp.top/xxe/vul1": 12,
     "whgojp.top/spel/vul": 12,
     "whgojp.top/csrf/vul": 12,
-    "whgojp.top/jwt/vul": 11,
-    "whgojp.top/rce/vul": 11,
+    "chimera.atlascrew.dev/api/v1/ecommerce/products/search?q=test": 8,
     "riglabs-cyber-lab.vercel.app/crypto": 7,
-    "riglabs-cyber-lab.vercel.app/http-headers": 7,
-    "seclab.vercel.app/labs/sqli": 7,
-    "demo.testfire.net/search.jsp?query=test": 14
+    "seclab.vercel.app/labs/sqli": 7
   }
 }
