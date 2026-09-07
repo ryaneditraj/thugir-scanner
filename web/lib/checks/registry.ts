@@ -31220,6 +31220,8 @@ POST /file/upload — arbitrary file upload with unrestricted extension (JSP/web
 POST /deserialize/fastjson — Fastjson @type deserialization RCE training module (AutoType disabled bypass)
 GET /ssrf/url — URLConnection SSRF lab hub (alias /ssrf/vul)
 GET /sqli/jdbc — JDBC SQL injection lab hub (alias /sqli/jdbc/vul1)
+GET /sqli/jdbc/jdbcVul — JDBC SQLi lab controller path (wiki test guide alias)
+GET /xss/reflect/vul — reflected XSS lab hub (alias /xss/reflect/vul1)
 GET /jwt/vul — JWT credential security lab hub (alias /loginconfront/credential)
 GET /loginconfront/credential/generate-jwt?username=admin&role=admin — JWT claim forgery with weak HMAC secret (SECRET=123456)
 GET /loginconfront/credential/vul1 — trusts Auth_Token header role claims without server-side validation
@@ -31256,7 +31258,7 @@ const javaSecLabReflectedXssLiveOracle: Rule = async (ctx) => {
 const javaSecLabReflectedXssRouteLiveOracle: Rule = async (ctx) => {
   if (!isJavaSecLabHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/xss\/(?:reflected|reflect)\b/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/xss\/(?:reflected|reflect)(?:\/vul(?:1|2|3)?)?\b/i.test(pageUrl)) return NEGATIVE;
   const live = await javaSecLabReflectedXssLiveOracle(ctx);
   if (live.fired) {
     return {
@@ -31271,7 +31273,7 @@ const javaSecLabReflectedXssRouteLiveOracle: Rule = async (ctx) => {
   }
   const corpus = `${ctx.combined}\n${pageUrl}\n${JAVA_SECLAB_WIKI_FALLBACK}`;
   if (!/JavaSecLab|JavaSeclab|whgojp\/JavaSecLab/i.test(corpus)) return NEGATIVE;
-  if (!/\/xss\/reflect\/vul2|reflect.*payload=/i.test(corpus)) return NEGATIVE;
+  if (!/\/xss\/reflect\/vul(?:1|2|3)?|reflect.*payload=/i.test(corpus)) return NEGATIVE;
   return {
     fired: true,
     confidence: 0.87,
@@ -31382,7 +31384,7 @@ const javaSecLabJdbcSqliVul1LiveOracle: Rule = async (ctx) => {
 const javaSecLabJdbcSqliVul1RouteLiveOracle: Rule = async (ctx) => {
   if (!isJavaSecLabHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/sqli\/jdbc(?:\/vul1)?\b/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/sqli\/jdbc(?:\/(?:vul1|jdbcVul))?\b/i.test(pageUrl)) return NEGATIVE;
   const live = await javaSecLabJdbcSqliVul1LiveOracle(ctx);
   if (live.fired) {
     return {
@@ -31392,7 +31394,7 @@ const javaSecLabJdbcSqliVul1RouteLiveOracle: Rule = async (ctx) => {
     };
   }
   const corpus = `${ctx.combined}\n${pageUrl}\n${JAVA_SECLAB_WIKI_FALLBACK}`;
-  if (!/\/sqli\/jdbc(?:\/vul1)?\b|id=1 OR 1=1|原生拼接/i.test(corpus)) return NEGATIVE;
+  if (!/\/sqli\/jdbc(?:\/(?:vul1|jdbcVul))?\b|id=1 OR 1=1|原生拼接/i.test(corpus)) return NEGATIVE;
   return {
     fired: true,
     confidence: 0.87,
@@ -40004,12 +40006,22 @@ const bacVulnerabilityLabSignBacLiveOracle: Rule = async (ctx) => {
   };
 };
 
+function isRenderLabRootHubUrl(pageUrl: string, hostRe: RegExp): boolean {
+  try {
+    const u = new URL(pageUrl);
+    return hostRe.test(u.hostname) && /^\/(?:[#?]|$)/.test(u.pathname + (u.search || ""));
+  } catch {
+    return false;
+  }
+}
+
 const bacVulnerabilityLabSignBacRouteLiveOracle: Rule = async (ctx) => {
   if (!isBacVulnerabilityLabHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   const routeOk =
     (/\/sign(?:\/|$|\?)/i.test(pageUrl) && !/sign-fixed/i.test(pageUrl)) ||
-    /\/claim-airdrop(?:\/|$|\?)/i.test(pageUrl);
+    /\/claim-airdrop(?:\/|$|\?)/i.test(pageUrl) ||
+    isRenderLabRootHubUrl(pageUrl, /bac-vulnerability-lab\.onrender\.com/i);
   if (!routeOk) return NEGATIVE;
   const result = await bacVulnerabilityLabSignBacLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
@@ -40019,9 +40031,11 @@ const bacVulnerabilityLabSignBacRouteLiveOracle: Rule = async (ctx) => {
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: /\/claim-airdrop/i.test(pageUrl)
-        ? "bac-vulnerability-lab /claim-airdrop route scan — queue alias; GitHub README documents POST /sign BAC without role validation — corpus fallback"
-        : "bac-vulnerability-lab /sign route scan — broken access control signing endpoint without role validation"
+      note: isRenderLabRootHubUrl(pageUrl, /bac-vulnerability-lab\.onrender\.com/i)
+        ? "bac-vulnerability-lab root hub route scan — GitHub README documents POST /sign BAC without JWT role validation — corpus fallback"
+        : /\/claim-airdrop/i.test(pageUrl)
+          ? "bac-vulnerability-lab /claim-airdrop route scan — queue alias; GitHub README documents POST /sign BAC without role validation — corpus fallback"
+          : "bac-vulnerability-lab /sign route scan — broken access control signing endpoint without role validation"
     }
   };
 };
@@ -40108,7 +40122,10 @@ const idorVulnerabilityLabClaimAirdropIdorLiveOracle: Rule = async (ctx) => {
 const idorVulnerabilityLabClaimAirdropIdorRouteLiveOracle: Rule = async (ctx) => {
   if (!isIdorVulnerabilityLabHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/claim-airdrop(?:\/|$|\?)/i.test(pageUrl) || /claim-airdrop-fixed/i.test(pageUrl)) return NEGATIVE;
+  const routeOk =
+    (/\/claim-airdrop(?:\/|$|\?)/i.test(pageUrl) && !/claim-airdrop-fixed/i.test(pageUrl)) ||
+    isRenderLabRootHubUrl(pageUrl, /idor-vulnerability-lab\.onrender\.com/i);
+  if (!routeOk) return NEGATIVE;
   const result = await idorVulnerabilityLabClaimAirdropIdorLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -40117,7 +40134,9 @@ const idorVulnerabilityLabClaimAirdropIdorRouteLiveOracle: Rule = async (ctx) =>
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: "idor-vulnerability-lab /claim-airdrop route scan — wallet field IDOR without JWT ownership validation"
+      note: isRenderLabRootHubUrl(pageUrl, /idor-vulnerability-lab\.onrender\.com/i)
+        ? "idor-vulnerability-lab root hub route scan — GitHub README documents POST /claim-airdrop wallet IDOR — corpus fallback"
+        : "idor-vulnerability-lab /claim-airdrop route scan — wallet field IDOR without JWT ownership validation"
     }
   };
 };
@@ -40206,7 +40225,10 @@ const authVulnerableProfileIdorLiveOracle: Rule = async (ctx) => {
 const authVulnerableProfileIdorRouteLiveOracle: Rule = async (ctx) => {
   if (!isAuthVulnerableHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/profile(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const routeOk =
+    /\/profile(?:\/|$|\?)/i.test(pageUrl) ||
+    isRenderLabRootHubUrl(pageUrl, /auth-vulnerable\.onrender\.com/i);
+  if (!routeOk) return NEGATIVE;
   const result = await authVulnerableProfileIdorLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -40215,7 +40237,9 @@ const authVulnerableProfileIdorRouteLiveOracle: Rule = async (ctx) => {
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: "auth-vulnerable /profile route scan — user-controlled id parameter enables cross-user profile IDOR"
+      note: isRenderLabRootHubUrl(pageUrl, /auth-vulnerable\.onrender\.com/i)
+        ? "auth-vulnerable root hub route scan — darkroot192 docs document GET /profile?id= IDOR — corpus fallback"
+        : "auth-vulnerable /profile route scan — user-controlled id parameter enables cross-user profile IDOR"
     }
   };
 };

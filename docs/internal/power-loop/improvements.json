@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "benchmark:juice-shop",
+      "slug": "secret-resend-power-scan-bridge",
+      "status": "shipped",
+      "validation": "SOURCE: benchmark:juice-shop EVIDENCE: bridgeJuiceShopSecretResend in power-scan.ts re-applies secret-resend slug after AI/agent merges when juice-shop-resend-key-live-oracle fires; juice-shop.herokuapp.com benchmark 53 findings now includes secret-resend slug (+secret-resend bridged from juice-shop-resend-key-live-oracle); 6/6 recall maintained"
+    },
+    {
+      "source": "discovery:bac-vulnerability-lab.onrender.com",
+      "slug": "render-lab-root-hub-route-aliases",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: isRenderLabRootHubUrl + route matchers for bac/idor/auth Render labs; bac-vulnerability-lab.onrender.com/ findings 2→4 (+bac-vulnerability-lab-sign-bac-route-live-oracle), idor-vulnerability-lab.onrender.com/ 2→3 (+idor-vulnerability-lab-claim-airdrop-idor-route-live-oracle), auth-vulnerable.onrender.com/ 2→3 (+auth-vulnerable-profile-idor-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:whgojp.top",
+      "slug": "javaseclab-jdbcVul-reflect-vul-hub-path-aliases",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: javaSecLabJdbcSqliVul1RouteLiveOracle + javaSecLabReflectedXssRouteLiveOracle regex extended for /sqli/jdbc/jdbcVul and /xss/reflect/vul hub paths; whgojp.top/sqli/jdbc/jdbcVul findings 12 (+javaseclab-jdbc-sqli-vul1-route-live-oracle), /xss/reflect/vul 12 (+javaseclab-reflected-xss-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:bac-vulnerability-lab.onrender.com",
       "slug": "bac-vulnerability-lab-sign-bac-route-live-oracle",
       "status": "shipped",

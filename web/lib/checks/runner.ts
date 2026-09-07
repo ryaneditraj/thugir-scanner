@@ -14283,20 +14283,23 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
       if (
         /bac-vulnerability-lab\.onrender\.com/i.test(origin) &&
         ((/\/sign(?:\/|$|\?)/i.test(targetInput) && !/sign-fixed/i.test(targetInput)) ||
-          /\/claim-airdrop(?:\/|$|\?)/i.test(targetInput)) &&
+          /\/claim-airdrop(?:\/|$|\?)/i.test(targetInput) ||
+          /^https:\/\/bac-vulnerability-lab\.onrender\.com\/?(?:[#?]|$)/i.test(targetInput)) &&
         p.slug.startsWith("bac-vulnerability-lab-sign-bac")
       )
         return -4;
       if (
         /idor-vulnerability-lab\.onrender\.com/i.test(origin) &&
-        /\/claim-airdrop(?:\/|$|\?)/i.test(targetInput) &&
+        (/\/claim-airdrop(?:\/|$|\?)/i.test(targetInput) ||
+          /^https:\/\/idor-vulnerability-lab\.onrender\.com\/?(?:[#?]|$)/i.test(targetInput)) &&
         !/claim-airdrop-fixed/i.test(targetInput) &&
         p.slug.startsWith("idor-vulnerability-lab-claim-airdrop")
       )
         return -4;
       if (
         /auth-vulnerable\.onrender\.com/i.test(origin) &&
-        /\/profile(?:\/|$|\?)/i.test(targetInput) &&
+        (/\/profile(?:\/|$|\?)/i.test(targetInput) ||
+          /^https:\/\/auth-vulnerable\.onrender\.com\/?(?:[#?]|$)/i.test(targetInput)) &&
         p.slug.startsWith("auth-vulnerable-profile-idor")
       )
         return -4;
@@ -17001,7 +17004,7 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         return -3;
       if (
         /whgojp\.top/i.test(origin) &&
-        /\/xss\/(?:reflected|reflect)\b/i.test(targetInput) &&
+        /\/xss\/(?:reflected|reflect)(?:\/vul(?:1|2|3)?)?\b/i.test(targetInput) &&
         p.slug.startsWith("javaseclab-reflected-xss")
       )
         return -3;
@@ -17019,7 +17022,7 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         return -3;
       if (
         /whgojp\.top/i.test(origin) &&
-        /\/sqli\/jdbc(?:\/vul1)?\b/i.test(targetInput) &&
+        /\/sqli\/jdbc(?:\/(?:vul1|jdbcVul))?\b/i.test(targetInput) &&
         p.slug.startsWith("javaseclab-jdbc-sqli-vul1")
       )
         return -3;
