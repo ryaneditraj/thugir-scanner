@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-07T06:22:00.000Z",
+  "updated_at": "2026-09-07T06:27:06.122Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,25 +15,25 @@
       ]
     }
   },
-  "total_sites_scanned": 2746,
-  "total_findings": 27028,
+  "total_sites_scanned": 2754,
+  "total_findings": 27159,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1965,
-  "discovery_findings": 22955,
+  "discovery_urls_added": 1970,
+  "discovery_findings": 23086,
   "improvements_shipped": 1167,
-  "last_run": "2026-09-07T06:22:00.000Z",
+  "last_run": "2026-09-07T06:27:06.122Z",
   "last_run_summary": {
     "hour_utc": "06",
     "benchmark": {
       "oracle_url": "https://juice-shop.demo.escape.tech",
-      "oracle_findings": 53,
+      "oracle_findings": 54,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 603,
-      "live_oracles": 39,
+      "probes_run": 608,
+      "live_oracles": 40,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -49,31 +49,35 @@
           ]
         }
       },
-      "note": "6/6 via escape.tech fallback (Heroku+staging errors); 53 findings, gap=[]"
+      "note": "6/6 via escape.tech fallback (Heroku+staging 600s timeouts); 54 findings, gap=[]; secret-resend present"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 120,
-      "focus": "brokencrystals fetch file sibling fallback; duck-store coupons openapi corpus fallback; duck-store openapi route oracle",
+      "urls_added": 5,
+      "urls_scanned": 11,
+      "findings": 251,
+      "focus": "power-scan queue drain (vulnlab/ssrf/wrongsecrets) + parallel engine duck-store/brokencrystals oracle fixes",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.demo.escape.tech: benchmark recall 6/6 (53 findings; gap=[])",
-      "brokencrystals.com/api/fetch: 82→86 findings (+brokencrystals-api-fetch-live-oracle via /api/file sibling fallback when httpbin 404 on fetch)",
-      "duck-store.escape.tech/api/v1/orders/coupons/validate: 13→17 findings (+duck-store-coupons-* corpus fallback when coupon APIs return HTTP 500)",
-      "duck-store.escape.tech/openapi.json: 14→17 findings (+duck-store-openapi-route-live-oracle)"
+      "juice-shop.demo.escape.tech: benchmark recall 6/6 (54 findings; gap=[])",
+      "wrongsecrets challenge-35/36/37/43: 19 findings each (MCP + database oracles)",
+      "ssrf.vulnlab.dev/metadata-azure: 18 findings (IMDS SSRF oracle)",
+      "brokencrystals.com/api/fetch + duck-store coupons/openapi: engine corpus fallback oracles (+3 shipped)"
     ],
     "learning_gaps": [
+      "juice-shop.herokuapp.com + staging timed out at 600s — cold-start oracle degradation",
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "duck-store coupon/order APIs intermittently return HTTP 500 — corpus fallback used for validate/disclosure oracles"
+      "duck-store testimonials/admin/auth oracle routes queued at tail (not drained this batch)",
+      "wrongsecrets challenge-63/67 + duck-store vulnerabilities still queued"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.demo.escape.tech": 53,
+    "juice-shop.demo.escape.tech": 54,
     "brokencrystals.com/api/fetch": 86,
-    "duck-store.escape.tech/api/v1/orders/coupons/validate": 17,
-    "duck-store.escape.tech/openapi.json": 17
+    "wrongsecrets.herokuapp.com/challenge/challenge-43": 19,
+    "ssrf.vulnlab.dev/metadata-azure": 18,
+    "ssrf.vulnlab.dev/metadata-gcp": 17,
+    "duck-store.escape.tech/api/v1/orders/coupons/validate": 17
   }
 }

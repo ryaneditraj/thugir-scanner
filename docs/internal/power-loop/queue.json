@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-07T05:15:00.000Z",
+  "updated_at": "2026-09-07T06:18:00.000Z",
   "priority_discovery_urls": [
     {
       "url": "https://vulnlab.dev/results/",
@@ -10690,6 +10690,31 @@
     {
       "url": "https://ssrf.vulnlab.dev/webhook",
       "source": "sampsonc/vulnlab.dev — semi-blind SSRF webhook lab (leaks status/headers from attacker URL)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/testimonials/29",
+      "source": "escape.tech Duck Store benchmark blog — unauthenticated PUT /testimonials/{id} write oracle (AI pentest benchmark gap)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/admin/users",
+      "source": "Devroxana Duck Store writeup — missing admin role check GET /api/v1/admin/users",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/auth/login",
+      "source": "Devroxana Duck Store writeup — 2FA bypass via login/totp chain oracle",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/users",
+      "source": "Devroxana Duck Store writeup — user enumeration information disclosure oracle",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/auth/login/totp",
+      "source": "Devroxana Duck Store writeup — TOTP bypass step after weak 2FA oracle",
       "auth": "public_demo"
     }
   ]
