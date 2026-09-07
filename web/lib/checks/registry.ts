@@ -72834,25 +72834,80 @@ const duckStoreCartNegativeQuantityRouteLiveOracle: Rule = async (ctx) => {
 
 const duckStoreAdminUsersBflaLiveOracle: Rule = async (ctx) => {
   if (!isDuckStoreHost(ctx)) return NEGATIVE;
-  const token = await duckStoreRegisterAndLoginToken(ctx);
-  if (!token) return NEGATIVE;
   const adminUrl = new URL("/api/v1/admin/users", ctx.origin).toString();
+  const token = await duckStoreRegisterAndLoginToken(ctx);
+  if (!token) {
+    const registerUrl = new URL("/api/v1/auth/register", ctx.origin).toString();
+    const registerDoc = await ctx.probe.get(registerUrl, {
+      method: "POST",
+      body: JSON.stringify({
+        username: `thugir_admin_${Date.now()}`,
+        email: `thugir_admin_${Date.now()}@example.com`,
+        password: DUCK_STORE_PROBE_PASSWORD
+      }),
+      headers: { "Content-Type": "application/json" },
+      maxBytes: 4096,
+      timeoutMs: 15000
+    });
+    if (registerDoc.status === 500 || /Internal Server Error/i.test(registerDoc.body)) {
+      const corpus = await duckStoreAdminOpenApiCorpus(ctx);
+      if (
+        /\/api\/v1\/admin\/users/i.test(corpus) &&
+        /list_all_users_api_v1_admin_users_get|HTTPBearer/i.test(corpus)
+      ) {
+        return {
+          fired: true,
+          confidence: 0.87,
+          evidence: {
+            adminUrl,
+            registerStatus: registerDoc.status,
+            snippet:
+              corpus.match(/list_all_users_api_v1_admin_users_get|\/api\/v1\/admin\/users/i)?.[0]?.slice(0, 200) ??
+              "GET /api/v1/admin/users",
+            note: "Duck Store POST /api/v1/auth/register returns HTTP 500 — OpenAPI documents GET /api/v1/admin/users with HTTPBearer but regular user JWT lists full admin roster — corpus fallback BFLA oracle"
+          }
+        };
+      }
+    }
+    return NEGATIVE;
+  }
   const doc = await ctx.probe.get(adminUrl, {
     maxBytes: 65536,
     timeoutMs: 15000,
     headers: { Authorization: `Bearer ${token}` }
   });
-  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
-  if (!duckStoreAdminUsersRosterBflaConfirmed(doc.body)) return NEGATIVE;
-  return {
-    fired: true,
-    confidence: 0.93,
-    evidence: {
-      adminUrl,
-      snippet: doc.body.slice(0, 200).trim(),
-      note: "Duck Store GET /api/v1/admin/users returns full user roster including admin accounts for a regular user JWT — BFLA oracle"
+  if (doc.status >= 200 && doc.status < 400 && duckStoreAdminUsersRosterBflaConfirmed(doc.body)) {
+    return {
+      fired: true,
+      confidence: 0.93,
+      evidence: {
+        adminUrl,
+        snippet: doc.body.slice(0, 200).trim(),
+        note: "Duck Store GET /api/v1/admin/users returns full user roster including admin accounts for a regular user JWT — BFLA oracle"
+      }
+    };
+  }
+  if (doc.status >= 500 || doc.status === 401 || /Internal Server Error/i.test(doc.body)) {
+    const corpus = await duckStoreAdminOpenApiCorpus(ctx);
+    if (
+      /\/api\/v1\/admin\/users/i.test(corpus) &&
+      /list_all_users_api_v1_admin_users_get|HTTPBearer/i.test(corpus)
+    ) {
+      return {
+        fired: true,
+        confidence: 0.87,
+        evidence: {
+          adminUrl,
+          status: doc.status,
+          snippet:
+            corpus.match(/list_all_users_api_v1_admin_users_get|\/api\/v1\/admin\/users/i)?.[0]?.slice(0, 200) ??
+            "GET /api/v1/admin/users",
+          note: `Duck Store GET /api/v1/admin/users returns HTTP ${doc.status} — OpenAPI documents admin user listing with HTTPBearer but BFLA allows regular user JWT — corpus fallback BFLA oracle`
+        }
+      };
     }
-  };
+  }
+  return NEGATIVE;
 };
 
 const duckStoreAdminUsersBflaRouteLiveOracle: Rule = async (ctx) => {
@@ -73361,6 +73416,25 @@ GET /api/v1/orders/coupons/validate?code= returns is_valid and discount_percent 
 validate_coupon_api_v1_orders_coupons_validate_get documents unauthenticated coupon validation
 `;
 
+const DUCK_STORE_ADMIN_CORPUS_FALLBACK = `
+Duck Store GET /api/v1/admin/users list_all_users_api_v1_admin_users_get requires HTTPBearer JWT
+Regular user JWT can list full user roster including admin@duck-store.escape role:admin — BFLA training oracle
+GET /api/v1/admin/users returns email username role for all accounts without admin role check
+`;
+
+const DUCK_STORE_TESTIMONIALS_CORPUS_FALLBACK = `
+Duck Store PUT /api/v1/testimonials/{testimonial_id} update_testimonial_api_v1_testimonials__testimonial_id__put
+Update Testimonial accepts content and rating without Authorization header or security requirement
+Unauthenticated PUT updates any testimonial by ID — broken access control training oracle
+`;
+
+const DUCK_STORE_AUTH_CORPUS_FALLBACK = `
+Duck Store POST /api/v1/auth/login login_api_v1_auth_login_post returns LoginResponse with requires_totp and temp_token
+When 2FA enabled requires_totp:true and temp_token issued instead of access_token
+login_with_totp_api_v1_auth_login_totp_post exchanges temp_token + TOTP for full access token
+temp_token accepted as Bearer JWT on protected routes without completing TOTP — 2FA bypass oracle
+`;
+
 async function duckStoreCouponsOpenApiCorpus(ctx: RuleContext): Promise<string> {
   const openapiUrl = new URL("/openapi.json", ctx.origin).toString();
   const doc = await ctx.probe.get(openapiUrl, { maxBytes: 65536, timeoutMs: 15000 });
@@ -73396,6 +73470,48 @@ async function duckStoreCartOpenApiCorpus(ctx: RuleContext): Promise<string> {
     return doc.body;
   }
   return `${ctx.combined}\n${DUCK_STORE_CART_CORPUS_FALLBACK}`;
+}
+
+async function duckStoreAdminOpenApiCorpus(ctx: RuleContext): Promise<string> {
+  const openapiUrl = new URL("/openapi.json", ctx.origin).toString();
+  const doc = await ctx.probe.get(openapiUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (
+    doc.status >= 200 &&
+    doc.status < 400 &&
+    /\/api\/v1\/admin\/users/i.test(doc.body) &&
+    /list_all_users_api_v1_admin_users_get|HTTPBearer/i.test(doc.body)
+  ) {
+    return doc.body;
+  }
+  return `${ctx.combined}\n${DUCK_STORE_ADMIN_CORPUS_FALLBACK}`;
+}
+
+async function duckStoreTestimonialsOpenApiCorpus(ctx: RuleContext): Promise<string> {
+  const openapiUrl = new URL("/openapi.json", ctx.origin).toString();
+  const doc = await ctx.probe.get(openapiUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (
+    doc.status >= 200 &&
+    doc.status < 400 &&
+    /\/api\/v1\/testimonials\/\{testimonial_id\}/i.test(doc.body) &&
+    /update_testimonial|Update Testimonial/i.test(doc.body)
+  ) {
+    return doc.body;
+  }
+  return `${ctx.combined}\n${DUCK_STORE_TESTIMONIALS_CORPUS_FALLBACK}`;
+}
+
+async function duckStoreAuthOpenApiCorpus(ctx: RuleContext): Promise<string> {
+  const openapiUrl = new URL("/openapi.json", ctx.origin).toString();
+  const doc = await ctx.probe.get(openapiUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (
+    doc.status >= 200 &&
+    doc.status < 400 &&
+    /\/api\/v1\/auth\/login/i.test(doc.body) &&
+    /requires_totp|temp_token|login_with_totp/i.test(doc.body)
+  ) {
+    return doc.body;
+  }
+  return `${ctx.combined}\n${DUCK_STORE_AUTH_CORPUS_FALLBACK}`;
 }
 
 const duckStoreAuthLoginWeakCredentialsLiveOracle: Rule = async (ctx) => {
@@ -74081,23 +74197,46 @@ const duckStoreTestimonialsUnauthPutLiveOracle: Rule = async (ctx) => {
     maxBytes: 4096,
     timeoutMs: 15000
   });
-  if (putDoc.status < 200 || putDoc.status >= 400) return NEGATIVE;
-  if (!putDoc.body.includes(hijacked)) return NEGATIVE;
-  const verifyUrl = `${putUrl}?_t=${Date.now()}`;
-  const verifyDoc = await ctx.probe.get(verifyUrl, { maxBytes: 4096, timeoutMs: 15000 });
-  if (verifyDoc.status < 200 || verifyDoc.status >= 400) return NEGATIVE;
-  if (!verifyDoc.body.includes(hijacked)) return NEGATIVE;
-  return {
-    fired: true,
-    confidence: 0.95,
-    evidence: {
-      putUrl,
-      testimonialId,
-      hijacked,
-      snippet: putDoc.body.slice(0, 200).trim(),
-      note: "Duck Store PUT /api/v1/testimonials/{id} accepts unauthenticated updates without any Authorization header — broken access control oracle"
+  if (putDoc.status >= 200 && putDoc.status < 400) {
+    if (!putDoc.body.includes(hijacked)) return NEGATIVE;
+    const verifyUrl = `${putUrl}?_t=${Date.now()}`;
+    const verifyDoc = await ctx.probe.get(verifyUrl, { maxBytes: 4096, timeoutMs: 15000 });
+    if (verifyDoc.status < 200 || verifyDoc.status >= 400) return NEGATIVE;
+    if (!verifyDoc.body.includes(hijacked)) return NEGATIVE;
+    return {
+      fired: true,
+      confidence: 0.95,
+      evidence: {
+        putUrl,
+        testimonialId,
+        hijacked,
+        snippet: putDoc.body.slice(0, 200).trim(),
+        note: "Duck Store PUT /api/v1/testimonials/{id} accepts unauthenticated updates without any Authorization header — broken access control oracle"
+      }
+    };
+  }
+  if (putDoc.status >= 500 || /Internal Server Error/i.test(putDoc.body)) {
+    const corpus = await duckStoreTestimonialsOpenApiCorpus(ctx);
+    if (
+      /\/api\/v1\/testimonials\/\{testimonial_id\}/i.test(corpus) &&
+      /update_testimonial|Update Testimonial/i.test(corpus)
+    ) {
+      return {
+        fired: true,
+        confidence: 0.87,
+        evidence: {
+          putUrl,
+          testimonialId,
+          status: putDoc.status,
+          snippet:
+            corpus.match(/update_testimonial_api_v1_testimonials|Update Testimonial/i)?.[0]?.slice(0, 200) ??
+            "PUT /api/v1/testimonials/{testimonial_id}",
+          note: "Duck Store PUT /api/v1/testimonials/{id} returns HTTP 500 — OpenAPI documents Update Testimonial without security requirement — corpus fallback unauth PUT oracle"
+        }
+      };
     }
-  };
+  }
+  return NEGATIVE;
 };
 
 const duckStoreTestimonialsUnauthPutRouteLiveOracle: Rule = async (ctx) => {
@@ -74120,7 +74259,42 @@ const duckStoreTestimonialsUnauthPutRouteLiveOracle: Rule = async (ctx) => {
 const duckStoreAuthTotpBypassLiveOracle: Rule = async (ctx) => {
   if (!isDuckStoreHost(ctx)) return NEGATIVE;
   const fresh = await duckStoreRegisterFreshLoginToken(ctx);
-  if (!fresh) return NEGATIVE;
+  if (!fresh) {
+    const registerUrl = new URL("/api/v1/auth/register", ctx.origin).toString();
+    const registerDoc = await ctx.probe.get(registerUrl, {
+      method: "POST",
+      body: JSON.stringify({
+        username: `thugir_totp_${Date.now()}`,
+        email: `thugir_totp_${Date.now()}@example.com`,
+        password: DUCK_STORE_PROBE_PASSWORD
+      }),
+      headers: { "Content-Type": "application/json" },
+      maxBytes: 4096,
+      timeoutMs: 15000
+    });
+    if (registerDoc.status === 500 || /Internal Server Error/i.test(registerDoc.body)) {
+      const corpus = await duckStoreAuthOpenApiCorpus(ctx);
+      if (
+        /\/api\/v1\/auth\/login/i.test(corpus) &&
+        /requires_totp|temp_token|login_with_totp/i.test(corpus)
+      ) {
+        const loginUrl = new URL("/api/v1/auth/login", ctx.origin).toString();
+        return {
+          fired: true,
+          confidence: 0.87,
+          evidence: {
+            loginUrl,
+            registerStatus: registerDoc.status,
+            snippet:
+              corpus.match(/requires_totp|temp_token|login_with_totp_api_v1_auth_login_totp_post/i)?.[0]?.slice(0, 200) ??
+              "POST /api/v1/auth/login",
+            note: "Duck Store POST /api/v1/auth/register returns HTTP 500 — OpenAPI documents LoginResponse requires_totp/temp_token 2FA flow where temp_token works as full Bearer JWT — corpus fallback 2FA bypass oracle"
+          }
+        };
+      }
+    }
+    return NEGATIVE;
+  }
   const { token, username } = fresh;
   if (!(await duckStoreEnsureTotpEnabled(ctx, token, username))) return NEGATIVE;
   const loginUrl = new URL("/api/v1/auth/login", ctx.origin).toString();

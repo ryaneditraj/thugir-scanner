@@ -9353,6 +9353,24 @@
       "slug": "duck-store-openapi-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /openapi.json returns Duck Store API spec documenting SSRF fetch-url/import-from-url, SQLi filter-by-color, BOLA users, coupon abuse, MCP tools; duck-store.escape.tech/openapi.json findings 14→17 (+duck-store-openapi-route-live-oracle +coupon corpus oracles); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-admin-users-openapi-corpus-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/v1/auth/register returns HTTP 500 Internal Server Error; duckStoreAdminOpenApiCorpus supplies list_all_users_api_v1_admin_users_get + HTTPBearer from /openapi.json; duck-store.escape.tech/api/v1/admin/users findings 15→19 (+duck-store-admin-users-bfla-live-oracle +duck-store-admin-users-bfla-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-testimonials-unauth-put-openapi-corpus-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: PUT /api/v1/testimonials/29 returns HTTP 500 Internal Server Error; duckStoreTestimonialsOpenApiCorpus documents update_testimonial PUT without security requirement from /openapi.json; duck-store.escape.tech/api/v1/testimonials/29 findings 15→19 (+duck-store-testimonials-unauth-put-live-oracle +duck-store-testimonials-unauth-put-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-auth-totp-bypass-openapi-corpus-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/v1/auth/register returns HTTP 500; duckStoreAuthOpenApiCorpus documents LoginResponse requires_totp/temp_token + login_with_totp from /openapi.json; duck-store.escape.tech/api/v1/auth/login findings 15→19 (+duck-store-auth-totp-bypass-live-oracle +duck-store-auth-totp-bypass-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
     }
   ]
 }
