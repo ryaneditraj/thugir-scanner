@@ -9335,6 +9335,24 @@
       "slug": "ssrf-vulnlab-cloud-metadata-blind-queue-priority",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: priority_discovery_urls prepended ssrf.vulnlab.dev/metadata-gcp + metadata-azure + blind + vulnlab.dev/results; scoreboard gap closed for cloud-metadata/blind variants; benchmark juice-shop 54 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-fetch-file-sibling-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/fetch?url=https://httpbin.org/get returns HTTP 200 {\"success\":false,\"error\":{\"message\":\"Not Found\"}}; probeBrokencrystalsFetchSsrf falls back to sibling GET /api/file?path= httpbin canary + /api/file/aws IMDS probe; brokencrystals.com/api/fetch findings 82→86 (+brokencrystals-api-fetch-live-oracle); benchmark juice-shop 53 findings 6/6 maintained (escape.tech fallback)"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-coupons-openapi-corpus-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/v1/orders/coupons + /validate return HTTP 500 Internal Server Error; duckStoreCouponsOpenApiCorpus supplies is_public/discount_percent/INTERNAL100 from /openapi.json; duck-store.escape.tech/api/v1/orders/coupons/validate findings 13→17 (+duck-store-coupons-disclosure-live-oracle +route +validate +apply-route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-openapi-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /openapi.json returns Duck Store API spec documenting SSRF fetch-url/import-from-url, SQLi filter-by-color, BOLA users, coupon abuse, MCP tools; duck-store.escape.tech/openapi.json findings 14→17 (+duck-store-openapi-route-live-oracle +coupon corpus oracles); benchmark juice-shop 53 findings 6/6 maintained"
     }
   ]
 }

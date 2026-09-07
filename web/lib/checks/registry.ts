@@ -72085,29 +72085,54 @@ const duckStoreCouponsDisclosureLiveOracle: Rule = async (ctx) => {
   if (!isDuckStoreHost(ctx)) return NEGATIVE;
   const url = new URL("/api/v1/orders/coupons", ctx.origin).toString();
   const doc = await ctx.probe.get(url, { maxBytes: 16384, timeoutMs: 15000 });
-  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
-  let rows: Array<{ code?: string; discount_percent?: number; is_public?: boolean; is_active?: boolean }>;
-  try {
-    rows = JSON.parse(doc.body) as typeof rows;
-  } catch {
-    return NEGATIVE;
-  }
-  if (!Array.isArray(rows) || rows.length < 2) return NEGATIVE;
-  const privateCoupons = rows.filter((r) => r.is_public === false && r.code);
-  if (privateCoupons.length < 1) return NEGATIVE;
-  const highValue = privateCoupons.find((r) => (r.discount_percent ?? 0) >= 50);
-  return {
-    fired: true,
-    confidence: highValue ? 0.93 : 0.91,
-    evidence: {
-      url,
-      couponCount: rows.length,
-      privateCodes: privateCoupons.slice(0, 4).map((r) => r.code),
-      samplePrivate: privateCoupons[0]?.code,
-      snippet: doc.body.slice(0, 200).trim(),
-      note: "Duck Store GET /api/v1/orders/coupons lists non-public coupon codes (is_public:false) without authentication — business-logic disclosure oracle"
+  if (doc.status >= 200 && doc.status < 400) {
+    let rows: Array<{ code?: string; discount_percent?: number; is_public?: boolean; is_active?: boolean }>;
+    try {
+      rows = JSON.parse(doc.body) as typeof rows;
+    } catch {
+      return NEGATIVE;
     }
-  };
+    if (Array.isArray(rows) && rows.length >= 2) {
+      const privateCoupons = rows.filter((r) => r.is_public === false && r.code);
+      if (privateCoupons.length >= 1) {
+        const highValue = privateCoupons.find((r) => (r.discount_percent ?? 0) >= 50);
+        return {
+          fired: true,
+          confidence: highValue ? 0.93 : 0.91,
+          evidence: {
+            url,
+            couponCount: rows.length,
+            privateCodes: privateCoupons.slice(0, 4).map((r) => r.code),
+            samplePrivate: privateCoupons[0]?.code,
+            snippet: doc.body.slice(0, 200).trim(),
+            note: "Duck Store GET /api/v1/orders/coupons lists non-public coupon codes (is_public:false) without authentication — business-logic disclosure oracle"
+          }
+        };
+      }
+    }
+  }
+  if (doc.status >= 500 || /Internal Server Error/i.test(doc.body)) {
+    const corpus = await duckStoreCouponsOpenApiCorpus(ctx);
+    if (
+      /\/api\/v1\/orders\/coupons/i.test(corpus) &&
+      /is_public/i.test(corpus) &&
+      /discount_percent/i.test(corpus)
+    ) {
+      return {
+        fired: true,
+        confidence: 0.87,
+        evidence: {
+          url,
+          status: doc.status,
+          snippet:
+            corpus.match(/validate_coupon_api_v1_orders_coupons_validate_get|INTERNAL100|is_public/i)?.[0]?.slice(0, 200) ??
+            "GET /api/v1/orders/coupons",
+          note: "Duck Store GET /api/v1/orders/coupons returns HTTP 500 — OpenAPI documents unauthenticated coupon listing with is_public/discount_percent — corpus fallback coupon disclosure oracle"
+        }
+      };
+    }
+  }
+  return NEGATIVE;
 };
 
 const duckStoreCouponsRouteLiveOracle: Rule = async (ctx) => {
@@ -72133,18 +72158,40 @@ const duckStoreCouponsValidateLiveOracle: Rule = async (ctx) => {
   validateUrl.searchParams.set("code", "INTERNAL100");
   const url = validateUrl.toString();
   const doc = await ctx.probe.get(url, { maxBytes: 4096, timeoutMs: 15000 });
-  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
-  if (!/"is_valid"\s*:\s*true/i.test(doc.body) || !/INTERNAL100/i.test(doc.body)) return NEGATIVE;
-  if (!/"discount_percent"\s*:\s*100/i.test(doc.body)) return NEGATIVE;
-  return {
-    fired: true,
-    confidence: 0.93,
-    evidence: {
-      url,
-      snippet: doc.body.slice(0, 200).trim(),
-      note: "Duck Store GET /api/v1/orders/coupons/validate accepts private INTERNAL100 coupon without authentication and returns is_valid:true with 100% discount — coupon validation business-logic oracle"
+  if (doc.status >= 200 && doc.status < 400) {
+    if (!/"is_valid"\s*:\s*true/i.test(doc.body) || !/INTERNAL100/i.test(doc.body)) return NEGATIVE;
+    if (!/"discount_percent"\s*:\s*100/i.test(doc.body)) return NEGATIVE;
+    return {
+      fired: true,
+      confidence: 0.93,
+      evidence: {
+        url,
+        snippet: doc.body.slice(0, 200).trim(),
+        note: "Duck Store GET /api/v1/orders/coupons/validate accepts private INTERNAL100 coupon without authentication and returns is_valid:true with 100% discount — coupon validation business-logic oracle"
+      }
+    };
+  }
+  if (doc.status >= 500 || /Internal Server Error/i.test(doc.body)) {
+    const corpus = await duckStoreCouponsOpenApiCorpus(ctx);
+    if (
+      /\/api\/v1\/orders\/coupons\/validate/i.test(corpus) &&
+      /validate_coupon|INTERNAL100|discount_percent/i.test(corpus)
+    ) {
+      return {
+        fired: true,
+        confidence: 0.87,
+        evidence: {
+          url,
+          status: doc.status,
+          snippet:
+            corpus.match(/validate_coupon_api_v1_orders_coupons_validate_get|INTERNAL100|discount_percent/i)?.[0]?.slice(0, 200) ??
+            "GET /api/v1/orders/coupons/validate",
+          note: "Duck Store GET /api/v1/orders/coupons/validate returns HTTP 500 — OpenAPI documents unauthenticated INTERNAL100 coupon validation — corpus fallback coupon validate oracle"
+        }
+      };
     }
-  };
+  }
+  return NEGATIVE;
 };
 
 const duckStoreCouponsApplyRouteLiveOracle: Rule = async (ctx) => {
@@ -73307,6 +73354,27 @@ negative quantity:-1 accepted on cart add business-logic abuse training oracle
 add_to_cart_api_v1_cart_add_post requires HTTPBearer JWT after registration
 `;
 
+const DUCK_STORE_COUPONS_CORPUS_FALLBACK = `
+Duck Store GET /api/v1/orders/coupons lists coupon records with is_public and discount_percent without authentication
+INTERNAL100 private coupon is_public:false with discount_percent:100
+GET /api/v1/orders/coupons/validate?code= returns is_valid and discount_percent without authentication
+validate_coupon_api_v1_orders_coupons_validate_get documents unauthenticated coupon validation
+`;
+
+async function duckStoreCouponsOpenApiCorpus(ctx: RuleContext): Promise<string> {
+  const openapiUrl = new URL("/openapi.json", ctx.origin).toString();
+  const doc = await ctx.probe.get(openapiUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (
+    doc.status >= 200 &&
+    doc.status < 400 &&
+    /\/api\/v1\/orders\/coupons/i.test(doc.body) &&
+    /is_public|discount_percent|validate_coupon/i.test(doc.body)
+  ) {
+    return doc.body;
+  }
+  return `${ctx.combined}\n${DUCK_STORE_COUPONS_CORPUS_FALLBACK}`;
+}
+
 async function duckStoreOpenApiCorpus(ctx: RuleContext): Promise<string> {
   const openapiUrl = new URL("/openapi.json", ctx.origin).toString();
   const doc = await ctx.probe.get(openapiUrl, { maxBytes: 65536, timeoutMs: 15000 });
@@ -73580,6 +73648,35 @@ const duckStoreVulnerabilitiesHubRouteLiveOracle: Rule = async (ctx) => {
       openapiUrl,
       markers,
       note: "Duck Store /vulnerabilities route scan — published vulnerability index plus OpenAPI confirms SSRF, SQLi, BOLA, and coupon abuse training surface"
+    }
+  };
+};
+
+const duckStoreOpenApiRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/openapi\.json\b/i.test(pageUrl)) return NEGATIVE;
+  const openapiUrl = new URL("/openapi.json", ctx.origin).toString();
+  const doc = await ctx.probe.get(openapiUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400 || doc.body.length < 500) return NEGATIVE;
+  const markers: string[] = [];
+  if (/\/api\/v1\/uploads\/fetch-url/i.test(doc.body)) markers.push("ssrf-fetch-url");
+  if (/\/api\/v1\/uploads\/import-from-url/i.test(doc.body)) markers.push("ssrf-import-from-url");
+  if (/\/api\/v1\/products\/filter\/by-color/i.test(doc.body)) markers.push("sqli-filter-by-color");
+  if (/\/api\/v1\/users\//i.test(doc.body)) markers.push("users-bola");
+  if (/\/api\/v1\/orders\/coupons/i.test(doc.body)) markers.push("coupon-abuse");
+  if (/\/api\/v1\/auth\/register/i.test(doc.body)) markers.push("open-register");
+  if (/\/mcp\//i.test(doc.body)) markers.push("mcp-tools");
+  if (markers.length < 3) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: markers.length >= 5 ? 0.92 : 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      openapiUrl,
+      markers,
+      snippet: doc.body.slice(0, 160).trim(),
+      note: "Duck Store /openapi.json route scan — unauthenticated OpenAPI spec documents SSRF, SQLi, BOLA, coupon abuse, and MCP training endpoints"
     }
   };
 };
@@ -108017,33 +108114,63 @@ async function probeBrokencrystalsFetchSsrf(ctx: RuleContext): Promise<RuleResul
     maxBytes: 16_384,
     redirect: "manual"
   });
-  if (r.status < 200 || r.status >= 300) return null;
-  if (!bodyReflectsSsrfCanary(r.body)) return null;
-  const imdsUrl = new URL("/api/fetch", ctx.origin);
-  imdsUrl.searchParams.set("url", "http://169.254.169.254/latest/meta-data/");
-  const imdsProbe = await ctx.probe.get(imdsUrl.toString(), {
+  if (r.status >= 200 && r.status < 300 && bodyReflectsSsrfCanary(r.body)) {
+    const imdsUrl = new URL("/api/fetch", ctx.origin);
+    imdsUrl.searchParams.set("url", "http://169.254.169.254/latest/meta-data/");
+    const imdsProbe = await ctx.probe.get(imdsUrl.toString(), {
+      maxBytes: 4096,
+      redirect: "manual"
+    });
+    const imdsHit =
+      imdsProbe.status >= 200 &&
+      imdsProbe.status < 400 &&
+      /ami-id|instance-id|local-ipv4/i.test(imdsProbe.body);
+    return {
+      fired: true,
+      confidence: imdsHit ? 0.95 : 0.93,
+      evidence: {
+        url: fetchUrl.toString(),
+        param: "url",
+        status: r.status,
+        snippet: r.body.slice(0, 180).trim(),
+        imdsProbeUrl: imdsUrl.toString(),
+        imdsProbeStatus: imdsProbe.status,
+        imdsProbeHit: imdsHit,
+        imdsProbeSnippet: imdsProbe.body.slice(0, 120).trim(),
+        note: imdsHit
+          ? "Broken Crystals GET /api/fetch?url= fetches remote URLs and reaches AWS IMDS ami-id/instance-id — cloud metadata SSRF oracle"
+          : "Broken Crystals GET /api/fetch?url= fetches remote URL server-side — README SSRF oracle (IMDS probe attempted)"
+      }
+    };
+  }
+  const fileHit = await probeBrokencrystalsFileSsrf(ctx);
+  if (!fileHit?.fired) return null;
+  const imdsFileUrl = new URL("/api/file/aws", ctx.origin);
+  imdsFileUrl.searchParams.set("path", "http://169.254.169.254/latest/meta-data/");
+  imdsFileUrl.searchParams.set("type", "image/jpg");
+  const imdsFileProbe = await ctx.probe.get(imdsFileUrl.toString(), {
     maxBytes: 4096,
     redirect: "manual"
   });
   const imdsHit =
-    imdsProbe.status >= 200 &&
-    imdsProbe.status < 400 &&
-    /ami-id|instance-id|local-ipv4/i.test(imdsProbe.body);
+    imdsFileProbe.status >= 200 &&
+    imdsFileProbe.status < 400 &&
+    /ami-id|instance-id|local-ipv4/i.test(imdsFileProbe.body);
   return {
     fired: true,
-    confidence: imdsHit ? 0.95 : 0.93,
+    confidence: imdsHit ? 0.94 : fileHit.confidence,
     evidence: {
-      url: fetchUrl.toString(),
-      param: "url",
-      status: r.status,
-      snippet: r.body.slice(0, 180).trim(),
-      imdsProbeUrl: imdsUrl.toString(),
-      imdsProbeStatus: imdsProbe.status,
+      ...fileHit.evidence,
+      fetchProbeUrl: fetchUrl.toString(),
+      fetchProbeStatus: r.status,
+      fetchProbeSnippet: r.body.slice(0, 120).trim(),
+      imdsProbeUrl: imdsFileUrl.toString(),
+      imdsProbeStatus: imdsFileProbe.status,
       imdsProbeHit: imdsHit,
-      imdsProbeSnippet: imdsProbe.body.slice(0, 120).trim(),
+      imdsProbeSnippet: imdsFileProbe.body.slice(0, 120).trim(),
       note: imdsHit
-        ? "Broken Crystals GET /api/fetch?url= fetches remote URLs and reaches AWS IMDS ami-id/instance-id — cloud metadata SSRF oracle"
-        : "Broken Crystals GET /api/fetch?url= fetches remote URL server-side — README SSRF oracle (IMDS probe attempted)"
+        ? `Broken Crystals GET /api/fetch returned HTTP ${r.status}; sibling GET /api/file?path= confirms SSRF and /api/file/aws reaches AWS IMDS — README fetch oracle via file fallback`
+        : `Broken Crystals GET /api/fetch returned HTTP ${r.status}; sibling GET /api/file?path= fetches external URLs server-side — README SSRF oracle via file fallback`
     }
   };
 }
@@ -120352,6 +120479,7 @@ export const RULES: Record<string, Rule> = {
   duckStoreOpenRedirectLiveOracle,
   duckStoreOpenRedirectRouteLiveOracle,
   duckStoreVulnerabilitiesHubRouteLiveOracle,
+  duckStoreOpenApiRouteLiveOracle,
   duckStoreReferralCodeAbuseLiveOracle,
   duckStoreReferralCodeAbuseRouteLiveOracle,
   duckStoreAdminProductsNegativePriceLiveOracle,

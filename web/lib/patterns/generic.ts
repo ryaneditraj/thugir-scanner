@@ -71259,6 +71259,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "duck-store-openapi-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Duck Store OpenAPI spec route live oracle",
+    description:
+      "When scanning /openapi.json, the unauthenticated Duck Store OpenAPI spec documents SSRF fetch-url/import-from-url, SQLi filter-by-color, BOLA user routes, coupon abuse, and MCP tool endpoints — route-specific API reconnaissance oracle.",
+    impactOneline:
+      "Unauthenticated OpenAPI specs on vulnerable training apps expose the full intentional attack surface for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreOpenApiRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict OpenAPI documentation on intentionally vulnerable training apps to authorized lab networks.",
+      steps: [
+        "Require authentication before serving OpenAPI specs in production-like environments.",
+        "Do not point production DAST scanners at public Duck Store instances without authorization.",
+        "Treat OpenAPI paths as sensitive reconnaissance data on vulnerable training apps."
+      ]
+    },
+    fixPrompt:
+      "Our Duck Store /openapi.json route exposes the full intentional flaw catalog. Show how to scope scanner targets to authorized lab infrastructure.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "duck-store-referral-code-abuse-live-oracle",
     platform: "generic",
     category: "Business logic",

@@ -3092,6 +3092,7 @@ const DEEP_RULES = new Set<string>([
   "duckStoreOpenRedirectLiveOracle",
   "duckStoreOpenRedirectRouteLiveOracle",
   "duckStoreVulnerabilitiesHubRouteLiveOracle",
+  "duckStoreOpenApiRouteLiveOracle",
   "duckStoreReferralCodeAbuseLiveOracle",
   "duckStoreReferralCodeAbuseRouteLiveOracle",
   "duckStoreAdminProductsNegativePriceLiveOracle",
@@ -17985,6 +17986,12 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /duck-store\.escape\.tech/i.test(origin) &&
         /\/vulnerabilities\/?(?:[#?]|$)/i.test(targetInput) &&
         p.slug.startsWith("duck-store-vulnerabilities-hub")
+      )
+        return -4;
+      if (
+        /duck-store\.escape\.tech/i.test(origin) &&
+        /\/openapi\.json\b/i.test(targetInput) &&
+        p.slug.startsWith("duck-store-openapi")
       )
         return -4;
       if (/juicesec\.mrdinesh\.workers\.dev/i.test(origin) && p.slug.startsWith("client-side-juicesec")) return -2;
