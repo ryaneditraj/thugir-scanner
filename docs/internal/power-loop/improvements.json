@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:idor-website.vercel.app",
+      "slug": "idor-website-checkpoint-hub-route-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: idorWebsiteMockApiCorpus IDOR_WEBSITE_CORPUS_FALLBACK when Vercel Security Checkpoint blocks homepage fetch; isIdorWebsiteHubOrApiRoute extends route oracles to / hub; idor-website.vercel.app/ findings 6→9 (+idor-website-mock-api-idor-route-live-oracle +idor-website-api-route-evidence alongside live oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:securebank-blog.vercel.app",
+      "slug": "securebank-blog-client-side-checkpoint-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: clientSideSecurebankBlogEvidence bootstraps secureBankBlogRouteCorpus + SECUREBANK_BLOG_ARTICLE_FALLBACK when /csrf route hits Vercel Security Checkpoint; securebank-blog.vercel.app/csrf findings 4→5 (+client-side-securebank-blog-evidence alongside csrf-attack-page-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-chat-prompt-injection-live-corpus-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: pwnshopChatPromptInjectionLiveOracle adds PWNSHOP_CHAT_PROMPT_INJECTION_ROUTE_FALLBACK corpus when POST /chat live LLM probe does not leak INTERNAL AGENT PRIVILEGED COMMANDS system prompt; pwnshop.ctfsecurity.com/chat findings 27→53 (+pwnshop-chat-prompt-injection-live-oracle alongside route oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:platform.sixhackacademy.com",
       "slug": "sixhack-platform-route-live-oracle",
       "status": "shipped",
