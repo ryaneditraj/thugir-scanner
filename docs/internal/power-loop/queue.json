@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-07T15:10:00.000Z",
+  "updated_at": "2026-09-07T16:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://pwnshop.ctfsecurity.com/vulnerabilities",
+      "source": "ctfsec/pwnshop README — interactive 45-vuln OWASP index at /vulnerabilities (16 UTC discovery; scoreboard learning gap)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/chat",
+      "source": "ctfsec/pwnshop — AI chatbot prompt-injection + order IDOR oracle PWN-035/037 (16 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-57",
+      "source": "OWASP WrongSecrets — Challenge 57 in-browser LLM prompt-injection oracle (16 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://idor-website.vercel.app/",
+      "source": "SecureBank IDOR lab — employee portal with predictable user IDs (web search 16 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://securebank-blog.vercel.app/csrf",
+      "source": "FAST-NUCES SecureBank attack lab — fake voucher CSRF transfer page (web search 16 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://pwnshop.ctfsecurity.com/download",
       "source": "ctfsec/pwnshop — path traversal file download lab PWN-038 (15 UTC discovery; queue gap from 14 UTC run)",

@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-07T15:16:00.000Z",
+  "updated_at": "2026-09-07T16:10:13.487Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,25 +15,25 @@
       ]
     }
   },
-  "total_sites_scanned": 2835,
-  "total_findings": 29072,
+  "total_sites_scanned": 2844,
+  "total_findings": 29288,
   "critical_findings": 54,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2021,
-  "discovery_findings": 24605,
-  "improvements_shipped": 1569,
-  "last_run": "2026-09-07T15:16:00.000Z",
+  "discovery_urls_added": 2026,
+  "discovery_findings": 24768,
+  "improvements_shipped": 1572,
+  "last_run": "2026-09-07T16:10:13.487Z",
   "last_run_summary": {
-    "hour_utc": "15",
+    "hour_utc": "16",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 52,
+      "oracle_findings": 53,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
       "probes_run": 597,
-      "live_oracles": 37,
+      "live_oracles": 40,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -49,54 +49,47 @@
           ]
         }
       },
-      "note": "Primary Heroku stable 6/6 (52 findings; gap=[]; 37 live oracles incl secret-resend + iac-terraform-tls-key)"
+      "note": "Primary Heroku stable 6/6 (53 findings; gap=[]; 40 live oracles incl secret-resend + iac-terraform-tls-key + privacy-requests-bola)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 204,
-      "focus": "15 UTC: pwnshop download/forgot-password + preview.owasp-juice.shop + SixHack platform + AI Security prompt-injection + wrongsecrets 64/26/27 queue drain",
+      "findings": 163,
+      "focus": "16 UTC: pwnshop /vulnerabilities + /chat + wrongsecrets-57 + idor-website + securebank-blog/csrf + wrongsecrets 20/21/22 queue drain",
       "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, gap=[])",
-      "preview.owasp-juice.shop: 55 findings, 38 live oracles — richer alternate oracle than Heroku this run",
-      "pwnshop.ctfsecurity.com/download: 52 (+pwnshop-download-path-traversal-route-live-oracle)",
-      "pwnshop.ctfsecurity.com/forgot-password: 27 (+pwnshop-otp-not-invalidated-route-live-oracle)",
-      "ai-security-platform-iota.vercel.app/challenges/prompt-injection: 9 (+ai-security-prompt-injection-route-live-oracle)",
-      "wrongsecrets.herokuapp.com/challenge/challenge-64: 19 (+wrongsecrets-challenge-64-swift-binary-route-live-oracle)",
-      "wrongsecrets.herokuapp.com/challenge/challenge-26: 19 (+wrongsecrets-challenge-26-web3-smart-contract-route-live-oracle)",
-      "wrongsecrets.herokuapp.com/challenge/challenge-27: 19 (+wrongsecrets-challenge-27-web3-smart-contract-route-live-oracle)",
-      "platform.sixhackacademy.com: 4 (landing/catalog only — CTF instances login-gated)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, gap=[])",
+      "pwnshop.ctfsecurity.com/vulnerabilities: 50 (+pwnshop-vulnerabilities-index-route-live-oracle)",
+      "pwnshop.ctfsecurity.com/chat: 27 (+pwnshop-chat-prompt-injection-route-live-oracle + chat-order-idor)",
+      "wrongsecrets.herokuapp.com/challenge/challenge-57: 19 (+wrongsecrets-challenge-57-browser-llm-route-live-oracle)",
+      "idor-website.vercel.app: 6 (+idor-website-mock-api-idor-live-oracle)",
+      "securebank-blog.vercel.app/csrf: 4 (+securebank-blog-csrf-attack-page-route-live-oracle corpus fallback)",
+      "wrongsecrets.herokuapp.com/challenge/challenge-20: 19 (queue drain)",
+      "wrongsecrets.herokuapp.com/challenge/challenge-21: 19 (queue drain)",
+      "wrongsecrets.herokuapp.com/challenge/challenge-22: 19 (queue drain)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "SixHack Academy platform landing is catalog-only — per-challenge instances require signup/session",
-      "AI Security prompt-injection challenge login-gated — route oracle fires on catalog redirect",
-      "preview.owasp-juice.shop viable fallback oracle (55 findings) when Heroku live-oracle count dips",
-      "pwnshop vulnerabilities index + seller preview SSTI still queued"
+      "idor-website.vercel.app is frontend-only mock API — live IDOR oracle fires on client bundle, no backend session",
+      "securebank-blog.vercel.app/csrf Vercel checkpoint blocks live CSRF probe — corpus fallback only",
+      "pwnshop /vulnerabilities index is catalog oracle — individual PWN slugs need dedicated route scans",
+      "wrongsecrets 20/21/22 queue drain confirms hub oracles; K8s/Vault execution not testable on Heroku"
     ]
   },
   "discovery_highlights": {
+    "pwnshop.ctfsecurity.com/vulnerabilities": 50,
+    "pwnshop.ctfsecurity.com/chat": 27,
+    "juice-shop.herokuapp.com": 53,
     "preview.owasp-juice.shop": 55,
-    "juice-shop.herokuapp.com": 52,
     "pwnshop.ctfsecurity.com/download": 52,
     "qa.brokencrystals.com/graphql": 93,
-    "qa.brokencrystals.com/api/render": 93,
-    "pwnshop.ctfsecurity.com/debug/info": 52,
-    "pwnshop.ctfsecurity.com/register-seller": 27,
-    "pwnshop.ctfsecurity.com/forgot-password": 27,
-    "vwad.owasp.org/app/ai-goat": 7,
-    "vwad.owasp.org/app/vulnerable-mcp-servers-lab": 7,
-    "koadt.github.io/oss-oopssec-store/posts/ssrf-internal-page-access": 10,
-    "ai-security-platform-iota.vercel.app/challenges/hacked-npm-packages": 10,
-    "ai-security-platform-iota.vercel.app/challenges/prompt-injection": 9,
-    "vault-notes-frontend-gules.vercel.app": 9,
-    "ai-security-platform-iota.vercel.app/challenges/ai-phishing": 9,
-    "wrongsecrets.herokuapp.com/challenge/challenge-64": 19,
-    "wrongsecrets.herokuapp.com/challenge/challenge-26": 19,
-    "wrongsecrets.herokuapp.com/challenge/challenge-27": 19,
-    "wrongsecrets.herokuapp.com/challenge/challenge-25": 19
+    "wrongsecrets.herokuapp.com/challenge/challenge-57": 19,
+    "wrongsecrets.herokuapp.com/challenge/challenge-20": 19,
+    "wrongsecrets.herokuapp.com/challenge/challenge-21": 19,
+    "wrongsecrets.herokuapp.com/challenge/challenge-22": 19,
+    "idor-website.vercel.app": 6,
+    "securebank-blog.vercel.app/csrf": 4
   }
 }
