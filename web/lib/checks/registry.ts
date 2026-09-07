@@ -113425,14 +113425,39 @@ async function finbotPageCsrfBootstrap(
   const pageUrl = new URL(path, ctx.origin).toString();
   const doc = await ctx.probe.get(pageUrl, { maxBytes: 65536, timeoutMs: 20000 });
   if (doc.status < 200 || doc.status >= 400) return null;
-  const csrfMatch = doc.body.match(/<meta\s+name=["']csrf-token["']\s+content=["']([^"']+)["']/i);
-  if (!csrfMatch) return null;
   const cookie = doc.setCookies
     .map((c) => c.split(";")[0]?.trim())
     .filter(Boolean)
     .join("; ");
   if (!cookie) return null;
+  const sessionUrl = new URL("/api/session/status", ctx.origin).toString();
+  const sessionDoc = await ctx.probe.get(sessionUrl, {
+    headers: { Cookie: cookie, Accept: "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (sessionDoc.status >= 200 && sessionDoc.status < 400) {
+    try {
+      const data = JSON.parse(sessionDoc.body) as { csrf_token?: string };
+      if (data.csrf_token) return { cookie, csrf: data.csrf_token };
+    } catch {
+      /* fall through to HTML meta */
+    }
+  }
+  const csrfMatch = doc.body.match(/<meta\s+name=["']csrf-token["']\s+content=["']([^"']+)["']/i);
+  if (!csrfMatch) return null;
   return { cookie, csrf: csrfMatch[1] };
+}
+
+/** Vendor portal bootstrap — session-status CSRF avoids HTML meta/session mismatch on /vendor redirects. */
+async function finbotVendorSessionBootstrap(
+  ctx: RuleContext
+): Promise<{ cookie: string; csrf: string } | null> {
+  for (const path of ["/vendor/onboarding", "/vendor/onboarding/", "/vendor/"]) {
+    const bootstrap = await finbotPageCsrfBootstrap(ctx, path);
+    if (bootstrap) return bootstrap;
+  }
+  return null;
 }
 
 const finbotVendorSidecarRouteLiveOracle: Rule = async (ctx) => {
@@ -113453,10 +113478,7 @@ const finbotVendorSidecarRouteLiveOracle: Rule = async (ctx) => {
 };
 
 async function probeFinbotVendorChatAgent(ctx: RuleContext): Promise<RuleResult | null> {
-  const bootstrap =
-    (await finbotPageCsrfBootstrap(ctx, "/vendor/onboarding")) ??
-    (await finbotPageCsrfBootstrap(ctx, "/vendor/onboarding/")) ??
-    (await finbotPageCsrfBootstrap(ctx, "/vendor/"));
+  const bootstrap = await finbotVendorSessionBootstrap(ctx);
   if (!bootstrap) return null;
   const chatUrl = new URL("/vendor/api/v1/chat", ctx.origin).toString();
   const doc = await ctx.probe.get(chatUrl, {
@@ -113469,13 +113491,18 @@ async function probeFinbotVendorChatAgent(ctx: RuleContext): Promise<RuleResult 
       "X-CSRF-Token": bootstrap.csrf,
       Cookie: bootstrap.cookie
     },
-    maxBytes: 16384,
-    timeoutMs: 30000
+    maxBytes: 32768,
+    timeoutMs: 45000
   });
   if (doc.status < 200 || doc.status >= 400) return null;
   if (!/data:\s*\{/.test(doc.body)) return null;
   if (!/"type"\s*:\s*"token"/.test(doc.body)) return null;
-  if (!/vendor|onboarding|compliance|document|portal/i.test(doc.body)) return null;
+  if (
+    !/vendor|onboarding|compliance|document|portal|checklist|typical|required|practical/i.test(
+      doc.body
+    )
+  )
+    return null;
   return {
     fired: true,
     confidence: 0.91,
@@ -114518,7 +114545,7 @@ const finbotCtfStatsRouteLiveOracle: Rule = async (ctx) => {
 };
 
 async function probeFinbotVendorInvoiceAgent(ctx: RuleContext): Promise<RuleResult | null> {
-  const bootstrap = await finbotPageCsrfBootstrap(ctx, "/vendor/onboarding");
+  const bootstrap = await finbotVendorSessionBootstrap(ctx);
   if (!bootstrap) return null;
   const stamp = `${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
   const registerUrl = new URL("/vendor/api/v1/vendors/register", ctx.origin).toString();
@@ -114613,7 +114640,9 @@ const finbotVendorInvoicesLiveOracle: Rule = async (ctx) => {
 const finbotVendorInvoicesRouteLiveOracle: Rule = async (ctx) => {
   if (!isFinbotCtfHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/vendor\/(?:api\/v1\/)?invoices\b/i.test(pageUrl)) return NEGATIVE;
+  const invoicesRoute = /\/vendor\/(?:api\/v1\/)?invoices\b/i.test(pageUrl);
+  const vendorHubRoute = /\/vendor(?:\/onboarding)?(?:\/|$)/i.test(pageUrl);
+  if (!invoicesRoute && !vendorHubRoute) return NEGATIVE;
   const result = await probeFinbotVendorInvoiceAgent(ctx);
   if (!result?.fired) return NEGATIVE;
   return {
@@ -114622,7 +114651,9 @@ const finbotVendorInvoicesRouteLiveOracle: Rule = async (ctx) => {
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: "OWASP FinBot /vendor/api/v1/invoices route scan — CSRF session bootstrap registers vendor and POST creates agent-triggering invoice"
+      note: invoicesRoute
+        ? "OWASP FinBot /vendor/api/v1/invoices route scan — CSRF session bootstrap registers vendor and POST creates agent-triggering invoice"
+        : "OWASP FinBot /vendor route scan — CSRF session bootstrap registers vendor and POST /vendor/api/v1/invoices creates agent-triggering invoice"
     }
   };
 };

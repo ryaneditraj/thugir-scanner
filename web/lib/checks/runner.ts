@@ -16922,6 +16922,12 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         return -4;
       if (
         /owasp-finbot-ctf\.org/i.test(origin) &&
+        /\/vendor(?:\/onboarding)?(?:\/|$)/i.test(targetInput) &&
+        p.slug.startsWith("finbot-vendor-invoices")
+      )
+        return -4;
+      if (
+        /owasp-finbot-ctf\.org/i.test(origin) &&
         /\/labs(?:\/api\/v1\/guardrails)?\b/i.test(targetInput) &&
         p.slug.startsWith("finbot-labs-guardrails")
       )

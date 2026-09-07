@@ -1,6 +1,21 @@
 {
-  "updated_at": "2026-09-07T12:05:00.000Z",
+  "updated_at": "2026-09-07T13:15:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://pwnshop.ctfsecurity.com/debug/info",
+      "source": "r007sec/pwnshop — PWN-018 intentionally public debug endpoint (13 UTC queue drain)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/register-seller",
+      "source": "ctfsec/pwnshop — seller registration + SSTI preview oracle PWN-040 (13 UTC queue drain)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/seller/preview",
+      "source": "ctfsec/pwnshop — SSTI seller storefront preview entry point PWN-040 (13 UTC queue drain)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://seclab.vercel.app/labs/idor",
       "source": "DaniSam-STU/security-lab — interactive IDOR lab page (12 UTC discovery)",

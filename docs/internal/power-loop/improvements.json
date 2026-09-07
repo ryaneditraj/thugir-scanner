@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:owasp-finbot-ctf.org",
+      "slug": "finbot-vendor-session-bootstrap-csrf-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: finbotPageCsrfBootstrap prefers GET /api/session/status csrf_token bound to finbot_session cookie; finbotVendorSessionBootstrap shared by chat+invoice probes; owasp-finbot-ctf.org/vendor findings 10→13 (+finbot-vendor-chat-live-oracle +finbot-vendor-chat-route-live-oracle +finbot-vendor-invoices-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owasp-finbot-ctf.org",
+      "slug": "finbot-vendor-chat-sse-reliability",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: probeFinbotVendorChatAgent SSE timeout 30→45s, maxBytes 16→32KB, early-token keyword match (checklist/typical/required); POST /vendor/api/v1/chat streams data:{\"type\":\"token\"} events; owasp-finbot-ctf.org/vendor findings 10→13; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-debug-seller-queue-drain",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: prepended pwnshop.ctfsecurity.com/debug/info + /register-seller + /seller/preview to priority_discovery_urls front; isolated probes confirm 47/52 findings with pwnshop-debug-info-route-live-oracle + pwnshop-register-seller-ssti-route-live-oracle; benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:demo-of-cve-2025-55182-saas.vercel.app",
       "slug": "cve-55182-saas-route-live-oracle",
       "status": "shipped",
