@@ -1,39 +1,39 @@
 {
-  "updated_at": "2026-09-07T22:05:00.000Z",
+  "updated_at": "2026-09-07T22:10:00.000Z",
   "priority_discovery_urls": [
     {
-      "url": "https://pwnshop.ctfsecurity.com/api/v1/events",
-      "source": "ctfsec/pwnshop README — unauthenticated audit-log JSON feed PWN-005 (22 UTC discovery)",
+      "url": "https://vaultapp-omega.vercel.app/api/documents/MTIz",
+      "source": "MRMcyber/vaultapp — VULN 5 base64-encoded document IDOR (22 UTC discovery gap)",
       "auth": "public_demo"
     },
     {
-      "url": "https://vulnbank.org/api/v1/payments/charge",
-      "source": "Commando-X/vuln-bank README — merchant payment API for lab integrations (22 UTC discovery)",
+      "url": "https://vaultapp-omega.vercel.app/api/notes/9",
+      "source": "MRMcyber/vaultapp — VULN 2 private-note IDOR with API-key leak (22 UTC discovery gap)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owaspbased-lessons.vercel.app/lesson/data-poisoning",
+      "source": "OWASP GenAI Security Lab — LLM04 data poisoning lesson (21 UTC discovery gap)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owaspbased-lessons.vercel.app/lesson/vector-embedding",
+      "source": "OWASP GenAI Security Lab — LLM08 vector embedding weaknesses lesson (21 UTC discovery gap)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owaspbased-lessons.vercel.app/lesson/misinformation",
+      "source": "OWASP GenAI Security Lab — LLM09 misinformation lesson (21 UTC discovery gap)",
       "auth": "public_demo"
     },
     {
       "url": "https://owaspbased-lessons.vercel.app/lesson/improper-output",
-      "source": "OWASP GenAI Security Lab — LLM05 improper output handling lesson (web search 22 UTC discovery)",
+      "source": "OWASP GenAI Security Lab — LLM05 improper output handling lesson (web search 21 UTC discovery)",
       "auth": "public_demo"
     },
     {
       "url": "https://owaspbased-lessons.vercel.app/lesson/system-prompt-leakage",
-      "source": "OWASP GenAI Security Lab — LLM07 system prompt leakage lesson (web search 22 UTC discovery)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://vaultapp-omega.vercel.app/api/profile/update",
-      "source": "MRMcyber/vaultapp — VULN 4 mass-assignment via POST /api/profile/update (22 UTC discovery gap)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://vaultapp-omega.vercel.app/api/users/profile/cfbbf49f-b2e3-40de-ba80-8d05ec97fd8f",
-      "source": "MRMcyber/vaultapp — VULN 6 UUID profile IDOR via /directory leak (21 UTC discovery gap)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://vaultapp-omega.vercel.app/api/admin/users/295",
-      "source": "MRMcyber/vaultapp — VULN 7 admin user-delete BFLA (21 UTC discovery gap)",
+      "source": "OWASP GenAI Security Lab — LLM07 system prompt leakage lesson (web search 21 UTC discovery)",
       "auth": "public_demo"
     },
     {
@@ -49,6 +49,21 @@
     {
       "url": "https://owaspbased-lessons.vercel.app/lesson/unbounded-consumption",
       "source": "OWASP GenAI Security Lab — LLM10 unbounded consumption lesson (web search 21 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vaultapp-omega.vercel.app/api/profile/update",
+      "source": "MRMcyber/vaultapp — VULN 4 mass-assignment via POST /api/profile/update (21 UTC discovery gap)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vaultapp-omega.vercel.app/api/users/profile/cfbbf49f-b2e3-40de-ba80-8d05ec97fd8f",
+      "source": "MRMcyber/vaultapp — VULN 6 UUID profile IDOR via /directory leak (21 UTC discovery gap)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vaultapp-omega.vercel.app/api/admin/users/295",
+      "source": "MRMcyber/vaultapp — VULN 7 admin user-delete BFLA (21 UTC discovery gap)",
       "auth": "public_demo"
     },
     {

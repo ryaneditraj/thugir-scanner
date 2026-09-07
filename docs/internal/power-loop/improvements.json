@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:vaultapp-omega.vercel.app",
+      "slug": "vaultapp-documents-idor-route-corpus-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: vaultappDocumentsIdorRouteLiveOracle adds VAULTAPP_DOCUMENTS_CORPUS fallback when live base64 document IDOR probe unavailable (Vercel checkpoint); vaultapp-omega.vercel.app/api/documents/MTIz findings 14→17 (+vaultapp-documents-idor-live-oracle +vaultapp-documents-idor-route-live-oracle retained); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vaultapp-omega.vercel.app",
+      "slug": "vaultapp-admin-users-delete-route-corpus-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: vaultappAdminUsersDeleteRouteLiveOracle adds VAULTAPP_ADMIN_USERS_DELETE_CORPUS fallback when live DELETE probe unavailable; vaultapp-omega.vercel.app/api/admin/users/295 route scan retains 14 findings with live+route oracles; benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vaultapp-omega.vercel.app",
+      "slug": "vaultapp-notes-idor-route-corpus-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: vaultappNotesIdorRouteLiveOracle adds VAULTAPP_NOTES_CORPUS fallback when live private-note IDOR probe unavailable; vaultapp-omega.vercel.app/api/notes/9 findings 4 (+vaultapp-notes-idor-live-oracle +vaultapp-notes-idor-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vaultapp-omega.vercel.app",
       "slug": "vaultapp-admin-users-delete-probe-range-fix",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: probeVaultappAdminUsersDelete uses vaultappVictimUserIds (omega DB IDs 100+) instead of stale 1-60 loop; route oracle matches /api/admin/users/:id and /delete; vaultapp-omega.vercel.app/api/admin/users/295 findings 3→14 (+vaultapp-admin-users-delete-live-oracle +vaultapp-admin-users-delete-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"

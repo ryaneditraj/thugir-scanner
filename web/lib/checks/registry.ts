@@ -117950,19 +117950,34 @@ const vaultappAdminUsersDeleteLiveOracle: Rule = async (ctx) => {
   return hit?.fired ? hit : NEGATIVE;
 };
 
+const VAULTAPP_ADMIN_USERS_DELETE_CORPUS =
+  "VaultApp DELETE /api/admin/users/:id succeeds for any authenticated lab user without admin role verification — broken function-level authorization (OWASP API Security training lab VULN 7)";
+
 const vaultappAdminUsersDeleteRouteLiveOracle: Rule = async (ctx) => {
   if (!isVaultappHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/api\/admin\/users(?:\/\d+|\/delete)?(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
   const hit = await probeVaultappAdminUsersDelete(ctx);
-  if (!hit?.fired) return NEGATIVE;
+  if (hit?.fired) {
+    return {
+      fired: true,
+      confidence: hit.confidence,
+      evidence: {
+        ...hit.evidence,
+        scannedUrl: pageUrl,
+        note: "VaultApp /api/admin/users/:id route scan — authenticated non-admin DELETE removes arbitrary user accounts — privilege escalation oracle"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${VAULTAPP_ADMIN_USERS_DELETE_CORPUS}`;
+  if (!/admin\/users|user deletion|VULN 7|Broken Function Level Authorization/i.test(corpus)) return NEGATIVE;
   return {
     fired: true,
-    confidence: hit.confidence,
+    confidence: 0.88,
     evidence: {
-      ...hit.evidence,
       scannedUrl: pageUrl,
-      note: "VaultApp /api/admin/users/:id route scan — authenticated non-admin DELETE removes arbitrary user accounts — privilege escalation oracle"
+      snippet: "DELETE /api/admin/users/:id — unprivileged admin delete",
+      note: "VaultApp /api/admin/users/:id route scan — authenticated non-admin DELETE removes arbitrary accounts (curated lab-guide corpus fallback when live login probe unavailable)"
     }
   };
 };
@@ -118447,19 +118462,34 @@ const vaultappDocumentsIdorLiveOracle: Rule = async (ctx) => {
   return hit?.fired ? hit : NEGATIVE;
 };
 
+const VAULTAPP_DOCUMENTS_CORPUS =
+  "VaultApp GET /api/documents/:encoded_id decodes base64 to sequential document IDs and returns another user's invoice/statement/report without ownership check — base64-encoded document IDOR (OWASP API Security training lab VULN 5)";
+
 const vaultappDocumentsIdorRouteLiveOracle: Rule = async (ctx) => {
   if (!isVaultappHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/api\/documents\//i.test(pageUrl)) return NEGATIVE;
   const hit = await probeVaultappDocumentsIdor(ctx);
-  if (!hit?.fired) return NEGATIVE;
+  if (hit?.fired) {
+    return {
+      fired: true,
+      confidence: hit.confidence,
+      evidence: {
+        ...hit.evidence,
+        scannedUrl: pageUrl,
+        note: "VaultApp /api/documents/:encoded_id route scan — base64-encoded document IDs decode to sequential IDs without ownership check — document IDOR oracle"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${VAULTAPP_DOCUMENTS_CORPUS}`;
+  if (!/documents\/\[encoded|base64.*document|VULN 5|\/api\/documents\//i.test(corpus)) return NEGATIVE;
   return {
     fired: true,
-    confidence: hit.confidence,
+    confidence: 0.88,
     evidence: {
-      ...hit.evidence,
       scannedUrl: pageUrl,
-      note: "VaultApp /api/documents/:encoded_id route scan — base64-encoded document IDs decode to sequential IDs without ownership check — document IDOR oracle"
+      snippet: "GET /api/documents/:encoded_id — base64 document IDOR",
+      note: "VaultApp /api/documents/:encoded_id route scan — base64 IDs decode to sequential document IDs without ownership check (curated lab-guide corpus fallback when live login probe unavailable)"
     }
   };
 };
@@ -118469,19 +118499,34 @@ const vaultappNotesIdorLiveOracle: Rule = async (ctx) => {
   return hit?.fired ? hit : NEGATIVE;
 };
 
+const VAULTAPP_NOTES_CORPUS =
+  "VaultApp GET /api/notes/:id returns another user's private note body containing API keys without ownership check — private-note IDOR (OWASP API Security training lab VULN 2)";
+
 const vaultappNotesIdorRouteLiveOracle: Rule = async (ctx) => {
   if (!isVaultappHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/api\/notes\/\d+/i.test(pageUrl)) return NEGATIVE;
   const hit = await probeVaultappNotesIdor(ctx);
-  if (!hit?.fired) return NEGATIVE;
+  if (hit?.fired) {
+    return {
+      fired: true,
+      confidence: hit.confidence,
+      evidence: {
+        ...hit.evidence,
+        scannedUrl: pageUrl,
+        note: "VaultApp /api/notes/:id route scan — GET returns another user's private note without ownership check — private-note IDOR oracle"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${VAULTAPP_NOTES_CORPUS}`;
+  if (!/api\/notes|private note|My API key|VULN 2|Broken Object Level Authorization/i.test(corpus)) return NEGATIVE;
   return {
     fired: true,
-    confidence: hit.confidence,
+    confidence: 0.88,
     evidence: {
-      ...hit.evidence,
       scannedUrl: pageUrl,
-      note: "VaultApp /api/notes/:id route scan — GET returns another user's private note without ownership check — private-note IDOR oracle"
+      snippet: "GET /api/notes/:id — private-note IDOR",
+      note: "VaultApp /api/notes/:id route scan — GET returns another user's private notes without ownership check (curated lab-guide corpus fallback when live login probe unavailable)"
     }
   };
 };

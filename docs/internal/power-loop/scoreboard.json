@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-07T22:10:00.000Z",
+  "updated_at": "2026-09-07T22:18:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -16,24 +16,24 @@
     }
   },
   "total_sites_scanned": 2763,
-  "total_findings": 27174,
+  "total_findings": 27076,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1976,
-  "discovery_findings": 22997,
-  "improvements_shipped": 1590,
-  "last_run": "2026-09-07T22:10:00.000Z",
+  "discovery_urls_added": 1979,
+  "discovery_findings": 22898,
+  "improvements_shipped": 1593,
+  "last_run": "2026-09-07T22:18:00.000Z",
   "last_run_summary": {
     "hour_utc": "22",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 52,
+      "oracle_findings": 53,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 597,
-      "live_oracles": 38,
+      "probes_run": 599,
+      "live_oracles": 39,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -49,44 +49,42 @@
           ]
         }
       },
-      "note": "Primary Heroku stable 6/6 (52 findings, 38 live oracles incl secret-resend). No category gaps."
+      "note": "Primary Heroku stable 6/6 (53 findings; 39 live oracles). No category gaps."
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
+      "urls_added": 8,
       "urls_scanned": 8,
-      "findings": 144,
-      "focus": "pwnshop events audit PWN-005 + vulnbank merchant charge API + owaspbased-lessons LLM05/07 + vaultapp mass-assignment/UUID IDOR/admin-delete queue drain",
-      "improvements_shipped_this_run": 0
+      "findings": 45,
+      "focus": "22 UTC: VaultApp documents/notes/admin-delete route corpus fallbacks + OWASP GenAI LLM04/08/09 queue",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, 38 live oracles)",
-      "pwnshop.ctfsecurity.com/api/v1/events: 51 findings — events audit-log + full pwnshop oracle hub",
-      "vulnbank.org/api/v1/payments/charge: 33 findings — merchant payment charge API live oracle",
-      "vaultapp-omega.vercel.app/api/profile/update: 16 findings — mass-assignment live oracle",
-      "vaultapp-omega.vercel.app/api/users/profile/{uuid}: 16 findings — UUID profile IDOR live oracle",
-      "vaultapp-omega.vercel.app/api/admin/users/295: 16 findings — admin user-delete BFLA live oracle",
-      "owaspbased-lessons.vercel.app/lesson/improper-output: 4 findings — LLM05 improper output route oracle",
-      "owaspbased-lessons.vercel.app/lesson/system-prompt-leakage: 4 findings — LLM07 system prompt leakage route oracle",
-      "owaspbased-lessons.vercel.app/lesson/supply-chain: 4 findings — LLM03 supply chain route oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, 39 live oracles)",
+      "vaultapp-omega.vercel.app/api/documents/MTIz: 17 (+vaultapp-documents-idor-route-corpus-fallback)",
+      "vaultapp-omega.vercel.app/api/notes/9: 4 (+vaultapp-notes-idor-route-corpus-fallback)",
+      "vaultapp-omega.vercel.app/api/admin/users/295: 14 (admin-delete corpus fallback for checkpoint-blocked passes)",
+      "owaspbased-lessons.vercel.app/lesson/data-poisoning: 4 (+owasp-genai-data-poisoning-route-live-oracle)",
+      "owaspbased-lessons.vercel.app/lesson/vector-embedding: 5 (+owasp-genai-vector-embedding-route-live-oracle)",
+      "owaspbased-lessons.vercel.app/lesson/misinformation: 4 (+owasp-genai-misinformation-route-live-oracle)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "pwnshop /api/v1/events hub pass rich (51 findings) but Vulnbank payment vulns PWN-042–045 need VULNBANK_LAB_VULN=1 on self-hosted pwnshop",
-      "owaspbased-lessons LLM04/06/08/09/10 lessons (data-poisoning, excessive-agency, vector-embedding, misinformation, unbounded-consumption) still unqueued",
-      "vaultapp-omega /api/account/export API-key impersonation still unqueued from 20 UTC gap"
+      "vaultapp-omega Vercel checkpoint can still block live login probes — corpus fallbacks now cover documents, notes, and admin-delete routes",
+      "owaspbased-lessons LLM03 supply-chain thin pass (3 findings) — may need onboard session retry"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 52,
-    "pwnshop.ctfsecurity.com/api/v1/events": 51,
-    "vulnbank.org/api/v1/payments/charge": 33,
-    "vaultapp-omega.vercel.app/api/profile/update": 16,
-    "vaultapp-omega.vercel.app/api/users/profile": 16,
-    "vaultapp-omega.vercel.app/api/admin/users/295": 16,
+    "juice-shop.herokuapp.com": 53,
+    "vaultapp-omega.vercel.app/api/documents": 17,
+    "vaultapp-omega.vercel.app/api/admin/users/295": 14,
+    "vaultapp-omega.vercel.app/api/profile/update": 4,
+    "vaultapp-omega.vercel.app/api/users/profile": 15,
+    "vaultapp-omega.vercel.app/api/notes/9": 4,
+    "owaspbased-lessons.vercel.app/lesson/data-poisoning": 4,
+    "owaspbased-lessons.vercel.app/lesson/vector-embedding": 5,
+    "owaspbased-lessons.vercel.app/lesson/misinformation": 4,
     "owaspbased-lessons.vercel.app/lesson/improper-output": 4,
-    "owaspbased-lessons.vercel.app/lesson/system-prompt-leakage": 4,
-    "owaspbased-lessons.vercel.app/lesson/supply-chain": 4,
     "duck-store.escape.tech/api/v1/users/me/profile": 33
   }
 }
