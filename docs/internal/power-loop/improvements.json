@@ -9299,6 +9299,24 @@
       "slug": "javaseclab-jwt-rce-hub-discovery-seeds",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: extractJavaSecLabSeeds extended with /jwt/vul /rce/vul /command/vul1 /xss/reflect/vul hub paths; accelerates JavaSecLab JWT/RCE hub route oracle queue drain; whgojp.top/jwt/vul + javaseclab-jwt-vul-route-live-oracle maintained at 12 findings; benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnlab.dev",
+      "slug": "vulnlab-dev-hub-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: vulnlab.dev homepage lists ssrf/xss/sqli/ssti training subdomains with intentionally-vulnerable banner; vulnlab.dev/ findings 3→6 (+vulnlab-dev-hub-live-oracle +vulnlab-dev-hub-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnlab.dev",
+      "slug": "vulnlab-dev-priority-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: vulnlabDevPrioritySeeds seeds ssrf/xss/sqli/ssti/gopher lab paths + /results/ when scanning vulnlab.dev hub; accelerates cross-subdomain oracle discovery from hub crawl; benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnlab.dev",
+      "slug": "vulnlab-dev-queue-drain",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: queue.priority_discovery_urls prepended vulnlab.dev + sqli/error + xss/reflected + ssti/basic + ssrf/gopher; POWER_SCAN_LIMIT=5 drained all 5 priority targets (vulnlab.dev 6, sqli 9, xss 10, ssti 10, gopher 16 findings); benchmark juice-shop 53 findings 6/6 maintained"
     }
   ]
 }

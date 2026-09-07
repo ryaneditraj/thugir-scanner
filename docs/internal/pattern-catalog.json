@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-07T03:22:18.713Z",
-  "total": 3413,
-  "uniqueSlugs": 3405,
+  "generatedAt": "2026-09-07T04:08:37.809Z",
+  "total": 3415,
+  "uniqueSlugs": 3407,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3395,
+    "generic": 3397,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3328,
+    "deep": 3330,
     "continuous": 0
   },
   "byCategory": {
@@ -24,7 +24,7 @@
     "Source exposure": 7,
     "Misconfiguration": 2,
     "Information exposure": 1,
-    "Information disclosure": 155,
+    "Information disclosure": 157,
     "Security misconfiguration": 288,
     "Broken authentication": 220,
     "Injection": 565,
@@ -3067,6 +3067,8 @@
     "vulnlab-cms-drupal-joomla-live-oracle",
     "vulnlab-cors-live-oracle",
     "vulnlab-cors-route-live-oracle",
+    "vulnlab-dev-hub-live-oracle",
+    "vulnlab-dev-hub-route-live-oracle",
     "vulnlab-env-file-route-live-oracle",
     "vulnlab-git-head-live-oracle",
     "vulnlab-graphql-soap-live-oracle",
