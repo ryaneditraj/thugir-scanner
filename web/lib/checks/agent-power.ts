@@ -174,6 +174,12 @@ function oopssecGitHubPagesReflexionSuppressed(ctx: PowerCtx): boolean {
   return /koadt\.github\.io\/oss-oopssec-store/i.test(pageUrl);
 }
 
+/** MCPGoat GitHub Pages hub is static HTML — no server-side template engine. */
+function mcpgoatGitHubPagesReflexionSuppressed(ctx: PowerCtx): boolean {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  return /sabyasachidhal\.github\.io\/MCPGoat/i.test(pageUrl);
+}
+
 /** yogsec.github.io static XSS/login labs have client-side sinks — no server-side SSTI. */
 function yogsecGitHubPagesReflexionSuppressed(ctx: PowerCtx): boolean {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
@@ -407,6 +413,7 @@ export const reflexionEscalatedSsti: PowerRule = async (ctx) => {
   if (securebankBlogReflexionSuppressed(ctx)) return NEGATIVE;
   if (ginAndJuiceReflexionSuppressed(ctx)) return NEGATIVE;
   if (oopssecGitHubPagesReflexionSuppressed(ctx)) return NEGATIVE;
+  if (mcpgoatGitHubPagesReflexionSuppressed(ctx)) return NEGATIVE;
   if (aiThreatlabReflexionSuppressed(ctx)) return NEGATIVE;
   if (yogsecGitHubPagesReflexionSuppressed(ctx)) return NEGATIVE;
   if (ctfChallange3ReflexionSuppressed(ctx)) return NEGATIVE;

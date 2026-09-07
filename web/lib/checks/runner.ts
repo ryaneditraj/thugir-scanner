@@ -5309,7 +5309,11 @@ function extractJavaSecLabSeeds(html: string, pageUrl: string): string[] {
     "/druid/sql.json",
     "/login",
     "/xss/reflect/vul2",
+    "/xss/reflect/vul",
     "/xss/reflected",
+    "/jwt/vul",
+    "/rce/vul",
+    "/command/vul1",
     "/ssrf/vul",
     "/sqli/jdbc/vul1",
     "/xxe/vul1",
@@ -15073,6 +15077,24 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
       if (/rest\.vulnweb\.com/i.test(origin) && p.slug.startsWith("rest-vulnweb-posts-bola")) return -2;
       if (/rest\.testinvicti\.com/i.test(origin) && p.slug.startsWith("rest-testinvicti-jwt-users-bola")) return -2;
       if (/vulnapi\.testinvicti\.com/i.test(origin) && p.slug.startsWith("vulnapi-")) return -2;
+      if (
+        /vulnapi\.testinvicti\.com/i.test(origin) &&
+        /\/api\/fetch/i.test(targetInput) &&
+        p.slug.startsWith("vulnapi-fetch-ssrf")
+      )
+        return -3;
+      if (
+        /vulnapi\.testinvicti\.com/i.test(origin) &&
+        /\/api\/orders/i.test(targetInput) &&
+        p.slug.startsWith("vulnapi-orders-bola")
+      )
+        return -3;
+      if (
+        /vulnapi\.testinvicti\.com/i.test(origin) &&
+        /\/api\/admin\/users/i.test(targetInput) &&
+        p.slug.startsWith("vulnapi-admin-users-host-bypass")
+      )
+        return -3;
       if (
         /promptairlines\.com/i.test(origin) &&
         /\/chat\b/i.test(targetInput) &&
