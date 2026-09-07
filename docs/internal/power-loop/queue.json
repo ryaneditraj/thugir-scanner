@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-06T23:05:00.000Z",
+  "updated_at": "2026-09-07T00:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "http://whgojp.top/xxe/vul1",
+      "source": "whgojp/JavaSecLab — XXE XMLReader external entity oracle GET /xxe/vul1?payload= (public demo; web search 00 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://whgojp.top/spel/vul",
+      "source": "whgojp/JavaSecLab — SpEL injection lab route /spel/vul (public demo whgojp.top; web search 00 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://whgojp.top/jwt/vul",
+      "source": "whgojp/JavaSecLab — JWT credential security lab route /jwt/vul (public demo; web search 00 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://whgojp.top/rce/vul",
+      "source": "whgojp/JavaSecLab — RCE command execution lab route /rce/vul (public demo; web search 00 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://whgojp.top/csrf/vul",
+      "source": "whgojp/JavaSecLab — CSRF cross-site request forgery lab route /csrf/vul (public demo; web search 00 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://sabyasachidhal.github.io/MCPGoat/",
       "source": "MCPGoat — deliberately vulnerable MCP server (26 challenges / 78 CTF flags; tool poisoning, prompt injection, SSRF; web search 23 UTC)",
@@ -12078,5 +12103,5 @@
       "auth": "public_benchmark"
     }
   ],
-  "discovery_urls_added": 2148
+  "discovery_urls_added": 2153
 }
