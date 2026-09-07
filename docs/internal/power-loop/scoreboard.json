@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-07T09:30:00.000Z",
+  "updated_at": "2026-09-07T10:12:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,25 +15,25 @@
       ]
     }
   },
-  "total_sites_scanned": 2773,
-  "total_findings": 27735,
+  "total_sites_scanned": 2782,
+  "total_findings": 27929,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1985,
-  "discovery_findings": 23532,
+  "discovery_urls_added": 1990,
+  "discovery_findings": 23673,
   "improvements_shipped": 1554,
-  "last_run": "2026-09-07T09:30:00.000Z",
+  "last_run": "2026-09-07T10:12:00.000Z",
   "last_run_summary": {
-    "hour_utc": "09",
+    "hour_utc": "10",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 52,
+      "oracle_findings": 53,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
       "probes_run": 597,
-      "live_oracles": 39,
+      "live_oracles": 38,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -49,43 +49,44 @@
           ]
         }
       },
-      "note": "Stable 6/6 on primary Heroku (52 findings, 39 live oracles); secret-resend + iac-terraform-tls-key present"
+      "note": "Stable 6/6 on primary Heroku (53 findings, 38 live oracles); secret-resend + iac-terraform-tls-key present"
     },
-    "teacher_delta": "skipped \u2014 nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 9,
-      "findings": 251,
-      "focus": "Drained wrongsecrets challenge-63/67 + duck-store vulnerabilities/import-from-url/cart + qa.brokencrystals AWS SSRF + DVGA GraphQL + crAPI2/vAPI BOLA",
-      "improvements_shipped_this_run": 3
+      "urls_scanned": 8,
+      "findings": 141,
+      "focus": "nodegoat + seclab SQLi + vulnforge L13 SSRF + duck-store testimonials/admin BOLA + wrongsecrets 63/67 + duck-store vulnerabilities hub",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, 39 live oracles; gap=[])",
-      "wrongsecrets.herokuapp.com/challenge/challenge-63: 19 findings (+wrongsecrets-challenge-63-hardcoded-aes-key-route-live-oracle)",
-      "wrongsecrets.herokuapp.com/challenge/challenge-67: 18 findings (+wrongsecrets-heroku-undeployed-challenge-live-oracle +route)",
-      "duck-store.escape.tech/vulnerabilities: 27 findings (+duck-store-vulnerabilities-hub-route-live-oracle)",
-      "duck-store.escape.tech/api/v1/uploads/import-from-url: 22\u219224 (+import-from-url corpus fallback when register HTTP 500)",
-      "duck-store.escape.tech/api/v1/cart/items: 22\u219224 (+cart-negative-quantity-route-live-oracle path expansion)",
-      "qa.brokencrystals.com/api/file/aws: 90 findings \u2014 AWS metadata SSRF route oracle on QA host",
-      "dvga.tools.escape.tech/graphql: 19 findings \u2014 GraphQL introspection/injection oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, 38 live oracles; gap=[])",
+      "nodegoat-websec.herokuapp.com/: 16 findings — nodegoat NoSQL IDOR, SSJS injection, stored XSS, CSRF live oracles",
+      "seclab.vercel.app/labs/sqli: 7 findings — seclab SQLi lab route oracle",
+      "vulnforge-academy.vercel.app/.../level13.php: 6 findings — vulnforge SSRF level route oracle",
+      "duck-store.escape.tech/api/v1/testimonials/1: 24 findings — unauth PUT BOLA oracle from Escape benchmarking blog",
+      "duck-store.escape.tech/api/v1/admin/users: 24 findings — admin user enumeration BFLA",
+      "wrongsecrets.herokuapp.com/challenge/challenge-63: 19 findings — hardcoded AES key route oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-67: 18 findings — undeployed-challenge route oracle",
+      "duck-store.escape.tech/vulnerabilities: 27 findings — vulnerability hub route oracle"
     ],
     "learning_gaps": [
-      "teacher_delta blocked \u2014 nuclei/engine unavailable in cloud agent",
-      "lab.pentest-forge.com crAPI/VAmPI/DVGA routes unreachable \u2014 now skipped after first error via isRecentlyDeadDiscoveryHost",
-      "duck-store Postgres intermittently in recovery mode \u2014 import-from-url SSRF now has OpenAPI corpus fallback when auth/register fails"
+      "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
+      "queue.json had merge conflict markers — resolved by merging both priority URL sets",
+      "duck-store import-from-url + cart/items still queued (48h skip not applicable; deprioritized behind 8-url limit)",
+      "lab.pentest-forge.com routes still unreachable from cloud agent"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 52,
-    "qa.brokencrystals.com/api/file/aws": 90,
+    "juice-shop.herokuapp.com": 53,
+    "nodegoat-websec.herokuapp.com": 16,
+    "duck-store.escape.tech/vulnerabilities": 27,
+    "duck-store.escape.tech/api/v1/testimonials/1": 24,
+    "duck-store.escape.tech/api/v1/admin/users": 24,
     "wrongsecrets.herokuapp.com/challenge/challenge-63": 19,
     "wrongsecrets.herokuapp.com/challenge/challenge-67": 18,
-    "duck-store.escape.tech/vulnerabilities": 27,
-    "duck-store.escape.tech/api/v1/uploads/import-from-url": 24,
-    "duck-store.escape.tech/api/v1/cart/items": 24,
-    "brokencrystals.com/api/fetch": 86,
-    "duck-store.escape.tech/api/v1/products/filter/by-color": 23,
-    "dvga.tools.escape.tech/graphql": 19,
-    "vapi.apisec.ai/identity/api/v2/user/1": 16
+    "seclab.vercel.app/labs/sqli": 7,
+    "vulnforge-academy.vercel.app/backend/includes/levels/medium/level13.php": 6,
+    "qa.brokencrystals.com/api/file/aws": 90
   }
 }
