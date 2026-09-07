@@ -3223,6 +3223,7 @@ const DEEP_RULES = new Set<string>([
   "crapiMechanicReportRouteLiveOracle",
   "crapiVehicleBolaLiveOracle",
   "crapiVehicleRouteLiveOracle",
+  "crapiVehicleLocationLiveOracle",
   "crapiVehicleLocationRouteLiveOracle",
   "crapiUserVideosBolaLiveOracle",
   "crapiUserVideosBolaRouteLiveOracle",

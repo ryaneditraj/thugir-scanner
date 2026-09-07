@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-07T09:21:09.427Z",
-  "total": 3417,
-  "uniqueSlugs": 3409,
+  "generatedAt": "2026-09-07T10:25:26.872Z",
+  "total": 3418,
+  "uniqueSlugs": 3410,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3399,
+    "generic": 3400,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3332,
+    "deep": 3333,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 672,
+    "Broken access control": 673,
     "Exposed secret": 120,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -1159,6 +1159,7 @@
     "crapi-validate-coupon-nosql-live-oracle",
     "crapi-validate-coupon-nosql-route-live-oracle",
     "crapi-vehicle-bola-live-oracle",
+    "crapi-vehicle-location-live-oracle",
     "crapi-vehicle-location-route-live-oracle",
     "crapi-vehicle-route-live-oracle",
     "crapi2-auth-login-route-live-oracle",

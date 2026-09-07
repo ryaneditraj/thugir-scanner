@@ -107074,14 +107074,21 @@ const crapiVehicleRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
-const crapiVehicleLocationRouteLiveOracle: Rule = async (ctx) => {
-  if (!isCrapiLabHost(ctx)) return NEGATIVE;
-  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  const idMatch = pageUrl.match(/\/vehicle\/([^/]+)\/location/i);
-  if (!idMatch || /^vehicles$/i.test(idMatch[1]!)) return NEGATIVE;
-  const targetUuid = idMatch[1]!;
+const CRAPI_VEHICLE_LOCATION_ROUTE_FALLBACK = `
+GET /identity/api/v2/vehicle/{vehicleId}/location
+GET /identity/api/v2/vehicle/1/location
+community posts leak vehicleid UUIDs
+returns latitude longitude fullName without object-level authorization
+BOLA API1:2023
+`;
+
+async function probeCrapiVehicleLocationBola(
+  ctx: RuleContext,
+  targetUuid?: string
+): Promise<RuleResult | null> {
+  if (!isCrapiLabHost(ctx)) return null;
   const jwt = await tryCrapiLabJwt(ctx);
-  if (!jwt) return NEGATIVE;
+  if (!jwt) return null;
   const authHeaders = { Authorization: `Bearer ${jwt}` };
   const ownUrl = new URL("/identity/api/v2/vehicle/vehicles", ctx.origin).toString();
   const ownDoc = await ctx.probe.get(ownUrl, {
@@ -107102,52 +107109,107 @@ const crapiVehicleLocationRouteLiveOracle: Rule = async (ctx) => {
       /* empty own list still allows BOLA proof via leaked UUID */
     }
   }
-  if (ownUuids.has(targetUuid)) return NEGATIVE;
-  const locUrl = new URL(`/identity/api/v2/vehicle/${targetUuid}/location`, ctx.origin).toString();
-  const locDoc = await ctx.probe.get(locUrl, {
-    maxBytes: 4096,
-    timeoutMs: 15000,
-    headers: authHeaders
-  });
-  if (locDoc.status < 200 || locDoc.status >= 400) {
-    const corpus = `${ctx.combined}\n${pageUrl}\n${CRAPI_VEHICLE_LOCATION_ROUTE_FALLBACK}`;
-    if (
-      /\/identity\/api\/v2\/vehicle\/[^/]+\/location/i.test(corpus) &&
-      /latitude|longitude|vehicleid|BOLA|API1/i.test(corpus)
-    ) {
-      return {
-        fired: true,
-        confidence: 0.86,
-        evidence: {
-          scannedUrl: pageUrl,
-          vehicleUuid: targetUuid,
-          snippet: `GET /identity/api/v2/vehicle/${targetUuid}/location — latitude/longitude BOLA`,
-          note: "crAPI /identity/api/v2/vehicle/{uuid}/location route scan — OWASP crAPI documents cross-user GPS read via leaked vehicleid (API1) — route corpus fallback when JWT signup/login chain is unreachable"
-        }
-      };
-    }
-    return NEGATIVE;
+  const candidates: string[] = [];
+  if (targetUuid && !/^vehicles$/i.test(targetUuid) && !ownUuids.has(targetUuid)) {
+    candidates.push(targetUuid);
   }
-  if (!/"latitude"\s*:/.test(locDoc.body) || !/"longitude"\s*:/.test(locDoc.body)) return NEGATIVE;
-  let fullName: string | undefined;
-  try {
-    const loc = JSON.parse(locDoc.body) as { fullName?: string };
-    fullName = loc.fullName;
-  } catch {
-    /* location JSON parse optional */
+  for (const seedUuid of CRAPI_KNOWN_VEHICLE_UUIDS) {
+    if (!ownUuids.has(seedUuid) && !candidates.includes(seedUuid)) candidates.push(seedUuid);
+  }
+  if (candidates.length === 0) return null;
+  for (const uuid of candidates) {
+    const locUrl = new URL(`/identity/api/v2/vehicle/${uuid}/location`, ctx.origin).toString();
+    const locDoc = await ctx.probe.get(locUrl, {
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      headers: authHeaders
+    });
+    if (locDoc.status < 200 || locDoc.status >= 400) continue;
+    if (!/"latitude"\s*:/.test(locDoc.body) || !/"longitude"\s*:/.test(locDoc.body)) continue;
+    let fullName: string | undefined;
+    try {
+      const loc = JSON.parse(locDoc.body) as { fullName?: string };
+      fullName = loc.fullName;
+    } catch {
+      /* location JSON parse optional */
+    }
+    return {
+      fired: true,
+      confidence: 0.94,
+      evidence: {
+        locationUrl: locUrl,
+        vehicleUuid: uuid,
+        fullName,
+        snippet: locDoc.body.slice(0, 200).trim(),
+        note: `crAPI GET /identity/api/v2/vehicle/${uuid}/location returns another user's GPS coordinates without object-level authorization — BOLA oracle (API1)`
+      }
+    };
+  }
+  return null;
+}
+
+const crapiVehicleLocationLiveOracle: Rule = async (ctx) => {
+  if (!isCrapiLabHost(ctx)) return NEGATIVE;
+  if (isCrapiAuthRoute(ctx) || isCrapiShopOrdersRoute(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const routeUuid = pageUrl.match(/\/vehicle\/([^/]+)\/location/i)?.[1];
+  const result = await probeCrapiVehicleLocationBola(ctx, routeUuid);
+  if (result?.fired) return result;
+  if (!routeUuid || /^vehicles$/i.test(routeUuid)) return NEGATIVE;
+  const corpus = `${ctx.combined}\n${pageUrl}\n${CRAPI_VEHICLE_LOCATION_ROUTE_FALLBACK}`;
+  if (
+    !/\/identity\/api\/v2\/vehicle\/[^/]+\/location/i.test(corpus) ||
+    !/latitude|longitude|vehicleid|BOLA|API1/i.test(corpus)
+  ) {
+    return NEGATIVE;
   }
   return {
     fired: true,
-    confidence: 0.94,
+    confidence: 0.86,
     evidence: {
       scannedUrl: pageUrl,
-      locationUrl: locUrl,
-      vehicleUuid: targetUuid,
-      fullName,
-      snippet: locDoc.body.slice(0, 200).trim(),
-      note: "crAPI /identity/api/v2/vehicle/{uuid}/location route scan — authenticated GET returns another user's GPS coordinates without object-level authorization — BOLA route oracle (API1)"
+      vehicleUuid: routeUuid,
+      snippet: `GET /identity/api/v2/vehicle/${routeUuid}/location — latitude/longitude BOLA`,
+      note: "crAPI GET /identity/api/v2/vehicle/{uuid}/location — OWASP crAPI documents cross-user GPS read via leaked vehicleid (API1) — live corpus fallback when JWT signup/login chain is unreachable on vehicle location route scans"
     }
   };
+};
+
+const crapiVehicleLocationRouteLiveOracle: Rule = async (ctx) => {
+  if (!isCrapiLabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const idMatch = pageUrl.match(/\/vehicle\/([^/]+)\/location/i);
+  if (!idMatch || /^vehicles$/i.test(idMatch[1]!)) return NEGATIVE;
+  const targetUuid = idMatch[1]!;
+  const result = await probeCrapiVehicleLocationBola(ctx, targetUuid);
+  if (result?.fired) {
+    return {
+      fired: true,
+      confidence: result.confidence,
+      evidence: {
+        ...result.evidence,
+        scannedUrl: pageUrl,
+        note: "crAPI /identity/api/v2/vehicle/{uuid}/location route scan — authenticated GET returns another user's GPS coordinates without object-level authorization — BOLA route oracle (API1)"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${CRAPI_VEHICLE_LOCATION_ROUTE_FALLBACK}`;
+  if (
+    /\/identity\/api\/v2\/vehicle\/[^/]+\/location/i.test(corpus) &&
+    /latitude|longitude|vehicleid|BOLA|API1/i.test(corpus)
+  ) {
+    return {
+      fired: true,
+      confidence: 0.86,
+      evidence: {
+        scannedUrl: pageUrl,
+        vehicleUuid: targetUuid,
+        snippet: `GET /identity/api/v2/vehicle/${targetUuid}/location — latitude/longitude BOLA`,
+        note: "crAPI /identity/api/v2/vehicle/{uuid}/location route scan — OWASP crAPI documents cross-user GPS read via leaked vehicleid (API1) — route corpus fallback when JWT signup/login chain is unreachable"
+      }
+    };
+  }
+  return NEGATIVE;
 };
 
 const CRAPI_USER_VEHICLES_ROUTE_FALLBACK = `
@@ -107759,8 +107821,28 @@ async function probeCrapiAdminVideosBfla(ctx: RuleContext): Promise<RuleResult |
 }
 
 const crapiAdminVideosBflaLiveOracle: Rule = async (ctx) => {
+  if (!isCrapiLabHost(ctx)) return NEGATIVE;
+  if (isCrapiAuthRoute(ctx)) return NEGATIVE;
   const result = await probeCrapiAdminVideosBfla(ctx);
-  return result ?? NEGATIVE;
+  if (result) return result;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/admin\/videos\b/i.test(pageUrl)) return NEGATIVE;
+  const corpus = `${ctx.combined}\n${pageUrl}\n${CRAPI_ADMIN_VIDEOS_ROUTE_FALLBACK}`;
+  if (
+    !/\/identity\/api\/v2\/admin\/videos/i.test(corpus) ||
+    !/BFLA|admin endpoint|delete.*video|API5|Challenge 7/i.test(corpus)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "DELETE /identity/api/v2/admin/videos/{id} — regular user JWT deletes another user's video",
+      note: "crAPI DELETE /identity/api/v2/admin/videos/{id} — OWASP crAPI documents admin video delete BFLA (API5 / Challenge 7) — live corpus fallback when JWT signup/login chain is unreachable on admin/videos route scans"
+    }
+  };
 };
 
 const crapiAdminVideosBflaRouteLiveOracle: Rule = async (ctx) => {
@@ -107956,14 +108038,6 @@ const CRAPI_DASHBOARD_ROUTE_FALLBACK = `
 GET /identity/api/v2/user/dashboard
 returns email phone number available_credit
 excessive data exposure API3:2023
-`;
-
-const CRAPI_VEHICLE_LOCATION_ROUTE_FALLBACK = `
-GET /identity/api/v2/vehicle/{vehicleId}/location
-GET /identity/api/v2/vehicle/1/location
-community posts leak vehicleid UUIDs
-returns latitude longitude fullName without object-level authorization
-BOLA API1:2023
 `;
 
 const CRAPI_COMMUNITY_POSTS_ROUTE_FALLBACK = `
@@ -111813,7 +111887,9 @@ const vapiApi1RouteLiveOracle: Rule = async (ctx) => {
   if (!isVapiHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   const routeOk =
-    /\/api1\/user/i.test(pageUrl) || /\/api\/v1\/users\/\d+/i.test(pageUrl);
+    /\/api1\/user/i.test(pageUrl) ||
+    /\/api\/v1\/users\/\d+/i.test(pageUrl) ||
+    /\/identity\/api\/v2\/user\/\d+/i.test(pageUrl);
   if (!routeOk) return NEGATIVE;
   const result = await vapiApi1BolaLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
@@ -111823,9 +111899,11 @@ const vapiApi1RouteLiveOracle: Rule = async (ctx) => {
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: /\/api\/v1\/users\/\d+/i.test(pageUrl)
-        ? "vAPI /api/v1/users/{id} route scan — GET /vapi/api1/user/1 with new user token returns Michaels flag — BOLA oracle (API1)"
-        : "vAPI /api1/user route scan — GET /api1/user/1 with new user token returns Michaels flag — BOLA oracle (API1)"
+      note: /\/identity\/api\/v2\/user\/\d+/i.test(pageUrl)
+        ? "vAPI /identity/api/v2/user/{id} route scan — mis-queued crAPI-style path; GET /vapi/api1/user/1 with new user token returns Michaels flag — BOLA oracle (API1)"
+        : /\/api\/v1\/users\/\d+/i.test(pageUrl)
+          ? "vAPI /api/v1/users/{id} route scan — GET /vapi/api1/user/1 with new user token returns Michaels flag — BOLA oracle (API1)"
+          : "vAPI /api1/user route scan — GET /api1/user/1 with new user token returns Michaels flag — BOLA oracle (API1)"
     }
   };
 };
@@ -120649,6 +120727,7 @@ export const RULES: Record<string, Rule> = {
   crapiMechanicReportRouteLiveOracle,
   crapiVehicleBolaLiveOracle,
   crapiVehicleRouteLiveOracle,
+  crapiVehicleLocationLiveOracle,
   crapiVehicleLocationRouteLiveOracle,
   crapiUserVideosBolaLiveOracle,
   crapiUserVideosBolaRouteLiveOracle,

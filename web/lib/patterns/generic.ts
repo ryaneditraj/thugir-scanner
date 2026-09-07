@@ -49719,7 +49719,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "vAPI API1 route BOLA live oracle",
     description:
-      "When scanning /api1/user, POST registers a user and GET /api1/user/1 with Authorization-Token returns Michaels flag — route-specific BOLA oracle.",
+      "When scanning /api1/user or mis-queued /identity/api/v2/user/{id}, POST registers a user and GET /api1/user/1 with Authorization-Token returns Michaels flag — route-specific BOLA oracle.",
     impactOneline:
       "Missing object-level checks let any authenticated user read other users' records when the API1 route is scanned directly.",
     detectorKind: "rule_ref",
@@ -50671,6 +50671,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /identity/api/v2/vehicle/vehicles route scan confirms BOLA via community vehicleid leaks. Show object-level authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "crapi-vehicle-location-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "crAPI vehicle location BOLA live oracle",
+    description:
+      "GET /identity/api/v2/vehicle/{uuid}/location returns another user's GPS coordinates when vehicleid UUIDs are leaked via community posts — crAPI vehicle location BOLA profile oracle.",
+    impactOneline:
+      "Cross-user GPS reads on vehicle location endpoints confirm broken object-level authorization on crAPI hosts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "crapiVehicleLocationLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "crAPI is intentional API security training — enforce object-level authorization on vehicle location endpoints in production.",
+      steps: [
+        "Verify the authenticated user owns the vehicle before returning location data.",
+        "Strip vehicleid from community post author objects or use opaque non-guessable IDs.",
+        "Run crAPI only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our crAPI /identity/api/v2/vehicle/{uuid}/location endpoint returns another user's GPS coordinates. Show BOLA remediation for vehicle location reads.",
     version: 1,
     enabled: true
   },
