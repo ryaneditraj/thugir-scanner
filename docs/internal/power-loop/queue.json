@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-07T06:18:00.000Z",
+  "updated_at": "2026-09-07T07:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://crapi.lab.pentest-forge.com/workshop/api/mechanic/mechanic_report?report_id=1",
+      "source": "PentestForge crAPI — Challenge 2 mechanic report BOLA oracle GET /workshop/api/mechanic/mechanic_report (OWASP crAPI challenges.md)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://crapi.lab.pentest-forge.com/workshop/api/merchant/contact_mechanic",
+      "source": "PentestForge crAPI — Challenge 8 SSRF oracle POST /workshop/api/merchant/contact_mechanic (mechanic_api internal fetch)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://crapi.lab.pentest-forge.com/identity/api/v2/user/videos/1",
+      "source": "PentestForge crAPI — Challenge 5/10 video mass-assignment + conversion_params oracle PUT /identity/api/v2/user/videos/{id}",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vampi.lab.pentest-forge.com/books/v1/1",
+      "source": "PentestForge VAmPI — BOLA oracle GET /books/v1/{id} (eric-ceccarelli/VAmPI README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvga.lab.pentest-forge.com/graphql",
+      "source": "PentestForge DVGA — GraphQL introspection/injection oracle endpoint (dosolihah/DVGA README)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://vulnlab.dev/results/",
       "source": "sampsonc/vulnlab.dev — scanner benchmark results table comparing Nuclei/Semgrep hit-miss per lab (scoreboard gap 05 UTC)",

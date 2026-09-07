@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-07T06:27:06.122Z",
+  "updated_at": "2026-09-07T07:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,25 +15,25 @@
       ]
     }
   },
-  "total_sites_scanned": 2754,
-  "total_findings": 27159,
+  "total_sites_scanned": 2758,
+  "total_findings": 27268,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1970,
-  "discovery_findings": 23086,
-  "improvements_shipped": 1167,
-  "last_run": "2026-09-07T06:27:06.122Z",
+  "discovery_urls_added": 1975,
+  "discovery_findings": 23143,
+  "improvements_shipped": 1545,
+  "last_run": "2026-09-07T07:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "06",
+    "hour_utc": "07",
     "benchmark": {
-      "oracle_url": "https://juice-shop.demo.escape.tech",
-      "oracle_findings": 54,
+      "oracle_url": "https://juice-shop.herokuapp.com",
+      "oracle_findings": 52,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 608,
-      "live_oracles": 40,
+      "probes_run": 599,
+      "live_oracles": 39,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -49,30 +49,35 @@
           ]
         }
       },
-      "note": "6/6 via escape.tech fallback (Heroku+staging 600s timeouts); 54 findings, gap=[]; secret-resend present"
+      "note": "Stable 6/6 on primary Heroku (52 findings, 39 live oracles); secret-resend present via bridge"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 11,
-      "findings": 251,
-      "focus": "power-scan queue drain (vulnlab/ssrf/wrongsecrets) + parallel engine duck-store/brokencrystals oracle fixes",
-      "improvements_shipped_this_run": 3
+      "urls_scanned": 3,
+      "urls_errored": 5,
+      "findings": 57,
+      "focus": "PentestForge crAPI/VAmPI/DVGA route oracles (unreachable) + WrongSecrets challenge-38/39/23 drain",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.demo.escape.tech: benchmark recall 6/6 (54 findings; gap=[])",
-      "wrongsecrets challenge-35/36/37/43: 19 findings each (MCP + database oracles)",
-      "ssrf.vulnlab.dev/metadata-azure: 18 findings (IMDS SSRF oracle)",
-      "brokencrystals.com/api/fetch + duck-store coupons/openapi: engine corpus fallback oracles (+3 shipped)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, 39 live oracles; gap=[])",
+      "wrongsecrets.herokuapp.com/challenge/challenge-38: 19 findings — challenge-38-git-notes-route-live-oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-39: 19 findings — challenge route oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-23: 19 findings — challenge route oracle"
     ],
     "learning_gaps": [
-      "juice-shop.herokuapp.com + staging timed out at 600s — cold-start oracle degradation",
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "duck-store testimonials/admin/auth oracle routes queued at tail (not drained this batch)",
+      "lab.pentest-forge.com crAPI/VAmPI/DVGA routes unreachable from cloud agent (DNS/connectivity)",
+      "duck-store testimonials/admin/auth/totp oracles still queued at tail",
       "wrongsecrets challenge-63/67 + duck-store vulnerabilities still queued"
     ]
   },
   "discovery_highlights": {
+    "juice-shop.herokuapp.com": 52,
+    "wrongsecrets.herokuapp.com/challenge/challenge-38": 19,
+    "wrongsecrets.herokuapp.com/challenge/challenge-39": 19,
+    "wrongsecrets.herokuapp.com/challenge/challenge-23": 19,
     "juice-shop.demo.escape.tech": 54,
     "brokencrystals.com/api/fetch": 86,
     "wrongsecrets.herokuapp.com/challenge/challenge-43": 19,
