@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-07T20:06:00.000Z",
+  "updated_at": "2026-09-07T21:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://owaspbased-lessons.vercel.app/lesson/improper-output",
+      "source": "OWASP GenAI Security Lab — LLM05 improper output handling lesson (web search 21 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owaspbased-lessons.vercel.app/lesson/system-prompt-leakage",
+      "source": "OWASP GenAI Security Lab — LLM07 system prompt leakage lesson (web search 21 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owaspbased-lessons.vercel.app/lesson/supply-chain",
+      "source": "OWASP GenAI Security Lab — LLM03 supply chain vulnerabilities lesson (web search 21 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owaspbased-lessons.vercel.app/lesson/excessive-agency",
+      "source": "OWASP GenAI Security Lab — LLM06 excessive agency lesson (web search 21 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owaspbased-lessons.vercel.app/lesson/unbounded-consumption",
+      "source": "OWASP GenAI Security Lab — LLM10 unbounded consumption lesson (web search 21 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://vaultapp-omega.vercel.app/api/account/export",
       "source": "MRMcyber/vaultapp — API-key impersonation via GET /api/account/export (20 UTC discovery gap)",
