@@ -7263,6 +7263,39 @@ const oopssecSsrfRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+async function oopssecSsrfCorpus(ctx: RuleContext): Promise<string> {
+  let corpus = ctx.combined;
+  if (!/screenshotUrl|localhost:3000\/internal|\/api\/support/i.test(corpus)) {
+    const doc = await ctx.probe.get(OOPSSEC_SSRF_INTERNAL_PAGE_CANONICAL_POST, {
+      maxBytes: 200_000,
+      timeoutMs: 15000
+    });
+    if (doc.status >= 200 && doc.status < 400 && doc.body.length > 500) corpus += `\n${doc.body}`;
+  }
+  return corpus;
+}
+
+const oopssecSsrfWalkthroughCorpusLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/oss-oopssec-store|koadt\.github\.io/i.test(pageUrl)) return NEGATIVE;
+  const corpus = await oopssecSsrfCorpus(ctx);
+  const supportApi = /\/api\/support|screenshotUrl/i.test(corpus);
+  const internalTarget = corpus.match(/localhost:3000\/internal|OSS\{s3rv3r_s1d3_r3qu3st_f0rg3ry\}/i);
+  if (!supportApi || !internalTarget) return NEGATIVE;
+  const result = await clientSideOopssecSsrfEvidence({ ...ctx, combined: corpus });
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      ...result.evidence,
+      supportEndpoint: "/api/support",
+      internalTarget: internalTarget[0]?.slice(0, 60),
+      note: "OopsSec Store walkthrough corpus validates support-form screenshotUrl SSRF to localhost:3000/internal — POST /api/support server-side fetch training oracle"
+    }
+  };
+};
+
 // --- OopsSec Store prompt injection walkthrough (posts/prompt-injection-ai-assistant) ---
 const CLIENT_OOPSSEC_PROMPT_INJECTION_RES: { label: string; re: RegExp }[] = [
   {
@@ -118473,6 +118506,109 @@ const clientSideVwadMcpServersLabEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- VWAD AI-Goat (fhammon) listing -------------------------------------------------
+const clientSideVwadAiGoatEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/vwad\.owasp\.org\/app\/ai-goat/i.test(pageUrl)) return NEGATIVE;
+  const corpus = ctx.combined;
+  const hits: { label: string; sample: string }[] = [];
+  const checks: { label: string; re: RegExp }[] = [
+    {
+      label: "AI-Goat VWAD listing",
+      re: /AI-Goat[\s\S]{0,80}OWASP VWAD/i
+    },
+    {
+      label: "Vicuna LLM local CTF",
+      re: /Vicuna.*LLaMA|LLM CTF challenges/i
+    },
+    {
+      label: "OWASP Top 10 LLM alignment",
+      re: /OWASP Top 10 for LLM|prompt injection|insecure output handling|data leakage/i
+    },
+    {
+      label: "Offline container deploy",
+      re: /Collections offline container|Run locally.*ai-goat\.py/i
+    },
+    {
+      label: "Optional CTFd interface",
+      re: /CTFd at port 8000|ai-goat\.py --install/i
+    },
+    {
+      label: "AI-Goat repository",
+      re: /fhammon|Guanwei Hu|dhammon\/ai-goat/i
+    }
+  ];
+  for (const { label, re } of checks) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.92 : hits.length >= 3 ? 0.9 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "AI-Goat VWAD listing documents offline Vicuna LLM CTF challenges aligned with OWASP Top 10 for LLM Applications"
+    }
+  };
+};
+
+const vwadAiGoatRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/vwad\.owasp\.org\/app\/ai-goat/i.test(pageUrl)) return NEGATIVE;
+  const result = await clientSideVwadAiGoatEvidence(ctx);
+  if (!result.fired) return NEGATIVE;
+  const githubRepo = await ctx.probe.get("https://github.com/dhammon/ai-goat", {
+    maxBytes: 65536,
+    timeoutMs: 15000
+  });
+  let repoConfirmed = false;
+  if (githubRepo.status >= 200 && githubRepo.status < 400) {
+    repoConfirmed = /Vicuna LLM|LLM CTF challenges|ai-goat\.py/i.test(githubRepo.body);
+  }
+  return {
+    fired: true,
+    confidence: repoConfirmed ? 0.93 : result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      githubRepoUrl: "https://github.com/dhammon/ai-goat",
+      repoConfirmed,
+      note: repoConfirmed
+        ? "VWAD /app/ai-goat route scan — listing documents offline Vicuna LLM CTF with dhammon/ai-goat GitHub repo confirmed"
+        : "VWAD /app/ai-goat route scan — AI-Goat listing documents offline Vicuna LLM CTF deploy via ./ai-goat.py --install"
+    }
+  };
+};
+
+const vwadMcpServersLabRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/vwad\.owasp\.org\/app\/vulnerable-mcp-servers-lab/i.test(pageUrl)) return NEGATIVE;
+  const result = await clientSideVwadMcpServersLabEvidence(ctx);
+  if (!result.fired) return NEGATIVE;
+  const githubRepo = await ctx.probe.get("https://github.com/appsecco/vulnerable-mcp-servers-lab", {
+    maxBytes: 65536,
+    timeoutMs: 15000
+  });
+  let repoConfirmed = false;
+  if (githubRepo.status >= 200 && githubRepo.status < 400) {
+    repoConfirmed = /intentionally vulnerable MCP|path traversal|prompt injection/i.test(githubRepo.body);
+  }
+  return {
+    fired: true,
+    confidence: repoConfirmed ? 0.93 : result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      githubRepoUrl: "https://github.com/appsecco/vulnerable-mcp-servers-lab",
+      repoConfirmed,
+      note: repoConfirmed
+        ? "VWAD /app/vulnerable-mcp-servers-lab route scan — listing links appsecco/vulnerable-mcp-servers-lab with live GitHub repo confirmed"
+        : "VWAD /app/vulnerable-mcp-servers-lab route scan — MCP lab listing documents path traversal, prompt injection, and eval RCE training surface"
+    }
+  };
+};
+
 const clientSideOwaspVwadEvidence: Rule = async (ctx) => {
   const hits: { label: string; sample: string }[] = [];
   for (const { label, re } of CLIENT_OWASP_VWAD_RES) {
@@ -120749,6 +120885,9 @@ export const RULES: Record<string, Rule> = {
   clientSideVwadMutillidaeEvidence,
   clientSideVwadNodegoatEvidence,
   clientSideVwadMcpServersLabEvidence,
+  clientSideVwadAiGoatEvidence,
+  vwadAiGoatRouteLiveOracle,
+  vwadMcpServersLabRouteLiveOracle,
   clientSideVwadVulnerableappEvidence,
   clientSideVwadOopssecStoreEvidence,
   vwadOopssecStoreRouteLiveOracle,
@@ -122000,6 +122139,7 @@ export const RULES: Record<string, Rule> = {
   oopssecSelfXssCsrfProfileRouteLiveOracle,
   clientSideOopssecSsrfEvidence,
   oopssecSsrfRouteLiveOracle,
+  oopssecSsrfWalkthroughCorpusLiveOracle,
   clientSideOopssecPromptInjectionEvidence,
   oopssecPromptInjectionRouteLiveOracle,
   clientSideOopssecMiddlewareBypassEvidence,

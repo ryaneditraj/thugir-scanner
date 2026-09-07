@@ -57381,6 +57381,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "oopssec-ssrf-walkthrough-corpus-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "OopsSec Store SSRF support-form walkthrough corpus live oracle",
+    description:
+      "OopsSec Store walkthrough corpus validates support-form screenshotUrl SSRF to localhost:3000/internal via POST /api/support — live walkthrough validation oracle.",
+    impactOneline:
+      "Walkthrough corpus documents server-side fetch of user-supplied screenshotUrl bypassing /internal redirect restrictions.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "oopssecSsrfWalkthroughCorpusLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block SSRF to internal hosts on server-side URL preview endpoints.",
+      steps: [
+        "Deny localhost and link-local destinations before fetch().",
+        "Disable server-side URL rendering for unauthenticated support tickets.",
+        "Run OopsSec Store only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our walkthrough documents POST /api/support screenshotUrl SSRF to /internal. Show outbound fetch allowlisting remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-oopssec-prompt-injection-evidence",
     platform: "generic",
     category: "Prompt injection",
@@ -65541,6 +65567,84 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our Vulnerable MCP Servers Lab is listed in OWASP VWAD. Show how to isolate MCP training servers from production agent infrastructure.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-vwad-ai-goat-evidence",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "medium",
+    title: "OWASP VWAD AI-Goat LLM CTF lab disclosed",
+    description:
+      "OWASP VWAD AI-Goat listing documents offline Vicuna LLM CTF challenges aligned with OWASP Top 10 for LLM Applications — prompt injection, insecure output handling, and data leakage training.",
+    impactOneline:
+      "Public VWAD AI-Goat catalog exposes offline-deployable LLM security CTF scope with optional CTFd interface.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideVwadAiGoatEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "AI-Goat is intentional LLM training — isolate lab instances from production agent fleets.",
+      steps: [
+        "Deploy AI-Goat only on isolated networks with no production credentials.",
+        "Require authentication before exposing LLM challenge endpoints publicly.",
+        "Monitor VWAD-linked AI-Goat instances for unauthenticated scanner abuse."
+      ]
+    },
+    fixPrompt:
+      "Our AI-Goat instance is listed in OWASP VWAD. Show how to isolate LLM security CTF labs from production agents.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vwad-ai-goat-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "medium",
+    title: "OWASP VWAD AI-Goat route live oracle",
+    description:
+      "When scanning vwad.owasp.org/app/ai-goat/, the VWAD listing documents offline Vicuna LLM CTF challenges with dhammon/ai-goat GitHub repo — route-specific AI security training oracle.",
+    impactOneline:
+      "VWAD AI-Goat listing exposes offline container deploy scope and Vicuna LLM CTF challenge catalog.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vwadAiGoatRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "AI-Goat is intentional training — limit public disclosure of LLM exploit catalog on VWAD-linked hosts.",
+      steps: [
+        "Gate AI-Goat challenge details behind authenticated lab enrollment.",
+        "Run AI-Goat only on isolated training infrastructure.",
+        "Do not expose LLM challenge endpoints on public-facing hosts."
+      ]
+    },
+    fixPrompt:
+      "Our VWAD AI-Goat listing documents a vulnerable Vicuna LLM CTF. Show route-specific training-platform access control.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vwad-mcp-servers-lab-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP VWAD Vulnerable MCP Servers Lab route live oracle",
+    description:
+      "When scanning vwad.owasp.org/app/vulnerable-mcp-servers-lab/, the VWAD listing documents intentionally vulnerable MCP servers with appsecco/vulnerable-mcp-servers-lab GitHub repo — route-specific agentic AI training oracle.",
+    impactOneline:
+      "VWAD MCP lab listing exposes path traversal, prompt injection, eval RCE, and typosquatting training surface with live GitHub repo confirmation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vwadMcpServersLabRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Vulnerable MCP Servers Lab is intentional training — limit public disclosure of MCP exploit catalog on VWAD-linked hosts.",
+      steps: [
+        "Gate MCP lab challenge details behind authenticated lab enrollment.",
+        "Run MCP security labs only on isolated training infrastructure.",
+        "Do not expose MCP tool endpoints on public-facing hosts."
+      ]
+    },
+    fixPrompt:
+      "Our VWAD Vulnerable MCP Servers Lab listing documents intentionally vulnerable MCP servers. Show route-specific training-platform access control.",
     version: 1,
     enabled: true
   },

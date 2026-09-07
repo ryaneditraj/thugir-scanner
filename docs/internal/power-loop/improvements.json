@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:vwad.owasp.org",
+      "slug": "vwad-ai-goat-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET vwad.owasp.org/app/ai-goat/ documents Vicuna LLM CTF + ./ai-goat.py --install; GitHub dhammon/ai-goat repo confirmed; vwad.owasp.org/app/ai-goat/ findings 5→7 (+client-side-vwad-ai-goat-evidence +vwad-ai-goat-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vwad.owasp.org",
+      "slug": "vwad-mcp-servers-lab-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET vwad.owasp.org/app/vulnerable-mcp-servers-lab/ documents path traversal/prompt injection/eval RCE MCP lab; GitHub appsecco/vulnerable-mcp-servers-lab repo confirmed; findings 6→7 (+vwad-mcp-servers-lab-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io/oss-oopssec-store",
+      "slug": "oopssec-ssrf-walkthrough-corpus-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: walkthrough corpus validates POST /api/support screenshotUrl SSRF to localhost:3000/internal + OSS{s3rv3r_s1d3_r3qu3st_f0rg3ry} flag; koadt.github.io/.../ssrf-internal-page-access findings 9→10 (+oopssec-ssrf-walkthrough-corpus-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:owasp-finbot-ctf.org",
       "slug": "finbot-vendor-session-bootstrap-csrf-fix",
       "status": "shipped",
