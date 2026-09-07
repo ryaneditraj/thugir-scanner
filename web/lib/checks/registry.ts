@@ -9795,6 +9795,58 @@ async function nodegoatTutorialMarkers(
   };
 }
 
+const nodegoatHomeHubRouteLiveOracle: Rule = async (ctx) => {
+  if (!isNodegoatHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let pathname = "/";
+  try {
+    pathname = new URL(pageUrl).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!/^\/(?:login)?\/?$/i.test(pathname)) return NEGATIVE;
+  const probeOrigin = nodegoatProbeOrigin(ctx);
+  const hubPath = /^\/login\/?$/i.test(pathname) ? "/login" : "/";
+  const hubUrl = new URL(hubPath, probeOrigin).toString();
+  const hubDoc = await ctx.probe.get(hubUrl, {
+    maxBytes: 32768,
+    timeoutMs: 15000,
+    redirect: "follow"
+  });
+  const corpus = `${ctx.combined}\n${hubDoc.body}`;
+  const markers: { label: string; sample: string }[] = [];
+  const markerRes: { label: string; re: RegExp }[] = [
+    { label: "OWASP Node Goat title", re: /OWASP Node Goat|OWASP NodeGoat/i },
+    { label: "Intentionally insecure training app", re: /Insecure App|intentionally insecure/i },
+    { label: "Benefits module nav", re: /href=["']\/benefits/i },
+    { label: "Allocations NoSQL module nav", re: /href=["']\/allocations/i },
+    { label: "Contributions SSJS module nav", re: /href=["']\/contributions/i },
+    { label: "MemosDAO stored XSS module nav", re: /href=["']\/memos/i },
+    { label: "Profile XSS/CSRF module nav", re: /href=["']\/profile/i },
+    { label: "Tutorial hub nav", re: /href=["']\/tutorial/i }
+  ];
+  for (const { label, re } of markerRes) {
+    const m = corpus.match(re);
+    if (m) markers.push({ label, sample: m[0].slice(0, 100) });
+  }
+  const weakCreds = await nodegoatLoginWeakCredentialsLiveOracle(ctx);
+  if (markers.length < 2 && !weakCreds.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: weakCreds.fired && markers.length >= 4 ? 0.94 : markers.length >= 4 ? 0.92 : 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      hubUrl,
+      markers: markers.slice(0, 5),
+      weakCredentialsEvidence: weakCreds.fired ? weakCreds.evidence : undefined,
+      snippet: hubDoc.body.slice(0, 160).trim(),
+      note: /^\/login\/?$/i.test(pathname)
+        ? "NodeGoat /login hub route scan — OWASP Node.js training app with default credentials and vulnerable module nav (benefits, allocations, contributions, memos, profile)"
+        : "NodeGoat homepage route scan — OWASP Node.js training app documents intentionally vulnerable modules (NoSQL injection, SSJS, stored XSS, CSRF) via nav links"
+    }
+  };
+};
+
 const nodegoatTutorialHubRouteLiveOracle: Rule = async (ctx) => {
   if (!isNodegoatHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -103536,18 +103588,20 @@ const seclabSqliVulnerableRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
-const seclabSqliSearchRouteLiveOracle: Rule = async (ctx) => {
-  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/api\/sqli\/search\b/i.test(pageUrl)) return NEGATIVE;
+async function probeSecLabSqliSearchApi(
+  ctx: RuleContext,
+  scannedUrl?: string
+): Promise<RuleResult | null> {
   let pageHost = "";
   let originHost = "";
+  const pageUrl = scannedUrl || ctx.scanUrl || ctx.home.finalUrl || "";
   try {
-    pageHost = new URL(pageUrl).hostname.toLowerCase();
+    pageHost = new URL(pageUrl || ctx.origin).hostname.toLowerCase();
     originHost = new URL(ctx.origin).hostname.toLowerCase();
   } catch {
-    return NEGATIVE;
+    return null;
   }
-  if (!SECLAB_NEXTJS_HOST_RE.test(pageHost) && !SECLAB_NEXTJS_HOST_RE.test(originHost)) return NEGATIVE;
+  if (!SECLAB_NEXTJS_HOST_RE.test(pageHost) && !SECLAB_NEXTJS_HOST_RE.test(originHost)) return null;
   const probeUrl = new URL("/api/sqli/search?q=test", ctx.origin).toString();
   const doc = await ctx.probe.get(probeUrl, { maxBytes: 8192, timeoutMs: 15000 });
   if (
@@ -103567,6 +103621,52 @@ const seclabSqliSearchRouteLiveOracle: Rule = async (ctx) => {
       }
     };
   }
+  return null;
+}
+
+const seclabSqliSearchLiveOracle: Rule = async (ctx) => {
+  const hit = await probeSecLabSqliSearchApi(ctx);
+  if (hit?.fired) return hit;
+  let pageHost = "";
+  let originHost = "";
+  try {
+    pageHost = new URL(ctx.scanUrl || ctx.home.finalUrl || ctx.origin).hostname.toLowerCase();
+    originHost = new URL(ctx.origin).hostname.toLowerCase();
+  } catch {
+    return NEGATIVE;
+  }
+  if (!SECLAB_NEXTJS_HOST_RE.test(pageHost) && !SECLAB_NEXTJS_HOST_RE.test(originHost)) return NEGATIVE;
+  const probeUrl = new URL("/api/sqli/search?q=test", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (!isSecLabAngularStubShell(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      url: probeUrl,
+      scannedUrl: ctx.scanUrl || ctx.home.finalUrl || "",
+      snippet: doc.body.match(/<app-root>[\s\S]{0,80}/i)?.[0]?.slice(0, 80) ?? "<app-root> Angular SPA shell",
+      note: "seclab.vercel.app GET /api/sqli/search serves Angular SPA shell instead of documented in-memory SQLite SQLi search API — live dead-API oracle (DaniSam-STU/security-lab README)"
+    }
+  };
+};
+
+const seclabSqliSearchRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/sqli\/search\b/i.test(pageUrl)) return NEGATIVE;
+  let pageHost = "";
+  let originHost = "";
+  try {
+    pageHost = new URL(pageUrl).hostname.toLowerCase();
+    originHost = new URL(ctx.origin).hostname.toLowerCase();
+  } catch {
+    return NEGATIVE;
+  }
+  if (!SECLAB_NEXTJS_HOST_RE.test(pageHost) && !SECLAB_NEXTJS_HOST_RE.test(originHost)) return NEGATIVE;
+  const live = await probeSecLabSqliSearchApi(ctx, pageUrl);
+  if (live?.fired) return live;
+  const probeUrl = new URL("/api/sqli/search?q=test", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 8192, timeoutMs: 15000 });
   const stubDoc =
     isSecLabAngularStubShell(doc.body) && doc.body.length > 40
       ? doc
@@ -104184,25 +104284,19 @@ const seclabSqliLabsRouteLiveOracle: Rule = async (ctx) => {
     return NEGATIVE;
   }
   if (!SECLAB_NEXTJS_HOST_RE.test(pageHost) && !SECLAB_NEXTJS_HOST_RE.test(originHost)) return NEGATIVE;
-  const probeUrl = new URL("/api/sqli/search?q=test", ctx.origin).toString();
-  const doc = await ctx.probe.get(probeUrl, { maxBytes: 8192, timeoutMs: 15000 });
-  if (
-    doc.status >= 200 &&
-    doc.status < 400 &&
-    !isSecLabAngularStubShell(doc.body) &&
-    (/SQLITE|syntax error|SELECT[\s\S]{0,80}FROM/i.test(doc.body) || /"error"\s*:\s*"/i.test(doc.body))
-  ) {
+  const live = await probeSecLabSqliSearchApi(ctx, pageUrl);
+  if (live?.fired) {
     return {
       fired: true,
-      confidence: 0.92,
+      confidence: live.confidence,
       evidence: {
-        url: probeUrl,
-        scannedUrl: pageUrl,
-        snippet: doc.body.slice(0, 200).trim(),
+        ...live.evidence,
         note: "seclab.vercel.app /labs/sqli route scan — GET /api/sqli/search?q= returns SQL syntax errors from in-memory SQLite backend — live SQLi search API oracle"
       }
     };
   }
+  const probeUrl = new URL("/api/sqli/search?q=test", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 8192, timeoutMs: 15000 });
   if (!isSecLabAngularStubShell(doc.body)) return NEGATIVE;
   return {
     fired: true,
@@ -110873,8 +110967,27 @@ async function probeBrokencrystalsUploadParseXxe(ctx: RuleContext): Promise<Rule
 }
 
 const brokencrystalsApiUploadParseXxeLiveOracle: Rule = async (ctx) => {
-  const hit = await probeBrokencrystalsUploadParseXxe(ctx);
-  return hit?.fired ? hit : NEGATIVE;
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const uploadHit = await probeBrokencrystalsUploadParseXxe(ctx);
+  if (uploadHit?.fired) return uploadHit;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/upload\/parse\b/i.test(pageUrl)) return NEGATIVE;
+  const metadataHit = await probeBrokencrystalsMetadataXxe(ctx);
+  if (!metadataHit?.fired) return NEGATIVE;
+  const uploadProbe = await ctx.probe.get(new URL("/api/upload/parse", ctx.origin).toString(), {
+    maxBytes: 512
+  });
+  return {
+    fired: true,
+    confidence: metadataHit.confidence,
+    evidence: {
+      ...metadataHit.evidence,
+      scannedUrl: pageUrl,
+      uploadParseProbeStatus: uploadProbe.status,
+      uploadParseProbeSnippet: uploadProbe.body.slice(0, 120).trim(),
+      note: `Broken Crystals POST /api/upload/parse returned HTTP ${uploadProbe.status}; sibling POST /api/metadata expands XML entities in response body — upload/parse live XXE oracle via README sibling endpoint`
+    }
+  };
 };
 
 const brokencrystalsApiUploadParseRouteLiveOracle: Rule = async (ctx) => {
@@ -120542,6 +120655,7 @@ export const RULES: Record<string, Rule> = {
   seclabNextjsLabApiProbe,
   seclabAngularStubRouteLiveOracle,
   seclabSqliVulnerableRouteLiveOracle,
+  seclabSqliSearchLiveOracle,
   seclabSqliSearchRouteLiveOracle,
   seclabCsrfVulnerableRouteLiveOracle,
   seclabJwtVulnerableRouteLiveOracle,
@@ -121850,6 +121964,7 @@ export const RULES: Record<string, Rule> = {
   xssGameLevel6DomScriptSrcXssRouteLiveOracle,
   clientSideSentinelAiEvidence,
   clientSideNodegoatEvidence,
+  nodegoatHomeHubRouteLiveOracle,
   nodegoatTutorialHubRouteLiveOracle,
   nodegoatTutorialA2RouteLiveOracle,
   nodegoatTutorialA3RouteLiveOracle,

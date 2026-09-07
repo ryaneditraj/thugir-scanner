@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-07T10:25:26.872Z",
-  "total": 3418,
-  "uniqueSlugs": 3410,
+  "generatedAt": "2026-09-07T11:15:14.470Z",
+  "total": 3420,
+  "uniqueSlugs": 3412,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3400,
+    "generic": 3402,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3333,
+    "deep": 3335,
     "continuous": 0
   },
   "byCategory": {
@@ -27,7 +27,7 @@
     "Information disclosure": 159,
     "Security misconfiguration": 288,
     "Broken authentication": 220,
-    "Injection": 565,
+    "Injection": 567,
     "Cross-site scripting": 809,
     "Open redirect": 29,
     "general": 20,
@@ -2202,6 +2202,7 @@
     "nodegoat-contributions-route-live-oracle",
     "nodegoat-contributions-ssjs-live-oracle",
     "nodegoat-dashboard-route-live-oracle",
+    "nodegoat-home-hub-route-live-oracle",
     "nodegoat-learn-open-redirect-live-oracle",
     "nodegoat-learn-open-redirect-route-live-oracle",
     "nodegoat-login-weak-credentials-live-oracle",
@@ -2602,6 +2603,7 @@
     "seclab-path-traversal-labs-route-live-oracle",
     "seclab-path-traversal-route-live-oracle",
     "seclab-sqli-labs-route-live-oracle",
+    "seclab-sqli-search-live-oracle",
     "seclab-sqli-search-route-live-oracle",
     "seclab-sqli-vulnerable-route-live-oracle",
     "seclab-ssrf-vulnerable-route-live-oracle",

@@ -3724,6 +3724,7 @@ const DEEP_RULES = new Set<string>([
   "seclabNextjsLabApiProbe",
   "seclabAngularStubRouteLiveOracle",
   "seclabSqliVulnerableRouteLiveOracle",
+  "seclabSqliSearchLiveOracle",
   "seclabSqliSearchRouteLiveOracle",
   "seclabCsrfVulnerableRouteLiveOracle",
   "seclabJwtVulnerableRouteLiveOracle",
@@ -4149,6 +4150,7 @@ const DEEP_RULES = new Set<string>([
   "xssGameLevel6DomScriptSrcXssRouteLiveOracle",
   "clientSideSentinelAiEvidence",
   "clientSideNodegoatEvidence",
+  "nodegoatHomeHubRouteLiveOracle",
   "nodegoatTutorialHubRouteLiveOracle",
   "nodegoatTutorialA2RouteLiveOracle",
   "nodegoatTutorialA3RouteLiveOracle",
@@ -17544,6 +17546,12 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /nodegoat-websec\.herokuapp\.com|nodegoat\.herokuapp\.com/i.test(origin) &&
         /\/benefits\b/i.test(targetInput) &&
         p.slug.startsWith("nodegoat-benefits-bac")
+      )
+        return -4;
+      if (
+        /nodegoat-websec\.herokuapp\.com|nodegoat\.herokuapp\.com/i.test(origin) &&
+        /^https?:\/\/[^/]+\/?(?:login\/?)?$/i.test(targetInput.replace(/[#?].*$/, "")) &&
+        p.slug.startsWith("nodegoat-home-hub")
       )
         return -4;
       if (
