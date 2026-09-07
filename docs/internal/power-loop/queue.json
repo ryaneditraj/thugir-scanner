@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-07T10:30:00.000Z",
+  "updated_at": "2026-09-07T11:15:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://vaultapp-omega.vercel.app/api/users/1",
+      "source": "MRMcyber/vaultapp — sequential IDOR oracle GET /api/users/{id} (11 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vaultapp-omega.vercel.app/api/documents/1",
+      "source": "MRMcyber/vaultapp — private document IDOR oracle GET /api/documents/{id} (11 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owasp-finbot-ctf.org/vendor",
+      "source": "OWASP FinBot CTF — agentic AI vendor portal prompt-injection / policy bypass (11 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/cart/items",
+      "source": "Escape Duck Store — negative quantity / business-logic cart oracle POST /api/v1/cart/items (11 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://qa.brokencrystals.com/api/render",
+      "source": "NeuraLegion/brokencrystals QA — SSTI template injection oracle POST /api/render (11 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://ssrf.vulnlab.dev/metadata-azure/",
       "source": "sampsonc/vulnlab.dev — mock Azure IMDS SSRF lab (11 UTC priority queue)",
