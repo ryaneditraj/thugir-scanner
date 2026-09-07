@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-07T00:09:57.240Z",
-  "total": 3408,
-  "uniqueSlugs": 3400,
+  "generatedAt": "2026-09-07T01:05:20.997Z",
+  "total": 3413,
+  "uniqueSlugs": 3405,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3390,
+    "generic": 3395,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3323,
+    "deep": 3328,
     "continuous": 0
   },
   "byCategory": {
@@ -26,8 +26,8 @@
     "Information exposure": 1,
     "Information disclosure": 155,
     "Security misconfiguration": 288,
-    "Broken authentication": 218,
-    "Injection": 562,
+    "Broken authentication": 220,
+    "Injection": 565,
     "Cross-site scripting": 809,
     "Open redirect": 29,
     "general": 20,
@@ -2084,6 +2084,10 @@
     "javaseclab-horizontal-idor-route-live-oracle",
     "javaseclab-jdbc-sqli-vul1-live-oracle",
     "javaseclab-jdbc-sqli-vul1-route-live-oracle",
+    "javaseclab-jwt-vul-live-oracle",
+    "javaseclab-jwt-vul-route-live-oracle",
+    "javaseclab-rce-vul-live-oracle",
+    "javaseclab-rce-vul-route-live-oracle",
     "javaseclab-reflected-xss-live-oracle",
     "javaseclab-reflected-xss-route-live-oracle",
     "javaseclab-spel-vul-live-oracle",
@@ -2750,6 +2754,7 @@
     "testasp-showforum-sqli-route-live-oracle",
     "testaspnet-comments-exposure-live-oracle",
     "testaspnet-comments-exposure-route-live-oracle",
+    "testfire-apply-login-sqli-route-live-oracle",
     "testfire-bank-login-sqli-route-live-oracle",
     "testfire-feedback-reflected-xss-live-oracle",
     "testfire-feedback-reflected-xss-route-live-oracle",

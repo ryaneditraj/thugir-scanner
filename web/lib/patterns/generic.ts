@@ -45069,6 +45069,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "testfire-apply-login-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Altoro Mutual /bank/apply.aspx SQL injection route oracle",
+    description:
+      "When scanning /bank/apply.aspx, POST /doLogin with admin' OR '1'='1 redirects to /bank/main.jsp — route-specific SQL injection authentication bypass confirmation oracle.",
+    impactOneline:
+      "Route-specific confirmation that Altoro Mutual credit card application login is vulnerable to classic SQLi authentication bypass.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "testfireApplyLoginSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries for all authentication lookups — Altoro Mutual is intentional training software.",
+      steps: [
+        "Replace string-concatenated SQL in login handlers with prepared statements.",
+        "Return generic authentication failures without distinguishing SQL errors.",
+        "Run Altoro Mutual only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /bank/apply.aspx route scan confirms SQLi auth bypass via /doLogin. Show parameterized query remediation for JSP login handlers.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "euri-sec-csp-dynamic-script-live-oracle",
     platform: "generic",
     category: "Security misconfiguration",
@@ -82409,6 +82435,110 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /deserialize/fastjson route is a JavaSecLab Fastjson deserialization training module. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "javaseclab-jwt-vul-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "JavaSecLab JWT vul live oracle",
+    description:
+      "GET /loginconfront/credential/generate-jwt on JavaSecLab signs JWT tokens with a weak static HMAC secret — JWT claim forgery training oracle.",
+    impactOneline:
+      "Weak JWT signing secrets allow attackers to forge role claims and bypass authentication.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "javaSecLabJwtVulLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use strong random JWT secrets and validate role claims server-side — JavaSecLab is intentional lab software.",
+      steps: [
+        "Replace static HMAC secrets with cryptographically random keys stored in a secrets manager.",
+        "Validate role and permission claims against server-side session state.",
+        "Run JavaSecLab only on isolated evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our JavaSecLab /loginconfront/credential endpoint signs JWT with a weak secret. Show JWT hardening remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "javaseclab-jwt-vul-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "JavaSecLab /jwt/vul route live oracle",
+    description:
+      "When scanning /jwt/vul on whgojp.top, live JWT generation probe or curated wiki corpus confirms JavaSecLab JWT credential security training module.",
+    impactOneline:
+      "Route-specific confirmation that JavaSecLab documents JWT claim forgery with weak HMAC secrets.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "javaSecLabJwtVulRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use strong random JWT secrets on credential routes.",
+      steps: [
+        "Replace static HMAC secrets with cryptographically random keys.",
+        "Validate role claims against server-side session state.",
+        "Run JavaSecLab only on isolated evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /jwt/vul route is a JavaSecLab JWT credential security training module. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "javaseclab-rce-vul-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "JavaSecLab RCE vul live oracle",
+    description:
+      "GET /command/vul1?payload= on JavaSecLab executes shell commands via ProcessBuilder — RCE command injection training oracle.",
+    impactOneline:
+      "Command injection via ProcessBuilder enables remote code execution on the application server.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "javaSecLabRceVulLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass user input to ProcessBuilder or Runtime.exec — JavaSecLab is intentional lab software.",
+      steps: [
+        "Use allow-listed command actions instead of arbitrary shell execution.",
+        "Avoid sh -c with user-controlled payloads.",
+        "Run JavaSecLab only on isolated evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our JavaSecLab /command/vul1 endpoint executes user-controlled commands. Show command injection remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "javaseclab-rce-vul-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "JavaSecLab /rce/vul route live oracle",
+    description:
+      "When scanning /rce/vul on whgojp.top, live ProcessBuilder probe or curated wiki corpus confirms JavaSecLab RCE command execution training module.",
+    impactOneline:
+      "Route-specific confirmation that JavaSecLab documents ProcessBuilder and Runtime.exec command injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "javaSecLabRceVulRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use allow-listed command actions on RCE training routes.",
+      steps: [
+        "Avoid ProcessBuilder with user-controlled shell metacharacters.",
+        "Use fixed command mappings with validated parameters.",
+        "Run JavaSecLab only on isolated evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /rce/vul route is a JavaSecLab RCE command execution training module. Show route-specific remediation.",
     version: 1,
     enabled: true
   },

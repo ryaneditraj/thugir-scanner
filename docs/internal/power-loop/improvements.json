@@ -9245,6 +9245,24 @@
       "slug": "seclab-xss-csrf-labs-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: POST /api/xss-vulnerable and /api/csrf-vulnerable return HTTP 405; /labs/xss and /labs/csrf route scans fall back to Angular <app-root> stub and fire seclabXssLabsRouteLiveOracle + seclabCsrfLabsRouteLiveOracle; seclab.vercel.app/labs/xss findings 6→7 (+seclab-xss-labs-route-live-oracle), /labs/csrf 6→7 (+seclab-csrf-labs-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:whgojp.top",
+      "slug": "javaseclab-jwt-vul-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /loginconfront/credential/generate-jwt?username=admin&role=admin signs JWT with weak HMAC secret (wiki corpus fallback when auth-gated); whgojp.top/jwt/vul findings 11→12 (+javaseclab-jwt-vul-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:whgojp.top",
+      "slug": "javaseclab-rce-vul-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /command/vul1?payload=whoami ProcessBuilder command injection (wiki corpus fallback when auth-gated); whgojp.top/rce/vul findings 11→12 (+javaseclab-rce-vul-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:demo.testfire.net",
+      "slug": "testfire-apply-login-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /doLogin admin' OR '1'='1 from /bank/apply.aspx redirects to /bank/main.jsp with AltoroAccounts session; demo.testfire.net/bank/apply.aspx findings 13→12 (+testfire-apply-login-sqli-route-live-oracle alongside testfire-login-sqli-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
     }
   ]
 }

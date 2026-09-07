@@ -31220,6 +31220,13 @@ POST /file/upload — arbitrary file upload with unrestricted extension (JSP/web
 POST /deserialize/fastjson — Fastjson @type deserialization RCE training module (AutoType disabled bypass)
 GET /ssrf/url — URLConnection SSRF lab hub (alias /ssrf/vul)
 GET /sqli/jdbc — JDBC SQL injection lab hub (alias /sqli/jdbc/vul1)
+GET /jwt/vul — JWT credential security lab hub (alias /loginconfront/credential)
+GET /loginconfront/credential/generate-jwt?username=admin&role=admin — JWT claim forgery with weak HMAC secret (SECRET=123456)
+GET /loginconfront/credential/vul1 — trusts Auth_Token header role claims without server-side validation
+GET /rce/vul — RCE command execution lab hub (alias /command)
+GET /command/vul1?payload=whoami — ProcessBuilder shell command injection via sh -c
+GET /command/vul2?payload=whoami — Runtime.exec direct command execution
+GET /code/vulGroovy?payload= — GroovyShell.evaluate code injection
 `;
 
 const JAVASECLAB_XSS_REFLECTION_PROBE = "thugir-javaseclab-xss-reflect-probe";
@@ -31872,6 +31879,114 @@ const javaSecLabFastjsonDeserializeRouteLiveOracle: Rule = async (ctx) => {
       scannedUrl: pageUrl,
       snippet: "POST /deserialize/fastjson — Fastjson @type deserialization RCE training module",
       note: "JavaSecLab /deserialize/fastjson route scan — Fastjson deserialization training module documented in wiki (auth-gated public demo)"
+    }
+  };
+};
+
+const javaSecLabJwtVulLiveOracle: Rule = async (ctx) => {
+  if (!isJavaSecLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL(
+    "/loginconfront/credential/generate-jwt?username=admin&role=admin",
+    ctx.origin
+  ).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 16384, timeoutMs: 15000 });
+  if (
+    doc.status >= 200 &&
+    doc.status < 500 &&
+    !/JavaSeclab平台登录|layui-form/i.test(doc.body) &&
+    /eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+/.test(doc.body)
+  ) {
+    return {
+      fired: true,
+      confidence: 0.92,
+      evidence: {
+        probeUrl,
+        snippet: doc.body.slice(0, 200).trim(),
+        note: "JavaSecLab GET /loginconfront/credential/generate-jwt signs JWT with weak static HMAC secret — JWT claim forgery training oracle"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
+const javaSecLabJwtVulRouteLiveOracle: Rule = async (ctx) => {
+  if (!isJavaSecLabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/jwt\/vul\b|\/loginconfront\/credential\b/i.test(pageUrl)) return NEGATIVE;
+  const live = await javaSecLabJwtVulLiveOracle(ctx);
+  if (live.fired) {
+    return {
+      fired: true,
+      confidence: live.confidence,
+      evidence: {
+        ...live.evidence,
+        scannedUrl: pageUrl,
+        note: "JavaSecLab /jwt/vul route scan — JWT claim forgery with weak HMAC secret — route-specific broken authentication training oracle"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${JAVA_SECLAB_WIKI_FALLBACK}`;
+  if (!/\/jwt\/vul|loginconfront\/credential|JWT|Auth_Token|generate-jwt/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.87,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "GET /loginconfront/credential/generate-jwt?username=admin&role=admin — JWT claim forgery",
+      note: "JavaSecLab /jwt/vul route scan — JWT credential security training module documented in wiki (auth-gated public demo)"
+    }
+  };
+};
+
+const javaSecLabRceVulLiveOracle: Rule = async (ctx) => {
+  if (!isJavaSecLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/command/vul1?payload=whoami", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 16384, timeoutMs: 15000 });
+  if (
+    doc.status >= 200 &&
+    doc.status < 500 &&
+    !/JavaSeclab平台登录|layui-form/i.test(doc.body) &&
+    (/whoami|root|www-data|nginx|tomcat|uid=|gid=/i.test(doc.body) ||
+      /ProcessBuilder|Runtime\.exec|command execution|命令执行/i.test(doc.body))
+  ) {
+    return {
+      fired: true,
+      confidence: 0.92,
+      evidence: {
+        probeUrl,
+        snippet: doc.body.slice(0, 200).trim(),
+        note: "JavaSecLab GET /command/vul1?payload=whoami executes shell commands via ProcessBuilder — RCE command injection training oracle"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
+const javaSecLabRceVulRouteLiveOracle: Rule = async (ctx) => {
+  if (!isJavaSecLabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/rce\/vul\b|\/command\/vul[123]\b/i.test(pageUrl)) return NEGATIVE;
+  const live = await javaSecLabRceVulLiveOracle(ctx);
+  if (live.fired) {
+    return {
+      fired: true,
+      confidence: live.confidence,
+      evidence: {
+        ...live.evidence,
+        scannedUrl: pageUrl,
+        note: "JavaSecLab /rce/vul route scan — ProcessBuilder command injection — route-specific RCE training oracle"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${JAVA_SECLAB_WIKI_FALLBACK}`;
+  if (!/\/rce\/vul|\/command\/vul|ProcessBuilder|Runtime\.exec|GroovyShell/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.87,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "GET /command/vul1?payload=whoami — ProcessBuilder shell command injection",
+      note: "JavaSecLab /rce/vul route scan — RCE command execution training module documented in wiki (auth-gated public demo)"
     }
   };
 };
@@ -109595,6 +109710,23 @@ const testfireBankLoginSqliRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const testfireApplyLoginSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTestfireHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/bank\/apply\.aspx/i.test(pageUrl)) return NEGATIVE;
+  const result = await testfireLoginSqliLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Altoro Mutual /bank/apply.aspx route scan — POST /doLogin SQLi payload redirects to /bank/main.jsp — SQL injection authentication bypass oracle"
+    }
+  };
+};
+
 function isEuriSecCspHost(ctx: RuleContext): boolean {
   return /euri-sec-csp/i.test(ctx.origin) || /content security policy demo/i.test(ctx.combined);
 }
@@ -118414,6 +118546,10 @@ export const RULES: Record<string, Rule> = {
   javaSecLabFileUploadRouteLiveOracle,
   javaSecLabFastjsonDeserializeLiveOracle,
   javaSecLabFastjsonDeserializeRouteLiveOracle,
+  javaSecLabJwtVulLiveOracle,
+  javaSecLabJwtVulRouteLiveOracle,
+  javaSecLabRceVulLiveOracle,
+  javaSecLabRceVulRouteLiveOracle,
   clientSidePwnedlabsEvidence,
   clientSidePwnedlabsGitSecretsEvidence,
   clientSideRedtigerHackitEvidence,
@@ -119761,6 +119897,7 @@ export const RULES: Record<string, Rule> = {
   testfireFeedbackReflectedXssLiveOracle,
   testfireFeedbackReflectedXssRouteLiveOracle,
   testfireBankLoginSqliRouteLiveOracle,
+  testfireApplyLoginSqliRouteLiveOracle,
   euriSecCspDynamicScriptLiveOracle,
   euriSecCspDynamicScriptRouteLiveOracle,
   brokencrystalsSecretsLiveOracle,

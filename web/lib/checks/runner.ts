@@ -2387,6 +2387,10 @@ const DEEP_RULES = new Set<string>([
   "javaSecLabFileUploadRouteLiveOracle",
   "javaSecLabFastjsonDeserializeLiveOracle",
   "javaSecLabFastjsonDeserializeRouteLiveOracle",
+  "javaSecLabJwtVulLiveOracle",
+  "javaSecLabJwtVulRouteLiveOracle",
+  "javaSecLabRceVulLiveOracle",
+  "javaSecLabRceVulRouteLiveOracle",
   "javaSecLabDruidBasicJsonRouteLiveOracle",
   "clientSidePwnedlabsEvidence",
   "clientSidePwnedlabsGitSecretsEvidence",
@@ -3870,6 +3874,7 @@ const DEEP_RULES = new Set<string>([
   "testfireFeedbackReflectedXssLiveOracle",
   "testfireFeedbackReflectedXssRouteLiveOracle",
   "testfireBankLoginSqliRouteLiveOracle",
+  "testfireApplyLoginSqliRouteLiveOracle",
   "euriSecCspDynamicScriptLiveOracle",
   "euriSecCspDynamicScriptRouteLiveOracle",
   "brokencrystalsSecretsLiveOracle",
@@ -17070,6 +17075,24 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /whgojp\.top/i.test(origin) &&
         /\/other\/xff\/vul2\b/i.test(targetInput) &&
         p.slug.startsWith("javaseclab-xff-vul2")
+      )
+        return -3;
+      if (
+        /whgojp\.top/i.test(origin) &&
+        /\/jwt\/vul\b/i.test(targetInput) &&
+        p.slug.startsWith("javaseclab-jwt-vul")
+      )
+        return -3;
+      if (
+        /whgojp\.top/i.test(origin) &&
+        /\/rce\/vul\b/i.test(targetInput) &&
+        p.slug.startsWith("javaseclab-rce-vul")
+      )
+        return -3;
+      if (
+        /testfire\.net/i.test(origin) &&
+        /\/bank\/apply\.aspx/i.test(targetInput) &&
+        p.slug.startsWith("testfire-apply-login-sqli")
       )
         return -3;
       if (
