@@ -9425,6 +9425,24 @@
       "slug": "crapi-vehicle-location-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: probeCrapiVehicleLocationBola shared probe + crapiVehicleLocationLiveOracle pattern/runner registration + live corpus fallback on /vehicle/{uuid}/location route scans; crapi.apisec.ai/identity/api/v2/vehicle/ee389276-4040-4960-8603-11c1c0560027/location findings 12→13 (+crapi-vehicle-location-live-oracle +route); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-home-hub-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: nodegoatHomeHubRouteLiveOracle matches / and /login hub paths with OWASP NodeGoat nav markers (benefits, allocations, contributions, memos, profile, tutorial) + weak-creds live probe; nodegoat-websec.herokuapp.com/ findings 16→17 (+nodegoat-home-hub-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:seclab.vercel.app",
+      "slug": "seclab-sqli-search-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: probeSecLabSqliSearchApi shared probe + seclabSqliSearchLiveOracle fires on live SQLite SQL errors or Angular SPA stub on GET /api/sqli/search?q=test; seclab.vercel.app/labs/sqli findings 7→8 (+seclab-sqli-search-live-oracle alongside route oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-upload-parse-live-metadata-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: brokencrystalsApiUploadParseXxeLiveOracle falls back to sibling POST /api/metadata XXE when POST /api/upload/parse returns HTTP 404; brokencrystals.com/api/upload/parse findings gain +brokencrystals-api-upload-parse-xxe-live-oracle (alongside route + metadata oracles); benchmark juice-shop 53 findings 6/6 maintained"
     }
   ]
 }

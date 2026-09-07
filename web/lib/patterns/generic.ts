@@ -43041,6 +43041,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "seclab-sqli-search-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "SecLab SQLi search live oracle",
+    description:
+      "GET /api/sqli/search?q= on seclab.vercel.app returns SQL syntax errors from the in-memory SQLite backend — live SQLi search API oracle independent of route pathname.",
+    impactOneline:
+      "Live probes against /api/sqli/search confirm error-based SQLi training endpoints on SecLab hosts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "seclabSqliSearchLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Deploy the SecLab SQLi search API or remove advertised dead routes.",
+      steps: [
+        "Ship DaniSam-STU/security-lab /api/sqli/search on production.",
+        "Use parameterized queries for all SQLite search endpoints.",
+        "Gate unreleased lab routes behind auth until content ships."
+      ]
+    },
+    fixPrompt:
+      "Our seclab.vercel.app GET /api/sqli/search exposes live SQL syntax errors. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "seclab-sqli-labs-route-live-oracle",
     platform: "generic",
     category: "Injection",
@@ -44503,7 +44529,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "Broken Crystals /api/upload/parse XXE live oracle",
     description:
-      "POST /api/upload/parse accepts multipart XML file uploads and expands entities in the response — Broken Crystals upload XXE oracle.",
+      "POST /api/upload/parse accepts multipart XML file uploads and expands entities in the response — when upload/parse returns 404, falls back to sibling POST /api/metadata XXE confirmation — Broken Crystals upload XXE oracle.",
     impactOneline:
       "XML file upload parsers with entity expansion let attackers read local files and reach internal services.",
     detectorKind: "rule_ref",
@@ -55866,6 +55892,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our NodeGoat POST /login accepts default admin/Admin_123 credentials. Show login hardening and credential rotation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "nodegoat-home-hub-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "NodeGoat homepage hub route live oracle",
+    description:
+      "When scanning nodegoat-websec.herokuapp.com / or /login, the OWASP Node.js training app documents vulnerable modules (benefits NoSQL, allocations IDOR, contributions SSJS, memos stored XSS, profile CSRF) via authenticated nav links — homepage hub route oracle.",
+    impactOneline:
+      "Homepage route scans on NodeGoat need hub-level documentation of intentionally vulnerable training modules.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "nodegoatHomeHubRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "NodeGoat is intentional OWASP training — run only on isolated lab hosts.",
+      steps: [
+        "Do not deploy NodeGoat to production environments.",
+        "Rotate default training credentials before any public exposure.",
+        "Use NodeGoat only for security education on localhost or isolated demos."
+      ]
+    },
+    fixPrompt:
+      "Our NodeGoat homepage route scan confirms an intentionally vulnerable OWASP training app with multiple exploitable modules. Show how to isolate training apps from production.",
     version: 1,
     enabled: true
   },
