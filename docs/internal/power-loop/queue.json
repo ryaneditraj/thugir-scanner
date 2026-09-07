@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-07T14:25:00.000Z",
+  "updated_at": "2026-09-07T15:10:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://pwnshop.ctfsecurity.com/download",
+      "source": "ctfsec/pwnshop — path traversal file download lab PWN-038 (15 UTC discovery; queue gap from 14 UTC run)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/forgot-password",
+      "source": "ctfsec/pwnshop — username enumeration via forgot-password + chat/init PWN-037 (15 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://preview.owasp-juice.shop",
+      "source": "OWASP Juice Shop preview deploy — alternate benchmark oracle host (benchmarks.json fallback_urls; 15 UTC discovery)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://platform.sixhackacademy.com/",
+      "source": "SixHack Academy platform — free browser OWASP Top 10 CTF labs (sixhackacademy.com; 15 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/prompt-injection",
+      "source": "AI Security Platform — LLM prompt-injection challenge catalog (15 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://vault-notes-frontend-gules.vercel.app/",
       "source": "Raghavtripathii/vault-notes-vapt — 5-vuln notes app with SQLi/IDOR/XSS/plaintext/exposed JWT (GitHub homepage; 14 UTC discovery)",
