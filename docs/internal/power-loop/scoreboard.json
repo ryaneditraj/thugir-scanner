@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-07T22:18:00.000Z",
+  "updated_at": "2026-09-07T23:07:56.189Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,25 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2763,
-  "total_findings": 27076,
+  "total_sites_scanned": 2772,
+  "total_findings": 27422,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1979,
-  "discovery_findings": 22898,
+  "discovery_urls_added": 1983,
+  "discovery_findings": 23192,
   "improvements_shipped": 1593,
-  "last_run": "2026-09-07T22:18:00.000Z",
+  "last_run": "2026-09-07T23:07:56.189Z",
   "last_run_summary": {
-    "hour_utc": "22",
+    "hour_utc": "23",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 53,
+      "oracle_findings": 52,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 599,
-      "live_oracles": 39,
+      "probes_run": 597,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -49,42 +48,39 @@
           ]
         }
       },
-      "note": "Primary Heroku stable 6/6 (53 findings; 39 live oracles). No category gaps."
+      "note": "Primary Heroku stable 6/6 (52 findings). No category gaps."
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 8,
+      "urls_added": 4,
       "urls_scanned": 8,
-      "findings": 45,
-      "focus": "22 UTC: VaultApp documents/notes/admin-delete route corpus fallbacks + OWASP GenAI LLM04/08/09 queue",
-      "improvements_shipped_this_run": 3
+      "findings": 294,
+      "focus": "23 UTC: Juice Shop basket BOLA + Broken Crystals SSRF/XPath + Pwnshop mail IDOR + queue backlog",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, 39 live oracles)",
-      "vaultapp-omega.vercel.app/api/documents/MTIz: 17 (+vaultapp-documents-idor-route-corpus-fallback)",
-      "vaultapp-omega.vercel.app/api/notes/9: 4 (+vaultapp-notes-idor-route-corpus-fallback)",
-      "vaultapp-omega.vercel.app/api/admin/users/295: 14 (admin-delete corpus fallback for checkpoint-blocked passes)",
-      "owaspbased-lessons.vercel.app/lesson/data-poisoning: 4 (+owasp-genai-data-poisoning-route-live-oracle)",
-      "owaspbased-lessons.vercel.app/lesson/vector-embedding: 5 (+owasp-genai-vector-embedding-route-live-oracle)",
-      "owaspbased-lessons.vercel.app/lesson/misinformation: 4 (+owasp-genai-misinformation-route-live-oracle)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings)",
+      "demo.owasp-juice.shop/rest/basket: 35 findings — basket BOLA route",
+      "brokencrystals.com/api/file/aws: 92 findings — SSRF oracle hub",
+      "brokencrystals.com/api/partners/partnerLogin: 76 findings — XPath injection route",
+      "pwnshop.ctfsecurity.com/mail/1: 50 findings — PWN-004 mail inbox IDOR",
+      "vaultapp-omega.vercel.app/api/documents/MTIz: 16 findings",
+      "vaultapp-omega.vercel.app/api/notes/9: 16 findings"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "vaultapp-omega Vercel checkpoint can still block live login probes — corpus fallbacks now cover documents, notes, and admin-delete routes",
-      "owaspbased-lessons LLM03 supply-chain thin pass (3 findings) — may need onboard session retry"
+      "crapi.lab.pentest-forge.com still unreachable from cloud agent (prior error)",
+      "brokencrystals high finding counts may include route-corpus fallbacks — verify live oracle hits vs generic bundle"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 53,
-    "vaultapp-omega.vercel.app/api/documents": 17,
-    "vaultapp-omega.vercel.app/api/admin/users/295": 14,
-    "vaultapp-omega.vercel.app/api/profile/update": 4,
-    "vaultapp-omega.vercel.app/api/users/profile": 15,
-    "vaultapp-omega.vercel.app/api/notes/9": 4,
-    "owaspbased-lessons.vercel.app/lesson/data-poisoning": 4,
-    "owaspbased-lessons.vercel.app/lesson/vector-embedding": 5,
-    "owaspbased-lessons.vercel.app/lesson/misinformation": 4,
-    "owaspbased-lessons.vercel.app/lesson/improper-output": 4,
+    "juice-shop.herokuapp.com": 52,
+    "brokencrystals.com/api/file/aws": 92,
+    "brokencrystals.com/api/partners/partnerLogin": 76,
+    "pwnshop.ctfsecurity.com/mail/1": 50,
+    "demo.owasp-juice.shop/rest/basket": 35,
+    "vaultapp-omega.vercel.app/api/documents/MTIz": 16,
+    "vaultapp-omega.vercel.app/api/notes/9": 16,
     "duck-store.escape.tech/api/v1/users/me/profile": 33
   }
 }

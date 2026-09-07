@@ -1,6 +1,26 @@
 {
-  "updated_at": "2026-09-07T22:10:00.000Z",
+  "updated_at": "2026-09-07T23:04:56.185Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://demo.owasp-juice.shop/rest/basket",
+      "source": "OWASP Juice Shop demo — basket BOLA route (23 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/file/aws",
+      "source": "NeuraLegion/brokencrystals — SSRF via /api/file/aws (web search 23 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/partners/partnerLogin",
+      "source": "NeuraLegion/brokencrystals — XPath injection partnerLogin (web search 23 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/mail/1",
+      "source": "ctfsec/pwnshop — PWN-004 mail inbox IDOR (web search 23 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://vaultapp-omega.vercel.app/api/documents/MTIz",
       "source": "MRMcyber/vaultapp — VULN 5 base64-encoded document IDOR (22 UTC discovery gap)",
