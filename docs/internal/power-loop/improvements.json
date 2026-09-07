@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:vaultapp-omega.vercel.app",
+      "slug": "vaultapp-admin-users-delete-probe-range-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: probeVaultappAdminUsersDelete uses vaultappVictimUserIds (omega DB IDs 100+) instead of stale 1-60 loop; route oracle matches /api/admin/users/:id and /delete; vaultapp-omega.vercel.app/api/admin/users/295 findings 3→14 (+vaultapp-admin-users-delete-live-oracle +vaultapp-admin-users-delete-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vaultapp-omega.vercel.app",
+      "slug": "vaultapp-profile-update-mass-assignment-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/profile/update with role:admin returns escalated role for authenticated player01; vaultapp-omega.vercel.app/api/profile/update findings 11→4 (+vaultapp-profile-update-mass-assignment-route-live-oracle +vaultapp-profile-update-mass-assignment-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vaultapp-omega.vercel.app",
+      "slug": "vaultapp-users-profile-uuid-idor-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /directory SSR __NEXT_DATA__ leaks employee UUIDs; GET /api/users/profile/{uuid} returns victim PII without ownership check; vaultapp-omega.vercel.app/api/users/profile/{uuid} findings 3→15 (+vaultapp-users-profile-uuid-idor-live-oracle +vaultapp-users-profile-uuid-idor-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:vulnforge.vercel.app",
       "slug": "vulnforge-spa-challenge-ssrf-route-live-oracle",
       "status": "shipped",

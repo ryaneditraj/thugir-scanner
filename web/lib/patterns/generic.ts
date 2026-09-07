@@ -76693,6 +76693,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vaultapp-profile-update-mass-assignment-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VaultApp profile-update mass-assignment live oracle",
+    description:
+      "POST /api/profile/update accepts privileged fields like role without allowlisting — VaultApp mass-assignment privilege escalation training oracle (VULN 4).",
+    impactOneline:
+      "Unrestricted profile update fields let authenticated users escalate to admin by setting role in the request body.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vaultappProfileUpdateMassAssignmentLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VaultApp is intentional IDOR training — allowlist profile update fields and reject role or balance mutations from users.",
+      steps: [
+        "Allowlist updatable profile fields (name, phone, address) and ignore role/balance.",
+        "Enforce server-side role changes only via admin workflows.",
+        "Run VaultApp only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "VaultApp POST /api/profile/update accepts role:admin from non-admin users. Show mass-assignment remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vaultapp-profile-update-mass-assignment-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VaultApp profile-update mass-assignment route live oracle",
+    description:
+      "When scanning /api/profile/update, POST accepts privileged fields like role without allowlisting — route-specific VaultApp mass-assignment oracle.",
+    impactOneline:
+      "Route scans on profile update endpoints should confirm missing field allowlisting on state-changing user attributes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vaultappProfileUpdateMassAssignmentRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VaultApp is intentional IDOR training — allowlist profile update fields and reject role or balance mutations from users.",
+      steps: [
+        "Allowlist updatable profile fields (name, phone, address) and ignore role/balance.",
+        "Enforce server-side role changes only via admin workflows.",
+        "Run VaultApp only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/profile/update route scan confirms mass-assignment role escalation. Show field allowlisting remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vaultapp-users-profile-uuid-idor-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VaultApp UUID profile IDOR live oracle",
+    description:
+      "GET /api/users/profile/{uuid} returns full user PII when UUIDs leak from /directory SSR — VaultApp UUID IDOR training oracle (VULN 6).",
+    impactOneline:
+      "UUID profile endpoints without ownership checks expose sensitive account data when identifiers leak from other pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vaultappUsersProfileUuidIdorLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VaultApp is intentional IDOR training — scope UUID profile lookups to the authenticated user and stop leaking UUIDs on /directory.",
+      steps: [
+        "Require profile.uuid === req.user.uuid before returning PII.",
+        "Remove UUID columns from directory pages visible to non-admin users.",
+        "Run VaultApp only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "VaultApp GET /api/users/profile/{uuid} returns other users' PII. Show UUID profile authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vaultapp-users-profile-uuid-idor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VaultApp UUID profile route IDOR live oracle",
+    description:
+      "When scanning /api/users/profile/:uuid, GET returns another user's PII without ownership check after UUID leaks from /directory — route-specific VaultApp UUID IDOR oracle.",
+    impactOneline:
+      "Route scans on UUID profile endpoints should confirm missing object-level authorization on hidden profile APIs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vaultappUsersProfileUuidIdorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VaultApp is intentional IDOR training — scope UUID profile lookups to the authenticated user and stop leaking UUIDs on /directory.",
+      steps: [
+        "Require profile.uuid === req.user.uuid before returning PII.",
+        "Remove UUID columns from directory pages visible to non-admin users.",
+        "Run VaultApp only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/users/profile/:uuid route scan confirms UUID IDOR without ownership check. Show remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vulnweb-comments-xss-route-live-oracle",
     platform: "generic",
     category: "Injection",
