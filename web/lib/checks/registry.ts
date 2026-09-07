@@ -92144,7 +92144,12 @@ const juiceShopBasketItemsBolaLiveOracle: Rule = async (ctx) => {
 const juiceShopBasketItemsBolaRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!JUICE_SHOP_HOST_RE.test(`${ctx.origin}\n${pageUrl}`)) return NEGATIVE;
-  if (!juiceShopApiOrRestRoute(pageUrl, "BasketItems\\b")) return NEGATIVE;
+  if (
+    !juiceShopApiOrRestRoute(pageUrl, "BasketItems\\b") &&
+    !/\/rest\/basket\/?(?:\?|$)/i.test(pageUrl)
+  ) {
+    return NEGATIVE;
+  }
   const result = await juiceShopBasketItemsBolaLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -92153,7 +92158,9 @@ const juiceShopBasketItemsBolaRouteLiveOracle: Rule = async (ctx) => {
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: "Juice Shop /api/BasketItems route scan — alg:none JWT lists basket items from multiple baskets — route-specific BOLA oracle"
+      note: /\/rest\/basket\/?(?:\?|$)/i.test(pageUrl)
+        ? "Juice Shop /rest/basket route scan — alg:none JWT lists basket items from multiple baskets via /api/BasketItems — route-specific BOLA oracle"
+        : "Juice Shop /api/BasketItems route scan — alg:none JWT lists basket items from multiple baskets — route-specific BOLA oracle"
     }
   };
 };
@@ -92768,7 +92775,7 @@ const juiceShopBasketIdorLiveOracle: Rule = async (ctx) => {
 const juiceShopBasketIdorRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!JUICE_SHOP_HOST_RE.test(`${ctx.origin}\n${pageUrl}`)) return NEGATIVE;
-  if (!/\/rest\/basket\/\d+/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/rest\/basket(?:\/\d+)?\/?(?:\?|$)/i.test(pageUrl)) return NEGATIVE;
   const result = await juiceShopBasketIdorLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -92777,7 +92784,9 @@ const juiceShopBasketIdorRouteLiveOracle: Rule = async (ctx) => {
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: "Juice Shop /rest/basket/:id route scan — alg:none JWT reads another user's basket — route-specific IDOR oracle"
+      note: /\/rest\/basket\/\d+/i.test(pageUrl)
+        ? "Juice Shop /rest/basket/:id route scan — alg:none JWT reads another user's basket — route-specific IDOR oracle"
+        : "Juice Shop /rest/basket route scan — alg:none JWT reads another user's basket — route-specific IDOR oracle"
     }
   };
 };
@@ -117507,7 +117516,8 @@ const VAULTAPP_LAB_CREDENTIALS = [
 function vaultappVictimUserIds(ctx: RuleContext, auth: VaultappAuth): number[] {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   const routeMatch = pageUrl.match(/\/api\/users\/(\d+)/i);
-  const routeId = routeMatch ? Number(routeMatch[1]) : null;
+  const adminRouteMatch = pageUrl.match(/\/api\/admin\/users\/(\d+)/i);
+  const routeId = routeMatch ? Number(routeMatch[1]) : adminRouteMatch ? Number(adminRouteMatch[1]) : null;
   const seeded = [100, 200, 250, 280, 290, 295, 298, 301];
   const range = Array.from({ length: 101 }, (_, i) => i + 100);
   const ids = [...(routeId && routeId > 0 ? [routeId] : []), ...seeded, ...range];
@@ -117908,6 +117918,7 @@ async function probeVaultappAdminUsersDelete(ctx: RuleContext): Promise<RuleResu
     if (id === auth.userId) continue;
     const userUrl = new URL(`/api/users/${id}`, apiOrigin).toString();
     const userDoc = await ctx.probe.get(userUrl, { headers, maxBytes: 2048, timeoutMs: 15000 });
+    if (vaultappCheckpointBlocked(userDoc.body)) continue;
     if (userDoc.status < 200 || userDoc.status >= 300) continue;
     try {
       const data = JSON.parse(userDoc.body) as { id?: number; username?: string };

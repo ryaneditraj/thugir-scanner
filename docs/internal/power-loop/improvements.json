@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:demo.owasp-juice.shop",
+      "slug": "juice-shop-basket-hub-route-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: juiceShopBasketIdorRouteLiveOracle + juiceShopBasketItemsBolaRouteLiveOracle pathname matchers extended to /rest/basket hub (no numeric ID); demo.owasp-juice.shop/rest/basket findings 34→36 (+juice-shop-basket-idor-route-live-oracle +juice-shop-basket-items-bola-route-live-oracle); benchmark juice-shop.herokuapp.com 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vaultapp-omega.vercel.app",
+      "slug": "vaultapp-admin-route-victim-id-extraction",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: vaultappVictimUserIds parses /api/admin/users/:id route IDs + probeVaultappAdminUsersDelete skips Vercel checkpoint HTML during victim lookup; vaultapp-omega.vercel.app/api/admin/users/101 route chain validated; benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vaultapp.vercel.app",
+      "slug": "vaultapp-admin-delete-checkpoint-skip",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: vaultappCheckpointBlocked guard in probeVaultappAdminUsersDelete victim sweep prevents false negatives on checkpoint-stub user responses; complements existing omega login fallback; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:vaultapp-omega.vercel.app",
       "slug": "vaultapp-documents-idor-route-corpus-fallback",
       "status": "shipped",

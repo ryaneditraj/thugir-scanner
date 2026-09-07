@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-07T23:07:56.189Z",
+  "updated_at": "2026-09-07T23:35:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,25 @@
       ]
     }
   },
-  "total_sites_scanned": 2772,
-  "total_findings": 27422,
+  "total_sites_scanned": 2777,
+  "total_findings": 27459,
   "critical_findings": 55,
   "teacher_delta_count": 0,
-  "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+  "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1983,
-  "discovery_findings": 23192,
-  "improvements_shipped": 1593,
-  "last_run": "2026-09-07T23:07:56.189Z",
+  "discovery_findings": 23229,
+  "improvements_shipped": 1596,
+  "last_run": "2026-09-07T23:35:00.000Z",
   "last_run_summary": {
     "hour_utc": "23",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 52,
+      "oracle_findings": 53,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
       "probes_run": 597,
+      "live_oracles": 40,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,39 +49,38 @@
           ]
         }
       },
-      "note": "Primary Heroku stable 6/6 (52 findings). No category gaps."
+      "note": "Primary Heroku stable 6/6 (53 findings; gap=[]; 40 live oracles incl secret-resend + iac-terraform-tls-key)"
     },
-    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 4,
-      "urls_scanned": 8,
-      "findings": 294,
-      "focus": "23 UTC: Juice Shop basket BOLA + Broken Crystals SSRF/XPath + Pwnshop mail IDOR + queue backlog",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 57,
+      "focus": "23 UTC follow-up: Juice Shop /rest/basket hub route oracles + vaultapp admin-route victim ID extraction",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings)",
-      "demo.owasp-juice.shop/rest/basket: 35 findings — basket BOLA route",
-      "brokencrystals.com/api/file/aws: 92 findings — SSRF oracle hub",
-      "brokencrystals.com/api/partners/partnerLogin: 76 findings — XPath injection route",
-      "pwnshop.ctfsecurity.com/mail/1: 50 findings — PWN-004 mail inbox IDOR",
-      "vaultapp-omega.vercel.app/api/documents/MTIz: 16 findings",
-      "vaultapp-omega.vercel.app/api/notes/9: 16 findings"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, gap=[])",
+      "demo.owasp-juice.shop/rest/basket: 36 (+juice-shop-basket-idor-route-live-oracle +juice-shop-basket-items-bola-route-live-oracle on hub path)",
+      "vaultapp-omega.vercel.app/api/admin/users/101: admin-delete route chain validated with admin-route victim ID extraction",
+      "brokencrystals.com/api/file/aws: 95 findings — 61 live oracles confirmed",
+      "pwnshop.ctfsecurity.com/vulnerabilities: 50 findings — index route oracle confirmed"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "crapi.lab.pentest-forge.com still unreachable from cloud agent (prior error)",
-      "brokencrystals high finding counts may include route-corpus fallbacks — verify live oracle hits vs generic bundle"
+      "crapi.lab.pentest-forge.com still unreachable from cloud agent",
+      "SixHack Academy per-challenge instances login-gated — platform route oracle covers catalog only"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 52,
-    "brokencrystals.com/api/file/aws": 92,
-    "brokencrystals.com/api/partners/partnerLogin": 76,
+    "demo.owasp-juice.shop/rest/basket": 36,
+    "juice-shop.herokuapp.com": 53,
+    "brokencrystals.com/api/file/aws": 95,
+    "brokencrystals.com/api/partners/partnerLogin": 75,
     "pwnshop.ctfsecurity.com/mail/1": 50,
-    "demo.owasp-juice.shop/rest/basket": 35,
+    "pwnshop.ctfsecurity.com/vulnerabilities": 50,
     "vaultapp-omega.vercel.app/api/documents/MTIz": 16,
     "vaultapp-omega.vercel.app/api/notes/9": 16,
-    "duck-store.escape.tech/api/v1/users/me/profile": 33
+    "platform.sixhackacademy.com": 5
   }
 }
