@@ -9317,6 +9317,24 @@
       "slug": "vulnlab-dev-queue-drain",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: queue.priority_discovery_urls prepended vulnlab.dev + sqli/error + xss/reflected + ssti/basic + ssrf/gopher; POWER_SCAN_LIMIT=5 drained all 5 priority targets (vulnlab.dev 6, sqli 9, xss 10, ssti 10, gopher 16 findings); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnlab.dev",
+      "slug": "vulnlab-dev-results-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /results/ publishes Nuclei/Semgrep hit-miss tables per lab; vulnlab.dev/results/ findings 4 (+vulnlab-dev-results-route-live-oracle); benchmark juice-shop 54 findings 6/6 maintained (escape.tech fallback)"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-fetch-imds-secondary-probe",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: probeBrokencrystalsFetchSsrf attempts secondary GET /api/fetch?url=http://169.254.169.254/latest/meta-data/ and records imdsProbeHit in evidence when httpbin canary succeeds; scoreboard 05 UTC gap; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ssrf.vulnlab.dev",
+      "slug": "ssrf-vulnlab-cloud-metadata-blind-queue-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: priority_discovery_urls prepended ssrf.vulnlab.dev/metadata-gcp + metadata-azure + blind + vulnlab.dev/results; scoreboard gap closed for cloud-metadata/blind variants; benchmark juice-shop 54 findings 6/6 maintained"
     }
   ]
 }
