@@ -1,79 +1,29 @@
 {
-  "updated_at": "2026-09-07T10:06:00.000Z",
+  "updated_at": "2026-09-07T10:30:00.000Z",
   "priority_discovery_urls": [
     {
-      "url": "https://nodegoat-websec.herokuapp.com/",
-      "source": "OWASP/NodeGoat README — public Heroku demo for NoSQL injection, XSS, CSRF (10 UTC discovery)",
+      "url": "https://ssrf.vulnlab.dev/metadata-azure/",
+      "source": "sampsonc/vulnlab.dev — mock Azure IMDS SSRF lab (11 UTC priority queue)",
       "auth": "public_demo"
     },
     {
-      "url": "https://seclab.vercel.app/labs/sqli",
-      "source": "DaniSam-STU/security-lab — interactive SQLi lab with live exploit UI (10 UTC discovery)",
+      "url": "https://ssrf.vulnlab.dev/blind/",
+      "source": "sampsonc/vulnlab.dev — blind SSRF lab (11 UTC priority queue)",
       "auth": "public_demo"
     },
     {
-      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/medium/level13.php",
-      "source": "webspoilt/vulnforge-academy — Level 13 SSRF challenge (GitHub README levels 13-15; 10 UTC discovery)",
+      "url": "https://brokencrystals.com/api/upload/parse",
+      "source": "NeuraLegion/brokencrystals README — XXE via XML file upload POST /api/upload/parse",
       "auth": "public_demo"
     },
     {
-      "url": "https://duck-store.escape.tech/api/v1/testimonials/1",
-      "source": "Escape Duck Store benchmarking blog — unauthenticated PUT /api/v1/testimonials/{id} BOLA oracle (10 UTC discovery)",
+      "url": "https://crapi2.apisec.ai/identity/api/v2/vehicle/ee389276-4040-4960-8603-11c1c0560027/location",
+      "source": "OWASP crAPI2 public demo — BOLA vehicle location oracle with demo UUID (10 UTC fix)",
       "auth": "public_demo"
     },
     {
-      "url": "https://duck-store.escape.tech/api/v1/admin/users",
-      "source": "Escape Duck Store OpenAPI — admin user enumeration BFLA oracle GET /api/v1/admin/users (10 UTC discovery)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-63",
-      "source": "OWASP WrongSecrets README — Heroku demo challenge 63 hardcoded AES key (scoreboard drain gap 08 UTC)",
-      "auth": "public_benchmark"
-    },
-    {
-      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-67",
-      "source": "OWASP WrongSecrets README — Heroku demo challenge 67 undeployed-challenge oracle (scoreboard drain gap 08 UTC)",
-      "auth": "public_benchmark"
-    },
-    {
-      "url": "https://duck-store.escape.tech/vulnerabilities",
-      "source": "Escape Duck Store blog — vulnerability index hub (scoreboard drain gap 08 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://duck-store.escape.tech/api/v1/uploads/import-from-url",
-      "source": "Escape Duck Store OpenAPI — authenticated import-from-url SSRF oracle (DB recovery corpus fallback gap 09 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://duck-store.escape.tech/api/v1/cart/items",
-      "source": "Escape Duck Store OpenAPI — cart negative-quantity route oracle path expansion (09 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://qa.brokencrystals.com/api/file/aws",
-      "source": "NeuraLegion/brokencrystals QA — AWS metadata SSRF oracle /api/file/aws (scoreboard gap: qa host not yet queued)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://dvga.tools.escape.tech/graphql",
-      "source": "dosolihah/DVGA Escape hosted demo — GraphQL introspection/injection oracle (VWAD online app)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://crapi.apisec.ai/identity/api/v2/admin/videos/1",
-      "source": "OWASP crAPI public demo — BFLA privilege-tier path substitution oracle DELETE /identity/api/v2/admin/videos/{id} (ASTF traceability live-confirmed)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://crapi2.apisec.ai/identity/api/v2/vehicle/1/location",
-      "source": "OWASP crAPI2 public demo — BOLA vehicle location oracle GET /identity/api/v2/vehicle/{id}/location (OWASPLA 2025 guide)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://vapi.apisec.ai/identity/api/v2/user/1",
-      "source": "roottusk/vAPI public demo — BOLA user profile oracle GET /identity/api/v2/user/{id} (APIsec hosted lab)",
+      "url": "http://vapi.apisec.ai/vapi/api2/user",
+      "source": "roottusk/vAPI public demo — API2 broken authentication oracle (HTTP canonical path)",
       "auth": "public_demo"
     },
     {

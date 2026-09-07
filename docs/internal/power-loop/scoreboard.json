@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-07T10:12:00.000Z",
+  "updated_at": "2026-09-07T10:30:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2782,
-  "total_findings": 27929,
+  "total_sites_scanned": 2787,
+  "total_findings": 27994,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1990,
-  "discovery_findings": 23673,
-  "improvements_shipped": 1554,
-  "last_run": "2026-09-07T10:12:00.000Z",
+  "discovery_urls_added": 1995,
+  "discovery_findings": 23738,
+  "improvements_shipped": 1557,
+  "last_run": "2026-09-07T10:30:00.000Z",
   "last_run_summary": {
     "hour_utc": "10",
     "benchmark": {
@@ -33,7 +33,7 @@
       "gap": [],
       "pages_crawled": 6,
       "probes_run": 597,
-      "live_oracles": 38,
+      "live_oracles": 39,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -49,44 +49,43 @@
           ]
         }
       },
-      "note": "Stable 6/6 on primary Heroku (53 findings, 38 live oracles); secret-resend + iac-terraform-tls-key present"
+      "note": "Stable 6/6 on primary Heroku (53 findings, 39 live oracles); secret-resend + iac-terraform-tls-key present"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 141,
-      "focus": "nodegoat + seclab SQLi + vulnforge L13 SSRF + duck-store testimonials/admin BOLA + wrongsecrets 63/67 + duck-store vulnerabilities hub",
-      "improvements_shipped_this_run": 0
+      "findings": 206,
+      "focus": "nodegoat + seclab SQLi + vulnforge L13 SSRF + duck-store testimonials/admin BOLA + vAPI identity-path route alias + crAPI admin-videos/vehicle-location live oracles",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, 38 live oracles; gap=[])",
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, 39 live oracles; gap=[])",
+      "vapi.apisec.ai/identity/api/v2/user/1: 16→17 (+vapi-api1-route-live-oracle identity-path alias)",
+      "crapi.apisec.ai/identity/api/v2/admin/videos/1: 12→13 (+crapi-admin-videos-bfla-live-oracle live corpus fallback)",
+      "crapi.apisec.ai/identity/api/v2/vehicle/ee389276-4040-4960-8603-11c1c0560027/location: 12→13 (+crapi-vehicle-location-live-oracle +route)",
       "nodegoat-websec.herokuapp.com/: 16 findings — nodegoat NoSQL IDOR, SSJS injection, stored XSS, CSRF live oracles",
-      "seclab.vercel.app/labs/sqli: 7 findings — seclab SQLi lab route oracle",
-      "vulnforge-academy.vercel.app/.../level13.php: 6 findings — vulnforge SSRF level route oracle",
-      "duck-store.escape.tech/api/v1/testimonials/1: 24 findings — unauth PUT BOLA oracle from Escape benchmarking blog",
-      "duck-store.escape.tech/api/v1/admin/users: 24 findings — admin user enumeration BFLA",
-      "wrongsecrets.herokuapp.com/challenge/challenge-63: 19 findings — hardcoded AES key route oracle",
-      "wrongsecrets.herokuapp.com/challenge/challenge-67: 18 findings — undeployed-challenge route oracle",
-      "duck-store.escape.tech/vulnerabilities: 27 findings — vulnerability hub route oracle"
+      "duck-store.escape.tech/api/v1/testimonials/1: 24 findings — unauth PUT BOLA oracle",
+      "duck-store.escape.tech/api/v1/admin/users: 24 findings — admin user enumeration BFLA"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "queue.json had merge conflict markers — resolved by merging both priority URL sets",
-      "duck-store import-from-url + cart/items still queued (48h skip not applicable; deprioritized behind 8-url limit)",
-      "lab.pentest-forge.com routes still unreachable from cloud agent"
+      "crapi2.apisec.ai intermittently unreachable (connection reset) — vehicle location live probe falls back to corpus on crapi.apisec.ai",
+      "lab.pentest-forge.com crAPI/VAmPI/DVGA routes skipped after first error via isRecentlyDeadDiscoveryHost"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 53,
+    "qa.brokencrystals.com/api/file/aws": 90,
+    "vapi.apisec.ai/identity/api/v2/user/1": 17,
+    "crapi.apisec.ai/identity/api/v2/admin/videos/1": 13,
+    "crapi.apisec.ai/identity/api/v2/vehicle/ee389276-4040-4960-8603-11c1c0560027/location": 13,
     "nodegoat-websec.herokuapp.com": 16,
     "duck-store.escape.tech/vulnerabilities": 27,
     "duck-store.escape.tech/api/v1/testimonials/1": 24,
     "duck-store.escape.tech/api/v1/admin/users": 24,
     "wrongsecrets.herokuapp.com/challenge/challenge-63": 19,
-    "wrongsecrets.herokuapp.com/challenge/challenge-67": 18,
-    "seclab.vercel.app/labs/sqli": 7,
-    "vulnforge-academy.vercel.app/backend/includes/levels/medium/level13.php": 6,
-    "qa.brokencrystals.com/api/file/aws": 90
+    "brokencrystals.com/api/fetch": 86,
+    "dvga.tools.escape.tech/graphql": 19
   }
 }

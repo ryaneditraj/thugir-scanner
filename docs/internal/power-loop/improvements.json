@@ -9407,6 +9407,24 @@
       "slug": "power-scan-dead-pentest-forge-host-skip",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: isRecentlyDeadDiscoveryHost skips *.lab.pentest-forge.com URLs after 24h discovery errors; POWER_SCAN_LIMIT=5 drained wrongsecrets challenge-63/67 + duck-store vulnerabilities/import-from-url/cart/items (112 findings) instead of blocking on unreachable crAPI/VAmPI/DVGA; benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vapi.apisec.ai",
+      "slug": "vapi-api1-identity-path-route-alias",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: vapiApi1RouteLiveOracle routeOk extended to /identity/api/v2/user/\\d+ for mis-queued crAPI-style paths on vapi.apisec.ai; https://vapi.apisec.ai/identity/api/v2/user/1 findings 16→17 (+vapi-api1-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:crapi.apisec.ai",
+      "slug": "crapi-admin-videos-bfla-live-corpus-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: crapiAdminVideosBflaLiveOracle adds CRAPI_ADMIN_VIDEOS_ROUTE_FALLBACK corpus when probeCrapiAdminVideosBfla JWT chain fails on /admin/videos route scans; crapi.apisec.ai/identity/api/v2/admin/videos/1 findings 12→13 (+crapi-admin-videos-bfla-live-oracle alongside route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:crapi.apisec.ai",
+      "slug": "crapi-vehicle-location-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: probeCrapiVehicleLocationBola shared probe + crapiVehicleLocationLiveOracle pattern/runner registration + live corpus fallback on /vehicle/{uuid}/location route scans; crapi.apisec.ai/identity/api/v2/vehicle/ee389276-4040-4960-8603-11c1c0560027/location findings 12→13 (+crapi-vehicle-location-live-oracle +route); benchmark juice-shop 53 findings 6/6 maintained"
     }
   ]
 }
