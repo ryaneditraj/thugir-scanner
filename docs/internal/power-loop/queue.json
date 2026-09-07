@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-07T16:05:00.000Z",
+  "updated_at": "2026-09-07T17:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://ucu-owasp-ctf.vercel.app/injection/",
+      "source": "UCU OWASP Top 10 CTF 2025 — /injection/ SQLi + command injection oracle (17 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ucu-owasp-ctf.vercel.app/access/",
+      "source": "UCU OWASP Top 10 CTF 2025 — /access/ admin bypass + path traversal oracle (17 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ucu-owasp-ctf.vercel.app/ssrf/",
+      "source": "UCU OWASP Top 10 CTF 2025 — /ssrf/ internal flag-server SSRF oracle (17 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://securebank-blog.vercel.app/idor",
+      "source": "FAST-NUCES SecureBank attack lab — IDOR employee portal oracle (17 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-28",
+      "source": "OWASP WrongSecrets — Challenge 28 secrets-management oracle (17 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://pwnshop.ctfsecurity.com/vulnerabilities",
       "source": "ctfsec/pwnshop README — interactive 45-vuln OWASP index at /vulnerabilities (16 UTC discovery; scoreboard learning gap)",
