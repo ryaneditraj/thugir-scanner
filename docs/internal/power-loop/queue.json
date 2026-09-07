@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-07T11:15:00.000Z",
+  "updated_at": "2026-09-07T12:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://seclab.vercel.app/labs/idor",
+      "source": "DaniSam-STU/security-lab — interactive IDOR lab page (12 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://seclab.vercel.app/labs/xss",
+      "source": "DaniSam-STU/security-lab — interactive XSS lab page (12 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://seclab.vercel.app/labs/csrf",
+      "source": "DaniSam-STU/security-lab — interactive CSRF lab page (12 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo-of-cve-2025-55182-saas.vercel.app/",
+      "source": "javaarchive/CVE-2025-55182-saas — React Server Components RCE lab (12 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/uploads/import-from-url",
+      "source": "Escape Duck Store — SSRF import-from-url oracle POST /api/v1/uploads/import-from-url (12 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://vaultapp-omega.vercel.app/api/users/1",
       "source": "MRMcyber/vaultapp — sequential IDOR oracle GET /api/users/{id} (11 UTC discovery)",

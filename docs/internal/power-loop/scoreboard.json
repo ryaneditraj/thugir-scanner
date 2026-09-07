@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-07T11:26:16.000Z",
+  "updated_at": "2026-09-07T12:09:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,21 +15,19 @@
       ]
     }
   },
-  "total_sites_scanned": 2795,
-  "total_findings": 28234,
+  "total_sites_scanned": 2803,
+  "total_findings": 28381,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2000,
-  "discovery_findings": 23925,
+  "discovery_urls_added": 2005,
+  "discovery_findings": 24019,
   "improvements_shipped": 1560,
-  "last_run": "2026-09-07T11:26:15.679Z",
+  "last_run": "2026-09-07T12:08:45.804Z",
   "last_run_summary": {
-    "hour_utc": "11",
+    "hour_utc": "12",
     "benchmark": {
-      "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "primary_url": "https://juice-shop.herokuapp.com",
-      "primary_status": "error — scan timeout after 600000ms",
+      "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 53,
       "oracle_recall": "6/6",
       "gap": [],
@@ -51,44 +49,46 @@
           ]
         }
       },
-      "note": "Primary Heroku cold-timeout; staging fallback 6/6 (53 findings, 40 live oracles incl secret-resend + iac-terraform-tls-key)"
+      "note": "Primary Heroku stable 6/6 (53 findings, 40 live oracles incl secret-resend + iac-terraform-tls-key)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 7,
-      "findings": 187,
-      "focus": "vaultapp IDOR oracles + FinBot vendor agentic AI + duck-store cart business-logic + qa.brokencrystals SSTI render + queue drain crAPI2 vehicle + vAPI api2 user",
+      "findings": 94,
+      "focus": "seclab IDOR/XSS/CSRF labs + CVE-2025-55182 RSC SaaS PoC + duck-store import-from-url SSRF + queue drain wrongsecrets 38/39",
       "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (53 findings, 40 live oracles; gap=[]) — primary Heroku timed out",
-      "vaultapp-omega.vercel.app/api/users/1: 14 findings — vaultapp-users-idor + transactions/messages/notes/documents/audit-log live oracles",
-      "vaultapp-omega.vercel.app/api/documents/1: 14 findings — vaultapp-documents-idor route oracle",
-      "owasp-finbot-ctf.org/vendor: 10 findings — finbot-vendor-sidecar + invoices + agentic AI lab evidence",
-      "duck-store.escape.tech/api/v1/cart/items: 24 findings — duck-store-cart-negative-quantity-live-oracle",
-      "qa.brokencrystals.com/api/render: 93 findings — brokencrystals-render-ssti route oracle on QA host",
-      "crapi2.apisec.ai/identity/api/v2/vehicle/.../location: 15 findings — crAPI2 vehicle BOLA queue drain",
-      "vapi.apisec.ai/vapi/api2/user: 17 findings — vAPI API2 broken-auth live oracles"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, 40 live oracles; gap=[]) — primary Heroku stable",
+      "seclab.vercel.app/labs/idor: 8 findings — seclab-idor-labs-route-live-oracle + sqli-search",
+      "seclab.vercel.app/labs/xss: 8 findings — seclab-xss-labs-route-live-oracle",
+      "seclab.vercel.app/labs/csrf: 8 findings — seclab-csrf-labs-route-live-oracle",
+      "demo-of-cve-2025-55182-saas.vercel.app: 8 findings — CVE-2025-55182 RSC SaaS PoC + react-rsc-cve evidence",
+      "duck-store.escape.tech/api/v1/uploads/import-from-url: 24 findings — duck-store-ssrf-import-from-url live oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-38: 19 findings — challenge-38 route oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-39: 19 findings — challenge-39 AES filename-key route oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "juice-shop.herokuapp.com primary oracle timed out (600s) — staging fallback required for stable 6/6",
-      "lab.pentest-forge.com VAmPI still unreachable (vampi.lab.pentest-forge.com connection error)",
-      "seclab idor/xss/csrf labs + duck-store import-from-url + pwnshop debug/seller still queued at tail"
+      "lab.pentest-forge.com DVGA still unreachable (dvga.lab.pentest-forge.com connection error)",
+      "pwnshop debug/seller + seclab API route oracles still queued at tail",
+      "CVE-2025-55182 lab: client-side evidence only — RSC deserialization exploit not attempted without auth"
     ]
   },
   "discovery_highlights": {
-    "juice-shop-staging.herokuapp.com": 53,
+    "juice-shop.herokuapp.com": 53,
     "qa.brokencrystals.com/api/render": 93,
     "qa.brokencrystals.com/api/file/aws": 90,
+    "duck-store.escape.tech/api/v1/uploads/import-from-url": 24,
     "duck-store.escape.tech/api/v1/cart/items": 24,
+    "seclab.vercel.app/labs/idor": 8,
+    "seclab.vercel.app/labs/xss": 8,
+    "seclab.vercel.app/labs/csrf": 8,
+    "demo-of-cve-2025-55182-saas.vercel.app": 8,
+    "wrongsecrets.herokuapp.com/challenge/challenge-38": 19,
+    "wrongsecrets.herokuapp.com/challenge/challenge-39": 19,
     "vaultapp-omega.vercel.app/api/users/1": 14,
-    "vaultapp-omega.vercel.app/api/documents/1": 14,
-    "owasp-finbot-ctf.org/vendor": 10,
-    "crapi2.apisec.ai/identity/api/v2/vehicle/ee389276-4040-4960-8603-11c1c0560027/location": 15,
-    "vapi.apisec.ai/vapi/api2/user": 17,
-    "duck-store.escape.tech/vulnerabilities": 27,
     "brokencrystals.com/api/fetch": 86
   }
 }
