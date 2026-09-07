@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-07T19:05:00.000Z",
+  "updated_at": "2026-09-07T19:23:08.570Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-30",
+      "source": "OWASP WrongSecrets — Challenge 30 localStorage sensitive-data oracle (19 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-31",
+      "source": "OWASP WrongSecrets — Challenge 31 secrets-management oracle (19 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-32",
+      "source": "OWASP WrongSecrets — Challenge 32 cloud-secrets oracle (19 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vaultapp-omega.vercel.app/lab-guide",
+      "source": "MRMcyber/vaultapp — IDOR training lab guide with 10 challenge routes (web search 19 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnforge.vercel.app/challenges/13",
+      "source": "webspoilt/vulnforge-academy — Level 13 SSRF challenge route (Vercel deploy; web search 19 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://ucu-owasp-ctf.vercel.app/crypto/",
       "source": "UCU OWASP Top 10 CTF 2025 — /crypto/ A02 weak MD5 + predictable RNG oracle (19 UTC discovery gap)",
@@ -282,23 +307,8 @@
       "auth": "public_demo"
     },
     {
-      "url": "https://ssrf.vulnlab.dev/metadata-azure/",
-      "source": "sampsonc/vulnlab.dev — mock Azure IMDS SSRF lab (scoreboard gap: metadata-azure not yet priority-queued)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://ssrf.vulnlab.dev/blind/",
-      "source": "sampsonc/vulnlab.dev — blind SSRF lab (scoreboard gap: blind variant not yet priority-queued)",
-      "auth": "public_demo"
-    },
-    {
       "url": "https://brokencrystals.com/api/fetch?url=https://httpbin.org/get",
       "source": "NeuraLegion/brokencrystals README — /api/fetch SSRF oracle (url param fetches arbitrary targets)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://brokencrystals.com/api/upload/parse",
-      "source": "NeuraLegion/brokencrystals README — XXE via XML file upload POST /api/upload/parse",
       "auth": "public_demo"
     },
     {

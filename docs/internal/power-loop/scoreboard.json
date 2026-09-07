@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-07T19:10:00.000Z",
+  "updated_at": "2026-09-07T19:23:08.570Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,25 +15,25 @@
       ]
     }
   },
-  "total_sites_scanned": 2874,
-  "total_findings": 29807,
+  "total_sites_scanned": 2883,
+  "total_findings": 29990,
   "critical_findings": 54,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2039,
-  "discovery_findings": 25131,
+  "discovery_urls_added": 2044,
+  "discovery_findings": 25262,
   "improvements_shipped": 1584,
-  "last_run": "2026-09-07T19:10:00.000Z",
+  "last_run": "2026-09-07T19:23:08.570Z",
   "last_run_summary": {
     "hour_utc": "19",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 53,
+      "oracle_findings": 52,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 599,
-      "live_oracles": 40,
+      "probes_run": 597,
+      "live_oracles": 39,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -49,41 +49,51 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (53 findings, 40 live oracles incl secret-resend)"
+      "note": "Primary Heroku stable 6/6 (52–53 findings; 39–40 live oracles). Parallel 19 UTC runs both hit 6/6 with no category gaps."
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 3,
-      "urls_scanned": 3,
-      "findings": 13,
-      "focus": "19 UTC: GenAI hub route oracle + UCU crypto queue + GenAI lessons API queue",
+      "urls_added": 8,
+      "urls_scanned": 11,
+      "findings": 144,
+      "focus": "19 UTC parallel: GenAI hub/lessons + UCU crypto (13 findings, 3 improvements) + wrongsecrets 30/31/32 + vaultapp lab-guide + vulnforge L13 + queue drain 10/11/19 (131 findings)",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, gap=[]; 40 live oracles)",
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (52–53 findings, gap=[]; 39–40 live oracles)",
       "owaspbased-lessons.vercel.app/: 4 (+owasp-genai-hub-route-live-oracle)",
       "owaspbased-lessons.vercel.app/api/lessons: 5 (+owasp-genai-lessons-api-route-live-oracle)",
-      "ucu-owasp-ctf.vercel.app/crypto/: 4 (+ucu-owasp-ctf-crypto-route-live-oracle)"
+      "ucu-owasp-ctf.vercel.app/crypto/: 4 (+ucu-owasp-ctf-crypto-route-live-oracle)",
+      "wrongsecrets.herokuapp.com/challenge/challenge-31: 17 (+wrongsecrets-challenge-31-web-page-secret-route-live-oracle)",
+      "wrongsecrets.herokuapp.com/challenge/challenge-32: 17 (+wrongsecrets-challenge-32-llm-prompt-leak-route-live-oracle)",
+      "vaultapp-omega.vercel.app/lab-guide: 15 (+vaultapp-lab-guide-route-live-oracle + IDOR oracles)",
+      "wrongsecrets.herokuapp.com/challenge/challenge-10/11: 19 each (CSI driver + IAM escalation route oracles)",
+      "vulnforge.vercel.app/challenges/13: 6 (client-side only; SSRF route oracle gap)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "owaspbased-lessons.vercel.app per-lesson route oracles still thin on homepage-only scans",
-      "UCU OWASP CTF /injection/ /access/ /ssrf/ already queued — /crypto/ now prioritized"
+      "vulnforge.vercel.app/challenges/13 thin pass — Level 13 SSRF needs dedicated route oracle",
+      "owaspbased-lessons.vercel.app per-lesson route oracles still thin beyond hub/API",
+      "vaultapp-omega individual /api/* challenge routes still queued"
     ]
   },
   "discovery_highlights": {
     "preview.owasp-juice.shop": 55,
     "juice-shop.demo.escape.tech": 54,
-    "juice-shop.herokuapp.com": 53,
+    "juice-shop.herokuapp.com": 52,
     "juice-shop-staging.herokuapp.com": 52,
+    "wrongsecrets.herokuapp.com/challenge/challenge-30": 19,
+    "wrongsecrets.herokuapp.com/challenge/challenge-31": 17,
+    "wrongsecrets.herokuapp.com/challenge/challenge-32": 17,
+    "wrongsecrets.herokuapp.com/challenge/challenge-10": 19,
+    "wrongsecrets.herokuapp.com/challenge/challenge-11": 19,
+    "wrongsecrets.herokuapp.com/challenge/challenge-19": 19,
+    "vaultapp-omega.vercel.app/lab-guide": 15,
+    "vulnforge.vercel.app/challenges/13": 6,
     "owaspbased-lessons.vercel.app/api/lessons": 5,
     "owaspbased-lessons.vercel.app": 4,
     "ucu-owasp-ctf.vercel.app/crypto": 4,
     "ucu-owasp-ctf.vercel.app/xss": 4,
-    "ucu-owasp-ctf.vercel.app/auth": 4,
-    "ucu-owasp-ctf.vercel.app/injection": 4,
-    "ucu-owasp-ctf.vercel.app/access": 4,
-    "ucu-owasp-ctf.vercel.app/ssrf": 4,
     "pentest-fauxbank.vercel.app": 15,
     "wrongsecrets.herokuapp.com/challenge/challenge-29": 19
   }
