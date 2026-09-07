@@ -1,6 +1,16 @@
 {
-  "updated_at": "2026-09-07T17:05:00.000Z",
+  "updated_at": "2026-09-07T18:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://ucu-owasp-ctf.vercel.app/auth/",
+      "source": "UCU OWASP Top 10 CTF 2025 — /auth/ A07 authentication failures oracle (18 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ucu-owasp-ctf.vercel.app/xss/",
+      "source": "UCU OWASP Top 10 CTF 2025 — /xss/ A07 session cookie theft oracle (18 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://ucu-owasp-ctf.vercel.app/injection/",
       "source": "UCU OWASP Top 10 CTF 2025 — /injection/ SQLi + command injection oracle (17 UTC discovery)",

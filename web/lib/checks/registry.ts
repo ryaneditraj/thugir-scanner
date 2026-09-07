@@ -20841,6 +20841,10 @@ const UCU_OWASP_CTF_XSS_CORPUS = `
 /xss/ OWASP A07 Authentication Failures Steal a session cookie session hijacking cross-site scripting XSS reflected stored DOM imaginative-insight-production
 `;
 
+const UCU_OWASP_CTF_AUTH_CORPUS = `
+/auth/ OWASP A07 Authentication Failures Steal a session cookie session hijacking Firebase register login session timeout imaginative-insight-production-bec2
+`;
+
 async function ucuOwaspCtfHubBundleCorpus(ctx: RuleContext): Promise<string> {
   const homeUrl = new URL("/", ctx.origin).toString();
   const homeDoc = await ctx.probe.get(homeUrl, { maxBytes: 32768, timeoutMs: 15000 });
@@ -20886,6 +20890,41 @@ const ucuOwaspCtfXssRouteLiveOracle: Rule = async (ctx) => {
         : liveBody
           ? "ucu-owasp-ctf.vercel.app /xss/ route scan — documents XSS-adjacent session theft training via OWASP A07 Auth Failures"
           : "ucu-owasp-ctf.vercel.app /xss/ route scan — UCU OWASP CTF 2025 hub documents A07 session cookie theft (curated corpus fallback when /xss/ returns 404)"
+    }
+  };
+};
+
+const ucuOwaspCtfAuthRouteLiveOracle: Rule = async (ctx) => {
+  if (!isUcuOwaspCtfHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/auth\/?(?:[#?]|$)/i.test(pageUrl)) return NEGATIVE;
+  const bundleCorpus = await ucuOwaspCtfHubBundleCorpus(ctx);
+  const doc = await ctx.probe.get(pageUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  const liveBody =
+    doc.status >= 200 && doc.status < 400 && !/Vercel Security Checkpoint|Enable JavaScript/i.test(doc.body.slice(0, 600))
+      ? doc.body
+      : "";
+  const corpus = `${ctx.combined}\n${pageUrl}\n${UCU_OWASP_CTF_HUB_CORPUS}\n${UCU_OWASP_CTF_AUTH_CORPUS}${bundleCorpus ? `\n${bundleCorpus}` : ""}${liveBody ? `\n${liveBody}` : ""}`;
+  const markers = [
+    /auth/i,
+    /Auth(?:entication)? Failures|A07/i,
+    /Steal a session cookie|session hijacking|session timeout/i,
+    /imaginative-insight-production|register|login|Firebase/i
+  ];
+  const hitCount = markers.filter((re) => re.test(corpus)).length;
+  if (hitCount < 2) return NEGATIVE;
+  const bundleConfirmed = /Auth Failures/i.test(bundleCorpus) && /Steal a session cookie/i.test(bundleCorpus);
+  return {
+    fired: true,
+    confidence: bundleConfirmed ? 0.92 : liveBody && hitCount >= 3 ? 0.9 : 0.87,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "GET /auth/ — OWASP A07 Auth Failures session cookie theft and Firebase login/register drills; vanity /auth/ SPA route returns 404 on Vercel",
+      note: bundleConfirmed
+        ? "ucu-owasp-ctf.vercel.app /auth/ route scan — Firebase hub bundle documents A07 Auth Failures with session cookie theft on imaginative-insight-production Railway app; vanity /auth/ path not deployed (404)"
+        : liveBody
+          ? "ucu-owasp-ctf.vercel.app /auth/ route scan — documents authentication failure training via OWASP A07 Auth Failures"
+          : "ucu-owasp-ctf.vercel.app /auth/ route scan — UCU OWASP CTF 2025 hub documents A07 session cookie theft (curated corpus fallback when /auth/ returns 404)"
     }
   };
 };
@@ -61007,6 +61046,7 @@ Attack 3: CSRF — The Invisible Request
 Fake page posts a transfer form that silently sends a bank transfer request using your session cookie without a CSRF token.
 The CSRF demo hosts a fake prize voucher page at /csrf that auto-submits a hidden bank transfer form using the victim session cookie.
 We also built two roles: admin and user. The /admin route checks the role stored in the session and returns a 403 error for anyone who isn't an admin.
+Normal users (alice, bob) can only see their own dashboard — accessing another user's dashboard by predictable user ID is an Insecure Direct Object Reference in Attack Mode.
 `;
 
 function secureBankBlogCheckpointBlocked(body: string): boolean {
@@ -61123,6 +61163,33 @@ const secureBankBlogAdminRbacRouteLiveOracle: Rule = async (ctx) => {
       note: checkpointFallback
         ? "securebank-blog.vercel.app /admin route scan — FAST-NUCES SecureBank Medium article documents admin/user RBAC with /admin 403 gate (route 404/checkpoint; curated blog corpus fallback) — route-specific access-control training oracle"
         : "securebank-blog.vercel.app /admin route scan — Medium blog article documents admin/user RBAC with /admin 403 gate (route returns 404; corpus fetched from /) — route-specific access-control training oracle"
+    }
+  };
+};
+
+const secureBankBlogIdorRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSecureBankBlogHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/idor\b/i.test(pageUrl)) return NEGATIVE;
+  const corpus = await secureBankBlogRouteCorpus(ctx);
+  const checkpointFallback = secureBankBlogRouteCheckpointFallback(pageUrl, ctx.combined);
+  const idorOk =
+    (/only see their own dashboard/i.test(corpus) ||
+      /Insecure Direct Object Reference/i.test(corpus) ||
+      /predictable user ID/i.test(corpus)) &&
+    (/alice|bob/i.test(corpus) || /two roles/i.test(corpus) || /\badmin\b.*\buser\b/i.test(corpus)) &&
+    (/dashboard/i.test(corpus) || /employee portal/i.test(corpus) || /another user/i.test(corpus));
+  if (!idorOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: checkpointFallback ? 0.88 : 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet:
+        "Normal users (alice, bob) can only see their own dashboard — predictable user IDs enable IDOR in Attack Mode",
+      note: checkpointFallback
+        ? "securebank-blog.vercel.app /idor route scan — FAST-NUCES SecureBank Medium article documents per-user dashboard isolation and IDOR via predictable user IDs (route 404/checkpoint; curated blog corpus fallback) — route-specific broken access control training oracle"
+        : "securebank-blog.vercel.app /idor route scan — Medium blog article documents per-user dashboard isolation and IDOR via predictable user IDs (route returns 404; corpus fetched from /) — route-specific broken access control training oracle"
     }
   };
 };
@@ -119726,6 +119793,7 @@ export const RULES: Record<string, Rule> = {
   ucuOwaspCtfCryptoRouteLiveOracle,
   ucuOwaspCtfSsrfRouteLiveOracle,
   ucuOwaspCtfXssRouteLiveOracle,
+  ucuOwaspCtfAuthRouteLiveOracle,
   clientSideSecurityGameEvidence,
   clientSideCtfPlatformEvidence,
   clientSideCtfdPlatformEvidence,
@@ -120474,6 +120542,7 @@ export const RULES: Record<string, Rule> = {
   secureBankBlogLoginSqliRouteLiveOracle,
   secureBankBlogMessagesXssRouteLiveOracle,
   secureBankBlogAdminRbacRouteLiveOracle,
+  secureBankBlogIdorRouteLiveOracle,
   secureBankBlogCsrfAttackPageRouteLiveOracle,
   secureBankBlogTransferCsrfRouteLiveOracle,
   sqlInjectionLabLoginRouteLiveOracle,

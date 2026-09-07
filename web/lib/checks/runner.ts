@@ -1684,6 +1684,7 @@ const DEEP_RULES = new Set<string>([
   "ucuOwaspCtfCryptoRouteLiveOracle",
   "ucuOwaspCtfSsrfRouteLiveOracle",
   "ucuOwaspCtfXssRouteLiveOracle",
+  "ucuOwaspCtfAuthRouteLiveOracle",
   "clientSideSecurityGameEvidence",
   "clientSideCtfPlatformEvidence",
   "clientSideCtfdPlatformEvidence",
@@ -2542,6 +2543,7 @@ const DEEP_RULES = new Set<string>([
   "secureBankBlogLoginSqliRouteLiveOracle",
   "secureBankBlogMessagesXssRouteLiveOracle",
   "secureBankBlogAdminRbacRouteLiveOracle",
+  "secureBankBlogIdorRouteLiveOracle",
   "secureBankBlogCsrfAttackPageRouteLiveOracle",
   "secureBankBlogTransferCsrfRouteLiveOracle",
   "sqlInjectionLabLoginRouteLiveOracle",
@@ -12851,6 +12853,12 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         p.slug.startsWith("ucu-owasp-ctf-xss")
       )
         return -4;
+      if (
+        /ucu-owasp-ctf\.vercel\.app/i.test(origin) &&
+        /\/auth\/?/i.test(targetInput) &&
+        p.slug.startsWith("ucu-owasp-ctf-auth")
+      )
+        return -4;
       if (/pentest-ground\.com:9000/i.test(origin) && p.slug.startsWith("pentest-ground-restflaw")) return -2;
       if (
         /pentest-ground\.com:9000/i.test(origin) &&
@@ -16997,7 +17005,7 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         return -4;
       if (
         /securebank-blog\.vercel\.app/i.test(origin) &&
-        /\/(?:login|messages|admin|transfer)\b/i.test(targetInput) &&
+        /\/(?:login|messages|admin|transfer|idor|csrf)\b/i.test(targetInput) &&
         p.slug.startsWith("securebank-blog")
       )
         return -3;

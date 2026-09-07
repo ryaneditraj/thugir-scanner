@@ -29546,6 +29546,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "securebank-blog-idor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "SecureBank blog IDOR dashboard route live oracle",
+    description:
+      "When scanning /idor on securebank-blog.vercel.app, the Medium article documents per-user dashboard isolation where normal users (alice, bob) can only see their own dashboard and predictable user IDs enable IDOR in Attack Mode — route-specific broken access control training oracle (404 route fetches / article corpus).",
+    impactOneline:
+      "Educational SecureBank blog walkthrough exposes intentional IDOR via predictable dashboard user IDs for route-specific scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "secureBankBlogIdorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Educational attack/secure mode toggles must never ship to production deployments.",
+      steps: [
+        "Authorize object access server-side using the authenticated user's identity.",
+        "Avoid predictable sequential user IDs for sensitive dashboard routes.",
+        "Host vulnerable demos on isolated lab subdomains with no production data."
+      ]
+    },
+    fixPrompt:
+      "Our securebank-blog /idor route documents per-user dashboard isolation broken by predictable user IDs. Show object-level authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "securebank-blog-transfer-csrf-route-live-oracle",
     platform: "generic",
     category: "Cross-site request forgery",
@@ -86245,6 +86271,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our ucu-owasp-ctf /xss/ route documents A07 session cookie theft. Show secure cookie and session management remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ucu-owasp-ctf-auth-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "UCU OWASP CTF auth failures lab route live oracle",
+    description:
+      "When scanning /auth/ on ucu-owasp-ctf.vercel.app, the UCU OWASP Top 10 CTF 2025 Firebase hub documents OWASP A07 Authentication Failures with session cookie theft and Firebase login/register drills on external Railway challenge apps — vanity /auth/ SPA route returns 404.",
+    impactOneline:
+      "Route-specific confirmation that UCU CTF documents authentication failure and session hijacking drills even when the /auth/ vanity path is not deployed.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ucuOwaspCtfAuthRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use HttpOnly/Secure/SameSite cookies and server-side session validation.",
+      steps: [
+        "Set HttpOnly and Secure flags on session cookies.",
+        "Enforce SameSite=Lax or Strict on authentication cookies.",
+        "Run CTF labs on isolated Docker networks only."
+      ]
+    },
+    fixPrompt:
+      "Our ucu-owasp-ctf /auth/ route documents A07 authentication failures. Show secure cookie and session management remediation.",
     version: 1,
     enabled: true
   },

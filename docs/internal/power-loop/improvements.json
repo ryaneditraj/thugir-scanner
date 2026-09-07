@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:securebank-blog.vercel.app",
+      "slug": "securebank-blog-idor-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: secureBankBlogIdorRouteLiveOracle matches /idor route with per-user dashboard isolation corpus (alice/bob only see own dashboard + predictable user ID IDOR in Attack Mode); securebank-blog.vercel.app/idor findings 3→5 (+securebank-blog-idor-route-live-oracle); benchmark juice-shop.demo.escape.tech 54 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ucu-owasp-ctf.vercel.app",
+      "slug": "ucu-owasp-ctf-auth-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: ucuOwaspCtfAuthRouteLiveOracle matches /auth/ OWASP A07 Auth Failures + Steal a session cookie markers via Firebase hub bundle corpus fallback; ucu-owasp-ctf.vercel.app/auth/ findings 3→4 (+ucu-owasp-ctf-auth-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ucu-owasp-ctf.vercel.app",
+      "slug": "ucu-owasp-ctf-xss-auth-queue-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: prepended ucu-owasp-ctf.vercel.app/xss/ + /auth/ to priority_discovery_urls; runner -4 priority for ucu-owasp-ctf-xss + ucu-owasp-ctf-auth route oracles; ucu-owasp-ctf.vercel.app/xss/ findings 3→4 (+ucu-owasp-ctf-xss-route-live-oracle); benchmark juice-shop 54 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:idor-website.vercel.app",
       "slug": "idor-website-checkpoint-hub-route-oracle",
       "status": "shipped",
