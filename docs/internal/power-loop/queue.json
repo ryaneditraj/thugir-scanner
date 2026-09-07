@@ -1,6 +1,21 @@
 {
-  "updated_at": "2026-09-07T18:37:00.000Z",
+  "updated_at": "2026-09-07T19:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://ucu-owasp-ctf.vercel.app/crypto/",
+      "source": "UCU OWASP Top 10 CTF 2025 — /crypto/ A02 weak MD5 + predictable RNG oracle (19 UTC discovery gap)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owaspbased-lessons.vercel.app/api/lessons",
+      "source": "OWASP GenAI Security Lab — unauthenticated LLM01–LLM10 lesson catalog API (19 UTC discovery gap)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owaspbased-lessons.vercel.app/lesson/prompt-injection",
+      "source": "OWASP GenAI Security Lab — LLM01 prompt injection interactive lesson (19 UTC discovery gap)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://ucu-owasp-ctf.vercel.app/xss/",
       "source": "UCU OWASP Top 10 CTF 2025 — /xss/ A07 session cookie theft oracle (18 UTC discovery)",

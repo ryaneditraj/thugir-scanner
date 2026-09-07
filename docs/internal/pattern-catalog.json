@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-07T18:04:15.238Z",
-  "total": 3435,
-  "uniqueSlugs": 3427,
+  "generatedAt": "2026-09-07T19:06:51.653Z",
+  "total": 3436,
+  "uniqueSlugs": 3428,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3417,
+    "generic": 3418,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3350,
+    "deep": 3351,
     "continuous": 0
   },
   "byCategory": {
@@ -34,7 +34,7 @@
     "SSRF": 19,
     "Server-side request forgery": 128,
     "Sensitive data exposure": 109,
-    "AI security": 150,
+    "AI security": 151,
     "Business logic": 43,
     "AI / LLM security": 4,
     "Cross-site request forgery": 15,
@@ -2306,6 +2306,7 @@
     "owasp-demo-vulcanlab-route-live-oracle",
     "owasp-genai-data-poisoning-route-live-oracle",
     "owasp-genai-excessive-agency-route-live-oracle",
+    "owasp-genai-hub-route-live-oracle",
     "owasp-genai-improper-output-route-live-oracle",
     "owasp-genai-lessons-api-route-live-oracle",
     "owasp-genai-misinformation-route-live-oracle",

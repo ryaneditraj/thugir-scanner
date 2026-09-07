@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:owaspbased-lessons.vercel.app",
+      "slug": "owasp-genai-hub-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: owaspGenaiHubRouteLiveOracle confirms onboarding form + unauthenticated GET /api/lessons catalog with LLM01–LLM10 on homepage route scan; owaspbased-lessons.vercel.app/ findings 3→4 (+owasp-genai-hub-route-live-oracle alongside client-side-owasp-genai-lab-evidence); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ucu-owasp-ctf.vercel.app",
+      "slug": "ucu-owasp-ctf-crypto-queue-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: prepended ucu-owasp-ctf.vercel.app/crypto/ to priority_discovery_urls; ucuOwaspCtfCryptoRouteLiveOracle matches /crypto/ OWASP A02 weak MD5 + predictable RNG via Firebase hub bundle corpus fallback; ucu-owasp-ctf.vercel.app/crypto/ findings 3→4 (+ucu-owasp-ctf-crypto-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspbased-lessons.vercel.app",
+      "slug": "owasp-genai-lessons-api-queue-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: prepended owaspbased-lessons.vercel.app/api/lessons + /lesson/prompt-injection to priority_discovery_urls; GET /api/lessons returns unauthenticated JSON catalog (LLM01–LLM10); owaspbased-lessons.vercel.app/api/lessons findings 5 (+owasp-genai-lessons-api-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:securebank-blog.vercel.app",
       "slug": "securebank-blog-idor-route-live-oracle",
       "status": "shipped",
