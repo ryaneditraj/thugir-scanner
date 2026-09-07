@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-07T11:15:14.470Z",
-  "total": 3420,
-  "uniqueSlugs": 3412,
+  "generatedAt": "2026-09-07T12:21:17.567Z",
+  "total": 3422,
+  "uniqueSlugs": 3414,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3402,
+    "generic": 3404,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3335,
+    "deep": 3337,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 673,
+    "Broken access control": 674,
     "Exposed secret": 120,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -27,7 +27,7 @@
     "Information disclosure": 159,
     "Security misconfiguration": 288,
     "Broken authentication": 220,
-    "Injection": 567,
+    "Injection": 568,
     "Cross-site scripting": 809,
     "Open redirect": 29,
     "general": 20,
@@ -1169,6 +1169,7 @@
     "ctf-challange-3-middleware-auth-bypass-live-oracle",
     "ctf-challange-3-middleware-auth-bypass-route-live-oracle",
     "cursor-next-public-secret",
+    "cve-55182-saas-route-live-oracle",
     "dangerous-html-sinks",
     "directory-listing-enabled",
     "dockerworkshop-devboard-route-live-oracle",
@@ -2977,6 +2978,7 @@
     "vulnapi-orders-bola-route-live-oracle",
     "vulnapi-users-bola-live-oracle",
     "vulnapi-users-bola-route-live-oracle",
+    "vulnapi-users-search-route-live-oracle",
     "vulnapi-validate-token-stack-disclosure-live-oracle",
     "vulnapi-validate-token-stack-disclosure-route-live-oracle",
     "vulnbank-ai-anonymous-chat-live-oracle",

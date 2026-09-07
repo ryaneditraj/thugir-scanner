@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:demo-of-cve-2025-55182-saas.vercel.app",
+      "slug": "cve-55182-saas-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET / returns CVE-2025-55182 Flight protocol markers + live self.__next_f RSC payload chunks; demo-of-cve-2025-55182-saas.vercel.app/ findings 8 (+cve-55182-saas-route-live-oracle, -reflexion-escalated-ssti false positive); benchmark juice-shop.herokuapp.com 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:demo-of-cve-2025-55182-saas.vercel.app",
+      "slug": "cve-55182-saas-reflexion-ssti-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: cve55182SaasReflexionSuppressed skips reflexionEscalatedSsti on RSC Flight __next_f chunks with lineHeight:49px styling; demo-of-cve-2025-55182-saas.vercel.app/ findings 8 (-reflexion-escalated-ssti false positive, +cve-55182-saas-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnapi.testinvicti.com",
+      "slug": "vulnapi-users-search-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /swagger.json documents /api/users/search; GET /api/users/search?q=admin with Bearer one returns {\"error\":{\"message\":\"User not found\"}}; vulnapi.testinvicti.com/api/users/search findings 14→15 (+vulnapi-users-search-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
       "source": "benchmark:juice-shop",
       "slug": "secret-resend-power-scan-bridge",
       "status": "shipped",

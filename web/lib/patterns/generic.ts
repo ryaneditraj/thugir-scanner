@@ -13811,6 +13811,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "cve-55182-saas-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "CVE-2025-55182 RSC SaaS PoC route live oracle",
+    description:
+      "When scanning demo-of-cve-2025-55182-saas.vercel.app, live __next_f Flight protocol RSC payload chunks and CVE-2025-55182 react-server-dom version markers confirm the vulnerable stack — route-specific RSC deserialization lab oracle.",
+    impactOneline:
+      "Public RSC CVE SaaS PoC serves live Flight protocol chunks advertising CVE-2025-55182 unsafe deserialization.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "cve55182SaasRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove public CVE PoC deployments; upgrade React/Next.js to patched RSC versions.",
+      steps: [
+        "Upgrade react-server-dom-* and Next.js to vendor-patched releases.",
+        "Do not expose intentionally vulnerable RSC PoC containers to the public internet.",
+        "Restrict lab deployments to isolated scanner-validation environments."
+      ]
+    },
+    fixPrompt:
+      "Our CVE-2025-55182 RSC SaaS PoC route serves live Flight protocol chunks. Show how to isolate it and upgrade to patched React Server Components packages.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-nextjs-middleware-cve-evidence",
     platform: "generic",
     category: "Broken authentication",
@@ -24319,6 +24345,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our vulnapi.testinvicti.com route scan confirms cross-user credential disclosure. Show BOLA remediation for REST user endpoints.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnapi-users-search-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Invicti vulnapi users search route live oracle",
+    description:
+      "When scanning vulnapi.testinvicti.com /api/users/search, Swagger documents a search endpoint and live probes confirm the API1 search training surface — route-specific users search oracle.",
+    impactOneline:
+      "Route-specific confirmation that Invicti vulnapi exposes a documented user search API for broken object property level authorization training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnapiUsersSearchRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "vulnapi.testinvicti.com is an intentional Invicti benchmark — enforce search authorization in production.",
+      steps: [
+        "Scope search results to objects the authenticated user is allowed to access.",
+        "Validate search query parameters and apply per-user filters server-side.",
+        "Run vulnapi.testinvicti.com only as an isolated scanner evaluation target."
+      ]
+    },
+    fixPrompt:
+      "Our vulnapi.testinvicti.com /api/users/search route exposes a documented search API. Show BOLA remediation for user search endpoints.",
     version: 1,
     enabled: true
   },

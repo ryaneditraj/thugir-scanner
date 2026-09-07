@@ -210,6 +210,12 @@ function ucuOwaspCtfReflexionSuppressed(ctx: PowerCtx): boolean {
   return /ucu-owasp-ctf\.vercel\.app/i.test(pageUrl);
 }
 
+/** demo-of-cve-2025-55182-saas RSC Flight __next_f chunks embed lineHeight:49px — suppress reflexion SSTI FPs. */
+function cve55182SaasReflexionSuppressed(ctx: PowerCtx): boolean {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  return /demo-of-cve-2025-55182-saas\.vercel\.app/i.test(pageUrl);
+}
+
 /** AppSec CI Pipeline /login returns plain HTTP 404 — reflexion probes echo canaries on the error page. */
 function appsecCiLoginReflexionSuppressed(ctx: PowerCtx): boolean {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
@@ -422,6 +428,7 @@ export const reflexionEscalatedSsti: PowerRule = async (ctx) => {
   if (ucuOwaspCtfReflexionSuppressed(ctx)) return NEGATIVE;
   if (aiSecurityPlatformLoginGatedReflexionSuppressed(ctx)) return NEGATIVE;
   if (zeroHealthVercelDashboardReflexionSuppressed(ctx)) return NEGATIVE;
+  if (cve55182SaasReflexionSuppressed(ctx)) return NEGATIVE;
   const params = ["name", "q", "template", "message", "content"];
   const paths = ["/", "/search", "/template"];
 

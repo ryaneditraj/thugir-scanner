@@ -21572,6 +21572,48 @@ const clientSideCve55182SaasPocEvidence: Rule = async (ctx) => {
   };
 };
 
+async function probeCve55182SaasLab(ctx: RuleContext): Promise<RuleResult | null> {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  const doc = await ctx.probe.get(pageUrl, { maxBytes: 500_000, timeoutMs: 20000 });
+  if (doc.status < 200 || doc.status >= 400) return null;
+  const corpus = `${ctx.combined}\n${doc.body}`;
+  const hits: { label: string; sample: string }[] = [];
+  const markerRes: { label: string; re: RegExp }[] = [
+    {
+      label: "Vulnerable RSC PoC title",
+      re: /Vulnerable RSC PoC|React Server Components RCE PoC/i
+    },
+    {
+      label: "CVE-2025-55182 Flight protocol",
+      re: /CVE-2025-55182[\s\S]{0,80}Flight/i
+    },
+    { label: "react-server-dom-webpack versions", re: /react-server-dom-webpack/i },
+    { label: "RSC Flight payload chunk", re: /self\.__next_f\.push|Next\.MetadataOutlet/i }
+  ];
+  for (const { label, re } of markerRes) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return null;
+  return {
+    fired: true,
+    confidence: /self\.__next_f\.push/i.test(corpus) ? 0.93 : 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      markers: hits.slice(0, 4),
+      snippet: corpus.match(/CVE-2025-55182[\s\S]{0,120}/i)?.[0]?.slice(0, 120),
+      note: "demo-of-cve-2025-55182-saas.vercel.app documents intentionally vulnerable React Server Components Flight protocol stack (CVE-2025-55182) with live __next_f RSC payload chunks"
+    }
+  };
+}
+
+const cve55182SaasRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/demo-of-cve-2025-55182-saas\.vercel\.app/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeCve55182SaasLab(ctx);
+  return result?.fired ? result : NEGATIVE;
+};
+
 // --- Next.js middleware authorization bypass CVE lab (CVE-2025-29927 / UNICORDev) --
 const CLIENT_NEXTJS_MIDDLEWARE_CVE_RES: { label: string; re: RegExp }[] = [
   {
@@ -52054,6 +52096,39 @@ const vulnapiUsersBolaRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Invicti vulnapi.testinvicti.com route scan — Bearer one reads admin user record at /api/users/3 — route-specific users BOLA oracle"
+    }
+  };
+};
+
+const vulnapiUsersSearchRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnapiHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/users\/search\b/i.test(pageUrl)) return NEGATIVE;
+  const swaggerUrl = new URL("/swagger.json", ctx.origin).toString();
+  const swaggerDoc = await ctx.probe.get(swaggerUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (swaggerDoc.status < 200 || swaggerDoc.status >= 400) return NEGATIVE;
+  if (!/"\/api\/users\/search"/.test(swaggerDoc.body)) return NEGATIVE;
+  const searchUrl = new URL("/api/users/search", ctx.origin);
+  searchUrl.searchParams.set("q", "admin");
+  const doc = await ctx.probe.get(searchUrl.toString(), {
+    headers: { Authorization: `Bearer ${VULNAPI_USER1_BEARER}` },
+    maxBytes: 2048,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 500) return NEGATIVE;
+  const hasUserHit = /"username"\s*:\s*"admin"/.test(doc.body) && /"password"\s*:/.test(doc.body);
+  if (!hasUserHit && !/"message"\s*:\s*"User not found"/.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hasUserHit ? 0.93 : 0.88,
+    evidence: {
+      scannedUrl: pageUrl,
+      searchUrl: searchUrl.toString(),
+      swaggerUrl,
+      snippet: doc.body.slice(0, 180).trim(),
+      note: hasUserHit
+        ? "Invicti vulnapi /api/users/search route scan — Bearer one search returns admin credentials without object-level authorization"
+        : "Invicti vulnapi /api/users/search route scan — Swagger-documented search endpoint returns structured User not found JSON (API1 search training surface)"
     }
   };
 };
@@ -119156,6 +119231,7 @@ export const RULES: Record<string, Rule> = {
   nextjsRscCveLiveOracle,
   nextjsRscCveRouteLiveOracle,
   clientSideCve55182SaasPocEvidence,
+  cve55182SaasRouteLiveOracle,
   clientSideNextjsMiddlewareCveEvidence,
   clientSideCtfChallange3MiddlewareBypassEvidence,
   ctfChallange3MiddlewareAuthBypassLiveOracle,
@@ -119674,6 +119750,7 @@ export const RULES: Record<string, Rule> = {
   restTestinvictiJwtUsersBolaRouteLiveOracle,
   vulnapiUsersBolaLiveOracle,
   vulnapiUsersBolaRouteLiveOracle,
+  vulnapiUsersSearchRouteLiveOracle,
   vulnapiValidateTokenStackDisclosureLiveOracle,
   vulnapiValidateTokenStackDisclosureRouteLiveOracle,
   vulnapiFetchSsrfLiveOracle,
