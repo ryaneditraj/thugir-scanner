@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-08T03:31:00.000Z",
+  "updated_at": "2026-09-08T04:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2814,
-  "total_findings": 28297,
+  "total_sites_scanned": 2823,
+  "total_findings": 28624,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1995,
-  "discovery_findings": 22893,
-  "improvements_shipped": 1161,
-  "last_run": "2026-09-08T03:31:00.000Z",
+  "discovery_urls_added": 2000,
+  "discovery_findings": 23167,
+  "improvements_shipped": 1605,
+  "last_run": "2026-09-08T04:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "03",
+    "hour_utc": "04",
     "benchmark": {
-      "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "oracle_findings": 48,
+      "oracle_url": "https://juice-shop.herokuapp.com",
+      "oracle_findings": 53,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 591,
+      "probes_run": 597,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,46 +48,43 @@
           ]
         }
       },
-      "note": "Primary Heroku timed out (20min); staging fallback 6/6 with 48 findings (37 juice-shop live oracles); secret-resend slug still absent"
+      "note": "Primary Heroku stable 6/6 first-pass recall (53 findings, 40 juice-shop live oracles incl secret-resend + iac-terraform-tls-key)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
+      "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 120,
-      "focus": "wrongsecrets 50-52/55-56/64-66 SSH bastion + binary oracles; priority_discovery_urls (duck-store MCP, wrongsecrets/1, dvaib login/register) pending next drain",
+      "findings": 274,
+      "focus": "SekuMart OpenAPI oracle expansion (catalog/track/members/directory/search) + queue drain brokencrystals XXE/SSRF + ssrf.vulnlab.dev allowlist",
       "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (48 findings, 37 live oracles) — primary Heroku timeout, staging fallback rich pass",
-      "wrongsecrets.herokuapp.com/challenge/challenge-55: 15 findings — wrongsecrets-challenge-55-ssh-bastion-route-live-oracle",
-      "wrongsecrets.herokuapp.com/challenge/challenge-56: 15 findings — wrongsecrets-challenge-56-project-spec-route-live-oracle",
-      "wrongsecrets.herokuapp.com/challenge/challenge-64: 15 findings — wrongsecrets-challenge-64-swift-binary-route-live-oracle",
-      "wrongsecrets.herokuapp.com/challenge/challenge-65: 15 findings — wrongsecrets-challenge-65-java-plain-cli-route-live-oracle",
-      "wrongsecrets.herokuapp.com/challenge/challenge-66: 15 findings — wrongsecrets-challenge-66-java-obfuscated-route-live-oracle",
-      "wrongsecrets.herokuapp.com/challenge/challenge-50: 15 findings — wrongsecrets-challenge-50-dotnet-binary-route-live-oracle",
-      "wrongsecrets.herokuapp.com/challenge/challenge-51: 15 findings — wrongsecrets-challenge-51-docker-secrets-route-live-oracle",
-      "wrongsecrets.herokuapp.com/challenge/challenge-52: 15 findings — wrongsecrets-challenge-52-buildx-secrets-route-live-oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, 40 live oracles) — rich primary Heroku pass with secret-resend present",
+      "sekumart.sekuripy.hr/catalog.php?sort=id: 20 findings — sekumart-catalog-orderby-sqli live oracle",
+      "sekumart.sekuripy.hr/track.php?order=SK-1001: 20 findings — sekumart-track-blind-sqli live oracle",
+      "sekumart.sekuripy.hr/members.php?user=ada: 20 findings — sekumart-members-nosql live oracle",
+      "sekumart.sekuripy.hr/directory.php?q=test: 20 findings — sekumart-directory-xpath live oracle",
+      "sekumart.sekuripy.hr/search.php?q=mug: 21 findings — sekumart-search-sqli + search-xss live oracles",
+      "brokencrystals.com/api/upload/parse: 94 findings — XXE upload oracle",
+      "brokencrystals.com/api/fetch?url=https://httpbin.org/get: 63 findings — SSRF fetch oracle",
+      "ssrf.vulnlab.dev/allowlist: 16 findings — ssrf-vulnlab-allowlist-bypass live oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "juice-shop.herokuapp.com primary timed out after 20min — Heroku cold start / connectivity degradation",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "newly queued wrongsecrets 1/2/8 + crAPI2 OTP v2/check-otp already in upstream priority_discovery_urls — not yet scanned (queue head was wrongsecrets 50-66)"
+      "SekuMart apiv1.php (JSON-body SQLi) and login.php (auth-bypass SQLi) queued for next drain",
+      "demo.owasp-juice.shop/rest/basket still 503 — basket BOLA oracle blocked",
+      "brokencrystals.com/api/partners/partnerLogin returns 403 from cloud agent — XPath oracle needs alternate path"
     ]
   },
   "discovery_highlights": {
-    "juice-shop-staging.herokuapp.com": 48,
-    "wrongsecrets.herokuapp.com/challenge/challenge-55": 15,
-    "wrongsecrets.herokuapp.com/challenge/challenge-56": 15,
-    "wrongsecrets.herokuapp.com/challenge/challenge-64": 15,
-    "wrongsecrets.herokuapp.com/challenge/challenge-65": 15,
-    "wrongsecrets.herokuapp.com/challenge/challenge-66": 15,
-    "wrongsecrets.herokuapp.com/challenge/challenge-50": 15,
-    "wrongsecrets.herokuapp.com/challenge/challenge-51": 15,
-    "wrongsecrets.herokuapp.com/challenge/challenge-52": 15,
-    "duck-store.escape.tech/api/v1/users/me/profile": 33,
-    "demo.owasp-juice.shop/rest/memories": 27,
-    "duck-store.escape.tech/api/v1/products/filter/by-color": 31
+    "juice-shop.herokuapp.com": 53,
+    "sekumart.sekuripy.hr/catalog.php?sort=id": 20,
+    "sekumart.sekuripy.hr/track.php?order=SK-1001": 20,
+    "sekumart.sekuripy.hr/members.php?user=ada": 20,
+    "sekumart.sekuripy.hr/directory.php?q=test": 20,
+    "sekumart.sekuripy.hr/search.php?q=mug": 21,
+    "brokencrystals.com/api/upload/parse": 94,
+    "brokencrystals.com/api/fetch?url=https://httpbin.org/get": 63,
+    "ssrf.vulnlab.dev/allowlist": 16
   }
 }
