@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-08T18:05:00.000Z",
+  "updated_at": "2026-09-08T19:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://ginandjuice.shop/logger",
+      "source": "PortSwigger Gin & Juice Shop — search logger endpoint linked from /catalog (ginandjuice.shop/vulnerabilities; web search 19 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/profile/update-avatar",
+      "source": "ctfsec/pwnshop — SSRF avatar URL fetch server-side POST /profile/update-avatar PWN-029 (pwnshop.ctfsecurity.com/vulnerabilities; web search 19 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/login?next=https://evil.com",
+      "source": "ctfsec/pwnshop — open redirect via ?next= on login PWN-017 (pwnshop.ctfsecurity.com/vulnerabilities; web search 19 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnbank.org/api/v1/reset-password",
+      "source": "VulnBank — API v1 reset-password redemption in version-confusion ATO chain (vulnbank.org/api/docs; Ostorlab blog + web search 19 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnbank.org/upload_profile_picture_url",
+      "source": "VulnBank — SSRF via profile picture URL upload (vulnbank.org pentest reports; web search 19 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://pwnshop.ctfsecurity.com/seller/preview",
       "source": "ctfsec/pwnshop — PWN-040 SSTI→RCE seller storefront preview GET /seller/preview?template= (pwnshop.ctfsecurity.com/vulnerabilities; web search 18 UTC discovery)",
