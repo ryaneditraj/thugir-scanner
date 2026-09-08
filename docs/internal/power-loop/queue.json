@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-08T20:05:00.000Z",
+  "updated_at": "2026-09-08T21:12:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://pwnshop.ctfsecurity.com/api/v1/events",
+      "source": "ctfsec/pwnshop — PWN-005 unauthenticated audit log JSON feed with plaintext passwords (pwnshop.ctfsecurity.com/vulnerabilities; web search 21 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/debug/info",
+      "source": "ctfsec/pwnshop — PWN-018 publicly exposed debug endpoint with credentials (pwnshop.ctfsecurity.com/vulnerabilities; web search 21 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/chat",
+      "source": "ctfsec/pwnshop — PWN-031/032 LLM prompt injection + agent command injection entry point (pwnshop.ctfsecurity.com/vulnerabilities; web search 21 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/render",
+      "source": "NeuraLegion/brokencrystals — POST /api/render SSTI→RCE oracle (brokencrystals.com README; web search 21 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owasp-finbot-ctf-demo.onrender.com/",
+      "source": "OWASP-ASI/finbot-ctf-demo — agentic AI CTF demo on Render (owasp-finbot-ctf-demo.onrender.com; web search 21 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://nodegoat-websec.herokuapp.com/tutorial",
       "source": "OWASP Node Goat — interactive OWASP Top 10 tutorial on Heroku demo (nodegoat-websec.herokuapp.com; web search 20 UTC discovery)",
