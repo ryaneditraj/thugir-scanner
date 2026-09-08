@@ -71311,6 +71311,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "duck-store-products-search-degraded-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Duck Store products search degraded live oracle",
+    description:
+      "GET /api/v1/products/search/ returns HTTP 500 on valid q payloads and /api/v1/products/search without trailing slash misroutes to /products/{product_id} — OpenAPI documents search_products with required q parameter.",
+    impactOneline:
+      "Broken product search endpoints leak routing mistakes and may hide SQL injection or availability failures on ecommerce search APIs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreProductsSearchDegradedLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix FastAPI trailing-slash routing and repair search query handling — Duck Store is intentional lab software.",
+      steps: [
+        "Register /api/v1/products/search with and without trailing slash or redirect consistently.",
+        "Use parameterized queries for product name/description search.",
+        "Return structured 4xx errors instead of generic HTTP 500 on search failures."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v1/products/search endpoint misroutes without trailing slash and returns HTTP 500 on valid searches. Show routing and SQL search remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "duck-store-products-search-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Duck Store products search route live oracle",
+    description:
+      "When scanning /api/v1/products/search, trailing-slash routing mismatch and/or HTTP 500 on search_products q parameter confirms broken search API — route-specific misconfiguration oracle.",
+    impactOneline:
+      "Route-specific scans should confirm product search routing and availability beyond generic Duck Store API hub fingerprints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreProductsSearchRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix search route registration and parameterized search queries on /api/v1/products/search/.",
+      steps: [
+        "Normalize /api/v1/products/search URLs to the trailing-slash FastAPI route.",
+        "Repair server-side search query execution returning HTTP 500.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v1/products/search route misroutes without trailing slash and returns HTTP 500. Show route-specific search API remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "duck-store-cart-negative-quantity-live-oracle",
     platform: "generic",
     category: "Business logic",

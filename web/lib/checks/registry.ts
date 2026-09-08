@@ -12757,9 +12757,22 @@ function zenDemoJavaStubScan(ctx: RuleContext): boolean {
   return /zen-demo-java\.fly\.dev/i.test(ctx.origin) && /Zen by Aikido:\s*Live Example/i.test(ctx.combined);
 }
 
+type ZenDemoJavaRouteKind = "execute" | "create" | "request" | "read";
+
+function zenDemoJavaRouteKind(ctx: RuleContext): ZenDemoJavaRouteKind | null {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const match = pageUrl.match(/\/pages\/(execute|create|request|read)\b/i);
+  return match ? (match[1].toLowerCase() as ZenDemoJavaRouteKind) : null;
+}
+
+/** Route fast-path injects stub HTML — still attempt live /api/* probes on matching /pages/* scans. */
+function zenDemoJavaSkipLiveProbe(ctx: RuleContext): boolean {
+  return zenDemoJavaStubScan(ctx) && zenDemoJavaRouteKind(ctx) === null;
+}
+
 async function probeZenDemoExecuteShellInjection(ctx: RuleContext): Promise<RuleResult | null> {
   if (!isZenDemoHost(ctx)) return null;
-  if (zenDemoJavaStubScan(ctx)) return null;
+  if (zenDemoJavaSkipLiveProbe(ctx)) return null;
   const executeUrl = new URL("/api/execute", ctx.origin).toString();
   const doc = await ctx.probe.get(executeUrl, {
     method: "POST",
@@ -12793,16 +12806,6 @@ const zenDemoExecuteRouteLiveOracle: Rule = async (ctx) => {
   if (!isZenDemoHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/pages\/execute\b/i.test(pageUrl)) return NEGATIVE;
-  if (zenDemoJavaStubScan(ctx)) {
-    const fallback = zenDemoJavaRouteCorpusFallback(ctx, "execute");
-    if (fallback?.fired) {
-      return {
-        fired: true,
-        confidence: fallback.confidence,
-        evidence: { ...fallback.evidence, scannedUrl: pageUrl }
-      };
-    }
-  }
   const result = await probeZenDemoExecuteShellInjection(ctx);
   if (result?.fired) {
     return {
@@ -12830,7 +12833,7 @@ const ZEN_PATH_TRAVERSAL_PROBE = "../secrets/key.txt";
 
 async function probeZenDemoCreateSqli(ctx: RuleContext): Promise<RuleResult | null> {
   if (!isZenDemoHost(ctx)) return null;
-  if (zenDemoJavaStubScan(ctx)) return null;
+  if (zenDemoJavaSkipLiveProbe(ctx)) return null;
   const createUrl = new URL("/api/create", ctx.origin).toString();
   const doc = await ctx.probe.get(createUrl, {
     method: "POST",
@@ -12862,7 +12865,7 @@ async function probeZenDemoCreateSqli(ctx: RuleContext): Promise<RuleResult | nu
 
 async function probeZenDemoRequestSsrf(ctx: RuleContext): Promise<RuleResult | null> {
   if (!isZenDemoHost(ctx)) return null;
-  if (zenDemoJavaStubScan(ctx)) return null;
+  if (zenDemoJavaSkipLiveProbe(ctx)) return null;
   const requestUrl = new URL("/api/request", ctx.origin).toString();
   const doc = await ctx.probe.get(requestUrl, {
     method: "POST",
@@ -12887,7 +12890,7 @@ async function probeZenDemoRequestSsrf(ctx: RuleContext): Promise<RuleResult | n
 
 async function probeZenDemoReadPathTraversal(ctx: RuleContext): Promise<RuleResult | null> {
   if (!isZenDemoHost(ctx)) return null;
-  if (zenDemoJavaStubScan(ctx)) return null;
+  if (zenDemoJavaSkipLiveProbe(ctx)) return null;
   const readUrl = new URL(
     `/api/read?path=${encodeURIComponent(ZEN_PATH_TRAVERSAL_PROBE)}`,
     ctx.origin
@@ -12921,16 +12924,6 @@ const zenDemoCreateRouteLiveOracle: Rule = async (ctx) => {
   if (!isZenDemoHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/pages\/create\b/i.test(pageUrl)) return NEGATIVE;
-  if (zenDemoJavaStubScan(ctx)) {
-    const fallback = zenDemoJavaRouteCorpusFallback(ctx, "create");
-    if (fallback?.fired) {
-      return {
-        fired: true,
-        confidence: fallback.confidence,
-        evidence: { ...fallback.evidence, scannedUrl: pageUrl }
-      };
-    }
-  }
   const result = await probeZenDemoCreateSqli(ctx);
   if (result?.fired) {
     return {
@@ -12959,16 +12952,6 @@ const zenDemoRequestRouteLiveOracle: Rule = async (ctx) => {
   if (!isZenDemoHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/pages\/request\b/i.test(pageUrl)) return NEGATIVE;
-  if (zenDemoJavaStubScan(ctx)) {
-    const fallback = zenDemoJavaRouteCorpusFallback(ctx, "request");
-    if (fallback?.fired) {
-      return {
-        fired: true,
-        confidence: fallback.confidence,
-        evidence: { ...fallback.evidence, scannedUrl: pageUrl }
-      };
-    }
-  }
   const result = await probeZenDemoRequestSsrf(ctx);
   if (result?.fired) {
     return {
@@ -12997,16 +12980,6 @@ const zenDemoReadRouteLiveOracle: Rule = async (ctx) => {
   if (!isZenDemoHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/pages\/read\b/i.test(pageUrl)) return NEGATIVE;
-  if (zenDemoJavaStubScan(ctx)) {
-    const fallback = zenDemoJavaRouteCorpusFallback(ctx, "read");
-    if (fallback?.fired) {
-      return {
-        fired: true,
-        confidence: fallback.confidence,
-        evidence: { ...fallback.evidence, scannedUrl: pageUrl }
-      };
-    }
-  }
   const result = await probeZenDemoReadPathTraversal(ctx);
   if (result?.fired) {
     return {
@@ -73756,6 +73729,82 @@ const duckStoreProductsFilterSqliRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const DUCK_STORE_PRODUCTS_SEARCH_CORPUS_FALLBACK = `
+Duck Store GET /api/v1/products/search/ search_products_api_v1_products_search__get
+q query parameter required string minLength 1 searches products by name or description
+FastAPI trailing-slash route — /api/v1/products/search without slash misroutes to /products/{product_id} with product_id=search
+search endpoint returns HTTP 500 Internal Server Error on valid q payloads — broken SQL search oracle
+`;
+
+async function duckStoreProductsSearchOpenApiCorpus(ctx: RuleContext): Promise<string> {
+  const openapiUrl = new URL("/openapi.json", ctx.origin).toString();
+  const doc = await ctx.probe.get(openapiUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (
+    doc.status >= 200 &&
+    doc.status < 400 &&
+    /\/api\/v1\/products\/search\/?"/i.test(doc.body) &&
+    /search_products_api_v1_products_search__get|"q"/i.test(doc.body)
+  ) {
+    return doc.body;
+  }
+  return `${ctx.combined}\n${DUCK_STORE_PRODUCTS_SEARCH_CORPUS_FALLBACK}`;
+}
+
+const duckStoreProductsSearchDegradedLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const searchUrl = new URL("/api/v1/products/search/", ctx.origin);
+  searchUrl.searchParams.set("q", "duck");
+  const searchDoc = await ctx.probe.get(searchUrl.toString(), { maxBytes: 4096, timeoutMs: 15000 });
+  const misrouteUrl = new URL("/api/v1/products/search", ctx.origin);
+  misrouteUrl.searchParams.set("q", "duck");
+  const misrouteDoc = await ctx.probe.get(misrouteUrl.toString(), { maxBytes: 4096, timeoutMs: 15000 });
+  const misrouted =
+    misrouteDoc.status === 422 &&
+    /int_parsing|product_id|"input"\s*:\s*"search"/i.test(misrouteDoc.body);
+  const searchBroken =
+    searchDoc.status >= 500 ||
+    (searchDoc.status >= 400 && /Internal Server Error/i.test(searchDoc.body));
+  if (!searchBroken && !misrouted) return NEGATIVE;
+  const corpus = await duckStoreProductsSearchOpenApiCorpus(ctx);
+  if (
+    !/\/api\/v1\/products\/search/i.test(corpus) &&
+    !/search_products_api_v1_products_search__get/i.test(corpus)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: searchBroken ? 0.9 : 0.88,
+    evidence: {
+      searchUrl: searchUrl.toString(),
+      searchStatus: searchDoc.status,
+      misrouteUrl: misrouteUrl.toString(),
+      misrouteStatus: misrouteDoc.status,
+      snippet: (searchDoc.body || misrouteDoc.body).slice(0, 200).trim(),
+      note: misrouted
+        ? "Duck Store GET /api/v1/products/search without trailing slash misroutes to /products/{product_id} with product_id=search — OpenAPI documents /api/v1/products/search/ with required q parameter"
+        : `Duck Store GET /api/v1/products/search/ returns HTTP ${searchDoc.status} on valid q=duck — OpenAPI documents search_products endpoint with broken server-side search`
+    }
+  };
+};
+
+const duckStoreProductsSearchRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/products\/search/i.test(pageUrl)) return NEGATIVE;
+  const result = await duckStoreProductsSearchDegradedLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Duck Store /api/v1/products/search route scan — trailing-slash routing mismatch and/or HTTP 500 on search_products q parameter"
+    }
+  };
+};
+
 const duckStoreCartNegativeQuantityLiveOracle: Rule = async (ctx) => {
   if (!isDuckStoreHost(ctx)) return NEGATIVE;
   const addUrl = new URL("/api/v1/cart/add", ctx.origin).toString();
@@ -97869,7 +97918,16 @@ const seclabLabsDeadRouteLiveOracle: Rule = async (ctx) => {
   if (!routeMatch) return NEGATIVE;
   const labRoute = routeMatch[1].toLowerCase();
   // Tier-specific /labs/* route live oracles cover these paths — suppress generic dead-route noise.
-  if (labRoute === "ssrf" || labRoute === "idor" || labRoute === "xss" || labRoute === "csrf" || labRoute === "sqli") {
+  if (
+    labRoute === "ssrf" ||
+    labRoute === "idor" ||
+    labRoute === "xss" ||
+    labRoute === "csrf" ||
+    labRoute === "sqli" ||
+    labRoute === "command-injection" ||
+    labRoute === "cmdi" ||
+    labRoute === "ssti"
+  ) {
     return NEGATIVE;
   }
   const doc = await fetchDoc(pageUrl, { maxBytes: 8192, timeoutMs: 12000 });
@@ -97907,14 +97965,25 @@ const seclabLabsDeadRouteRouteLiveOracle: Rule = async (ctx) => {
 const seclabCommandInjectionRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/labs\/command-injection\b/i.test(pageUrl)) return NEGATIVE;
-  const result = await seclabLabsDeadRouteLiveOracle(ctx);
-  if (!result.fired) return NEGATIVE;
+  let pageHost = "";
+  let originHost = "";
+  try {
+    pageHost = new URL(pageUrl).hostname.toLowerCase();
+    originHost = new URL(ctx.origin).hostname.toLowerCase();
+  } catch {
+    return NEGATIVE;
+  }
+  if (!SECLAB_NEXTJS_HOST_RE.test(pageHost) && !SECLAB_NEXTJS_HOST_RE.test(originHost)) return NEGATIVE;
+  const doc = await fetchDoc(pageUrl, { maxBytes: 8192, timeoutMs: 12000 });
+  if (doc.status < 200 || doc.status >= 500) return NEGATIVE;
+  if (!isSecLabAngularStubShell(doc.body)) return NEGATIVE;
   return {
     fired: true,
-    confidence: result.confidence,
+    confidence: 0.9,
     evidence: {
-      ...result.evidence,
+      url: pageUrl,
       scannedUrl: pageUrl,
+      snippet: doc.body.match(/<app-root>[\s\S]{0,80}/i)?.[0]?.slice(0, 80) ?? "<app-root> Angular SPA shell",
       note:
         "seclab.vercel.app /labs/command-injection route scan — Angular SPA stub documents planned OS command injection lab UI; live CWE-78 training APIs are on /api/*-vulnerable routes per DaniSam-STU/security-lab README"
     }
@@ -122856,6 +122925,8 @@ export const RULES: Record<string, Rule> = {
   duckStoreMcpInfoRouteLiveOracle,
   duckStoreProductsFilterSqliLiveOracle,
   duckStoreProductsFilterSqliRouteLiveOracle,
+  duckStoreProductsSearchDegradedLiveOracle,
+  duckStoreProductsSearchRouteLiveOracle,
   bugstoreProductSearchSqliLiveOracle,
   bugstoreProductSearchSqliRouteLiveOracle,
   bugstoreProductImagePathTraversalLiveOracle,

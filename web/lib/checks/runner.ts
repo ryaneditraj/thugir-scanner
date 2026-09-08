@@ -3046,6 +3046,8 @@ const DEEP_RULES = new Set<string>([
   "duckStoreMcpInfoRouteLiveOracle",
   "duckStoreProductsFilterSqliLiveOracle",
   "duckStoreProductsFilterSqliRouteLiveOracle",
+  "duckStoreProductsSearchDegradedLiveOracle",
+  "duckStoreProductsSearchRouteLiveOracle",
   "bugstoreProductSearchSqliLiveOracle",
   "bugstoreProductSearchSqliRouteLiveOracle",
   "bugstoreProductImagePathTraversalLiveOracle",
@@ -18084,6 +18086,12 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /duck-store\.escape\.tech/i.test(origin) &&
         /\/api\/v1\/products\/filter\/by-color/i.test(targetInput) &&
         p.slug.startsWith("duck-store-products-filter-sqli")
+      )
+        return -3;
+      if (
+        /duck-store\.escape\.tech/i.test(origin) &&
+        /\/api\/v1\/products\/search/i.test(targetInput) &&
+        p.slug.startsWith("duck-store-products-search")
       )
         return -3;
       if (

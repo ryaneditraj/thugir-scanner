@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-08T10:14:34.909Z",
-  "total": 3457,
-  "uniqueSlugs": 3449,
+  "generatedAt": "2026-09-08T11:06:16.732Z",
+  "total": 3459,
+  "uniqueSlugs": 3451,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3439,
+    "generic": 3441,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3372,
+    "deep": 3374,
     "continuous": 0
   },
   "byCategory": {
@@ -25,7 +25,7 @@
     "Misconfiguration": 2,
     "Information exposure": 1,
     "Information disclosure": 159,
-    "Security misconfiguration": 288,
+    "Security misconfiguration": 290,
     "Broken authentication": 223,
     "Injection": 576,
     "Cross-site scripting": 814,
@@ -1239,6 +1239,8 @@
     "duck-store-products-filter-sqli-route-live-oracle",
     "duck-store-products-reviews-misroute-live-oracle",
     "duck-store-products-reviews-misroute-route-live-oracle",
+    "duck-store-products-search-degraded-live-oracle",
+    "duck-store-products-search-route-live-oracle",
     "duck-store-profile-mass-assignment-live-oracle",
     "duck-store-profile-mass-assignment-route-live-oracle",
     "duck-store-referral-code-abuse-live-oracle",
