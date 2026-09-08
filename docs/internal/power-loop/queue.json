@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-08T00:12:00.000Z",
+  "updated_at": "2026-09-08T01:05:00.000Z",
   "priority_discovery_urls": [
     {
       "url": "https://demo.owasp-juice.shop/rest/basket",
@@ -11165,6 +11165,31 @@
     {
       "url": "https://duck-store.escape.tech/api/v1/orders/coupons",
       "source": "Escape Duck Store \u2014 coupon information disclosure GET /api/v1/orders/coupons (vulnerabilities page)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-1",
+      "source": "OWASP WrongSecrets \u2014 Challenge 1 Git hardcoded password oracle (official Heroku demo; web search 01 UTC)",
+      "auth": "public_benchmark"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-2",
+      "source": "OWASP WrongSecrets \u2014 Challenge 2 Spring application.properties secret oracle (official Heroku demo; web search 01 UTC)",
+      "auth": "public_benchmark"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-8",
+      "source": "OWASP WrongSecrets \u2014 Challenge 8 startup logging secret disclosure oracle (official Heroku demo; web search 01 UTC)",
+      "auth": "public_benchmark"
+    },
+    {
+      "url": "https://dvaib.com/login",
+      "source": "DVAIB Damn Vulnerable AI Bank \u2014 auth/login surface for prompt-injection scenarios (dvaib.com OSS deploy; web search 01 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvaib.com/register",
+      "source": "DVAIB Damn Vulnerable AI Bank \u2014 registration/auth-bypass surface (dvaib.com OSS deploy; web search 01 UTC)",
       "auth": "public_demo"
     }
   ]

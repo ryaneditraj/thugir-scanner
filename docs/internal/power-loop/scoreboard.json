@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-08T00:45:00.000Z",
+  "updated_at": "2026-09-08T01:10:40.920Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2782,
-  "total_findings": 27629,
+  "total_sites_scanned": 2791,
+  "total_findings": 27835,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1983,
-  "discovery_findings": 23335,
+  "discovery_urls_added": 1988,
+  "discovery_findings": 23488,
   "improvements_shipped": 1599,
-  "last_run": "2026-09-08T00:45:00.000Z",
+  "last_run": "2026-09-08T01:10:40.920Z",
   "last_run_summary": {
-    "hour_utc": "00",
+    "hour_utc": "01",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 53,
@@ -53,34 +53,42 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 76,
-      "focus": "00 UTC: Juice Shop basket-items BOLA mirror fallback + Pwnshop mail IDOR route corpus + SixHack CTF labs marketing hub",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 153,
+      "focus": "WrongSecrets K8s/crypto challenges 5/33/48/49/59/61/62 + SekuMart SQLi playground + queued DVAIB login/register + WrongSecrets Git/logging challenges 1/2/8",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, gap=[])",
-      "demo.owasp-juice.shop/rest/basket: 25 (+juice-shop-basket-items-bola-live-oracle +juice-shop-basket-items-bola-route-live-oracle via escape.tech mirror)",
-      "pwnshop.ctfsecurity.com/mail/1: 47 (+pwnshop-mail-inbox-idor-live-oracle +pwnshop-mail-idor-route-live-oracle)",
-      "sixhackacademy.com/ctf-labs/: 4 (+sixhack-ctf-labs-route-live-oracle marketing hub oracle)"
+      "wrongsecrets.herokuapp.com/challenge/challenge-33: 19 (+wrongsecrets-challenge-33-k8s-stringdata-route-live-oracle)",
+      "wrongsecrets.herokuapp.com/challenge/challenge-48: 19 (K8s secrets oracle corpus)",
+      "wrongsecrets.herokuapp.com/challenge/challenge-49: 19 (cryptography secret oracle corpus)",
+      "wrongsecrets.herokuapp.com/challenge/challenge-5: 19 (K8s ConfigMap oracle corpus)",
+      "wrongsecrets.herokuapp.com/challenge/challenge-59: 19 (CI/CD pipeline secret oracle corpus)",
+      "wrongsecrets.herokuapp.com/challenge/challenge-61: 19 (secrets-management oracle corpus)",
+      "wrongsecrets.herokuapp.com/challenge/challenge-62: 19 (AI secret-extraction oracle corpus)",
+      "sekumart.sekuripy.hr/product.php?id=1: 20 (+sekumart-openapi-sqli-live-oracle +sekumart-catalog-orderby-sqli-live-oracle +sekumart-members-nosql-live-oracle)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "crapi.lab.pentest-forge.com still unreachable from cloud agent",
-      "SixHack Academy per-challenge instances login-gated — platform + /ctf-labs/ hub oracles cover catalog only"
+      "crapi.lab.pentest-forge.com still unreachable from cloud agent (skipped at queue head)",
+      "WrongSecrets challenges 1/2/8 + DVAIB login/register queued but not yet scanned (queue tail)",
+      "WrongSecrets K8s challenges 33/48/49/59/61/62: route oracles confirm walkthrough text but cloud-only K8s execution not testable on Heroku"
     ]
   },
   "discovery_highlights": {
-    "demo.owasp-juice.shop/rest/basket": 25,
     "juice-shop.herokuapp.com": 53,
+    "wrongsecrets.herokuapp.com/challenge/challenge-33": 19,
+    "wrongsecrets.herokuapp.com/challenge/challenge-48": 19,
+    "wrongsecrets.herokuapp.com/challenge/challenge-49": 19,
+    "wrongsecrets.herokuapp.com/challenge/challenge-5": 19,
+    "wrongsecrets.herokuapp.com/challenge/challenge-59": 19,
+    "wrongsecrets.herokuapp.com/challenge/challenge-61": 19,
+    "wrongsecrets.herokuapp.com/challenge/challenge-62": 19,
+    "sekumart.sekuripy.hr/product.php?id=1": 20,
+    "demo.owasp-juice.shop/rest/basket": 25,
     "pwnshop.ctfsecurity.com/mail/1": 47,
-    "sixhackacademy.com/ctf-labs": 4,
-    "brokencrystals.com/api/file/aws": 95,
-    "brokencrystals.com/api/partners/partnerLogin": 75,
-    "pwnshop.ctfsecurity.com/vulnerabilities": 50,
-    "vaultapp-omega.vercel.app/api/documents/MTIz": 16,
-    "vaultapp-omega.vercel.app/api/notes/9": 16,
-    "platform.sixhackacademy.com": 5
+    "brokencrystals.com/api/file/aws": 95
   }
 }
