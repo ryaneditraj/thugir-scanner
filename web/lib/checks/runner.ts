@@ -16987,7 +16987,9 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         return -4;
       if (
         /ginandjuice\.shop/i.test(origin) &&
-        /\/my-account\/forgot-password\b/i.test(targetInput) &&
+        /\/my-account\/(?:forgot-password|change-password|change-email|change-address|delete)\b/i.test(
+          targetInput
+        ) &&
         p.slug.startsWith("ginandjuice-forgot-password")
       )
         return -4;
@@ -17063,7 +17065,7 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         return -4;
       if (
         /owasp-finbot-ctf\.org/i.test(origin) &&
-        /\/stats\b/i.test(targetInput) &&
+        (/\/stats\b/i.test(targetInput) || /\/ctf\/api\/v1\/challenges\b/i.test(targetInput)) &&
         p.slug.startsWith("finbot-ctf-stats")
       )
         return -4;
@@ -17152,6 +17154,14 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
       if (/bypass403\.vercel\.app/i.test(origin) && /\/debug\b/i.test(targetInput) && p.slug.startsWith("bypass403-debug")) return -3;
       if (/bypass403\.vercel\.app/i.test(origin) && /\/secure\b/i.test(targetInput) && p.slug.startsWith("bypass403-secure")) return -3;
       if (/bypass403\.vercel\.app/i.test(origin) && /\/admin\b/i.test(targetInput) && p.slug.startsWith("bypass403-admin")) return -3;
+      if (
+        /bypass403\.vercel\.app/i.test(origin) &&
+        /\/admin\/?(?:\?|#|$)/i.test(targetInput) &&
+        p.slug.startsWith("bypass403-") &&
+        /-route-live-oracle$/.test(p.slug) &&
+        !p.slug.startsWith("bypass403-admin-route")
+      )
+        return -3;
       if (/bypass403\.vercel\.app/i.test(origin) && /\/api\/admin\b/i.test(targetInput) && p.slug.startsWith("bypass403-api-admin")) return -3;
       if (/bypass403\.vercel\.app/i.test(origin) && /\/secret\b/i.test(targetInput) && p.slug.startsWith("bypass403-secret")) return -3;
       if (/bypass403\.vercel\.app/i.test(origin) && /\/config\b/i.test(targetInput) && p.slug.startsWith("bypass403-config")) return -3;

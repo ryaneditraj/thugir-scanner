@@ -19997,10 +19997,14 @@ const bypass403WafLiveOracle: Rule = async (ctx) => {
   return hit?.fired ? hit : NEGATIVE;
 };
 
+function bypass403AdminHubRouteScan(pageUrl: string): boolean {
+  return /\/admin\/?(?:\?|#|$)/i.test(pageUrl);
+}
+
 const bypass403WafRouteLiveOracle: Rule = async (ctx) => {
   if (!isBypass403Host(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/waf\b/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/waf\b/i.test(pageUrl) && !bypass403AdminHubRouteScan(pageUrl)) return NEGATIVE;
   const hit = await probeBypass403WafCfConnectingIp(ctx);
   if (!hit?.fired) return NEGATIVE;
   return {
@@ -20095,7 +20099,7 @@ const bypass403ApiAdminLiveOracle: Rule = async (ctx) => {
 const bypass403ApiAdminRouteLiveOracle: Rule = async (ctx) => {
   if (!isBypass403Host(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/api\/admin\b/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/api\/admin\b/i.test(pageUrl) && !bypass403AdminHubRouteScan(pageUrl)) return NEGATIVE;
   const hit = await probeBypass403ApiAdminSemicolon(ctx);
   if (!hit?.fired) return NEGATIVE;
   return {
@@ -20267,7 +20271,7 @@ const bypass403DebugVerbTunnelingLiveOracle: Rule = async (ctx) => {
 const bypass403DebugVerbTunnelingRouteLiveOracle: Rule = async (ctx) => {
   if (!isBypass403Host(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/debug\b/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/debug\b/i.test(pageUrl) && !bypass403AdminHubRouteScan(pageUrl)) return NEGATIVE;
   const hit = await probeBypass403DebugVerbTunneling(ctx);
   if (!hit?.fired) return NEGATIVE;
   return {
@@ -20368,7 +20372,7 @@ const bypass403SecureBearerInvalidTokenLiveOracle: Rule = async (ctx) => {
 const bypass403SecureBearerInvalidTokenRouteLiveOracle: Rule = async (ctx) => {
   if (!isBypass403Host(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/secure\b/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/secure\b/i.test(pageUrl) && !bypass403AdminHubRouteScan(pageUrl)) return NEGATIVE;
   const hit = await probeBypass403SecureBearerBypass(ctx);
   if (!hit?.fired) return NEGATIVE;
   return {
@@ -89098,7 +89102,9 @@ const ginAndJuiceChangeEmailRouteLiveOracle: Rule = async (ctx) => {
 const ginAndJuiceChangePasswordRouteLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/my-account\/change-password\b/i.test(pageUrl)) return NEGATIVE;
+  const myAccountSiblingRoute =
+    /\/my-account\/(?:change-password|change-email|change-address|delete)\b/i.test(pageUrl);
+  if (!myAccountSiblingRoute) return NEGATIVE;
   const result = await probeGinAndJuiceChangePasswordSurface(ctx);
   if (!result?.fired) {
     const doc = await ctx.probe.get(pageUrl, { maxBytes: 32768, timeoutMs: 15000 });
@@ -89626,7 +89632,12 @@ const ginAndJuiceForgotPasswordRouteLiveOracle: Rule = async (ctx) => {
 const ginAndJuiceMyAccountForgotPasswordRouteLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/my-account\/forgot-password\b/i.test(pageUrl)) return NEGATIVE;
+  if (
+    !/\/my-account\/(?:forgot-password|change-password|change-email|change-address|delete)\b/i.test(
+      pageUrl
+    )
+  )
+    return NEGATIVE;
   const result = await probeGinAndJuiceForgotPasswordSurface(ctx);
   if (!result?.fired) return NEGATIVE;
   return {
@@ -115957,7 +115968,11 @@ const finbotCtfStatsLiveOracle: Rule = async (ctx) => {
 const finbotCtfStatsRouteLiveOracle: Rule = async (ctx) => {
   if (!isFinbotCtfHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/stats(?:\/|$)/i.test(pageUrl)) return NEGATIVE;
+  if (
+    !/\/stats(?:\/|$)/i.test(pageUrl) &&
+    !/\/ctf\/api\/v1\/challenges\b/i.test(pageUrl)
+  )
+    return NEGATIVE;
   const result = await probeFinbotCtfStats(ctx);
   if (!result?.fired) return NEGATIVE;
   return {
@@ -115966,7 +115981,7 @@ const finbotCtfStatsRouteLiveOracle: Rule = async (ctx) => {
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: "OWASP FinBot /stats route scan — public /ctf/api/v1/stats exposes agentic challenge progress and category breakdown without authentication"
+      note: "OWASP FinBot /stats or /ctf/api/v1/challenges route scan — public /ctf/api/v1/stats exposes agentic challenge progress and category breakdown without authentication"
     }
   };
 };

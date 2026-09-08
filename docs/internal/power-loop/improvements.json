@@ -1,10 +1,22 @@
 {
   "candidates": [
     {
-      "source": "discovery:zen-demo-java.fly.dev",
-      "slug": "zen-demo-java-route-live-probe-priority",
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-my-account-sibling-route-oracles",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: zenDemoJavaSkipLiveProbe allows live /api/* probes on /pages/* route scans despite fast-path stub HTML; POST /api/execute invalid-command-here returns Cannot run program error=2; zen-demo-java.fly.dev/pages/execute findings 5→9 (+zen-demo-java-execute-shell-injection-live-oracle +create-sqli +request-ssrf +read-path-traversal alongside route oracles); benchmark juice-shop 53 findings 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: ginAndJuiceChangePasswordRouteLiveOracle + ginAndJuiceMyAccountForgotPasswordRouteLiveOracle extended to /my-account/change-email|change-password|change-address|delete sibling paths; ginandjuice.shop/my-account/change-email findings 39→40 (+ginandjuice-change-password-route-live-oracle +ginandjuice-my-account-forgot-password-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:bypass403.vercel.app",
+      "slug": "bypass403-admin-hub-route-oracles",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: bypass403AdminHubRouteScan extends api-admin/waf/debug/secure route oracles to /admin hub scans when live probes succeed; bypass403.vercel.app/admin findings 10→14 (+bypass403-api-admin-route-live-oracle +bypass403-waf-route-live-oracle +bypass403-debug-verb-tunneling-route-live-oracle +bypass403-secure-bearer-invalid-token-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owasp-finbot-ctf.org",
+      "slug": "finbot-ctf-challenges-stats-route-alias",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: finbotCtfStatsRouteLiveOracle extended to /ctf/api/v1/challenges API hub alongside /stats; owasp-finbot-ctf.org/ctf/api/v1/challenges findings 9→10 (+finbot-ctf-stats-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
     },
     {
       "source": "discovery:duck-store.escape.tech",
