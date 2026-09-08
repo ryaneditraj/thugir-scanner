@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-08T03:12:00.000Z",
+  "updated_at": "2026-09-08T03:31:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,25 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2805,
-  "total_findings": 28129,
+  "total_sites_scanned": 2814,
+  "total_findings": 28297,
   "critical_findings": 55,
   "teacher_delta_count": 0,
-  "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
+  "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1995,
-  "discovery_findings": 23730,
-  "improvements_shipped": 1605,
-  "last_run": "2026-09-08T03:12:00.000Z",
+  "discovery_findings": 22893,
+  "improvements_shipped": 1161,
+  "last_run": "2026-09-08T03:31:00.000Z",
   "last_run_summary": {
     "hour_utc": "03",
     "benchmark": {
-      "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 53,
+      "oracle_url": "https://juice-shop-staging.herokuapp.com",
+      "oracle_findings": 48,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 597,
-      "live_oracles": 39,
+      "probes_run": 591,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -49,38 +48,46 @@
           ]
         }
       },
-      "note": "Primary Heroku stable 6/6 first-pass recall (53 findings; gap=[]; no benchmark misses)"
+      "note": "Primary Heroku timed out (20min); staging fallback 6/6 with 48 findings (37 juice-shop live oracles); secret-resend slug still absent"
     },
-    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 2,
-      "urls_scanned": 5,
-      "findings": 108,
-      "focus": "Duck Store MCP coupons corpus fallback + DVAIB login live oracle + WrongSecrets /challenge/1 short URL seed validation",
-      "improvements_shipped_this_run": 3
+      "urls_added": 0,
+      "urls_scanned": 8,
+      "findings": 120,
+      "focus": "wrongsecrets 50-52/55-56/64-66 SSH bastion + binary oracles; priority_discovery_urls (duck-store MCP, wrongsecrets/1, dvaib login/register) pending next drain",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, gap=[])",
-      "duck-store.escape.tech/mcp/tools/list_coupons: 25 findings — duck-store-mcp-coupons-disclosure-live-oracle corpus fallback (was 0)",
-      "dvaib.com/login: 10 findings — dvaib-login-live-oracle + dvaib-login-route-live-oracle (first scan)",
-      "wrongsecrets.herokuapp.com/challenge/1: 19 findings — wrongsecrets-challenge-1-git-hardcoded-route-live-oracle via short URL seed",
-      "dvaib.com/register: 9 findings — register route oracle maintained",
-      "ai-security-platform-iota.vercel.app/challenges/command-injection: 12 findings — command-injection live oracle maintained"
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (48 findings, 37 live oracles) — primary Heroku timeout, staging fallback rich pass",
+      "wrongsecrets.herokuapp.com/challenge/challenge-55: 15 findings — wrongsecrets-challenge-55-ssh-bastion-route-live-oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-56: 15 findings — wrongsecrets-challenge-56-project-spec-route-live-oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-64: 15 findings — wrongsecrets-challenge-64-swift-binary-route-live-oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-65: 15 findings — wrongsecrets-challenge-65-java-plain-cli-route-live-oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-66: 15 findings — wrongsecrets-challenge-66-java-obfuscated-route-live-oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-50: 15 findings — wrongsecrets-challenge-50-dotnet-binary-route-live-oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-51: 15 findings — wrongsecrets-challenge-51-docker-secrets-route-live-oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-52: 15 findings — wrongsecrets-challenge-52-buildx-secrets-route-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "Queue tail not reached: WrongSecrets 2/6/8 short URLs, DVAIB hub, duck-store cart, crAPI2 OTP/JWT-none, vAPI BOLA still queued",
-      "Duck Store MCP list_coupons backend returns HTTP 500 — corpus fallback confirms tool disclosure from OpenAPI + tools/list"
+      "juice-shop.herokuapp.com primary timed out after 20min — Heroku cold start / connectivity degradation",
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "newly queued wrongsecrets 1/2/8 + crAPI2 OTP v2/check-otp already in upstream priority_discovery_urls — not yet scanned (queue head was wrongsecrets 50-66)"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 53,
-    "duck-store.escape.tech/mcp/tools/list_coupons": 25,
-    "dvaib.com/login": 10,
-    "wrongsecrets.herokuapp.com/challenge/1": 19,
-    "preview.owasp-juice.shop/rest/wallet/balance": 35,
-    "sekumart.sekuripy.hr/openapi.json": 18,
-    "brokencrystals.com/api/file/aws": 92,
-    "pwnshop.ctfsecurity.com/mail/1": 50
+    "juice-shop-staging.herokuapp.com": 48,
+    "wrongsecrets.herokuapp.com/challenge/challenge-55": 15,
+    "wrongsecrets.herokuapp.com/challenge/challenge-56": 15,
+    "wrongsecrets.herokuapp.com/challenge/challenge-64": 15,
+    "wrongsecrets.herokuapp.com/challenge/challenge-65": 15,
+    "wrongsecrets.herokuapp.com/challenge/challenge-66": 15,
+    "wrongsecrets.herokuapp.com/challenge/challenge-50": 15,
+    "wrongsecrets.herokuapp.com/challenge/challenge-51": 15,
+    "wrongsecrets.herokuapp.com/challenge/challenge-52": 15,
+    "duck-store.escape.tech/api/v1/users/me/profile": 33,
+    "demo.owasp-juice.shop/rest/memories": 27,
+    "duck-store.escape.tech/api/v1/products/filter/by-color": 31
   }
 }
