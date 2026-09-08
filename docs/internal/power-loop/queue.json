@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-08T08:05:00.000Z",
+  "updated_at": "2026-09-08T09:08:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/brute-force",
+      "source": "AI Security Platform — no rate-limit login brute-force challenge 11 (web search 09 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/vulnerable-npm-packages",
+      "source": "AI Security Platform — outdated npm CVE dependency challenge 07 (web search 09 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://seclab.vercel.app/labs/ssrf",
+      "source": "DaniSam-STU/security-lab — interactive SSRF lab page with live exploit UI (seclab.vercel.app; web search 09 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://bypass403.vercel.app/admin",
+      "source": "Karthikdude/bypass403 — protected /admin 403 bypass oracle (60+ endpoint lab; web search 09 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/account/delete",
+      "source": "Escape Duck Store benchmark blog — stored XSS via delete-account confirmation field oracle",
+      "auth": "public_demo"
+    },
     {
       "url": "https://ai-security-platform-iota.vercel.app/challenges/missing-security-headers",
       "source": "AI Security Platform — missing CSP/HSTS/X-Frame-Options challenge 09 (web search 08 UTC discovery)",
