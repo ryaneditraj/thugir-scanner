@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-08T07:08:00.000Z",
+  "updated_at": "2026-09-08T08:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/missing-security-headers",
+      "source": "AI Security Platform — missing CSP/HSTS/X-Frame-Options challenge 09 (web search 08 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/orders/checkout",
+      "source": "Escape Duck Store — 100% discount coupon + shipping bypass business-logic oracle POST /api/v1/orders/checkout (vulnerabilities page)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-0",
+      "source": "OWASP WrongSecrets — Challenge 0 intro Docker secret oracle (official Heroku demo; web search 08 UTC)",
+      "auth": "public_benchmark"
+    },
+    {
+      "url": "https://duck-store.escape.tech/testimonials",
+      "source": "Escape Duck Store — stored XSS testimonials POST surface (vulnerabilities page)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/nonexistent?redirect=https://evil.com",
+      "source": "Escape Duck Store — open redirect oracle GET /nonexistent?redirect= (vulnerabilities page)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://ai-security-platform-iota.vercel.app/challenges/weak-rls",
       "source": "AI Security Platform — Weak Supabase RLS challenge (web search 07 UTC discovery)",
@@ -11355,6 +11380,31 @@
     {
       "url": "http://vapi.apisec.ai/vapi/api1/user",
       "source": "roottusk/vAPI APIsec hosted — BOLA oracle GET /vapi/api1/user (OWASP API1 broken object auth)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/missing-security-headers",
+      "source": "AI Security Platform — missing CSP/HSTS/X-Frame-Options challenge 09 (web search 08 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/orders/checkout",
+      "source": "Escape Duck Store — 100% discount coupon + shipping bypass business-logic oracle POST /api/v1/orders/checkout (vulnerabilities page)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-0",
+      "source": "OWASP WrongSecrets — Challenge 0 intro Docker secret oracle (official Heroku demo; web search 08 UTC)",
+      "auth": "public_benchmark"
+    },
+    {
+      "url": "https://duck-store.escape.tech/testimonials",
+      "source": "Escape Duck Store — stored XSS testimonials POST surface (vulnerabilities page)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/nonexistent?redirect=https://evil.com",
+      "source": "Escape Duck Store — open redirect oracle GET /nonexistent?redirect= (vulnerabilities page)",
       "auth": "public_demo"
     }
   ]
