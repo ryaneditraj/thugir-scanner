@@ -33664,8 +33664,86 @@ const brokencrystalsSearchUsersRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+type VulnbankRouteTier =
+  | "chat"
+  | "ai-system-info"
+  | "ai-chat"
+  | "register"
+  | "login"
+  | "merchant-login"
+  | "merchant-me"
+  | "merchant-register"
+  | "merchant-payment"
+  | "bill-payments"
+  | "virtual-cards"
+  | "werkzeug"
+  | "upload-profile"
+  | "transfer"
+  | "graphql"
+  | "v3-user"
+  | "reset-password-v1"
+  | "reset-password-v2"
+  | "reset-password-v3"
+  | "forgot-password-v1"
+  | "forgot-password-v2"
+  | "request-loan"
+  | "sup3r-secret-admin"
+  | "create-admin"
+  | "internal-config"
+  | "check-balance"
+  | "transactions";
+
+function vulnbankScannedRoute(ctx: RuleContext): VulnbankRouteTier | null {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!pageUrl) return null;
+  try {
+    const pathname = new URL(pageUrl).pathname.toLowerCase();
+    if (/\/api\/v1\/reset-password\b/.test(pathname)) return "reset-password-v1";
+    if (/\/api\/v2\/reset-password\b/.test(pathname)) return "reset-password-v2";
+    if (/\/api\/v3\/reset-password\b/.test(pathname)) return "reset-password-v3";
+    if (/\/api\/v1\/forgot-password\b/.test(pathname)) return "forgot-password-v1";
+    if (/\/api\/v2\/forgot-password\b/.test(pathname)) return "forgot-password-v2";
+    if (/\/upload_profile_picture_url\b/.test(pathname)) return "upload-profile";
+    if (/\/profile\/upload\b/.test(pathname)) return "upload-profile";
+    if (/\/chat\b/.test(pathname)) return "chat";
+    if (/\/api\/ai\/system-info\b/.test(pathname)) return "ai-system-info";
+    if (/\/api\/ai\/chat\b/.test(pathname)) return "ai-chat";
+    if (/\/register\b/.test(pathname)) return "register";
+    if (/\/merchant\/login\b/.test(pathname)) return "merchant-login";
+    if (/\/merchant\/me\b/.test(pathname)) return "merchant-me";
+    if (/\/merchant\/register\b/.test(pathname)) return "merchant-register";
+    if (/\/merchant\/payment\b/.test(pathname)) return "merchant-payment";
+    if (/\/bill_payments\b/.test(pathname)) return "bill-payments";
+    if (/\/virtual_cards\b/.test(pathname)) return "virtual-cards";
+    if (/\/console\b/.test(pathname)) return "werkzeug";
+    if (/\/transfer\b/.test(pathname)) return "transfer";
+    if (/\/graphql\b/.test(pathname)) return "graphql";
+    if (/\/api\/v3\/user\b/.test(pathname)) return "v3-user";
+    if (/\/request_loan\b/.test(pathname)) return "request-loan";
+    if (/\/sup3r_s3cr3t_admin\b/.test(pathname)) return "sup3r-secret-admin";
+    if (/\/admin\/create_admin\b/.test(pathname)) return "create-admin";
+    if (/\/internal\/config\.json\b/.test(pathname)) return "internal-config";
+    if (/\/check_balance\b/.test(pathname)) return "check-balance";
+    if (/\/transactions\b/.test(pathname)) return "transactions";
+    return null;
+  } catch {
+    return null;
+  }
+}
+
+function vulnbankRouteTierAllows(
+  ctx: RuleContext,
+  allowed: VulnbankRouteTier | VulnbankRouteTier[]
+): boolean {
+  const scanned = vulnbankScannedRoute(ctx);
+  if (!scanned) return true;
+  const tiers = Array.isArray(allowed) ? allowed : [allowed];
+  return tiers.includes(scanned);
+}
+
 const vulnbankAiAnonymousChatLiveOracle: Rule = async (ctx) => {
   if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  if (!vulnbankRouteTierAllows(ctx, "chat")) return NEGATIVE;
   const chatUrl = new URL("/api/ai/chat/anonymous", ctx.origin).toString();
   const payload = JSON.stringify({ message: "What banking services do you offer?" });
   const doc = await ctx.probe.get(chatUrl, {
@@ -33723,6 +33801,7 @@ const vulnbankAiAnonymousChatRouteLiveOracle: Rule = async (ctx) => {
 
 const vulnbankAiSystemInfoLiveOracle: Rule = async (ctx) => {
   if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  if (!vulnbankRouteTierAllows(ctx, "ai-system-info")) return NEGATIVE;
   const infoUrl = new URL("/api/ai/system-info", ctx.origin).toString();
   const doc = await ctx.probe.get(infoUrl, {
     headers: { Accept: "application/json" },
@@ -33774,6 +33853,7 @@ const vulnbankAiSystemInfoRouteLiveOracle: Rule = async (ctx) => {
 
 const vulnbankAiChatTokenGateLiveOracle: Rule = async (ctx) => {
   if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  if (!vulnbankRouteTierAllows(ctx, "ai-chat")) return NEGATIVE;
   const chatUrl = new URL("/api/ai/chat", ctx.origin).toString();
   const payload = JSON.stringify({ message: "What is my account balance?" });
   const doc = await ctx.probe.get(chatUrl, {
@@ -33838,6 +33918,7 @@ const vulnbankAiChatTokenGateRouteLiveOracle: Rule = async (ctx) => {
 
 const vulnbankBoplaRegisterLiveOracle: Rule = async (ctx) => {
   if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  if (!vulnbankRouteTierAllows(ctx, "register")) return NEGATIVE;
   const registerUrl = new URL("/register", ctx.origin).toString();
   const probeUser = `thugir_bopla_${Date.now().toString(36)}`;
   const payload = JSON.stringify({
@@ -33970,6 +34051,8 @@ async function vulnbankSqliLoginBypassProbe(ctx: RuleContext): Promise<RuleResul
 }
 
 const vulnbankSqliLoginLiveOracle: Rule = async (ctx) => {
+  if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  if (!vulnbankRouteTierAllows(ctx, "login")) return NEGATIVE;
   const hit = await vulnbankSqliLoginBypassProbe(ctx);
   return hit?.fired ? hit : NEGATIVE;
 };
@@ -34119,6 +34202,8 @@ async function vulnbankMerchantSqliLoginBypassProbe(ctx: RuleContext): Promise<R
 }
 
 const vulnbankMerchantSqliLoginLiveOracle: Rule = async (ctx) => {
+  if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  if (!vulnbankRouteTierAllows(ctx, "merchant-login")) return NEGATIVE;
   const hit = await vulnbankMerchantSqliLoginBypassProbe(ctx);
   return hit?.fired ? hit : NEGATIVE;
 };
@@ -34205,6 +34290,7 @@ async function vulnbankMerchantMeDebugDisclosureProbe(ctx: RuleContext): Promise
 
 const vulnbankMerchantMeDebugDisclosureLiveOracle: Rule = async (ctx) => {
   if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  if (!vulnbankRouteTierAllows(ctx, "merchant-me")) return NEGATIVE;
   const hit = await vulnbankMerchantMeDebugDisclosureProbe(ctx);
   return hit?.fired ? hit : NEGATIVE;
 };
@@ -34228,6 +34314,7 @@ const vulnbankMerchantMeDebugDisclosureRouteLiveOracle: Rule = async (ctx) => {
 
 const vulnbankMerchantRegisterLiveOracle: Rule = async (ctx) => {
   if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  if (!vulnbankRouteTierAllows(ctx, "merchant-register")) return NEGATIVE;
   const registerUrl = new URL("/api/v1/merchants/register", ctx.origin).toString();
   const probeName = `thugir_merchant_${Date.now().toString(36)}`;
   const payload = JSON.stringify({
@@ -34271,6 +34358,7 @@ const vulnbankMerchantRegisterLiveOracle: Rule = async (ctx) => {
 
 const vulnbankBillPaymentsNegativeAmountLiveOracle: Rule = async (ctx) => {
   if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  if (!vulnbankRouteTierAllows(ctx, "bill-payments")) return NEGATIVE;
   const token = await vulnbankProbeUserToken(ctx, { balance: 10000 });
   if (!token) return NEGATIVE;
   const payUrl = new URL("/api/bill-payments/create", ctx.origin).toString();
@@ -34333,6 +34421,7 @@ const vulnbankBillPaymentsNegativeAmountRouteLiveOracle: Rule = async (ctx) => {
 
 const vulnbankMerchantPaymentChargeLiveOracle: Rule = async (ctx) => {
   if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  if (!vulnbankRouteTierAllows(ctx, "merchant-payment")) return NEGATIVE;
   const registerUrl = new URL("/api/v1/merchants/register", ctx.origin).toString();
   const probeName = `thugir_pay_${Date.now().toString(36)}`;
   const registerPayload = JSON.stringify({
@@ -34438,6 +34527,7 @@ const vulnbankMerchantPaymentChargeRouteLiveOracle: Rule = async (ctx) => {
 
 const vulnbankVirtualCardsBolaLiveOracle: Rule = async (ctx) => {
   if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  if (!vulnbankRouteTierAllows(ctx, "virtual-cards")) return NEGATIVE;
   const password = "ThugirProbe1!";
   const userA = `thugir_vca_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
   const userB = `thugir_vcb_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
@@ -34552,6 +34642,7 @@ const vulnbankVirtualCardsBolaRouteLiveOracle: Rule = async (ctx) => {
 
 const vulnbankWerkzeugConsoleLiveOracle: Rule = async (ctx) => {
   if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  if (!vulnbankRouteTierAllows(ctx, "werkzeug")) return NEGATIVE;
   const consoleUrl = new URL("/console", ctx.origin).toString();
   const doc = await ctx.probe.get(consoleUrl, { maxBytes: 16384, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -34592,6 +34683,7 @@ const vulnbankWerkzeugConsoleRouteLiveOracle: Rule = async (ctx) => {
 
 const vulnbankUploadProfilePictureUrlSsrfLiveOracle: Rule = async (ctx) => {
   if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  if (!vulnbankRouteTierAllows(ctx, "upload-profile")) return NEGATIVE;
   const token = await vulnbankProbeUserToken(ctx);
   if (!token) return NEGATIVE;
   const uploadUrl = new URL("/upload_profile_picture_url", ctx.origin).toString();
@@ -34682,6 +34774,7 @@ const vulnbankUploadProfilePictureUrlSsrfLiveOracle: Rule = async (ctx) => {
 
 const vulnbankTransferNegativeAmountLiveOracle: Rule = async (ctx) => {
   if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  if (!vulnbankRouteTierAllows(ctx, "transfer")) return NEGATIVE;
   const startingBalance = 1000;
   const transferAmount = -500;
   const token = await vulnbankProbeUserToken(ctx, { balance: startingBalance });
@@ -34746,6 +34839,7 @@ const vulnbankTransferNegativeAmountRouteLiveOracle: Rule = async (ctx) => {
 
 const vulnbankGraphqlIntrospectionLiveOracle: Rule = async (ctx) => {
   if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  if (!vulnbankRouteTierAllows(ctx, "graphql")) return NEGATIVE;
   const token = await vulnbankProbeUserToken(ctx);
   if (!token) return NEGATIVE;
   const graphqlUrl = new URL("/graphql", ctx.origin).toString();
@@ -34790,6 +34884,7 @@ const vulnbankGraphqlIntrospectionLiveOracle: Rule = async (ctx) => {
 
 const vulnbankV3UserIdorLiveOracle: Rule = async (ctx) => {
   if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  if (!vulnbankRouteTierAllows(ctx, "v3-user")) return NEGATIVE;
   const username = `thugir_v3_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
   const registerUrl = new URL("/register", ctx.origin).toString();
   const registerDoc = await ctx.probe.get(registerUrl, {
@@ -34882,7 +34977,7 @@ const vulnbankV3UserIdorRouteLiveOracle: Rule = async (ctx) => {
 
 async function vulnbankResetPasswordVersioningProbe(
   ctx: RuleContext,
-  version: "v2" | "v3"
+  version: "v1" | "v2" | "v3"
 ): Promise<RuleResult> {
   if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
   const username = `thugir_v3rp_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
@@ -34955,6 +35050,11 @@ async function vulnbankResetPasswordVersioningProbe(
 }
 
 const vulnbankV3ResetPasswordVersioningLiveOracle: Rule = async (ctx) => {
+  if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  if (
+    !vulnbankRouteTierAllows(ctx, ["reset-password-v1", "reset-password-v2", "reset-password-v3"])
+  )
+    return NEGATIVE;
   return vulnbankResetPasswordVersioningProbe(ctx, "v3");
 };
 
@@ -34992,8 +35092,26 @@ const vulnbankV2ResetPasswordVersioningRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const vulnbankV1ResetPasswordVersioningRouteLiveOracle: Rule = async (ctx) => {
+  if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/reset-password/i.test(pageUrl)) return NEGATIVE;
+  const result = await vulnbankResetPasswordVersioningProbe(ctx, "v1");
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Vuln Bank /api/v1/reset-password route scan — v1 forgot-password PIN leak resets password on v1 endpoint — API version confusion route oracle"
+    }
+  };
+};
+
 const vulnbankV1ForgotPasswordPinLeakLiveOracle: Rule = async (ctx) => {
   if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  if (!vulnbankRouteTierAllows(ctx, "forgot-password-v1")) return NEGATIVE;
   const username = `thugir_fp_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
   const registerUrl = new URL("/register", ctx.origin).toString();
   const registerDoc = await ctx.probe.get(registerUrl, {
@@ -35081,6 +35199,7 @@ const vulnbankV1ForgotPasswordRouteLiveOracle: Rule = async (ctx) => {
 
 const vulnbankV2ForgotPasswordEnumerationLiveOracle: Rule = async (ctx) => {
   if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  if (!vulnbankRouteTierAllows(ctx, "forgot-password-v2")) return NEGATIVE;
   const username = `thugir_v2fp_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
   const registerUrl = new URL("/register", ctx.origin).toString();
   const registerDoc = await ctx.probe.get(registerUrl, {
@@ -35163,6 +35282,7 @@ const vulnbankV2ForgotPasswordRouteLiveOracle: Rule = async (ctx) => {
 
 const vulnbankRequestLoanLiveOracle: Rule = async (ctx) => {
   if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  if (!vulnbankRouteTierAllows(ctx, "request-loan")) return NEGATIVE;
   const token = await vulnbankProbeUserToken(ctx);
   if (!token) return NEGATIVE;
   const loanUrl = new URL("/request_loan", ctx.origin).toString();
@@ -35201,6 +35321,7 @@ const vulnbankRequestLoanLiveOracle: Rule = async (ctx) => {
 
 const vulnbankRequestLoanNegativeAmountLiveOracle: Rule = async (ctx) => {
   if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  if (!vulnbankRouteTierAllows(ctx, "request-loan")) return NEGATIVE;
   const token = await vulnbankProbeUserToken(ctx);
   if (!token) return NEGATIVE;
   const loanUrl = new URL("/request_loan", ctx.origin).toString();
@@ -35273,6 +35394,7 @@ const vulnbankRequestLoanNegativeAmountRouteLiveOracle: Rule = async (ctx) => {
 
 const vulnbankSup3rSecretAdminLiveOracle: Rule = async (ctx) => {
   if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  if (!vulnbankRouteTierAllows(ctx, "sup3r-secret-admin")) return NEGATIVE;
   const username = `thugir_adm_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
   const registerUrl = new URL("/register", ctx.origin).toString();
   const registerDoc = await ctx.probe.get(registerUrl, {
@@ -35398,6 +35520,7 @@ async function vulnbankBoplaAdminToken(ctx: RuleContext): Promise<string | null>
 
 const vulnbankCreateAdminLiveOracle: Rule = async (ctx) => {
   if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  if (!vulnbankRouteTierAllows(ctx, "create-admin")) return NEGATIVE;
   const token = await vulnbankBoplaAdminToken(ctx);
   if (!token) return NEGATIVE;
   const createUrl = new URL("/admin/create_admin", ctx.origin).toString();
@@ -35452,6 +35575,7 @@ const vulnbankCreateAdminRouteLiveOracle: Rule = async (ctx) => {
 
 const vulnbankInternalConfigSsrfDemoLiveOracle: Rule = async (ctx) => {
   if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  if (!vulnbankRouteTierAllows(ctx, "internal-config")) return NEGATIVE;
   const url = new URL("/internal/config.json", ctx.origin).toString();
   const doc = await ctx.probe.get(url, { maxBytes: 2048, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 500) return NEGATIVE;
@@ -35487,6 +35611,7 @@ const vulnbankInternalConfigRouteLiveOracle: Rule = async (ctx) => {
 
 const vulnbankCheckBalanceIdorLiveOracle: Rule = async (ctx) => {
   if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  if (!vulnbankRouteTierAllows(ctx, "check-balance")) return NEGATIVE;
   const username = `thugir_bal_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
   const probeBalance = 1234.56;
   const registerUrl = new URL("/register", ctx.origin).toString();
@@ -35566,6 +35691,7 @@ const vulnbankCheckBalanceIdorRouteLiveOracle: Rule = async (ctx) => {
 
 const vulnbankTransactionsBolaLiveOracle: Rule = async (ctx) => {
   if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  if (!vulnbankRouteTierAllows(ctx, "transactions")) return NEGATIVE;
   const token = await vulnbankProbeUserToken(ctx);
   if (!token) return NEGATIVE;
   const victimAccount = "1234567890";
@@ -53844,6 +53970,8 @@ function pwnshopScannedRoute(ctx: RuleContext): string | null {
     if (/\/debug\b/.test(pathname)) return "debug";
     if (/\/lab-stats\b/.test(pathname)) return "lab-stats";
     if (/\/checkout\b/.test(pathname)) return "checkout";
+    if (/\/profile\/(?:update-avatar|upload-avatar)\b/.test(pathname)) return "profile";
+    if (/\/profile\b/.test(pathname)) return "profile";
     if (/\/seller\b/.test(pathname)) return "seller";
     if (/\/product\b/.test(pathname)) return "product";
     if (/\/search\b/.test(pathname)) return "search";
@@ -55049,7 +55177,7 @@ const pwnshopProductReviewStoredXssReviewRouteLiveOracle: Rule = async (ctx) => 
 
 const pwnshopAvatarSvgXssLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
-  if (!pwnshopRouteTierAllows(ctx, "product")) return NEGATIVE;
+  if (!pwnshopRouteTierAllows(ctx, ["product", "profile"])) return NEGATIVE;
   const cookie = await pwnshopCompleteOtpSession(ctx);
   if (!cookie) return NEGATIVE;
   const uploadUrl = new URL("/profile/upload-avatar", ctx.origin).toString();
@@ -55612,7 +55740,7 @@ const PWNSHOP_AVATAR_SSRF_PROBE_URL = "https://example.com/";
 
 const pwnshopAvatarUrlSsrfLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
-  if (!pwnshopRouteTierAllows(ctx, "product")) return NEGATIVE;
+  if (!pwnshopRouteTierAllows(ctx, ["product", "profile"])) return NEGATIVE;
   const cookie = await pwnshopCompleteOtpSession(ctx);
   if (!cookie) return NEGATIVE;
   const updateUrl = new URL("/profile/update-avatar", ctx.origin).toString();
@@ -89103,6 +89231,7 @@ const ginAndJuiceVulnerabilitiesDisclosureRouteLiveOracle: Rule = async (ctx) =>
 
 const ginAndJuiceLogoutSessionRegenerationLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  if (ginAndJuiceScannedRoute(ctx) === "logger") return NEGATIVE;
   const catalogUrl = new URL("/catalog", ctx.origin);
   catalogUrl.searchParams.set("thugir", Date.now().toString(36));
   const catalogPage = await ctx.probe.get(catalogUrl.toString(), {
@@ -90061,7 +90190,7 @@ const ginAndJuiceAngularVulnerableDependencyRouteLiveOracle: Rule = async (ctx) 
 
 const ginAndJuiceLoggerOastLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
-  if (!ginAndJuiceRouteTierAllows(ctx, ["catalog", "logger"])) return NEGATIVE;
+  if (!ginAndJuiceRouteTierAllows(ctx, "logger")) return NEGATIVE;
   const loggerUrl = new URL("/logger", ctx.origin).toString();
   const getBlocked = await ctx.probe.get(loggerUrl, { maxBytes: 4096, timeoutMs: 15000 });
   if (getBlocked.status !== 404) return NEGATIVE;
@@ -122207,6 +122336,7 @@ export const RULES: Record<string, Rule> = {
   vulnbankV3ResetPasswordVersioningLiveOracle,
   vulnbankV3ResetPasswordVersioningRouteLiveOracle,
   vulnbankV2ResetPasswordVersioningRouteLiveOracle,
+  vulnbankV1ResetPasswordVersioningRouteLiveOracle,
   vulnbankSup3rSecretAdminLiveOracle,
   vulnbankSup3rSecretAdminRouteLiveOracle,
   vulnbankCreateAdminLiveOracle,

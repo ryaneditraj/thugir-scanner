@@ -49118,6 +49118,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnbank-v1-reset-password-versioning-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "Vuln Bank v1 reset-password route API versioning oracle",
+    description:
+      "When scanning /api/v1/reset-password, v1 forgot-password PIN leaks reset the account on the v1 endpoint — route-specific API version confusion oracle.",
+    impactOneline:
+      "Route scans on v1 reset-password should confirm legacy PIN leaks remain exploitable across API versions.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankV1ResetPasswordVersioningRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Retire legacy forgot-password versions and isolate reset PIN handling per API version — Vuln Bank is intentional training software.",
+      steps: [
+        "Remove debug_info.pin from all forgot-password API versions.",
+        "Block cross-version reset flows or use version-specific PIN stores.",
+        "Run Vuln Bank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v1/reset-password route scan confirms v1 PIN leaks reset accounts on v1. Show API versioning remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vulnbank-sup3r-secret-admin-live-oracle",
     platform: "generic",
     category: "Broken access control",

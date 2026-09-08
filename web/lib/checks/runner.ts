@@ -4049,6 +4049,7 @@ const DEEP_RULES = new Set<string>([
   "vulnbankV3ResetPasswordVersioningLiveOracle",
   "vulnbankV3ResetPasswordVersioningRouteLiveOracle",
   "vulnbankV2ResetPasswordVersioningRouteLiveOracle",
+  "vulnbankV1ResetPasswordVersioningRouteLiveOracle",
   "vulnbankSup3rSecretAdminLiveOracle",
   "vulnbankSup3rSecretAdminRouteLiveOracle",
   "vulnbankCreateAdminLiveOracle",
@@ -14518,6 +14519,18 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /vulnbank\.org/i.test(origin) &&
         /\/api\/v2\/reset-password/i.test(targetInput) &&
         p.slug.startsWith("vulnbank-v2-reset-password")
+      )
+        return -3;
+      if (
+        /vulnbank\.org/i.test(origin) &&
+        /\/api\/v1\/reset-password/i.test(targetInput) &&
+        p.slug.startsWith("vulnbank-v1-reset-password")
+      )
+        return -3;
+      if (
+        /vulnbank\.org/i.test(origin) &&
+        /\/upload_profile_picture_url/i.test(targetInput) &&
+        p.slug.startsWith("vulnbank-upload-profile-picture")
       )
         return -3;
       if (

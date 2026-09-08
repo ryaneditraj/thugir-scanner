@@ -156,6 +156,20 @@ function pwnshopForgotPasswordReflexionSuppressed(ctx: PowerCtx): boolean {
   return /\/forgot-password\b/i.test(pageUrl);
 }
 
+/** Pwnshop /profile/update-avatar is OTP-gated SSRF — suppress generic reflexion probes on route scans. */
+function pwnshopProfileReflexionSuppressed(ctx: PowerCtx): boolean {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  if (!/pwnshop|ctfsecurity\.com/i.test(pageUrl)) return false;
+  return /\/profile\/(?:update-avatar|upload-avatar)\b/i.test(pageUrl);
+}
+
+/** Pwnshop /seller/preview is SSTI — suppress generic reflexion probes on route scans. */
+function pwnshopSellerReflexionSuppressed(ctx: PowerCtx): boolean {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  if (!/pwnshop|ctfsecurity\.com/i.test(pageUrl)) return false;
+  return /\/seller\/(?:preview|storefront)\b/i.test(pageUrl);
+}
+
 function pwnshopChatReflexionSuppressed(ctx: PowerCtx): boolean {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
   if (!/pwnshop|ctfsecurity\.com/i.test(pageUrl)) return false;
@@ -171,6 +185,7 @@ function ginAndJuiceReflexionSuppressed(ctx: PowerCtx): boolean {
     /\/catalog\/cart\b/i.test(pageUrl) ||
     /\/catalog\/product\b/i.test(pageUrl) ||
     /\/checkout\b/i.test(pageUrl) ||
+    /\/logger\b/i.test(pageUrl) ||
     (/\/cart\b/i.test(pageUrl) && !/\/catalog\/cart\b/i.test(pageUrl))
   );
 }
@@ -372,6 +387,8 @@ export const reflexionEscalatedXss: PowerRule = async (ctx) => {
   if (pwnshopWishlistReflexionSuppressed(ctx)) return NEGATIVE;
   if (pwnshopChatReflexionSuppressed(ctx)) return NEGATIVE;
   if (pwnshopForgotPasswordReflexionSuppressed(ctx)) return NEGATIVE;
+  if (pwnshopProfileReflexionSuppressed(ctx)) return NEGATIVE;
+  if (pwnshopSellerReflexionSuppressed(ctx)) return NEGATIVE;
   if (appsecCiLoginReflexionSuppressed(ctx)) return NEGATIVE;
   if (zeroHealthVercelDashboardReflexionSuppressed(ctx)) return NEGATIVE;
   if (hackminaazizReflexionSuppressed(ctx)) return NEGATIVE;
@@ -419,6 +436,8 @@ export const reflexionEscalatedSqli: PowerRule = async (ctx) => {
   if (pwnshopWishlistReflexionSuppressed(ctx)) return NEGATIVE;
   if (pwnshopChatReflexionSuppressed(ctx)) return NEGATIVE;
   if (pwnshopForgotPasswordReflexionSuppressed(ctx)) return NEGATIVE;
+  if (pwnshopProfileReflexionSuppressed(ctx)) return NEGATIVE;
+  if (pwnshopSellerReflexionSuppressed(ctx)) return NEGATIVE;
   if (zeroHealthVercelDashboardReflexionSuppressed(ctx)) return NEGATIVE;
   const params = ["id", "user", "name", "q", "search"];
   const paths = ["/", "/api/users", "/search"];
@@ -471,6 +490,8 @@ export const reflexionEscalatedSsti: PowerRule = async (ctx) => {
   if (securebankBlogReflexionSuppressed(ctx)) return NEGATIVE;
   if (ginAndJuiceReflexionSuppressed(ctx)) return NEGATIVE;
   if (pwnshopForgotPasswordReflexionSuppressed(ctx)) return NEGATIVE;
+  if (pwnshopProfileReflexionSuppressed(ctx)) return NEGATIVE;
+  if (pwnshopSellerReflexionSuppressed(ctx)) return NEGATIVE;
   if (oopssecGitHubPagesReflexionSuppressed(ctx)) return NEGATIVE;
   if (mcpgoatGitHubPagesReflexionSuppressed(ctx)) return NEGATIVE;
   if (aiThreatlabReflexionSuppressed(ctx)) return NEGATIVE;
