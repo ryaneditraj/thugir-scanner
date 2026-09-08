@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-08T10:08:00.000Z",
+  "updated_at": "2026-09-08T11:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://ginandjuice.shop/my-account/change-email",
+      "source": "PortSwigger Gin & Juice Shop — change-email account takeover oracle (VWAD gin-juice-shop; web search 11 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnbank.org/register",
+      "source": "Commando-X/vuln-bank — mass-assignment admin registration oracle POST /register (OpenAPI + Medium API pentest writeups; web search 11 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnbank.org/transfer",
+      "source": "VulnBank — negative-value transfer + BOLA oracle (OpenAPI /static/openapi.json; web search 11 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owasp-finbot-ctf.org/ctf/api/v1/challenges",
+      "source": "OWASP FinBot CTF — 19 agentic-AI challenge catalog API (system_prompt_leak, tool_poisoning, data_exfiltration; web search 11 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://seclab.vercel.app/labs/command-injection",
+      "source": "DaniSam-STU/security-lab — OS command injection lab page (seclab.vercel.app; web search 11 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://zen-demo-java.fly.dev/pages/execute",
       "source": "Aikido Zen WAF playground — shell injection POST /api/execute oracle (fly.dev; web search 10 UTC discovery)",
