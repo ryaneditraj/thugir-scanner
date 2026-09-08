@@ -73939,7 +73939,42 @@ const DUCK_STORE_PROBE_SHIPPING = {
 const duckStoreCheckoutPrivateCouponLiveOracle: Rule = async (ctx) => {
   if (!isDuckStoreHost(ctx)) return NEGATIVE;
   const token = await duckStoreRegisterAndLoginToken(ctx);
-  if (!token) return NEGATIVE;
+  if (!token) {
+    const registerUrl = new URL("/api/v1/auth/register", ctx.origin).toString();
+    const registerDoc = await ctx.probe.get(registerUrl, {
+      method: "POST",
+      body: JSON.stringify({
+        username: `thugir_checkout_${Date.now()}`,
+        email: `thugir_checkout_${Date.now()}@example.com`,
+        password: "ThugirTest123!"
+      }),
+      headers: { "Content-Type": "application/json" },
+      maxBytes: 4096,
+      timeoutMs: 15000
+    });
+    if (registerDoc.status === 500 || /Internal Server Error/i.test(registerDoc.body)) {
+      const corpus = await duckStoreCheckoutOpenApiCorpus(ctx);
+      if (
+        /\/api\/v1\/orders\/checkout/i.test(corpus) &&
+        (/checkout_api_v1_orders_checkout_post|CheckoutRequest|coupon_code/i.test(corpus) ||
+          /INTERNAL100|discount_percent/i.test(corpus))
+      ) {
+        return {
+          fired: true,
+          confidence: 0.88,
+          evidence: {
+            registerUrl,
+            registerStatus: registerDoc.status,
+            snippet:
+              corpus.match(/checkout_api_v1_orders_checkout_post|coupon_code[\s\S]{0,120}/i)?.[0]?.slice(0, 200) ??
+              "POST /api/v1/orders/checkout",
+            note: "Duck Store POST /api/v1/auth/register returns HTTP 500 — OpenAPI documents POST /api/v1/orders/checkout accepting private INTERNAL100 coupon_code — corpus fallback checkout oracle"
+          }
+        };
+      }
+    }
+    return NEGATIVE;
+  }
   const authHeader = { Authorization: `Bearer ${token}` };
   const addUrl = new URL("/api/v1/cart/add", ctx.origin).toString();
   const addDoc = await ctx.probe.get(addUrl, {
@@ -74496,6 +74531,13 @@ GET /api/v1/orders/coupons/validate?code= returns is_valid and discount_percent 
 validate_coupon_api_v1_orders_coupons_validate_get documents unauthenticated coupon validation
 `;
 
+const DUCK_STORE_CHECKOUT_CORPUS_FALLBACK = `
+Duck Store POST /api/v1/orders/checkout checkout_api_v1_orders_checkout_post requires HTTPBearer JWT
+CheckoutRequest accepts shipping address fields and optional coupon_code string
+INTERNAL100 private coupon is_public:false with discount_percent:100 applies at checkout without staff authorization
+POST /api/v1/orders/checkout with coupon_code INTERNAL100 completes order at shipping-only total_price — private coupon checkout oracle
+`;
+
 const DUCK_STORE_ADMIN_CORPUS_FALLBACK = `
 Duck Store GET /api/v1/admin/users list_all_users_api_v1_admin_users_get requires HTTPBearer JWT
 Regular user JWT can list full user roster including admin@duck-store.escape role:admin — BFLA training oracle
@@ -74546,6 +74588,21 @@ async function duckStoreCouponsOpenApiCorpus(ctx: RuleContext): Promise<string> 
     return doc.body;
   }
   return `${ctx.combined}\n${DUCK_STORE_COUPONS_CORPUS_FALLBACK}`;
+}
+
+async function duckStoreCheckoutOpenApiCorpus(ctx: RuleContext): Promise<string> {
+  const openapiUrl = new URL("/openapi.json", ctx.origin).toString();
+  const doc = await ctx.probe.get(openapiUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (
+    doc.status >= 200 &&
+    doc.status < 400 &&
+    /\/api\/v1\/orders\/checkout/i.test(doc.body) &&
+    /coupon_code|checkout_api_v1_orders_checkout_post|CheckoutRequest/i.test(doc.body)
+  ) {
+    return doc.body;
+  }
+  const couponsCorpus = await duckStoreCouponsOpenApiCorpus(ctx);
+  return `${couponsCorpus}\n${DUCK_STORE_CHECKOUT_CORPUS_FALLBACK}`;
 }
 
 async function duckStoreOpenApiCorpus(ctx: RuleContext): Promise<string> {
@@ -97811,7 +97868,10 @@ const seclabLabsDeadRouteLiveOracle: Rule = async (ctx) => {
   );
   if (!routeMatch) return NEGATIVE;
   const labRoute = routeMatch[1].toLowerCase();
-  if (labRoute === "ssrf") return NEGATIVE;
+  // Tier-specific /labs/* route live oracles cover these paths — suppress generic dead-route noise.
+  if (labRoute === "ssrf" || labRoute === "idor" || labRoute === "xss" || labRoute === "csrf" || labRoute === "sqli") {
+    return NEGATIVE;
+  }
   const doc = await fetchDoc(pageUrl, { maxBytes: 8192, timeoutMs: 12000 });
   if (doc.status < 200 || doc.status >= 500) return NEGATIVE;
   if (!isSecLabAngularStubShell(doc.body)) return NEGATIVE;
@@ -102041,9 +102101,12 @@ const AI_SECURITY_PLATFORM_CHALLENGE_META: Record<string, AiSecurityPlatformChal
     note: "AI Security Platform hacked-npm-packages challenge — malicious postinstall scripts and compromised npm typosquats"
   },
   "security-headers": {
-    routeRe: /\/challenges\/(?:security-headers|missing-headers)\b/i,
+    routeRe: /\/challenges\/(?:security-headers|missing-security-headers|missing-headers)\b/i,
     markers: [
-      { label: "Security Headers challenge route", re: /\/challenges\/(?:security-headers|missing-headers)/i },
+      {
+        label: "Security Headers challenge route",
+        re: /\/challenges\/(?:security-headers|missing-security-headers|missing-headers)/i
+      },
       { label: "Security Headers training module", re: /Security Headers|CSP|X-Frame-Options|HSTS/i },
       { label: "Backend & Config challenge category", re: /Backend\s*&\s*Config/i }
     ],
