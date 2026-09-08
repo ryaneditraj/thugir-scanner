@@ -11206,6 +11206,31 @@
       "url": "https://dvaib.com/register",
       "source": "DVAIB Damn Vulnerable AI Bank \u2014 registration/auth-bypass surface (dvaib.com OSS deploy; web search 01 UTC)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-6",
+      "source": "OWASP WrongSecrets \u2014 Challenge 6 K8s secrets oracle (official Heroku demo; web search 02 UTC)",
+      "auth": "public_benchmark"
+    },
+    {
+      "url": "https://crapi2.apisec.ai/identity/api/auth/v2/check-otp",
+      "source": "APIsec crAPI guide \u2014 OTP brute-force oracle POST /identity/api/auth/v2/check-otp (OWASP API2 broken auth)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://crapi2.apisec.ai/identity/api/auth/verify",
+      "source": "APIsec crAPI guide \u2014 JWT alg:none oracle POST /identity/api/auth/verify (OWASP API2 broken auth)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/mcp/tools/list_coupons",
+      "source": "Escape Duck Store \u2014 MCP coupon disclosure POST /mcp/tools/list_coupons (vulnerabilities page)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://vapi.apisec.ai/vapi/api1/user",
+      "source": "roottusk/vAPI APIsec hosted \u2014 BOLA oracle GET /vapi/api1/user (OWASP API1 broken object auth)",
+      "auth": "public_demo"
     }
   ]
 }
