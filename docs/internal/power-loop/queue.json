@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-08T21:12:00.000Z",
+  "updated_at": "2026-09-08T22:05:32.403Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://ginandjuice.shop/blog/post?postId=1",
+      "source": "PortSwigger Web Security Academy ginandjuice — blog post XSS oracle (ginandjuice.shop; web search 22 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/catalog/product?productId=1",
+      "source": "PortSwigger Web Security Academy ginandjuice — catalog product XXE/SQLi oracle (ginandjuice.shop; web search 22 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/cart",
+      "source": "Escape Duck Store — negative-quantity cart business-logic oracle (duck-store.escape.tech/vulnerabilities; web search 22 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/testimonials",
+      "source": "Escape Duck Store — stored XSS testimonials endpoint (duck-store.escape.tech/vulnerabilities; web search 22 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/orders",
+      "source": "Escape Duck Store — BOLA orders API oracle (escape.tech/blog/duck-store-vulnerable-app; web search 22 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://pwnshop.ctfsecurity.com/api/v1/events",
       "source": "ctfsec/pwnshop — PWN-005 unauthenticated audit log JSON feed with plaintext passwords (pwnshop.ctfsecurity.com/vulnerabilities; web search 21 UTC discovery)",

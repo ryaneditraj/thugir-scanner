@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-08T22:05:00.000Z",
+  "updated_at": "2026-09-08T22:10:13.695Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2990,
-  "total_findings": 31989,
+  "total_sites_scanned": 2999,
+  "total_findings": 32199,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2073,
-  "discovery_findings": 25386,
+  "discovery_urls_added": 2078,
+  "discovery_findings": 25543,
   "improvements_shipped": 1658,
-  "last_run": "2026-09-08T22:05:00.000Z",
+  "last_run": "2026-09-08T22:10:13.695Z",
   "last_run_summary": {
     "hour_utc": "22",
     "benchmark": {
@@ -48,35 +48,42 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (53 findings) — no category misses; teacher_delta skipped"
+      "note": "Stable 6/6 first-pass recall (53 findings, 40 live oracles incl secret-resend + jwt-alg-none + captcha-bypass) — no category misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 51,
-      "focus": "brokencrystals /api/render tier hub + pwnshop debug client-oracle strict + finbot-demo reflexion SSTI suppression",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 157,
+      "focus": "duck-store orders/cart/testimonials BOLA+XSS hub + ginandjuice catalog/blog oracles + queue drain login/wrongsecrets-45/46",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings)",
-      "brokencrystals.com/api/render: 93→33 — render-tier hub oracle suppression",
-      "pwnshop.ctfsecurity.com/debug/info: drops client-side-pwnshop-ssti + path-traversal corpus bleed",
-      "owasp-finbot-ctf-demo.onrender.com/: 3→2 — finbot-demo reflexion SSTI suppression"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, 597 probes)",
+      "duck-store.escape.tech/api/v1/orders: 27 findings — orders BOLA route hub",
+      "duck-store.escape.tech/api/v1/cart: 28 findings — negative-quantity cart business-logic hub",
+      "duck-store.escape.tech/api/v1/testimonials: 28 findings — stored XSS testimonials hub",
+      "ginandjuice.shop/catalog/product?productId=1: 13 findings — catalog product XXE/SQLi oracle",
+      "ginandjuice.shop/blog/post?postId=1: 23 findings — blog post XSS oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-45: 13 findings — Vault subkey route oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-46: 13 findings — Vault template injection route oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "benchmark 6/6 stable at 53 findings on Heroku",
-      "brokencrystals.com/api/render still 33 findings — generic passive probes (exposed-env-file, vibe-*) remain on API route scans"
+      "benchmark 6/6 stable at 53 findings on Heroku primary — no category gaps",
+      "duck-store API routes share hub oracle fingerprint — route-specific dedup candidate for cart vs orders vs testimonials"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 53,
+    "duck-store.escape.tech/api/v1/cart": 28,
+    "duck-store.escape.tech/api/v1/testimonials": 28,
+    "duck-store.escape.tech/api/v1/orders": 27,
+    "ginandjuice.shop/blog/post?postId=1": 23,
+    "ginandjuice.shop/catalog/product?productId=1": 13,
+    "wrongsecrets.herokuapp.com/challenge/challenge-45": 13,
+    "wrongsecrets.herokuapp.com/challenge/challenge-46": 13,
     "brokencrystals.com/api/render": 33,
-    "pwnshop.ctfsecurity.com/debug/info": 16,
-    "owasp-finbot-ctf-demo.onrender.com": 2,
-    "nodegoat-websec.herokuapp.com/profile": 14,
-    "dvga.tools.escape.tech/graphql": 11,
-    "ginandjuice.shop/logger": 8
+    "pwnshop.ctfsecurity.com/debug/info": 16
   }
 }
