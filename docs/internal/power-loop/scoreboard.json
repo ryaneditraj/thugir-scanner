@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-08T15:26:28.709Z",
+  "updated_at": "2026-09-08T16:06:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2933,
-  "total_findings": 30738,
+  "total_sites_scanned": 2951,
+  "total_findings": 30944,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2053,
-  "discovery_findings": 24509,
+  "discovery_urls_added": 2058,
+  "discovery_findings": 24560,
   "improvements_shipped": 1637,
-  "last_run": "2026-09-08T15:26:28.709Z",
+  "last_run": "2026-09-08T16:06:00.000Z",
   "last_run_summary": {
-    "hour_utc": "15",
+    "hour_utc": "16",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 53,
+      "oracle_findings": 52,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 597,
+      "probes_run": 596,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,42 +48,41 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (53 findings, 40 live oracles); primary Heroku ok on engine evolve validation pass"
+      "note": "Stable 6/6 recall (52 findings, 39 live oracles incl secret-resend + jwt-alg-none + captcha-bypass)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 57,
-      "focus": "QA Bash sample API REST/GraphQL BOLA oracles + pwnshop chat / ginandjuice cart reflexion suppression; vulnlab sqli/xss/ssti queue drain",
-      "improvements_shipped_this_run": 3
+      "findings": 51,
+      "focus": "vulnlab.dev blind-bool/second-order SQLi, format/sandboxed SSTI, CSP JSONP bypass XSS + queue drain sqli union/blind + xss stored",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, gap=[])",
-      "www.qabash.com/api/tools/sample-api/users: 6 findings — qabash-sample-api-users live+route oracles (+graphql hub bleed)",
-      "www.qabash.com/api/tools/sample-api/graphql: 6 findings — qabash-sample-api-graphql live+route oracles",
-      "pwnshop.ctfsecurity.com/chat: 51 findings — reflexion XSS/SQLi false positives suppressed",
-      "ginandjuice.shop/catalog/cart: 45 findings — reflexion-escalated-ssti false positive suppressed",
-      "sqli.vulnlab.dev/union/: 5 findings — sqli-vulnlab-union-route-live-oracle",
-      "xss.vulnlab.dev/stored/: 8 findings — stored + mxss + CSP JSONP bypass oracles",
-      "ssti.vulnlab.dev/blocklist/: 9 findings — full ssti.vulnlab.dev tier catalog"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, 39 live oracles, gap=[])",
+      "sqli.vulnlab.dev/blind-bool/: 5 findings — sqli-vulnlab-blind-bool live+route oracles",
+      "sqli.vulnlab.dev/second-order/: 4 findings — sqli-vulnlab-second-order live oracle",
+      "ssti.vulnlab.dev/format/: 10 findings — format-string SSTI live+route oracles + full tier catalog bleed",
+      "ssti.vulnlab.dev/sandboxed/: 4 findings — basic SSTI oracle only (sandboxed route oracle thin)",
+      "xss.vulnlab.dev/csp-bypass/: 10 findings — JSONP CSP bypass live+route oracles + full xss tier catalog",
+      "sqli.vulnlab.dev/union/: 5 findings — union live+route oracles",
+      "xss.vulnlab.dev/stored/: 8 findings — stored + mxss + CSP JSONP bypass oracles"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "primary Heroku juice-shop can timeout at 600s — staging fallback used by parallel scan",
-      "sqli.vulnlab.dev/blind/: union oracle fires but no dedicated boolean-blind route oracle",
-      "pentest-fauxbank.vercel.app/api/* routes queued but not yet drained this hour"
+      "ssti.vulnlab.dev/sandboxed/: sandboxed-specific route oracle missing — only basic tier fires",
+      "sqli.vulnlab.dev/blind/: fires union/error oracles not dedicated boolean-blind route oracle",
+      "sqli.vulnlab.dev/blind-time/ and xss.vulnlab.dev/mxss/ queued but not drained this hour"
     ]
   },
   "discovery_highlights": {
-    "www.qabash.com/api/tools/sample-api/users": 6,
-    "www.qabash.com/api/tools/sample-api/graphql": 6,
-    "pwnshop.ctfsecurity.com/chat": 51,
-    "ginandjuice.shop/catalog/cart": 45,
+    "juice-shop.herokuapp.com": 52,
+    "sqli.vulnlab.dev/blind-bool": 5,
+    "sqli.vulnlab.dev/second-order": 4,
+    "ssti.vulnlab.dev/format": 10,
+    "ssti.vulnlab.dev/sandboxed": 4,
+    "xss.vulnlab.dev/csp-bypass": 10,
     "sqli.vulnlab.dev/union": 5,
-    "xss.vulnlab.dev/stored": 8,
-    "ssti.vulnlab.dev/blocklist": 9,
-    "juice-shop.herokuapp.com": 53,
-    "juice-shop-staging.herokuapp.com": 52
+    "xss.vulnlab.dev/stored": 8
   }
 }
