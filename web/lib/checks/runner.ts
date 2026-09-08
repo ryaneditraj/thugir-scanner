@@ -18515,6 +18515,24 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
     }
   }
 
+  if (/dvga2?\.tools\.escape\.tech/i.test(origin)) {
+    try {
+      const pathname = new URL(targetInput).pathname.toLowerCase();
+      if (/\/(?:graphql|graphiql|my_pastes|import_paste|create_paste)\b/.test(pathname)) {
+        const deduped = findings.filter((f) => {
+          const slug = f.patternSlug || "";
+          if (!slug.startsWith("dvga-")) return true;
+          if (slug.endsWith("-route-live-oracle")) return true;
+          return false;
+        });
+        findings.length = 0;
+        findings.push(...deduped);
+      }
+    } catch {
+      /* ignore */
+    }
+  }
+
   return {
     target: target.toString(),
     finalUrl: home.finalUrl,

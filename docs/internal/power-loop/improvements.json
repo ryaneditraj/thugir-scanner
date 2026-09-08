@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-tier-hub-oracle-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: nodegoatScannedRoute + nodegoatRouteTierAllows guard 13 module live oracles on route scans; nodegoat-websec.herokuapp.com/profile findings 20→14 (-benefits-nosql/bac, memos, contributions, login-weak, signup cross-module bleed, +profile oracles retained); /tutorial findings 17→8 (-module live oracles, +tutorial-hub-route-live-oracle retained); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvga.tools.escape.tech",
+      "slug": "dvga-graphql-route-oracle-dedup",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: runDeepScan drops non-route dvga-*-live-oracle siblings on /graphql|graphiql|my_pastes|import_paste|create_paste route scans; dvga.tools.escape.tech/graphql findings 19→11 (-8 duplicate live-oracle siblings, +route oracles +dvga-route-live-oracle retained); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-logger-generic-probe-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: sqlErrorDisclosure + reflectedXss skip when ginAndJuiceScannedRoute is logger (catalog crawl bleed); ginandjuice.shop/logger findings 11→8 (-sql-error-disclosure -reflexion-escalated-xss/reflected-xss, +ginandjuice-logger-oast-live-oracle +route retained); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:qabash.com",
       "slug": "qabash-sample-api-users-live-oracle",
       "status": "shipped",

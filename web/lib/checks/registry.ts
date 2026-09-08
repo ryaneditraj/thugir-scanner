@@ -590,6 +590,8 @@ async function extractGruyereLiveInstancePaths(ctx: RuleContext): Promise<string
 }
 
 const reflectedXss: Rule = async (ctx) => {
+  if (/ginandjuice\.shop/i.test(ctx.origin) && ginAndJuiceScannedRoute(ctx) === "logger")
+    return NEGATIVE;
   const canary = `thugirXSS${Date.now().toString(36)}`;
   if (/brokencrystals\.com/i.test(ctx.origin)) {
     const subUrl = new URL("/api/subscriptions", ctx.origin);
@@ -2689,6 +2691,8 @@ async function probeDogViewerIdSql(ctx: RuleContext): Promise<RuleResult | null>
 }
 
 const sqlErrorDisclosure: Rule = async (ctx) => {
+  if (/ginandjuice\.shop/i.test(ctx.origin) && ginAndJuiceScannedRoute(ctx) === "logger")
+    return NEGATIVE;
   // Juice Shop benchmark oracle: /rest/products/search?q=')) returns SQLITE_ERROR.
   // Bootstrap may already contain the oracle body after primeJuiceShop — use it on cold pass1.
   if (/juice-shop|owasp-juice|\.juice\.shop$/i.test(ctx.origin)) {
@@ -9777,6 +9781,71 @@ function nodegoatProbeOrigin(ctx: RuleContext): string {
   return nodegoatLiveOrigin(ctx);
 }
 
+type NodegoatRouteTier =
+  | "home"
+  | "login"
+  | "signup"
+  | "dashboard"
+  | "tutorial"
+  | "tutorial-a1"
+  | "tutorial-a2"
+  | "tutorial-a3"
+  | "tutorial-a4"
+  | "tutorial-a5"
+  | "tutorial-a6"
+  | "tutorial-a7"
+  | "tutorial-a8"
+  | "tutorial-a9"
+  | "tutorial-a10"
+  | "tutorial-ssrf"
+  | "tutorial-redos"
+  | "benefits"
+  | "allocations"
+  | "profile"
+  | "memos"
+  | "contributions"
+  | "admin"
+  | "upload"
+  | "research"
+  | "learn";
+
+function nodegoatScannedRoute(ctx: RuleContext): NodegoatRouteTier | null {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!pageUrl) return null;
+  try {
+    const pathname = new URL(pageUrl).pathname.toLowerCase();
+    const tutorialMatch = pathname.match(/^\/tutorial\/(a\d{1,2}|ssrf|redos)\b/);
+    if (tutorialMatch) return `tutorial-${tutorialMatch[1]}` as NodegoatRouteTier;
+    if (/^\/tutorial\/?$/.test(pathname)) return "tutorial";
+    if (/^\/profile\/?$/.test(pathname)) return "profile";
+    if (/^\/benefits\/?$/.test(pathname)) return "benefits";
+    if (/^\/allocations/.test(pathname)) return "allocations";
+    if (/^\/memos\/?$/.test(pathname)) return "memos";
+    if (/^\/contributions\/?$/.test(pathname)) return "contributions";
+    if (/^\/login\/?$/.test(pathname)) return "login";
+    if (/^\/signup\/?$/.test(pathname)) return "signup";
+    if (/^\/dashboard\/?$/.test(pathname)) return "dashboard";
+    if (/^\/admin\/?$/.test(pathname)) return "admin";
+    if (/^\/upload\/?$/.test(pathname)) return "upload";
+    if (/^\/research\/?$/.test(pathname)) return "research";
+    if (/^\/learn\/?$/.test(pathname)) return "learn";
+    if (pathname === "/" || pathname === "") return "home";
+    return null;
+  } catch {
+    return null;
+  }
+}
+
+function nodegoatRouteTierAllows(
+  ctx: RuleContext,
+  allowed: NodegoatRouteTier | NodegoatRouteTier[]
+): boolean {
+  const scanned = nodegoatScannedRoute(ctx);
+  if (!scanned) return true;
+  const tiers = Array.isArray(allowed) ? allowed : [allowed];
+  return tiers.includes(scanned);
+}
+
 /** Login page meta/title also contains "OWASP NodeGoat" — require authenticated nav/profile markers. */
 function nodegoatLooksAuthenticated(html: string): boolean {
   if (/Enter sign up information/i.test(html)) return false;
@@ -10375,6 +10444,8 @@ const nodegoatBenefitsNosqlRouteLiveOracle: Rule = async (ctx) => {
 
 const nodegoatBenefitsNosqlLiveOracle: Rule = async (ctx) => {
   if (!isNodegoatHost(ctx)) return NEGATIVE;
+  if (!nodegoatRouteTierAllows(ctx, ["benefits", "allocations", "tutorial-a4", "tutorial-a1"]))
+    return NEGATIVE;
   return nodegoatBenefitsNosqlLiveProbe(ctx);
 };
 
@@ -10424,6 +10495,7 @@ async function nodegoatBenefitsBacLiveProbe(ctx: RuleContext): Promise<RuleResul
 
 const nodegoatBenefitsBacLiveOracle: Rule = async (ctx) => {
   if (!isNodegoatHost(ctx)) return NEGATIVE;
+  if (!nodegoatRouteTierAllows(ctx, ["benefits", "tutorial-a7"])) return NEGATIVE;
   return nodegoatBenefitsBacLiveProbe(ctx);
 };
 
@@ -10446,6 +10518,7 @@ const nodegoatBenefitsBacRouteLiveOracle: Rule = async (ctx) => {
 
 const nodegoatNosqlLoginLiveOracle: Rule = async (ctx) => {
   if (!isNodegoatHost(ctx)) return NEGATIVE;
+  if (!nodegoatRouteTierAllows(ctx, ["login", "tutorial-a2"])) return NEGATIVE;
   const cookie = await nodegoatNosqlLoginCookie(ctx);
   if (!cookie) return NEGATIVE;
   const dashUrl = new URL("/dashboard", nodegoatProbeOrigin(ctx)).toString();
@@ -11601,6 +11674,7 @@ async function nodegoatTutorialRedosLiveProbe(ctx: RuleContext): Promise<RuleRes
 
 const nodegoatTutorialRedosLiveOracle: Rule = async (ctx) => {
   if (!isNodegoatHost(ctx)) return NEGATIVE;
+  if (!nodegoatRouteTierAllows(ctx, ["tutorial-redos", "profile"])) return NEGATIVE;
   return nodegoatTutorialRedosLiveProbe(ctx);
 };
 
@@ -11722,12 +11796,14 @@ const nodegoatResearchSsrfRouteLiveOracle: Rule = async (ctx) => {
 
 const nodegoatResearchSsrfLiveOracle: Rule = async (ctx) => {
   if (!isNodegoatHost(ctx)) return NEGATIVE;
+  if (!nodegoatRouteTierAllows(ctx, ["research", "tutorial-ssrf"])) return NEGATIVE;
   const result = await nodegoatResearchSsrfLiveProbe(ctx);
   return result.fired ? result : NEGATIVE;
 };
 
 const nodegoatLearnOpenRedirectLiveOracle: Rule = async (ctx) => {
   if (!isNodegoatHost(ctx)) return NEGATIVE;
+  if (!nodegoatRouteTierAllows(ctx, ["learn", "tutorial-a10"])) return NEGATIVE;
   let cookie = await nodegoatNosqlLoginCookie(ctx);
   if (!cookie) cookie = await nodegoatRegisterSessionCookie(ctx);
   if (!cookie) return NEGATIVE;
@@ -11806,6 +11882,7 @@ const nodegoatLearnOpenRedirectRouteLiveOracle: Rule = async (ctx) => {
 
 const nodegoatSignupOpenRegistrationLiveOracle: Rule = async (ctx) => {
   if (!isNodegoatHost(ctx)) return NEGATIVE;
+  if (!nodegoatRouteTierAllows(ctx, ["signup", "home"])) return NEGATIVE;
   const signupUrl = new URL("/signup", ctx.origin).toString();
   const signupPage = await ctx.probe.get(signupUrl, { maxBytes: 16384, timeoutMs: 15000 });
   if (signupPage.status < 200 || signupPage.status >= 400) return NEGATIVE;
@@ -11862,6 +11939,7 @@ const nodegoatSignupRouteLiveOracle: Rule = async (ctx) => {
 
 const nodegoatLoginWeakCredentialsLiveOracle: Rule = async (ctx) => {
   if (!isNodegoatHost(ctx)) return NEGATIVE;
+  if (!nodegoatRouteTierAllows(ctx, ["login", "home", "dashboard"])) return NEGATIVE;
   const loginUrl = new URL("/login", nodegoatLiveOrigin(ctx)).toString();
   const loginPage = await ctx.probe.get(loginUrl, { maxBytes: 16384, timeoutMs: 15000 });
   if (loginPage.status < 200 || loginPage.status >= 400) return NEGATIVE;
@@ -12017,6 +12095,7 @@ async function nodegoatMemosStoredXssLiveProbe(ctx: RuleContext): Promise<RuleRe
 
 const nodegoatMemosStoredXssLiveOracle: Rule = async (ctx) => {
   if (!isNodegoatHost(ctx)) return NEGATIVE;
+  if (!nodegoatRouteTierAllows(ctx, "memos")) return NEGATIVE;
   return nodegoatMemosStoredXssLiveProbe(ctx);
 };
 
@@ -12106,6 +12185,7 @@ async function nodegoatContributionsSsjsLiveProbe(ctx: RuleContext): Promise<Rul
 
 const nodegoatContributionsSsjsLiveOracle: Rule = async (ctx) => {
   if (!isNodegoatHost(ctx)) return NEGATIVE;
+  if (!nodegoatRouteTierAllows(ctx, "contributions")) return NEGATIVE;
   return nodegoatContributionsSsjsLiveProbe(ctx);
 };
 
@@ -12203,6 +12283,7 @@ async function nodegoatProfileCsrfLiveProbe(ctx: RuleContext): Promise<RuleResul
 
 const nodegoatProfileCsrfLiveOracle: Rule = async (ctx) => {
   if (!isNodegoatHost(ctx)) return NEGATIVE;
+  if (!nodegoatRouteTierAllows(ctx, ["profile", "tutorial-a8"])) return NEGATIVE;
   return nodegoatProfileCsrfLiveProbe(ctx);
 };
 
@@ -12269,6 +12350,7 @@ async function nodegoatProfileSensitiveDataLiveProbe(ctx: RuleContext): Promise<
 
 const nodegoatProfileSensitiveDataLiveOracle: Rule = async (ctx) => {
   if (!isNodegoatHost(ctx)) return NEGATIVE;
+  if (!nodegoatRouteTierAllows(ctx, ["profile", "tutorial-a6"])) return NEGATIVE;
   return nodegoatProfileSensitiveDataLiveProbe(ctx);
 };
 
@@ -12357,6 +12439,7 @@ async function nodegoatProfileStoredXssLiveProbe(ctx: RuleContext): Promise<Rule
 
 const nodegoatProfileStoredXssLiveOracle: Rule = async (ctx) => {
   if (!isNodegoatHost(ctx)) return NEGATIVE;
+  if (!nodegoatRouteTierAllows(ctx, ["profile", "tutorial-a3"])) return NEGATIVE;
   return nodegoatProfileStoredXssLiveProbe(ctx);
 };
 

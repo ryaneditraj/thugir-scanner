@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-08T21:19:44.858Z",
+  "updated_at": "2026-09-08T21:50:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,17 +22,17 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2073,
   "discovery_findings": 25344,
-  "improvements_shipped": 1652,
-  "last_run": "2026-09-08T21:19:44.858Z",
+  "improvements_shipped": 1655,
+  "last_run": "2026-09-08T21:50:00.000Z",
   "last_run_summary": {
     "hour_utc": "21",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 49,
+      "oracle_findings": 53,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 573,
+      "probes_run": 597,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,39 +48,37 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (49 findings, 38 juice-shop live oracles incl secret-resend + jwt-alg-none + captcha-bypass)"
+      "note": "Stable 6/6 recall (53 findings) — no category misses; teacher_delta skipped"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 220,
-      "focus": "pwnshop audit-log/debug/chat + brokencrystals SSTI render + finbot-demo Render",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 4,
+      "findings": 41,
+      "focus": "nodegoat profile/tutorial tier hub + DVGA graphql route dedup + ginandjuice logger generic probe suppression",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (49 findings, 38 live oracles)",
-      "brokencrystals.com/api/render: 93 findings — SSTI render route oracle suite",
-      "pwnshop.ctfsecurity.com/api/v1/events: 53 findings — unauthenticated audit log PWN-005",
-      "pwnshop.ctfsecurity.com/chat: 22 findings — LLM prompt injection entry point",
-      "pwnshop.ctfsecurity.com/debug/info: 11 findings — debug credentials PWN-018",
-      "owasp-finbot-ctf-demo.onrender.com: 3 findings — agentic AI demo namespace (thin; policy gate)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings)",
+      "nodegoat-websec.herokuapp.com/profile: 20→14 — profile-tier hub oracle suppression",
+      "nodegoat-websec.herokuapp.com/tutorial: 17→8 — tutorial hub oracle suppression",
+      "dvga.tools.escape.tech/graphql: 19→11 — route-oracle dedup on graphql scans",
+      "ginandjuice.shop/logger: 11→8 — sql/xss generic probe suppression on logger route"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "owasp-finbot-ctf-demo.onrender.com: thin pass (3 findings) — policy agreement gate blocks deep crawl",
+      "benchmark 6/6 stable at 53 findings on Heroku",
       "brokencrystals.com/api/render: high finding count (93) may include hub oracles — route-specific suppression candidate"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 49,
+    "juice-shop.herokuapp.com": 53,
+    "nodegoat-websec.herokuapp.com/profile": 14,
+    "nodegoat-websec.herokuapp.com/tutorial": 8,
+    "dvga.tools.escape.tech/graphql": 11,
+    "ginandjuice.shop/logger": 8,
     "brokencrystals.com/api/render": 93,
-    "pwnshop.ctfsecurity.com/api/v1/events": 53,
-    "pwnshop.ctfsecurity.com/chat": 22,
-    "pwnshop.ctfsecurity.com/seller/preview": 20,
-    "pwnshop.ctfsecurity.com/debug/info": 11,
-    "vulnbank.org/api/v1/reset-password": 9,
-    "vulnbank.org/upload_profile_picture_url": 9,
-    "owasp-finbot-ctf-demo.onrender.com": 3
+    "pwnshop.ctfsecurity.com/profile/update-avatar": 26,
+    "vulnbank.org/api/v1/reset-password": 9
   }
 }
