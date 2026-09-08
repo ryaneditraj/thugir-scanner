@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-08T15:15:00.000Z",
+  "updated_at": "2026-09-08T16:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://sqli.vulnlab.dev/blind-bool/",
+      "source": "sampsonc/vulnlab.dev — boolean blind SQLi oracle lab (sqli.vulnlab.dev/meta blind-bool; web search 16 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://sqli.vulnlab.dev/second-order/",
+      "source": "sampsonc/vulnlab.dev — second-order SQLi via stored profile input (sqli.vulnlab.dev/meta second-order; web search 16 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssti.vulnlab.dev/format/",
+      "source": "sampsonc/vulnlab.dev — Python str.format() attribute-walk SSTI lab (ssti.vulnlab.dev/meta format; web search 16 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssti.vulnlab.dev/sandboxed/",
+      "source": "sampsonc/vulnlab.dev — Jinja2 SandboxedEnvironment bypass SSTI lab (ssti.vulnlab.dev/meta sandboxed; web search 16 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://xss.vulnlab.dev/csp-bypass/",
+      "source": "sampsonc/vulnlab.dev — CSP JSONP callback bypass reflected XSS lab (xss.vulnlab.dev/meta csp-bypass; web search 16 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://sqli.vulnlab.dev/union/",
       "source": "sampsonc/vulnlab.dev — UNION-based SQLi lab on live MariaDB (vulnlab.dev index; web search 15 UTC discovery)",
