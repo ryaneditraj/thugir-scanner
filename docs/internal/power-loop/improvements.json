@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-render-tier-hub-oracle-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: brokencrystalsRouteSlugPatterns + applyRouteOracleHubFilters drop cross-module brokencrystals-*-live-oracle siblings on /api/render route scans; POST /api/render Hello {{=7*7}} → Hello 49; brokencrystals.com/api/render findings 93→33 (-60 cross-module JWT/photo/SSRF/config oracles, +brokencrystals-render-dot-ssti-live-oracle +route +ssti-template-injection retained); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-debug-client-oracle-route-strict",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: pwnshopRouteOracle requires onRoute match when pwnshopScannedRoute is set — blocks PWNSHOP_VULN_REGISTRY corpus fallback bleed on route scans; pwnshop.ctfsecurity.com/debug/info drops client-side-pwnshop-ssti-oracle + client-side-pwnshop-path-traversal-oracle (-2 cross-route client oracles, +pwnshop-debug-info-live-oracle +pwnshop-events-audit-live-oracle retained); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owasp-finbot-ctf-demo.onrender.com",
+      "slug": "finbot-demo-reflexion-ssti-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: finbotDemoReflexionSuppressed skips reflexionEscalatedSsti on owasp-finbot-ctf-demo.onrender.com Next.js SPA (no server-side template engine); owasp-finbot-ctf-demo.onrender.com/ findings 3→2 (-reflexion-escalated-ssti false positive, +client-side-ctf-challange-3-middleware-bypass-evidence retained); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:nodegoat-websec.herokuapp.com",
       "slug": "nodegoat-tier-hub-oracle-suppression",
       "status": "shipped",
