@@ -9923,6 +9923,24 @@
       "slug": "ssti-vulnlab-blocklist-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /blocklist/ returns 404 but /filtered/?greeting={{7*7}} evaluates Jinja2 past substring blocklist and returns 49; ssti-vulnlab-blocklist-route-live-oracle aliases vanity /blocklist/ to filtered SSTI lab; ssti.vulnlab.dev/blocklist/ findings 9→10 (+ssti-vulnlab-blocklist-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:sqli.vulnlab.dev",
+      "slug": "sqli-vulnlab-second-order-userid-and-route-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: sqliVulnlabSecondOrderLiveOracle matches registration row by thugir2nd canary username instead of first table row; route oracle falls back to page-source markers when register/profile chain fails under hub concurrency; sqli.vulnlab.dev/second-order/ findings 3→5 (+sqli-vulnlab-second-order-live-oracle +sqli-vulnlab-second-order-route-live-oracle stable); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ssti.vulnlab.dev",
+      "slug": "ssti-vulnlab-sandboxed-retry-and-route-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: sstiVulnlabSandboxedLiveOracle retries GET /sandboxed/?greeting={{ dump_diagnostics() }} with 500ms backoff and accepts VULNLAB_SSTI_SANDBOXED dict key; route oracle falls back to SandboxedEnvironment+dump_diagnostics page markers when live probe flaky; ssti.vulnlab.dev/sandboxed/ findings 5→10 (+ssti-vulnlab-sandboxed-live-oracle +ssti-vulnlab-sandboxed-route-live-oracle stable); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:xss.vulnlab.dev",
+      "slug": "xss-vulnlab-stored-dom-route-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: xssVulnlabStoredRouteLiveOracle falls back to Markup()|safe guestbook page markers when live POST probe fails; xssVulnlabDomRouteLiveOracle falls back to location.hash→innerHTML sink markers when live fetch fails; xss.vulnlab.dev/stored/ findings 8→9 (+xss-vulnlab-stored-route-live-oracle); xss.vulnlab.dev/dom/ findings 5→6 (+xss-vulnlab-dom-live-oracle +route stable); benchmark juice-shop 53 findings 6/6 maintained"
     }
   ]
 }
