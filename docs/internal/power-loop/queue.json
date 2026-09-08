@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-08T04:34:27.394Z",
+  "updated_at": "2026-09-08T05:22:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://sekumart.sekuripy.hr/login.php",
+      "source": "SekuriPy SekuMart sqlmap playground — auth-bypass SQLi oracle POST /login.php (OpenAPI 05 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://sekumart.sekuripy.hr/apiv1.php",
+      "source": "SekuriPy SekuMart sqlmap playground — JSON-body SQLi oracle POST /apiv1.php (OpenAPI 05 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://sekumart.sekuripy.hr/category.php?cat=1",
+      "source": "SekuriPy SekuMart sqlmap playground — integer SQLi oracle GET /category.php?cat= (OpenAPI 05 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://vapi.apisec.ai/vapi/api7/user/login",
+      "source": "roottusk/vAPI — broken authentication oracle POST /vapi/api7/user/login (APIsec hosted lab 05 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://vapi.apisec.ai/vapi/api8/user/login",
+      "source": "roottusk/vAPI — credential stuffing / weak auth oracle POST /vapi/api8/user/login (APIsec hosted lab 05 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://crapi2.apisec.ai/identity/api/auth/v2/check-otp",
       "source": "APIsec crAPI v2 OTP brute-force — POST /identity/api/auth/v2/check-otp lacks v3 rate limit (04 UTC validation)",
