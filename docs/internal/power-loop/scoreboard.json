@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-08T05:32:00.000Z",
+  "updated_at": "2026-09-08T06:03:42.485Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,19 @@
       ]
     }
   },
-  "total_sites_scanned": 2834,
-  "total_findings": 28920,
+  "total_sites_scanned": 2838,
+  "total_findings": 29110,
   "critical_findings": 55,
   "teacher_delta_count": 0,
-  "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+  "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2008,
-  "discovery_findings": 23305,
-  "improvements_shipped": 1608,
-  "last_run": "2026-09-08T05:32:00.000Z",
+  "discovery_findings": 23343,
+  "improvements_shipped": 1611,
+  "last_run": "2026-09-08T06:03:42.485Z",
   "last_run_summary": {
-    "hour_utc": "05",
+    "hour_utc": "06",
     "benchmark": {
-      "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "primary_error": "https://juice-shop.herokuapp.com scan timeout after 600000ms",
+      "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 52,
       "oracle_recall": "6/6",
       "gap": [],
@@ -49,36 +48,34 @@
           ]
         }
       },
-      "note": "Primary Heroku cold-start timeout; staging fallback stable 6/6 (52 findings, 39 juice-shop live oracles incl secret-resend + iac-terraform-tls-key)"
+      "note": "Primary Heroku timeout; staging fallback 6/6 (52 findings, 39 live oracles incl secret-resend)"
     },
-    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 138,
-      "focus": "SekuMart OpenAPI tail (login/apiv1/category) + vAPI api7/api8 login; queue drain crAPI2 v2/check-otp + wrongsecrets 2/8",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 69,
+      "focus": "06 UTC: SekuMart login/apiv1/category route-specific SQLi oracles from OpenAPI queue gaps",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (52 findings, primary Heroku timeout)",
-      "sekumart.sekuripy.hr/login.php: 19 findings — OpenAPI sqlmap playground auth-bypass surface",
-      "sekumart.sekuripy.hr/apiv1.php: 19 findings — JSON-body SQLi oracle",
-      "vapi.apisec.ai/vapi/api7/user/login: 17 findings — vAPI broken-auth live oracles",
-      "crapi2.apisec.ai/identity/api/auth/v2/check-otp: 9 findings — v2 OTP brute-force route oracle",
-      "wrongsecrets.herokuapp.com/challenge/8: 19 findings — challenge-8 logging route live oracle"
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (52 findings, gap=[])",
+      "sekumart.sekuripy.hr/login.php: 19→23 (+sekumart-login-sqli-live-oracle +route)",
+      "sekumart.sekuripy.hr/apiv1.php: 19→23 (+sekumart-apiv1-json-sqli-live-oracle +route)",
+      "sekumart.sekuripy.hr/category.php?cat=1: +sekumart-category-sqli-live-oracle +route"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "juice-shop.herokuapp.com primary oracle unstable (600s timeout) — prefer staging fallback for recall scoring",
-      "demo.owasp-juice.shop/rest/basket still 503 — basket BOLA oracle blocked"
+      "juice-shop.herokuapp.com primary oracle unstable (600s timeout) — prefer staging fallback",
+      "demo.owasp-juice.shop/rest/basket intermittent 503 — basket BOLA uses escape.tech mirror"
     ]
   },
   "discovery_highlights": {
+    "sekumart.sekuripy.hr/login.php": 23,
+    "sekumart.sekuripy.hr/apiv1.php": 23,
+    "sekumart.sekuripy.hr/category.php?cat=1": 23,
     "juice-shop-staging.herokuapp.com": 52,
-    "sekumart.sekuripy.hr/login.php": 19,
-    "sekumart.sekuripy.hr/apiv1.php": 19,
-    "vapi.apisec.ai/vapi/api7/user/login": 17,
-    "wrongsecrets.herokuapp.com/challenge/8": 19,
-    "crapi2.apisec.ai/identity/api/auth/v2/check-otp": 9
+    "crapi2.apisec.ai/identity/api/auth/v2/check-otp": 9,
+    "vapi.apisec.ai/vapi/api7/user/login": 17
   }
 }
