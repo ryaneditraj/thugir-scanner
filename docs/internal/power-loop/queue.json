@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-08T16:05:00.000Z",
+  "updated_at": "2026-09-08T17:10:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://sqli.vulnlab.dev/blind-time/",
+      "source": "sampsonc/vulnlab.dev — blind time-based SQLi via SLEEP() oracle (sqli.vulnlab.dev/meta blind-time; web search 17 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://xss.vulnlab.dev/mxss/",
+      "source": "sampsonc/vulnlab.dev — mutation XSS via innerHTML round-trip sanitizer bypass (xss.vulnlab.dev/meta mxss; web search 17 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssti.vulnlab.dev/second-order/",
+      "source": "sampsonc/vulnlab.dev — second-order SSTI stored draft rendered later (ssti.vulnlab.dev/meta second-order; web search 17 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/catalog/product",
+      "source": "PortSwigger Gin & Juice Shop — XXE via /catalog/product stock check lab (ginandjuice.shop/vulnerabilities; web search 17 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-44",
+      "source": "OWASP WrongSecrets — Vault metadata SSRF challenge #44 (wrongsecrets.herokuapp.com; web search 17 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://sqli.vulnlab.dev/blind-bool/",
       "source": "sampsonc/vulnlab.dev — boolean blind SQLi oracle lab (sqli.vulnlab.dev/meta blind-bool; web search 16 UTC discovery)",
