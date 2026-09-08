@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-08T09:08:00.000Z",
+  "updated_at": "2026-09-08T10:08:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://zen-demo-java.fly.dev/pages/execute",
+      "source": "Aikido Zen WAF playground — shell injection POST /api/execute oracle (fly.dev; web search 10 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://zen-demo-java.fly.dev/pages/create",
+      "source": "Aikido Zen WAF playground — SQLi POST /api/create Malicious Pet oracle (fly.dev; web search 10 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://zen-demo-java.fly.dev/pages/request",
+      "source": "Aikido Zen WAF playground — SSRF POST /api/request url=127.0.0.1 oracle (fly.dev; web search 10 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://zen-demo-java.fly.dev/pages/read",
+      "source": "Aikido Zen WAF playground — path traversal GET /api/read?path=../secrets oracle (fly.dev; web search 10 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/products/search?q=duck",
+      "source": "Escape Duck Store — product search SQLi/injection oracle GET /api/v1/products/search (vulnerabilities page gap; web search 10 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://ai-security-platform-iota.vercel.app/challenges/brute-force",
       "source": "AI Security Platform — no rate-limit login brute-force challenge 11 (web search 09 UTC discovery)",
