@@ -97973,6 +97973,62 @@ const seclabLabsDeadRouteRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+/** True when a /labs/{tier} hub scan should not fire a different tier's live oracle. */
+function seclabLabsHubTierMismatch(pageUrl: string, oracleTier: string): boolean {
+  const hubMatch = pageUrl.match(
+    /\/labs\/(sqli|xss|csrf|idor|ssrf|ssti|command-injection|cmdi)(?:\/|$|\?)/i
+  );
+  if (!hubMatch) return false;
+  const normalize = (tier: string) => (tier === "cmdi" ? "command-injection" : tier.toLowerCase());
+  return normalize(hubMatch[1]) !== normalize(oracleTier);
+}
+
+const seclabSstiLabsRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/labs\/ssti\b/i.test(pageUrl)) return NEGATIVE;
+  let pageHost = "";
+  let originHost = "";
+  try {
+    pageHost = new URL(pageUrl).hostname.toLowerCase();
+    originHost = new URL(ctx.origin).hostname.toLowerCase();
+  } catch {
+    return NEGATIVE;
+  }
+  if (!SECLAB_NEXTJS_HOST_RE.test(pageHost) && !SECLAB_NEXTJS_HOST_RE.test(originHost)) return NEGATIVE;
+  const probeUrl = new URL("/api/ssti-vulnerable?name=${7*7}", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (
+    doc.status >= 200 &&
+    doc.status < 300 &&
+    /"safe"\s*:\s*false/.test(doc.body) &&
+    (/ssti|template|49/.test(doc.body) || /No authentication or authorization/i.test(doc.body)) &&
+    !isSecLabAngularStubShell(doc.body)
+  ) {
+    return {
+      fired: true,
+      confidence: 0.92,
+      evidence: {
+        url: probeUrl,
+        scannedUrl: pageUrl,
+        snippet: doc.body.slice(0, 200).trim(),
+        note: "seclab.vercel.app /labs/ssti route scan — GET /api/ssti-vulnerable evaluates template expressions server-side — live SSTI training API oracle"
+      }
+    };
+  }
+  const stubDoc = await fetchDoc(pageUrl, { maxBytes: 8192, timeoutMs: 12000 });
+  if (!isSecLabAngularStubShell(stubDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      url: probeUrl,
+      scannedUrl: pageUrl,
+      snippet: stubDoc.body.match(/<app-root>[\s\S]{0,80}/i)?.[0]?.slice(0, 80) ?? "<app-root> Angular SPA shell",
+      note: "seclab.vercel.app /labs/ssti route scan — Angular SPA stub documents planned SSTI lab UI; live CWE-1336 training APIs are on /api/*-vulnerable routes per DaniSam-STU/security-lab README"
+    }
+  };
+};
+
 const seclabCommandInjectionRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/labs\/command-injection\b/i.test(pageUrl)) return NEGATIVE;
@@ -105055,6 +105111,8 @@ async function probeSecLabSqliSearchApi(
 }
 
 const seclabSqliSearchLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (seclabLabsHubTierMismatch(pageUrl, "sqli")) return NEGATIVE;
   const hit = await probeSecLabSqliSearchApi(ctx);
   if (hit?.fired) return hit;
   let pageHost = "";
@@ -105505,6 +105563,8 @@ async function probeSecLabSsrfVulnerableApi(
 }
 
 const seclabSsrfVulnerableLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (seclabLabsHubTierMismatch(pageUrl, "ssrf")) return NEGATIVE;
   const hit = await probeSecLabSsrfVulnerableApi(ctx);
   if (hit?.fired) return hit;
   let pageHost = "";
@@ -122611,6 +122671,7 @@ export const RULES: Record<string, Rule> = {
   seclabPathTraversalRouteLiveOracle,
   seclabPathTraversalLabsRouteLiveOracle,
   seclabOpenRedirectLabsRouteLiveOracle,
+  seclabSstiLabsRouteLiveOracle,
   seclabSsrfVulnerableLiveOracle,
   seclabSsrfVulnerableRouteLiveOracle,
   seclabXxeVulnerableRouteLiveOracle,

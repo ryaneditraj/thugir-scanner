@@ -83687,6 +83687,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "seclab-ssti-labs-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "SecLab SSTI lab route live oracle",
+    description:
+      "When scanning /labs/ssti on seclab.vercel.app, the Angular SPA stub documents the planned server-side template injection lab — route-specific CWE-1336 training oracle (DaniSam-STU/security-lab README corpus).",
+    impactOneline:
+      "Route scans on /labs/ssti confirm advertised SSTI lab is an Angular stub pointing scanners to /api/*-vulnerable live endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "seclabSstiLabsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Deploy live SSTI lab UI on /labs/ssti or redirect to working /api/* training endpoints.",
+      steps: [
+        "Wire /labs/ssti to documented template injection APIs in DaniSam-STU/security-lab README.",
+        "Remove /labs/ssti from discovery queues until live UI deploys.",
+        "Run training labs only on isolated infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our seclab.vercel.app /labs/ssti route scan hits an Angular SPA stub. Show route-specific deployment fixes for the SSTI lab UI.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vulnerable-bounty-site-search-xss-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",

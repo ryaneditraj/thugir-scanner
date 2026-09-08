@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:seclab.vercel.app",
+      "slug": "seclab-ssti-labs-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: seclabSstiLabsRouteLiveOracle documents /labs/ssti Angular SPA stub + probes /api/ssti-vulnerable; seclab.vercel.app/labs/ssti findings 7→6 (+seclab-ssti-labs-route-live-oracle, -seclab-sqli-search-live-oracle -seclab-ssrf-vulnerable-live-oracle cross-tier bleed); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:seclab.vercel.app",
+      "slug": "seclab-labs-hub-tier-oracle-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: seclabLabsHubTierMismatch suppresses sqli/ssrf live oracles on non-matching /labs/{tier} hub scans; seclab.vercel.app/labs/ssti no longer fires seclab-sqli-search-live-oracle or seclab-ssrf-vulnerable-live-oracle; benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:qabash.com",
+      "slug": "qabash-api-playground-reflexion-ssti-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: qaBashApiPlaygroundReflexionSuppressed skips reflexionEscalatedSsti on /api/tools/sample-api/* testing sandbox (homepage chunk hashes embed coincidental 49); www.qabash.com/api/tools/sample-api/users findings 4→3 (-reflexion-escalated-ssti false positive); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:ginandjuice.shop",
       "slug": "ginandjuice-my-account-sibling-route-oracles",
       "status": "shipped",

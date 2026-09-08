@@ -100,6 +100,18 @@ function riglabsCyberLabReflexionSuppressed(ctx: PowerCtx): boolean {
   return RIGLABS_CYBER_LAB_HOST_RE.test(pageUrl);
 }
 
+/** QA Bash API Playground sample endpoints are testing sandboxes — reflexion SSTI probes hit homepage chunk hashes. */
+function qaBashApiPlaygroundReflexionSuppressed(ctx: PowerCtx): boolean {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  if (!/\/api\/tools\/sample-api\b/i.test(pageUrl)) return false;
+  try {
+    const host = new URL(pageUrl).hostname.toLowerCase();
+    return host === "qabash.com" || host.endsWith(".qabash.com");
+  } catch {
+    return /qabash\.com/i.test(pageUrl);
+  }
+}
+
 /** mantishack / International Bank demo embeds lineHeight:49px in Next.js 404 shells — suppress reflexion SSTI FPs. */
 function vulnerableBountySiteReflexionSuppressed(ctx: PowerCtx): boolean {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
@@ -441,6 +453,7 @@ export const reflexionEscalatedSsti: PowerRule = async (ctx) => {
   if (aiSecurityPlatformLoginGatedReflexionSuppressed(ctx)) return NEGATIVE;
   if (zeroHealthVercelDashboardReflexionSuppressed(ctx)) return NEGATIVE;
   if (cve55182SaasReflexionSuppressed(ctx)) return NEGATIVE;
+  if (qaBashApiPlaygroundReflexionSuppressed(ctx)) return NEGATIVE;
   const params = ["name", "q", "template", "message", "content"];
   const paths = ["/", "/search", "/template"];
 

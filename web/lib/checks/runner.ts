@@ -3522,6 +3522,7 @@ const DEEP_RULES = new Set<string>([
   "seclabLabsDeadRouteLiveOracle",
   "seclabLabsDeadRouteRouteLiveOracle",
   "seclabCommandInjectionRouteLiveOracle",
+  "seclabSstiLabsRouteLiveOracle",
   "vulnerableBountySiteSearchXssLiveOracle",
   "vulnerableBountySiteSearchXssRouteLiveOracle",
   "vulnerableBountySiteUsersApiRouteLiveOracle",
@@ -3767,6 +3768,8 @@ const DEEP_RULES = new Set<string>([
   "seclabCsrfLabsRouteLiveOracle",
   "seclabIdorVulnerableRouteLiveOracle",
   "seclabPathTraversalRouteLiveOracle",
+  "seclabCommandInjectionRouteLiveOracle",
+  "seclabSstiLabsRouteLiveOracle",
   "seclabSsrfVulnerableLiveOracle",
   "seclabSsrfVulnerableRouteLiveOracle",
   "seclabXxeVulnerableRouteLiveOracle",
@@ -15856,6 +15859,12 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /(?:^|\.)seclab\.vercel\.app$/i.test(origin) &&
         /\/labs\/command-injection\b/i.test(targetInput) &&
         p.slug === "seclab-command-injection-route-live-oracle"
+      )
+        return -4;
+      if (
+        /(?:^|\.)seclab\.vercel\.app$/i.test(origin) &&
+        /\/labs\/ssti\b/i.test(targetInput) &&
+        p.slug === "seclab-ssti-labs-route-live-oracle"
       )
         return -4;
       if (
