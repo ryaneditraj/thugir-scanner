@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:demo.owasp-juice.shop",
+      "slug": "juice-shop-basket-items-bola-mirror-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: juiceShopBasketItemsBolaLiveOracle retries escape.tech + staging mirrors when primary demo.owasp-juice.shop returns Heroku Application Error stub; demo.owasp-juice.shop/rest/basket findings 22→25 (+juice-shop-basket-items-bola-live-oracle +juice-shop-basket-items-bola-route-live-oracle); benchmark juice-shop.herokuapp.com 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-mail-idor-route-corpus-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: pwnshopMailIdorRouteLiveOracle adds PWNSHOP_MAIL_IDOR_CORPUS fallback when live OTP probe unavailable; pwnshop.ctfsecurity.com/mail/1 findings 12→47 (+pwnshop-mail-inbox-idor-live-oracle +pwnshop-mail-idor-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:sixhackacademy.com",
+      "slug": "sixhack-ctf-labs-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: sixhackCtfLabsRouteLiveOracle matches /ctf-labs/ marketing hub documenting free OWASP Top 10 CTF Labs on platform.sixhackacademy.com; sixhackacademy.com/ctf-labs/ findings 3→4 (+sixhack-ctf-labs-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:demo.owasp-juice.shop",
       "slug": "juice-shop-basket-hub-route-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: juiceShopBasketIdorRouteLiveOracle + juiceShopBasketItemsBolaRouteLiveOracle pathname matchers extended to /rest/basket hub (no numeric ID); demo.owasp-juice.shop/rest/basket findings 34→36 (+juice-shop-basket-idor-route-live-oracle +juice-shop-basket-items-bola-route-live-oracle); benchmark juice-shop.herokuapp.com 53 findings 6/6 maintained"
