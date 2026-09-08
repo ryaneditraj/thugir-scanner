@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-08T14:08:37.833Z",
-  "total": 3461,
-  "uniqueSlugs": 3453,
+  "generatedAt": "2026-09-08T15:24:25.706Z",
+  "total": 3465,
+  "uniqueSlugs": 3457,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3443,
+    "generic": 3447,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3376,
+    "deep": 3380,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 681,
+    "Broken access control": 685,
     "Exposed secret": 120,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -2563,6 +2563,10 @@
     "pygoat-sql-route-live-oracle",
     "pygoat-ssrf-lab-route-live-oracle",
     "pygoat-ssti-lab-route-live-oracle",
+    "qabash-sample-api-graphql-live-oracle",
+    "qabash-sample-api-graphql-route-live-oracle",
+    "qabash-sample-api-users-live-oracle",
+    "qabash-sample-api-users-route-live-oracle",
     "ratdo-csrf-live-oracle",
     "ratdo-idor-edit-live-oracle",
     "ratdo-stored-xss-live-oracle",

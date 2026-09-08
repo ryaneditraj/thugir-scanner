@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:qabash.com",
+      "slug": "qabash-sample-api-users-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET https://www.qabash.com/api/tools/sample-api/users returns [{\"role\":\"admin\",\"email\":\"alice@example.com\"}]; www.qabash.com/api/tools/sample-api/users findings 3→6 (+qabash-sample-api-users-live-oracle +qabash-sample-api-users-route-live-oracle +qabash-sample-api-graphql-live-oracle hub bleed); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:qabash.com",
+      "slug": "qabash-sample-api-graphql-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/tools/sample-api/graphql {\"query\":\"{ users { id name email role } }\"} returns data.users with role:admin without auth; www.qabash.com/api/tools/sample-api/graphql findings 3→6 (+qabash-sample-api-graphql-live-oracle +qabash-sample-api-graphql-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-chat-ginandjuice-cart-reflexion-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: pwnshopChatReflexionSuppressed skips reflexionEscalatedXss/Sqli on /chat; ginAndJuiceReflexionSuppressed extended to /catalog/cart + /checkout + /cart; pwnshop.ctfsecurity.com/chat findings 52→51 (-reflexion-escalated-sqli -reflexion-escalated-xss), ginandjuice.shop/catalog/cart 46→45 (-reflexion-escalated-ssti); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:sql-injection-lab.vercel.app",
       "slug": "sql-injection-lab-hub-route-live-oracle",
       "status": "shipped",

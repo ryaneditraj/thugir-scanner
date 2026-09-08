@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-08T15:17:00.000Z",
+  "updated_at": "2026-09-08T15:26:28.709Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2932,
-  "total_findings": 30685,
+  "total_sites_scanned": 2933,
+  "total_findings": 30738,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2053,
   "discovery_findings": 24509,
-  "improvements_shipped": 1634,
-  "last_run": "2026-09-08T15:17:00.000Z",
+  "improvements_shipped": 1637,
+  "last_run": "2026-09-08T15:26:28.709Z",
   "last_run_summary": {
     "hour_utc": "15",
     "benchmark": {
-      "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "oracle_findings": 52,
+      "oracle_url": "https://juice-shop.herokuapp.com",
+      "oracle_findings": 53,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 599,
+      "probes_run": 597,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,41 +48,42 @@
           ]
         }
       },
-      "note": "Primary juice-shop.herokuapp.com timed out 600s; staging fallback stable 6/6 (52 findings, 39 live oracles)"
+      "note": "Stable 6/6 recall (53 findings, 40 live oracles); primary Heroku ok on engine evolve validation pass"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
       "findings": 57,
-      "focus": "vulnlab.dev sqli union/blind + xss stored/dom + ssti blocklist; queue drain ucu-owasp-ctf xss/auth + wrongsecrets challenge-29",
-      "improvements_shipped_this_run": 0
+      "focus": "QA Bash sample API REST/GraphQL BOLA oracles + pwnshop chat / ginandjuice cart reflexion suppression; vulnlab sqli/xss/ssti queue drain",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (52 findings, gap=[]; primary Heroku cold-start timeout)",
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, gap=[])",
+      "www.qabash.com/api/tools/sample-api/users: 6 findings — qabash-sample-api-users live+route oracles (+graphql hub bleed)",
+      "www.qabash.com/api/tools/sample-api/graphql: 6 findings — qabash-sample-api-graphql live+route oracles",
+      "pwnshop.ctfsecurity.com/chat: 51 findings — reflexion XSS/SQLi false positives suppressed",
+      "ginandjuice.shop/catalog/cart: 45 findings — reflexion-escalated-ssti false positive suppressed",
       "sqli.vulnlab.dev/union/: 5 findings — sqli-vulnlab-union-route-live-oracle",
-      "sqli.vulnlab.dev/blind/: 4 findings — union oracle fires; dedicated blind-route oracle thin",
       "xss.vulnlab.dev/stored/: 8 findings — stored + mxss + CSP JSONP bypass oracles",
-      "xss.vulnlab.dev/dom/: 4 findings — xss-vulnlab-dom-route-live-oracle",
-      "ssti.vulnlab.dev/blocklist/: 9 findings — full ssti.vulnlab.dev tier catalog (basic/format/filtered/sandboxed)",
-      "wrongsecrets.herokuapp.com/challenge/challenge-29: 19 findings — challenge-29 screenshot-log route oracle"
+      "ssti.vulnlab.dev/blocklist/: 9 findings — full ssti.vulnlab.dev tier catalog"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "primary Heroku juice-shop timeout at 600s — staging fallback required for stable benchmark",
+      "primary Heroku juice-shop can timeout at 600s — staging fallback used by parallel scan",
       "sqli.vulnlab.dev/blind/: union oracle fires but no dedicated boolean-blind route oracle",
-      "ssti.vulnlab.dev/blocklist/: blocklist-bypass slug may need route-specific live oracle (filtered/sandboxed siblings fire)"
+      "pentest-fauxbank.vercel.app/api/* routes queued but not yet drained this hour"
     ]
   },
   "discovery_highlights": {
+    "www.qabash.com/api/tools/sample-api/users": 6,
+    "www.qabash.com/api/tools/sample-api/graphql": 6,
+    "pwnshop.ctfsecurity.com/chat": 51,
+    "ginandjuice.shop/catalog/cart": 45,
     "sqli.vulnlab.dev/union": 5,
-    "sqli.vulnlab.dev/blind": 4,
     "xss.vulnlab.dev/stored": 8,
-    "xss.vulnlab.dev/dom": 4,
     "ssti.vulnlab.dev/blocklist": 9,
-    "ucu-owasp-ctf.vercel.app/xss": 4,
-    "ucu-owasp-ctf.vercel.app/auth": 4,
-    "wrongsecrets.herokuapp.com/challenge/challenge-29": 19,
+    "juice-shop.herokuapp.com": 53,
     "juice-shop-staging.herokuapp.com": 52
   }
 }
