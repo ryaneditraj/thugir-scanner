@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:seclab.vercel.app",
+      "slug": "seclab-labs-dead-route-tier-exclusions",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: seclabLabsDeadRouteLiveOracle excludes idor/xss/csrf/sqli tiers (same pattern as ssrf); seclab.vercel.app/labs/idor findings 8→8 (-seclab-labs-dead-route-live-oracle, +seclab-idor-labs-route-live-oracle retained); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-checkout-private-coupon-openapi-corpus-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: duckStoreCheckoutOpenApiCorpus + register HTTP 500 corpus fallback when auth chain fails; duck-store.escape.tech/api/v1/orders/checkout findings 24→27 (+duck-store-checkout-private-coupon-live-oracle +duck-store-checkout-private-coupon-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ai-security-platform-iota.vercel.app",
+      "slug": "ai-security-missing-security-headers-route-alias",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: AI_SECURITY_PLATFORM_CHALLENGE_META security-headers routeRe extended to /challenges/missing-security-headers; ai-security-platform-iota.vercel.app/challenges/missing-security-headers findings 11→8 (+ai-security-security-headers-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:seclab.vercel.app",
       "slug": "seclab-ssrf-vulnerable-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: probeSecLabSsrfVulnerableApi shared by live+route oracles; seclabSsrfVulnerableLiveOracle fires on /labs/ssrf hub; seclab-labs-dead-route excludes ssrf tier; seclab.vercel.app/labs/ssrf findings 8→8 (+seclab-ssrf-vulnerable-live-oracle, -seclab-labs-dead-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
