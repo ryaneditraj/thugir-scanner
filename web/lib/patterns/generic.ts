@@ -13785,6 +13785,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "csrf-xss-demo-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "CSRF + XSS demo route live oracle",
+    description:
+      "When scanning csrf-xss-demo.vercel.app, route scan confirms React training app with CSRF fund-transfer simulation, DOM eval XSS sink, and hardcoded admin/password credentials.",
+    impactOneline:
+      "Route-specific CSRF+XSS training demo confirms intentional client-side eval XSS and CSRF simulation markers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "csrfXssDemoRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never use eval() on user input; require CSRF tokens on state-changing actions.",
+      steps: [
+        "Replace eval() with safe DOM APIs or sandboxed rendering.",
+        "Add CSRF tokens to fund-transfer and other state-changing endpoints.",
+        "Remove hardcoded demo credentials from client bundles."
+      ]
+    },
+    fixPrompt:
+      "Our CSRF+XSS demo route exposes eval() XSS and simulated CSRF transfer. Show DOM XSS and CSRF remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "csrf-xss-demo-csrf-transfer-live-oracle",
+    platform: "generic",
+    category: "Cross-site request forgery",
+    severityDefault: "high",
+    title: "CSRF + XSS demo CSRF transfer live oracle",
+    description:
+      "csrf-xss-demo.vercel.app client bundle simulates a state-changing fund transfer without CSRF protection — CSRF training oracle.",
+    impactOneline:
+      "Client-side CSRF demo documents fund transfer without anti-CSRF token validation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "csrfXssDemoCsrfTransferLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require CSRF tokens on all state-changing actions.",
+      steps: [
+        "Add CSRF tokens to transfer and payment endpoints.",
+        "Validate Origin/Referer on sensitive POST requests.",
+        "Use SameSite cookies for session-bound actions."
+      ]
+    },
+    fixPrompt:
+      "Our CSRF demo simulates fund transfer without CSRF protection. Show anti-CSRF token remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-cve-55182-saas-poc-evidence",
     platform: "generic",
     category: "Injection",
@@ -26605,6 +26657,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /api/settings/less/imports route enables Less.php import_dir SSTI→RCE. Show remediation for CSS preprocessor import handling.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pwnshop-css-settings-ssti-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Pwnshop CSS settings SSTI→RCE route live oracle (PwnMe 2025)",
+    description:
+      "When scanning /api/settings/css, PUT JSON css payload compiled by less.php data-uri executes attacker commands — route-specific SSTI chain oracle (PWN-040 family).",
+    impactOneline:
+      "Less.php CSS data-uri injection enables remote code execution after import_dir manipulation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopCssSettingsSstiRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never compile attacker-controlled CSS with shell-invoking less.php data-uri — PwnMe PwnShop chain is intentional CTF software.",
+      steps: [
+        "Disable data-uri command execution in Less.php rendering.",
+        "Require admin approval for CSS changes with static analysis.",
+        "Run Pwnshop CTF endpoints only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/settings/css route enables Less.php data-uri SSTI→RCE. Show remediation for CSS preprocessor command injection.",
     version: 1,
     enabled: true
   },

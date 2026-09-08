@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-08T07:08:00.000Z",
+  "updated_at": "2026-09-08T07:12:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -16,14 +16,14 @@
     }
   },
   "total_sites_scanned": 2854,
-  "total_findings": 29312,
+  "total_findings": 29315,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2018,
-  "discovery_findings": 23505,
-  "improvements_shipped": 1611,
-  "last_run": "2026-09-08T07:08:00.000Z",
+  "discovery_findings": 23508,
+  "improvements_shipped": 1614,
+  "last_run": "2026-09-08T07:12:00.000Z",
   "last_run_summary": {
     "hour_utc": "07",
     "benchmark": {
@@ -52,35 +52,31 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 80,
-      "focus": "AI Security weak-rls/idor/cookie-auth + dvwu JWT lab + sqli.vulnlab error oracle; queue drain vulnforge L13 + vulnlab results + ssrf metadata-gcp",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 2,
+      "findings": 57,
+      "focus": "06 UTC queue gap closure — csrf-xss-demo route oracles + pwnshop PUT /api/settings/css SSTI chain",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, 40 live oracles, primary Heroku stable)",
-      "ai-security-platform-iota.vercel.app/challenges/idor: 13 findings — IDOR route live oracle",
-      "ai-security-platform-iota.vercel.app/challenges/weak-rls: 12 findings — Weak Supabase RLS route oracle",
-      "dvwu.vercel.app/labs/jwt: 10 findings — JWT attacks lab route oracle",
-      "sqli.vulnlab.dev/error/: 9 findings — error-based SQLi live oracle",
-      "ai-security-platform-iota.vercel.app/challenges/cookie-auth: 9 findings — client-writable admin cookie bypass",
-      "ssrf.vulnlab.dev/metadata-gcp/: 17 findings — GCP metadata SSRF queue drain"
+      "csrf-xss-demo.vercel.app: 8 findings (+csrf-xss-demo-route-live-oracle +csrf-xss-demo-csrf-transfer-live-oracle)",
+      "pwnshop.ctfsecurity.com/api/settings/css: 49 findings (+pwnshop-css-settings-ssti-route-live-oracle PWN-040 data-uri chain)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "crapi.lab.pentest-forge.com unreachable from cloud agent — DNS/connectivity",
-      "demo.owasp-juice.shop/rest/basket still 503 — basket BOLA oracle blocked"
+      "pwnshop /api/settings/css live PUT returns 404 on OSS deploy — corpus fallback documents PwnMe 2025 chain",
+      "crapi.lab.pentest-forge.com unreachable from cloud agent — DNS/connectivity"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 53,
+    "pwnshop.ctfsecurity.com/api/settings/css": 49,
+    "csrf-xss-demo.vercel.app": 8,
     "ssrf.vulnlab.dev/metadata-gcp": 17,
     "ai-security-platform-iota.vercel.app/challenges/idor": 13,
     "ai-security-platform-iota.vercel.app/challenges/weak-rls": 12,
     "dvwu.vercel.app/labs/jwt": 10,
-    "sqli.vulnlab.dev/error": 9,
-    "ai-security-platform-iota.vercel.app/challenges/cookie-auth": 9,
-    "pwnshop.ctfsecurity.com/api/settings/css": 48
+    "sqli.vulnlab.dev/error": 9
   }
 }

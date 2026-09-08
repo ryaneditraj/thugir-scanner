@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:csrf-xss-demo.vercel.app",
+      "slug": "csrf-xss-demo-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET / + main.js bundle documents CSRF and XSS Demo title, eval(document.getElementById('xssInput').value) DOM XSS sink, Transfer funds CSRF simulation, admin/password credentials; csrf-xss-demo.vercel.app/ findings 6→8 (+csrf-xss-demo-route-live-oracle +csrf-xss-demo-csrf-transfer-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:csrf-xss-demo.vercel.app",
+      "slug": "csrf-xss-demo-csrf-transfer-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: React bundle simulates $1000 fund transfer on button click without CSRF token (In a CSRF attack + tricks the victim markers); csrf-xss-demo.vercel.app/ findings 6→8 (+csrf-xss-demo-csrf-transfer-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-css-settings-ssti-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: PwnMe 2025 writeup PUT /api/settings/css {\"css\":\".test { content: data-uri('/getflag PWNME');}\"} Less.php data-uri RCE chain; live PUT returns HTTP 404 on OSS deploy — curated corpus fallback fires on route scan; pwnshop.ctfsecurity.com/api/settings/css findings 48→49 (+pwnshop-css-settings-ssti-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:sekumart.sekuripy.hr",
       "slug": "sekumart-login-sqli-route-live-oracle",
       "status": "shipped",
