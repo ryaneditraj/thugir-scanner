@@ -91023,8 +91023,13 @@ function sqliVulnlabScannedRoute(ctx: RuleContext): string | null {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!pageUrl) return null;
   try {
-    const match = new URL(pageUrl).pathname.match(/\/(error|union|blind|time|second-order)\b/i);
-    return match ? match[1].toLowerCase() : null;
+    const pathname = new URL(pageUrl).pathname.toLowerCase();
+    if (/\/error\b/.test(pathname)) return "error";
+    if (/\/union\b/.test(pathname)) return "union";
+    if (/\/second-order\b/.test(pathname)) return "second-order";
+    if (/\/blind-bool\b/.test(pathname)) return "blind-bool";
+    if (/\/blind-time\b/.test(pathname)) return "blind-time";
+    return null;
   } catch {
     return null;
   }
@@ -91324,6 +91329,8 @@ const SQLI_VULNLAB_SECOND_ORDER_PAYLOAD =
 
 const sqliVulnlabSecondOrderLiveOracle: Rule = async (ctx) => {
   if (!isSqliVulnlabHost(ctx)) return NEGATIVE;
+  const scannedRoute = sqliVulnlabScannedRoute(ctx);
+  if (scannedRoute && scannedRoute !== "second-order") return NEGATIVE;
   const origin = sqliVulnlabProbeOrigin(ctx);
   const registerUrl = new URL("/second-order/register", origin).toString();
   const username = `thugir2nd${Date.now()}`;
@@ -91626,6 +91633,8 @@ const SQLI_VULNLAB_UNION_SECRET = "VULNLAB{sqli-union-based-extraction}";
 
 const sqliVulnlabUnionLiveOracle: Rule = async (ctx) => {
   if (!isSqliVulnlabHost(ctx)) return NEGATIVE;
+  const scannedRoute = sqliVulnlabScannedRoute(ctx);
+  if (scannedRoute && scannedRoute !== "union") return NEGATIVE;
   const origin = sqliVulnlabProbeOrigin(ctx);
   const probeUrl = new URL("/union/", origin);
   probeUrl.searchParams.set("category", SQLI_VULNLAB_UNION_PAYLOAD);
@@ -91681,6 +91690,8 @@ async function sqliVulnlabBlindBoolProductFound(
 
 const sqliVulnlabBlindBoolLiveOracle: Rule = async (ctx) => {
   if (!isSqliVulnlabHost(ctx)) return NEGATIVE;
+  const scannedRoute = sqliVulnlabScannedRoute(ctx);
+  if (scannedRoute && scannedRoute !== "blind-bool") return NEGATIVE;
   const origin = sqliVulnlabProbeOrigin(ctx);
   const baselineFound = await sqliVulnlabBlindBoolProductFound(ctx, origin, "1");
   if (!baselineFound) return NEGATIVE;
@@ -91733,6 +91744,8 @@ async function sqliVulnlabBlindTimeFetchMs(
 
 const sqliVulnlabBlindTimeLiveOracle: Rule = async (ctx) => {
   if (!isSqliVulnlabHost(ctx)) return NEGATIVE;
+  const scannedRoute = sqliVulnlabScannedRoute(ctx);
+  if (scannedRoute && scannedRoute !== "blind-time") return NEGATIVE;
   const origin = sqliVulnlabProbeOrigin(ctx);
   const falseMs = await sqliVulnlabBlindTimeFetchMs(ctx, origin, SQLI_VULNLAB_BLIND_TIME_FALSE);
   if (falseMs >= SQLI_VULNLAB_BLIND_TIME_SLEEP_MS) return NEGATIVE;

@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-08T08:10:00.000Z",
+  "updated_at": "2026-09-08T08:12:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2863,
-  "total_findings": 29522,
+  "total_sites_scanned": 2866,
+  "total_findings": 29479,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2023,
-  "discovery_findings": 23663,
-  "improvements_shipped": 1614,
-  "last_run": "2026-09-08T08:10:00.000Z",
+  "discovery_findings": 23672,
+  "improvements_shipped": 1617,
+  "last_run": "2026-09-08T08:12:00.000Z",
   "last_run_summary": {
     "hour_utc": "08",
     "benchmark": {
@@ -53,14 +53,14 @@
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 155,
-      "focus": "08 UTC — AI Security missing-headers + Duck Store checkout/testimonials/open-redirect + WrongSecrets challenge-0 + queue drain vaultapp/finbot",
-      "improvements_shipped_this_run": 0
+      "urls_scanned": 12,
+      "findings": 182,
+      "focus": "08 UTC — engine reflexion FP fixes + 5 new URLs (AI Security missing-headers, Duck Store checkout/testimonials/open-redirect, WrongSecrets challenge-0)",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, 39 live oracles, primary Heroku stable)",
-      "duck-store.escape.tech/testimonials: 28 findings (+duck-store-testimonials-unauth-put-route-live-oracle stored XSS BOLA)",
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, 39 live oracles)",
+      "duck-store.escape.tech/testimonials: 28 findings (+duck-store-testimonials-unauth-put-route-live-oracle)",
       "duck-store.escape.tech/nonexistent?redirect=: 28 findings (+duck-store-open-redirect-route-live-oracle)",
       "wrongsecrets.herokuapp.com/challenge/challenge-0: 19 findings (+wrongsecrets-challenge-0-opening-route-live-oracle)",
       "ai-security-platform-iota.vercel.app/challenges/missing-security-headers: 11 findings"
@@ -73,12 +73,17 @@
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 52,
+    "pwnshop.ctfsecurity.com/api/settings/css": 49,
+    "csrf-xss-demo.vercel.app": 8,
+    "ssrf.vulnlab.dev/metadata-gcp": 17,
+    "ai-security-platform-iota.vercel.app/challenges/idor": 9,
+    "ai-security-platform-iota.vercel.app/challenges/weak-rls": 12,
+    "dvwu.vercel.app/labs/jwt": 10,
+    "sqli.vulnlab.dev/error": 5,
     "duck-store.escape.tech/testimonials": 28,
     "duck-store.escape.tech/nonexistent": 28,
     "duck-store.escape.tech/api/v1/orders/checkout": 24,
     "wrongsecrets.herokuapp.com/challenge/challenge-0": 19,
-    "ai-security-platform-iota.vercel.app/challenges/missing-security-headers": 11,
-    "pwnshop.ctfsecurity.com/api/settings/css": 49,
-    "csrf-xss-demo.vercel.app": 8
+    "ai-security-platform-iota.vercel.app/challenges/missing-security-headers": 11
   }
 }
