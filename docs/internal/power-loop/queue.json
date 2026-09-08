@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-08T17:10:00.000Z",
+  "updated_at": "2026-09-08T18:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://pwnshop.ctfsecurity.com/seller/preview",
+      "source": "ctfsec/pwnshop — PWN-040 SSTI→RCE seller storefront preview GET /seller/preview?template= (pwnshop.ctfsecurity.com/vulnerabilities; web search 18 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/login",
+      "source": "PortSwigger Gin & Juice Shop — reflected XSS + DOM manipulation on /login (ginandjuice.shop/vulnerabilities; web search 18 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-45",
+      "source": "OWASP WrongSecrets — Vault subkey SSRF challenge #45 (wrongsecrets.herokuapp.com; web search 18 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-46",
+      "source": "OWASP WrongSecrets — Vault template injection challenge #46 (wrongsecrets.herokuapp.com; web search 18 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-47",
+      "source": "OWASP WrongSecrets — Vault hardcoded template challenge #47 (wrongsecrets.herokuapp.com; web search 18 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://sqli.vulnlab.dev/blind-time/",
       "source": "sampsonc/vulnlab.dev — blind time-based SQLi via SLEEP() oracle (sqli.vulnlab.dev/meta blind-time; web search 17 UTC discovery)",
