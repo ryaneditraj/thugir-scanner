@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-08T14:05:00.000Z",
+  "updated_at": "2026-09-08T15:15:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://sqli.vulnlab.dev/union/",
+      "source": "sampsonc/vulnlab.dev — UNION-based SQLi lab on live MariaDB (vulnlab.dev index; web search 15 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://sqli.vulnlab.dev/blind/",
+      "source": "sampsonc/vulnlab.dev — boolean blind SQLi lab (sqli.vulnlab.dev live; web search 15 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://xss.vulnlab.dev/stored/",
+      "source": "sampsonc/vulnlab.dev — stored XSS lab with persistent payload sink (xss.vulnlab.dev live; web search 15 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://xss.vulnlab.dev/dom/",
+      "source": "sampsonc/vulnlab.dev — DOM-based XSS via location.hash sink (xss.vulnlab.dev live; web search 15 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssti.vulnlab.dev/blocklist/",
+      "source": "sampsonc/vulnlab.dev — Jinja2 SSTI blocklist-bypass lab (ssti.vulnlab.dev live; web search 15 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://seclab.vercel.app/labs/path-traversal",
       "source": "DaniSam-STU/security-lab — path traversal / LFI lab page with live exploit UI (seclab.vercel.app; web search 13 UTC discovery)",
