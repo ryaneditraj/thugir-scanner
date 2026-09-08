@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-08T12:20:00.000Z",
+  "updated_at": "2026-09-08T13:06:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2905,
-  "total_findings": 30250,
+  "total_sites_scanned": 2914,
+  "total_findings": 30377,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2038,
-  "discovery_findings": 24232,
-  "improvements_shipped": 1629,
-  "last_run": "2026-09-08T12:20:00.000Z",
+  "discovery_urls_added": 2043,
+  "discovery_findings": 24306,
+  "improvements_shipped": 1628,
+  "last_run": "2026-09-08T13:06:00.000Z",
   "last_run_summary": {
-    "hour_utc": "12",
+    "hour_utc": "13",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 53,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 599,
+      "probes_run": 597,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,43 +48,43 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (53 findings, 40 live oracles incl secret-resend + iac-terraform-tls-key); no category misses"
+      "note": "Stable 6/6 recall (53 findings, 40 live oracles incl secret-resend + jwt-alg-none + captcha-bypass); no category misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 11,
-      "findings": 253,
-      "focus": "QA Bash REST/GraphQL + SecLab SSTI/SQLi + VulnBank login + concurrent ginandjuice/bypass403/finbot route oracles + queue drain pwnshop/preview/brokencrystals",
-      "improvements_shipped_this_run": 3
+      "urls_scanned": 8,
+      "findings": 74,
+      "focus": "SecLab path-traversal/open-redirect + NoSQL/SQLi injection labs + Gin & Juice change-password sibling route + queue drain ucu-owasp-ctf injection/access/ssrf",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, 40 live oracles, gap=[])",
-      "preview.owasp-juice.shop: 55 findings — full juice-shop oracle bundle on Escape preview host",
-      "qa.brokencrystals.com/graphql: 93 findings — GraphQL introspection oracle cluster",
-      "pwnshop.ctfsecurity.com/download: 47 findings — file download + SSTI oracle cluster",
-      "ginandjuice.shop/my-account/change-email: 40 findings — change-password + forgot-password sibling route oracles",
-      "vulnbank.org/login: 35 findings — vulnbank-sqli-login + merchant portal SQLi + BOPLA register oracle",
-      "bypass403.vercel.app/admin: 14 findings — api-admin/waf/debug/secure route oracles",
-      "seclab.vercel.app/labs/sqli: 8 findings — seclab-sqli-search-live-oracle"
+      "ginandjuice.shop/my-account/change-password: 39 findings — change-password + change-email + forgot-password route oracle cluster",
+      "seclab.vercel.app/labs/path-traversal: 7 findings — seclab-path-traversal-labs-route-live-oracle + sqli/ssrf sibling oracles",
+      "seclab.vercel.app/labs/open-redirect: 7 findings — open-redirect lab route oracle cluster",
+      "nosql-injection-lab.vercel.app: 6 findings — NoSQL operator injection practice lab",
+      "sql-injection-lab.vercel.app: 3 findings — Flask SQLi auth-bypass lab",
+      "ucu-owasp-ctf.vercel.app/injection: 4 findings — UCU OWASP CTF injection realm"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "QA Bash API Playground is testing sandbox not vuln lab — reflexion-escalated-ssti false positive on /users route",
-      "seclab /labs/ssti lacks dedicated route oracle (sqli/ssrf oracles fire on ssti page)",
-      "concurrent 12 UTC runs merged — two automations scanned overlapping queue URLs"
+      "seclab /labs/path-traversal and /labs/open-redirect fire sqli/ssrf sibling oracles — dedicated route oracles still thin",
+      "sql-injection-lab.vercel.app only 3 findings — may need dedicated login-sqli live oracle",
+      "nosql-injection-lab sparse — MongoDB operator injection probe may need escalation"
     ]
   },
   "discovery_highlights": {
     "qa.brokencrystals.com/graphql": 93,
     "preview.owasp-juice.shop": 55,
     "pwnshop.ctfsecurity.com/download": 47,
+    "ginandjuice.shop/my-account/change-password": 39,
     "ginandjuice.shop/my-account/change-email": 40,
     "vulnbank.org/login": 35,
     "pwnshop.ctfsecurity.com/forgot-password": 29,
     "bypass403.vercel.app/admin": 14,
     "seclab.vercel.app/labs/sqli": 8,
-    "seclab.vercel.app/labs/ssti": 7,
+    "seclab.vercel.app/labs/path-traversal": 7,
     "juice-shop.herokuapp.com": 53
   }
 }
