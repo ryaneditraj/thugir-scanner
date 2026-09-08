@@ -9941,6 +9941,24 @@
       "slug": "xss-vulnlab-stored-dom-route-fallback",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: xssVulnlabStoredRouteLiveOracle falls back to Markup()|safe guestbook page markers when live POST probe fails; xssVulnlabDomRouteLiveOracle falls back to location.hash→innerHTML sink markers when live fetch fails; xss.vulnlab.dev/stored/ findings 8→9 (+xss-vulnlab-stored-route-live-oracle); xss.vulnlab.dev/dom/ findings 5→6 (+xss-vulnlab-dom-live-oracle +route stable); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:xss.vulnlab.dev",
+      "slug": "xss-vulnlab-tier-hub-oracle-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: xssVulnlabScannedRoute guards dom/reflected/stored/mxss/csp-bypass live oracles so tier route scans skip cross-lab hub probes; xss.vulnlab.dev/reflected/ findings 10→6 (-xss-vulnlab-dom-live-oracle -xss-vulnlab-stored-live-oracle -xss-vulnlab-mxss-live-oracle -xss-vulnlab-csp-bypass-jsonp-live-oracle, +xss-vulnlab-reflected-live-oracle +xss-vulnlab-reflected-route-live-oracle retained); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ssti.vulnlab.dev",
+      "slug": "ssti-vulnlab-tier-hub-oracle-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: sstiVulnlabScannedRoute guards basic/format/second-order/filtered/sandboxed/meta live oracles on tier route scans; ssti.vulnlab.dev/filtered/ findings 10→5 (-ssti-vulnlab-basic-live-oracle -ssti-vulnlab-format-live-oracle -ssti-vulnlab-second-order-live-oracle -ssti-vulnlab-sandboxed-live-oracle -ssti-vulnlab-meta-catalog-live-oracle, +ssti-vulnlab-filtered-live-oracle +ssti-vulnlab-filtered-route-live-oracle retained); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ssrf.vulnlab.dev",
+      "slug": "ssrf-vulnlab-tier-hub-oracle-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: ssrfVulnlabScannedRoute guards basic/metadata/blocklist/redirect/allowlist/scheme/gopher/parser/blind/webhook live oracles on tier route scans; ssrf.vulnlab.dev/allowlist/ findings 16→5 (-11 cross-tier ssrf-vulnlab-*-live-oracle, +ssrf-vulnlab-allowlist-bypass-live-oracle +ssrf-vulnlab-allowlist-route-live-oracle retained); benchmark juice-shop 52 findings 6/6 maintained"
     }
   ]
 }

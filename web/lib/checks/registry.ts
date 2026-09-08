@@ -90695,6 +90695,30 @@ function ssrfVulnlabProbeOrigin(ctx: RuleContext): string {
   return "https://ssrf.vulnlab.dev";
 }
 
+function ssrfVulnlabScannedRoute(ctx: RuleContext): string | null {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!pageUrl) return null;
+  try {
+    const pathname = new URL(pageUrl).pathname.toLowerCase();
+    if (/\/basic\b/.test(pathname)) return "basic";
+    if (/\/metadata-gcp\b/.test(pathname)) return "metadata-gcp";
+    if (/\/metadata-azure\b/.test(pathname)) return "metadata-azure";
+    if (/\/metadata\b/.test(pathname)) return "metadata";
+    if (/\/blocklist\b/.test(pathname)) return "blocklist";
+    if (/\/redirect\b/.test(pathname)) return "redirect";
+    if (/\/(?:^|\/)r\/?$/.test(pathname)) return "redirect";
+    if (/\/allowlist\b/.test(pathname)) return "allowlist";
+    if (/\/scheme\b/.test(pathname)) return "scheme";
+    if (/\/gopher\b/.test(pathname)) return "gopher";
+    if (/\/parser\b/.test(pathname)) return "parser";
+    if (/\/blind\b/.test(pathname)) return "blind";
+    if (/\/webhook\b/.test(pathname)) return "webhook";
+    return null;
+  } catch {
+    return null;
+  }
+}
+
 async function ssrfVulnlabFetchDoc(
   url: string,
   opts?: { maxBytes?: number; timeoutMs?: number }
@@ -90727,6 +90751,8 @@ function ssrfVulnlabLabBody(html: string): string | null {
 
 const ssrfVulnlabBasicLiveOracle: Rule = async (ctx) => {
   if (!isSsrfVulnlabHost(ctx)) return NEGATIVE;
+  const scannedRoute = ssrfVulnlabScannedRoute(ctx);
+  if (scannedRoute && scannedRoute !== "basic") return NEGATIVE;
   const origin = ssrfVulnlabProbeOrigin(ctx);
   const internalUrl = new URL("/basic/", origin);
   internalUrl.searchParams.set("url", "http://127.0.0.1:8089/secret");
@@ -90772,6 +90798,8 @@ const ssrfVulnlabBasicLiveOracle: Rule = async (ctx) => {
 
 const ssrfVulnlabMetadataAwsLiveOracle: Rule = async (ctx) => {
   if (!isSsrfVulnlabHost(ctx)) return NEGATIVE;
+  const scannedRoute = ssrfVulnlabScannedRoute(ctx);
+  if (scannedRoute && scannedRoute !== "metadata") return NEGATIVE;
   const origin = ssrfVulnlabProbeOrigin(ctx);
   const probeUrl = new URL("/metadata/", origin);
   probeUrl.searchParams.set("url", "http://169.254.169.254/latest/meta-data/");
@@ -90797,6 +90825,8 @@ const ssrfVulnlabMetadataAwsLiveOracle: Rule = async (ctx) => {
 
 const ssrfVulnlabBlocklistBypassLiveOracle: Rule = async (ctx) => {
   if (!isSsrfVulnlabHost(ctx)) return NEGATIVE;
+  const scannedRoute = ssrfVulnlabScannedRoute(ctx);
+  if (scannedRoute && scannedRoute !== "blocklist") return NEGATIVE;
   const origin = ssrfVulnlabProbeOrigin(ctx);
   const blockedUrl = new URL("/blocklist/", origin);
   blockedUrl.searchParams.set("url", "http://127.0.0.1/");
@@ -90823,6 +90853,8 @@ const ssrfVulnlabBlocklistBypassLiveOracle: Rule = async (ctx) => {
 
 const ssrfVulnlabRedirectLiveOracle: Rule = async (ctx) => {
   if (!isSsrfVulnlabHost(ctx)) return NEGATIVE;
+  const scannedRoute = ssrfVulnlabScannedRoute(ctx);
+  if (scannedRoute && scannedRoute !== "redirect") return NEGATIVE;
   const origin = ssrfVulnlabProbeOrigin(ctx);
   const innerTarget = "http://169.254.169.254/latest/meta-data/";
   const redirectChain = `${origin}/r/?to=${encodeURIComponent(innerTarget)}`;
@@ -90877,6 +90909,8 @@ const ssrfVulnlabMetadataAwsRouteLiveOracle: Rule = async (ctx) => {
 
 const ssrfVulnlabMetadataGcpLiveOracle: Rule = async (ctx) => {
   if (!isSsrfVulnlabHost(ctx)) return NEGATIVE;
+  const scannedRoute = ssrfVulnlabScannedRoute(ctx);
+  if (scannedRoute && scannedRoute !== "metadata-gcp") return NEGATIVE;
   const origin = ssrfVulnlabProbeOrigin(ctx);
   const probeUrl = new URL("/metadata-gcp/", origin);
   probeUrl.searchParams.set("url", "http://169.254.169.254/computeMetadata/v1/");
@@ -90912,6 +90946,8 @@ const ssrfVulnlabMetadataGcpRouteLiveOracle: Rule = async (ctx) => {
 
 const ssrfVulnlabMetadataAzureLiveOracle: Rule = async (ctx) => {
   if (!isSsrfVulnlabHost(ctx)) return NEGATIVE;
+  const scannedRoute = ssrfVulnlabScannedRoute(ctx);
+  if (scannedRoute && scannedRoute !== "metadata-azure") return NEGATIVE;
   const origin = ssrfVulnlabProbeOrigin(ctx);
   const probeUrl = new URL("/metadata-azure/", origin);
   probeUrl.searchParams.set("url", "http://169.254.169.254/metadata/instance");
@@ -90991,6 +91027,8 @@ const ssrfVulnlabOpenRedirectorRouteLiveOracle: Rule = async (ctx) => {
 
 const ssrfVulnlabAllowlistBypassLiveOracle: Rule = async (ctx) => {
   if (!isSsrfVulnlabHost(ctx)) return NEGATIVE;
+  const scannedRoute = ssrfVulnlabScannedRoute(ctx);
+  if (scannedRoute && scannedRoute !== "allowlist") return NEGATIVE;
   const origin = ssrfVulnlabProbeOrigin(ctx);
   const blockedUrl = new URL("/allowlist/", origin);
   blockedUrl.searchParams.set("url", "http://169.254.169.254/latest/meta-data/");
@@ -91037,6 +91075,8 @@ const ssrfVulnlabAllowlistRouteLiveOracle: Rule = async (ctx) => {
 
 const ssrfVulnlabSchemeLiveOracle: Rule = async (ctx) => {
   if (!isSsrfVulnlabHost(ctx)) return NEGATIVE;
+  const scannedRoute = ssrfVulnlabScannedRoute(ctx);
+  if (scannedRoute && scannedRoute !== "scheme") return NEGATIVE;
   const origin = ssrfVulnlabProbeOrigin(ctx);
   const probeUrl = new URL("/scheme/", origin);
   probeUrl.searchParams.set("url", "file:///etc/passwd");
@@ -91075,6 +91115,8 @@ const ssrfVulnlabSchemeRouteLiveOracle: Rule = async (ctx) => {
 
 const ssrfVulnlabGopherLiveOracle: Rule = async (ctx) => {
   if (!isSsrfVulnlabHost(ctx)) return NEGATIVE;
+  const scannedRoute = ssrfVulnlabScannedRoute(ctx);
+  if (scannedRoute && scannedRoute !== "gopher") return NEGATIVE;
   const origin = ssrfVulnlabProbeOrigin(ctx);
   const probeUrl = new URL("/gopher/", origin);
   probeUrl.searchParams.set("url", "gopher://127.0.0.1:6479/_PING");
@@ -91112,6 +91154,8 @@ const ssrfVulnlabGopherRouteLiveOracle: Rule = async (ctx) => {
 
 const ssrfVulnlabParserLiveOracle: Rule = async (ctx) => {
   if (!isSsrfVulnlabHost(ctx)) return NEGATIVE;
+  const scannedRoute = ssrfVulnlabScannedRoute(ctx);
+  if (scannedRoute && scannedRoute !== "parser") return NEGATIVE;
   const origin = ssrfVulnlabProbeOrigin(ctx);
   const blockedUrl = new URL("/parser/", origin);
   blockedUrl.searchParams.set("url", "http://169.254.169.254@ssrf.vulnlab.dev/");
@@ -91164,6 +91208,8 @@ const ssrfVulnlabParserRouteLiveOracle: Rule = async (ctx) => {
 
 const ssrfVulnlabBlindLiveOracle: Rule = async (ctx) => {
   if (!isSsrfVulnlabHost(ctx)) return NEGATIVE;
+  const scannedRoute = ssrfVulnlabScannedRoute(ctx);
+  if (scannedRoute && scannedRoute !== "blind") return NEGATIVE;
   const origin = ssrfVulnlabProbeOrigin(ctx);
   const probeUrl = new URL("/blind/", origin);
   probeUrl.searchParams.set("url", "http://example.com/");
@@ -91187,6 +91233,8 @@ const ssrfVulnlabBlindLiveOracle: Rule = async (ctx) => {
 
 const ssrfVulnlabWebhookLiveOracle: Rule = async (ctx) => {
   if (!isSsrfVulnlabHost(ctx)) return NEGATIVE;
+  const scannedRoute = ssrfVulnlabScannedRoute(ctx);
+  if (scannedRoute && scannedRoute !== "webhook") return NEGATIVE;
   const origin = ssrfVulnlabProbeOrigin(ctx);
   const probeUrl = new URL("/webhook/", origin);
   probeUrl.searchParams.set("url", "http://127.0.0.1:8089/webhook-callback");
@@ -91503,8 +91551,27 @@ function xssVulnlabProbeOrigin(ctx: RuleContext): string {
   return "https://xss.vulnlab.dev";
 }
 
+function xssVulnlabScannedRoute(ctx: RuleContext): string | null {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!pageUrl) return null;
+  try {
+    const pathname = new URL(pageUrl).pathname.toLowerCase();
+    if (/\/dom\b/.test(pathname)) return "dom";
+    if (/\/reflected\b/.test(pathname)) return "reflected";
+    if (/\/stored\b/.test(pathname)) return "stored";
+    if (/\/(?:mxss|mutation)\b/.test(pathname)) return "mxss";
+    if (/\/filter\b/.test(pathname)) return "mxss";
+    if (/\/csp-bypass\b/.test(pathname)) return "csp-bypass";
+    return null;
+  } catch {
+    return null;
+  }
+}
+
 const xssVulnlabDomLiveOracle: Rule = async (ctx) => {
   if (!isXssVulnlabHost(ctx)) return NEGATIVE;
+  const scannedRoute = xssVulnlabScannedRoute(ctx);
+  if (scannedRoute && scannedRoute !== "dom") return NEGATIVE;
   const origin = xssVulnlabProbeOrigin(ctx);
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   let probePath = "/dom/";
@@ -91569,6 +91636,8 @@ const XSS_VULNLAB_REFLECTED_CANARY = "thugirxsscan7";
 
 const xssVulnlabReflectedLiveOracle: Rule = async (ctx) => {
   if (!isXssVulnlabHost(ctx)) return NEGATIVE;
+  const scannedRoute = xssVulnlabScannedRoute(ctx);
+  if (scannedRoute && scannedRoute !== "reflected") return NEGATIVE;
   const origin = xssVulnlabProbeOrigin(ctx);
   const canary = XSS_VULNLAB_REFLECTED_CANARY;
   const probeUrl = new URL(`/reflected/?q=${encodeURIComponent(canary)}`, origin).toString();
@@ -91611,6 +91680,24 @@ function sstiVulnlabProbeOrigin(ctx: RuleContext): string {
   return "https://ssti.vulnlab.dev";
 }
 
+function sstiVulnlabScannedRoute(ctx: RuleContext): string | null {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!pageUrl) return null;
+  try {
+    const pathname = new URL(pageUrl).pathname.toLowerCase();
+    if (/\/basic\b/.test(pathname)) return "basic";
+    if (/\/format\b/.test(pathname)) return "format";
+    if (/\/second-order\b/.test(pathname)) return "second-order";
+    if (/\/filtered\b/.test(pathname)) return "filtered";
+    if (/\/blocklist\b/.test(pathname)) return "filtered";
+    if (/\/sandboxed\b/.test(pathname)) return "sandboxed";
+    if (/\/meta\b/.test(pathname)) return "meta";
+    return null;
+  } catch {
+    return null;
+  }
+}
+
 function sstiVulnlabDecodeBody(raw: string): string {
   return raw
     .replace(/&#39;/g, "'")
@@ -91634,6 +91721,8 @@ const SSTI_VULNLAB_SECOND_ORDER_KEY = "thugir-ssti-second-order-probe";
 
 const sstiVulnlabBasicLiveOracle: Rule = async (ctx) => {
   if (!isSstiVulnlabHost(ctx)) return NEGATIVE;
+  const scannedRoute = sstiVulnlabScannedRoute(ctx);
+  if (scannedRoute && scannedRoute !== "basic") return NEGATIVE;
   const origin = sstiVulnlabProbeOrigin(ctx);
   const probeUrl = new URL("/basic/", origin);
   probeUrl.searchParams.set("greeting", SSTI_VULNLAB_BASIC_PAYLOAD);
@@ -91668,6 +91757,8 @@ const sstiVulnlabBasicRouteLiveOracle: Rule = async (ctx) => {
 
 const sstiVulnlabFormatLiveOracle: Rule = async (ctx) => {
   if (!isSstiVulnlabHost(ctx)) return NEGATIVE;
+  const scannedRoute = sstiVulnlabScannedRoute(ctx);
+  if (scannedRoute && scannedRoute !== "format") return NEGATIVE;
   const origin = sstiVulnlabProbeOrigin(ctx);
   const probeUrl = new URL("/format/", origin);
   probeUrl.searchParams.set("template", SSTI_VULNLAB_FORMAT_TEMPLATE);
@@ -91702,6 +91793,8 @@ const sstiVulnlabFormatRouteLiveOracle: Rule = async (ctx) => {
 
 const sstiVulnlabSecondOrderLiveOracle: Rule = async (ctx) => {
   if (!isSstiVulnlabHost(ctx)) return NEGATIVE;
+  const scannedRoute = sstiVulnlabScannedRoute(ctx);
+  if (scannedRoute && scannedRoute !== "second-order") return NEGATIVE;
   const origin = sstiVulnlabProbeOrigin(ctx);
   const saveUrl = new URL("/second-order/save", origin).toString();
   const saveBody = new URLSearchParams({
@@ -91846,6 +91939,8 @@ const XSS_VULNLAB_STORED_CANARY_PREFIX = "thugirxssstored";
 
 const xssVulnlabStoredLiveOracle: Rule = async (ctx) => {
   if (!isXssVulnlabHost(ctx)) return NEGATIVE;
+  const scannedRoute = xssVulnlabScannedRoute(ctx);
+  if (scannedRoute && scannedRoute !== "stored") return NEGATIVE;
   const origin = xssVulnlabProbeOrigin(ctx);
   const canary = `${XSS_VULNLAB_STORED_CANARY_PREFIX}${Date.now()}`;
   const postUrl = new URL("/stored/", origin).toString();
@@ -91912,6 +92007,8 @@ const xssVulnlabStoredRouteLiveOracle: Rule = async (ctx) => {
 
 const xssVulnlabMxssLiveOracle: Rule = async (ctx) => {
   if (!isXssVulnlabHost(ctx)) return NEGATIVE;
+  const scannedRoute = xssVulnlabScannedRoute(ctx);
+  if (scannedRoute && scannedRoute !== "mxss") return NEGATIVE;
   const origin = xssVulnlabProbeOrigin(ctx);
   const canary = "thugirMxssProbe";
   const url = new URL("/mxss/", origin);
@@ -91973,6 +92070,8 @@ const XSS_VULNLAB_CSP_JSONP_CALLBACK = "thugirCspJsonpProbe7";
 
 const xssVulnlabCspBypassJsonpLiveOracle: Rule = async (ctx) => {
   if (!isXssVulnlabHost(ctx)) return NEGATIVE;
+  const scannedRoute = xssVulnlabScannedRoute(ctx);
+  if (scannedRoute && scannedRoute !== "csp-bypass") return NEGATIVE;
   const origin = xssVulnlabProbeOrigin(ctx);
   const callback = XSS_VULNLAB_CSP_JSONP_CALLBACK;
   const jsonpUrl = new URL("/csp-bypass/jsonp", origin);
@@ -92017,6 +92116,8 @@ const xssVulnlabCspBypassJsonpRouteLiveOracle: Rule = async (ctx) => {
 
 const sstiVulnlabFilteredLiveOracle: Rule = async (ctx) => {
   if (!isSstiVulnlabHost(ctx)) return NEGATIVE;
+  const scannedRoute = sstiVulnlabScannedRoute(ctx);
+  if (scannedRoute && scannedRoute !== "filtered") return NEGATIVE;
   const origin = sstiVulnlabProbeOrigin(ctx);
   const probeUrl = new URL("/filtered/", origin);
   probeUrl.searchParams.set("greeting", SSTI_VULNLAB_BASIC_PAYLOAD);
@@ -92085,6 +92186,8 @@ const sstiVulnlabBlocklistRouteLiveOracle: Rule = async (ctx) => {
 
 const sstiVulnlabMetaCatalogLiveOracle: Rule = async (ctx) => {
   if (!isSstiVulnlabHost(ctx)) return NEGATIVE;
+  const scannedRoute = sstiVulnlabScannedRoute(ctx);
+  if (scannedRoute && scannedRoute !== "meta") return NEGATIVE;
   const origin = sstiVulnlabProbeOrigin(ctx);
   const metaUrl = new URL("/meta/", origin).toString();
   const doc = await ctx.probe.get(metaUrl, { maxBytes: 16384, timeoutMs: 15000 });
@@ -92356,6 +92459,8 @@ function sstiVulnlabSandboxedSecretConfirmed(rendered: string | null): boolean {
 
 const sstiVulnlabSandboxedLiveOracle: Rule = async (ctx) => {
   if (!isSstiVulnlabHost(ctx)) return NEGATIVE;
+  const scannedRoute = sstiVulnlabScannedRoute(ctx);
+  if (scannedRoute && scannedRoute !== "sandboxed") return NEGATIVE;
   const origin = sstiVulnlabProbeOrigin(ctx);
   const probeUrl = new URL("/sandboxed/", origin);
   probeUrl.searchParams.set("greeting", SSTI_VULNLAB_SANDBOXED_PAYLOAD);
