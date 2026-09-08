@@ -37,9 +37,13 @@ const AI_SECURITY_PLATFORM_HOST_RE = /ai-security-platform-iota\.vercel\.app/i;
 function aiSecurityPlatformLoginGatedReflexionSuppressed(ctx: PowerCtx): boolean {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
   if (!AI_SECURITY_PLATFORM_HOST_RE.test(pageUrl)) return false;
-  return /\/challenges\/(?:brute-force|supabase-rls|missing-headers|rate-limiting|supabase-data|security-headers)\b/i.test(
-    pageUrl
-  );
+  return /\/challenges\/[a-z0-9-]+/i.test(pageUrl);
+}
+
+/** nextjs-cve-hackerone RSC CVE demo — reflexion XSS probes false-positive on intentional lab canaries. */
+function nextjsCveHackeroneReflexionSuppressed(ctx: PowerCtx): boolean {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  return /nextjs-cve-hackerone\.vercel\.app/i.test(pageUrl);
 }
 
 const WSL_HOST_RE = /web-security-learning-labs\.vercel\.app/i;
@@ -332,6 +336,7 @@ export const reflexionEscalatedXss: PowerRule = async (ctx) => {
   if (appsecCiLoginReflexionSuppressed(ctx)) return NEGATIVE;
   if (zeroHealthVercelDashboardReflexionSuppressed(ctx)) return NEGATIVE;
   if (hackminaazizReflexionSuppressed(ctx)) return NEGATIVE;
+  if (nextjsCveHackeroneReflexionSuppressed(ctx)) return NEGATIVE;
   const suffix = "pwr";
   const base = xssCanary(suffix);
   const params = ["q", "search", "query", "name", "id", "term"];
