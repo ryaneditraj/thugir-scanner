@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-08T04:10:00.000Z",
+  "updated_at": "2026-09-08T04:31:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2823,
-  "total_findings": 28624,
+  "total_sites_scanned": 2824,
+  "total_findings": 28677,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2000,
+  "discovery_urls_added": 2003,
   "discovery_findings": 23167,
-  "improvements_shipped": 1605,
-  "last_run": "2026-09-08T04:10:00.000Z",
+  "improvements_shipped": 1608,
+  "last_run": "2026-09-08T04:31:00.000Z",
   "last_run_summary": {
     "hour_utc": "04",
     "benchmark": {
@@ -48,43 +48,36 @@
           ]
         }
       },
-      "note": "Primary Heroku stable 6/6 first-pass recall (53 findings, 40 juice-shop live oracles incl secret-resend + iac-terraform-tls-key)"
+      "note": "Stable 6/6 first-pass recall (53 findings, 40 live oracles incl secret-resend + iac-terraform-tls-key)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
+      "urls_added": 3,
       "urls_scanned": 8,
       "findings": 274,
-      "focus": "SekuMart OpenAPI oracle expansion (catalog/track/members/directory/search) + queue drain brokencrystals XXE/SSRF + ssrf.vulnlab.dev allowlist",
-      "improvements_shipped_this_run": 0
+      "focus": "wrongsecrets 44-54 hub seeds + crAPI2 v2/check-otp priority; prior drain SekuMart OpenAPI + brokencrystals XXE/SSRF + ssrf.vulnlab allowlist",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, 40 live oracles) — rich primary Heroku pass with secret-resend present",
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, secret-resend present)",
+      "wrongsecrets.herokuapp.com/challenge/50: 18 findings — hub seeds 44-54 + route priority -4",
+      "crapi2.apisec.ai/identity/api/auth/v2/check-otp: 9 findings — v2 OTP brute-force route oracle",
       "sekumart.sekuripy.hr/catalog.php?sort=id: 20 findings — sekumart-catalog-orderby-sqli live oracle",
-      "sekumart.sekuripy.hr/track.php?order=SK-1001: 20 findings — sekumart-track-blind-sqli live oracle",
-      "sekumart.sekuripy.hr/members.php?user=ada: 20 findings — sekumart-members-nosql live oracle",
-      "sekumart.sekuripy.hr/directory.php?q=test: 20 findings — sekumart-directory-xpath live oracle",
-      "sekumart.sekuripy.hr/search.php?q=mug: 21 findings — sekumart-search-sqli + search-xss live oracles",
       "brokencrystals.com/api/upload/parse: 94 findings — XXE upload oracle",
-      "brokencrystals.com/api/fetch?url=https://httpbin.org/get: 63 findings — SSRF fetch oracle",
       "ssrf.vulnlab.dev/allowlist: 16 findings — ssrf-vulnlab-allowlist-bypass live oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "SekuMart apiv1.php (JSON-body SQLi) and login.php (auth-bypass SQLi) queued for next drain",
-      "demo.owasp-juice.shop/rest/basket still 503 — basket BOLA oracle blocked",
-      "brokencrystals.com/api/partners/partnerLogin returns 403 from cloud agent — XPath oracle needs alternate path"
+      "demo.owasp-juice.shop/rest/basket still 503 — basket BOLA oracle blocked"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 53,
     "sekumart.sekuripy.hr/catalog.php?sort=id": 20,
     "sekumart.sekuripy.hr/track.php?order=SK-1001": 20,
-    "sekumart.sekuripy.hr/members.php?user=ada": 20,
-    "sekumart.sekuripy.hr/directory.php?q=test": 20,
-    "sekumart.sekuripy.hr/search.php?q=mug": 21,
     "brokencrystals.com/api/upload/parse": 94,
-    "brokencrystals.com/api/fetch?url=https://httpbin.org/get": 63,
-    "ssrf.vulnlab.dev/allowlist": 16
+    "ssrf.vulnlab.dev/allowlist": 16,
+    "wrongsecrets.herokuapp.com/challenge/50": 18
   }
 }

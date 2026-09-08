@@ -1,6 +1,21 @@
 {
-  "updated_at": "2026-09-08T04:05:00.000Z",
+  "updated_at": "2026-09-08T04:34:27.394Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://crapi2.apisec.ai/identity/api/auth/v2/check-otp",
+      "source": "APIsec crAPI v2 OTP brute-force — POST /identity/api/auth/v2/check-otp lacks v3 rate limit (04 UTC validation)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/2",
+      "source": "OWASP WrongSecrets challenge-2 application.properties short URL alias (04 UTC validation)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/8",
+      "source": "OWASP WrongSecrets challenge-8 docker logs short URL alias (04 UTC validation)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://sekumart.sekuripy.hr/catalog.php?sort=id",
       "source": "SekuriPy SekuMart sqlmap playground — ORDER BY SQLi oracle GET /catalog.php?sort= (OpenAPI 04 UTC discovery)",
