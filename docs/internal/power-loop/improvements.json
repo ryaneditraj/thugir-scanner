@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:sekumart.sekuripy.hr",
+      "slug": "sekumart-login-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /login.php username=admin' OR '1'='1' -- - reaches account page; sekumart.sekuripy.hr/login.php findings 19→23 (+sekumart-login-sqli-live-oracle +sekumart-login-sqli-route-live-oracle); benchmark juice-shop-staging 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:sekumart.sekuripy.hr",
+      "slug": "sekumart-apiv1-json-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /apiv1.php {\"id\":\"1 OR 1=1\"} returns full product catalog JSON; sekumart.sekuripy.hr/apiv1.php findings 19→23 (+sekumart-apiv1-json-sqli-live-oracle +sekumart-apiv1-json-sqli-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:sekumart.sekuripy.hr",
+      "slug": "sekumart-category-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /category.php?cat=1' triggers mysqli_sql_exception in category_low.php; sekumart.sekuripy.hr/category.php?cat=1 findings gain +sekumart-category-sqli-live-oracle +sekumart-category-sqli-route-live-oracle; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-challenge-44-54-hub-seeds",
       "status": "shipped",

@@ -62918,6 +62918,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "sekumart-login-sqli-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "SekuMart login auth-bypass SQLi live oracle",
+    description:
+      "POST sekumart.sekuripy.hr/login.php with username=admin' OR '1'='1' -- - bypasses authentication and reaches the account page — sqlmap auth-bypass training oracle.",
+    impactOneline:
+      "Authentication bypass via SQL injection on login lets attackers access any account without valid credentials.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sekumartLoginSqliLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "SekuMart is intentional training software — use parameterized queries on login.",
+      steps: [
+        "Replace string-concatenated SQL with prepared statements on POST /login.php.",
+        "Validate username/password inputs server-side.",
+        "Run SekuMart labs only on isolated staging infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our SekuMart login.php accepts auth-bypass SQLi via username. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "sekumart-login-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "SekuMart /login.php route auth-bypass SQLi live oracle",
+    description:
+      "When scanning sekumart.sekuripy.hr/login.php, POST auth-bypass SQLi with admin' OR '1'='1' -- - reaches account page — route-specific sqlmap training oracle.",
+    impactOneline:
+      "Route scans on /login.php should confirm live authentication bypass via SQL injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sekumartLoginSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "SekuMart is intentional training software — use parameterized queries on login.",
+      steps: [
+        "Replace string-concatenated SQL with prepared statements on POST /login.php.",
+        "Validate username/password inputs server-side.",
+        "Run SekuMart labs only on isolated staging infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our SekuMart /login.php route has auth-bypass SQLi. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "sekumart-apiv1-json-sqli-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "SekuMart apiv1.php JSON-body SQLi live oracle",
+    description:
+      'POST sekumart.sekuripy.hr/apiv1.php with {"id":"1 OR 1=1"} returns full product catalog via JSON-body SQLi — sqlmap training oracle.',
+    impactOneline:
+      "JSON-body SQL injection on API endpoints lets attackers dump entire product catalogs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sekumartApiv1JsonSqliLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "SekuMart is intentional training software — validate JSON body types and use parameterized queries.",
+      steps: [
+        "Reject non-integer id values in JSON request bodies.",
+        "Use prepared statements for all database queries.",
+        "Run SekuMart labs only on isolated staging infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our SekuMart apiv1.php accepts JSON-body SQLi on id. Show typed input validation and parameterized queries.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "sekumart-apiv1-json-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "SekuMart /apiv1.php route JSON-body SQLi live oracle",
+    description:
+      "When scanning sekumart.sekuripy.hr/apiv1.php, POST JSON-body id injection returns multiple products — route-specific sqlmap --openapi training oracle.",
+    impactOneline:
+      "Route scans on /apiv1.php should confirm live JSON-body SQL injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sekumartApiv1JsonSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "SekuMart is intentional training software — validate JSON body types and use parameterized queries.",
+      steps: [
+        "Reject non-integer id values in JSON request bodies.",
+        "Use prepared statements for all database queries.",
+        "Run SekuMart labs only on isolated staging infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our SekuMart /apiv1.php route has JSON-body SQLi. Show typed validation and parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "sekumart-category-sqli-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "SekuMart category.php integer SQLi live oracle",
+    description:
+      "GET sekumart.sekuripy.hr/category.php?cat=1' triggers mysqli_sql_exception in category_low.php — integer SQLi sqlmap training oracle.",
+    impactOneline:
+      "Integer SQL injection on category filters lets attackers extract or manipulate catalog data.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sekumartCategorySqliLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "SekuMart is intentional training software — cast category IDs to integers and use parameterized queries.",
+      steps: [
+        "Validate cat parameter as integer before SQL queries.",
+        "Use prepared statements on category.php.",
+        "Run SekuMart labs only on isolated staging infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our SekuMart category.php accepts integer SQLi on cat. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "sekumart-category-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "SekuMart /category.php route integer SQLi live oracle",
+    description:
+      "When scanning sekumart.sekuripy.hr/category.php, GET ?cat=1' triggers mysqli_sql_exception — route-specific integer SQLi sqlmap training oracle.",
+    impactOneline:
+      "Route scans on /category.php should confirm live integer SQL injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sekumartCategorySqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "SekuMart is intentional training software — cast category IDs to integers and use parameterized queries.",
+      steps: [
+        "Validate cat parameter as integer before SQL queries.",
+        "Use prepared statements on category.php.",
+        "Run SekuMart labs only on isolated staging infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our SekuMart /category.php route has integer SQLi on cat. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "pc-parts-store-stored-xss-route-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
