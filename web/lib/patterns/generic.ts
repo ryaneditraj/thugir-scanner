@@ -25649,6 +25649,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "dvaib-login-live-oracle",
+    platform: "generic",
+    category: "Authentication bypass",
+    severityDefault: "high",
+    title: "DVAIB login session bootstrap live oracle",
+    description:
+      "POST /api/auth/register + POST /api/auth/login returns a bearer token and GET /api/auth/me succeeds — session bootstrap live oracle for auth-gated prompt-injection lab probes on dvaib.com.",
+    impactOneline:
+      "Open register/login on DVAIB enables scanner sessions for AI banking assistant prompt-injection training scenarios.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvaibLoginLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Harden DVAIB auth endpoints — intentional training software for prompt-injection scenarios.",
+      steps: [
+        "Require MFA before LLM tool calls can modify account balances.",
+        "Rate-limit /api/auth/register and monitor for scanner-driven account sprawl.",
+        "Run DVAIB only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our DVAIB login scan confirms open register/login for AI banking lab sessions. Show auth hardening for training deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "dvaib-login-route-live-oracle",
     platform: "generic",
     category: "Authentication bypass",

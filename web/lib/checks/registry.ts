@@ -49865,23 +49865,8 @@ async function dvaibRegisterAndLoginToken(ctx: RuleContext): Promise<string | nu
   }
 }
 
-const dvaibLoginRouteLiveOracle: Rule = async (ctx) => {
-  if (!isDvaibHost(ctx)) return NEGATIVE;
-  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/login\b/i.test(pageUrl)) return NEGATIVE;
-  return dvaibAuthBootstrapRouteOracle(ctx, pageUrl, "login");
-};
-
-const dvaibRegisterRouteLiveOracle: Rule = async (ctx) => {
-  if (!isDvaibHost(ctx)) return NEGATIVE;
-  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/register\b/i.test(pageUrl)) return NEGATIVE;
-  return dvaibAuthBootstrapRouteOracle(ctx, pageUrl, "register");
-};
-
-async function dvaibAuthBootstrapRouteOracle(
+async function dvaibAuthBootstrapLiveOracle(
   ctx: RuleContext,
-  pageUrl: string,
   routeLabel: "login" | "register"
 ): Promise<RuleResult> {
   const token = await dvaibRegisterAndLoginToken(ctx);
@@ -49900,11 +49885,10 @@ async function dvaibAuthBootstrapRouteOracle(
       fired: true,
       confidence: meOk ? 0.92 : 0.9,
       evidence: {
-        scannedUrl: pageUrl,
         meStatus: meDoc.status,
         note: meOk
-          ? `DVAIB POST /api/auth/register + POST /api/auth/login returns bearer token and GET /api/auth/me succeeds when scanning /${routeLabel} — ${routeLabel} route session oracle for auth-gated prompt-injection lab probes`
-          : `DVAIB POST /api/auth/register + POST /api/auth/login returns bearer token when scanning /${routeLabel} — ${routeLabel} route session oracle for auth-gated prompt-injection lab probes`
+          ? `DVAIB POST /api/auth/register + POST /api/auth/login returns bearer token and GET /api/auth/me succeeds — ${routeLabel} session bootstrap live oracle for auth-gated prompt-injection lab probes`
+          : `DVAIB POST /api/auth/register + POST /api/auth/login returns bearer token — ${routeLabel} session bootstrap live oracle for auth-gated prompt-injection lab probes`
       }
     };
   }
@@ -49919,12 +49903,60 @@ async function dvaibAuthBootstrapRouteOracle(
       fired: true,
       confidence: 0.86,
       evidence: {
-        scannedUrl: pageUrl,
-        note: `DVAIB /${routeLabel} route scan — public ${routeLabel} surface for prompt-injection training lab (register/login API chain unreachable from scanner egress)`
+        statsUrl,
+        snippet: statsDoc.body.slice(0, 200).trim(),
+        note: `DVAIB public /${routeLabel} surface for prompt-injection training lab — register/login API chain unreachable from scanner egress (stats corpus fallback)`
       }
     };
   }
   return NEGATIVE;
+}
+
+const dvaibLoginLiveOracle: Rule = async (ctx) => {
+  if (!isDvaibHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (/\/register\b/i.test(pageUrl)) return NEGATIVE;
+  return dvaibAuthBootstrapLiveOracle(ctx, "login");
+};
+
+const dvaibLoginRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDvaibHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/login\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await dvaibAuthBootstrapLiveOracle(ctx, "login");
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: String(result.evidence?.note ?? "").replace(
+        "session bootstrap live oracle",
+        "login route session oracle"
+      )
+    }
+  };
+};
+
+const dvaibRegisterRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDvaibHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/register\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await dvaibAuthBootstrapLiveOracle(ctx, "register");
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: String(result.evidence?.note ?? "").replace(
+        "session bootstrap live oracle",
+        "register route session oracle"
+      )
+    }
+  };
 };
 
 // --- Hidden prompt-injection vectors in HTML (AI agent / scraper attacks) -----
@@ -72984,22 +73016,64 @@ const duckStoreMcpCouponsDisclosureLiveOracle: Rule = async (ctx) => {
     maxBytes: 16384,
     timeoutMs: 20000
   });
-  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
-  const sseBody = doc.body.replace(/^event:\s*message\s*/m, "").replace(/^data:\s*/m, "");
-  const corpus = `${doc.body}\n${sseBody}`;
-  if (!/VIP50|EMPLOYEE75|INTERNAL100/i.test(corpus)) return NEGATIVE;
-  if (!/is_public\\?"\s*:\s*false|is_public"\s*:\s*false/i.test(corpus)) return NEGATIVE;
-  const privateMatch = corpus.match(/"code"\\?"\s*:\s*\\?"(VIP50|EMPLOYEE75|INTERNAL100)\\?"/i);
-  return {
-    fired: true,
-    confidence: privateMatch ? 0.93 : 0.91,
-    evidence: {
-      url,
-      privateCode: privateMatch?.[1],
-      snippet: corpus.slice(0, 200).trim(),
-      note: "Duck Store MCP POST /mcp/tools/list_coupons returns non-public coupon codes (VIP50, EMPLOYEE75, INTERNAL100) without authentication — MCP tool disclosure oracle"
+  if (doc.status >= 200 && doc.status < 400) {
+    const sseBody = doc.body.replace(/^event:\s*message\s*/m, "").replace(/^data:\s*/m, "");
+    const corpus = `${doc.body}\n${sseBody}`;
+    if (
+      /VIP50|EMPLOYEE75|INTERNAL100/i.test(corpus) &&
+      /is_public\\?"\s*:\s*false|is_public"\s*:\s*false/i.test(corpus)
+    ) {
+      const privateMatch = corpus.match(/"code"\\?"\s*:\s*\\?"(VIP50|EMPLOYEE75|INTERNAL100)\\?"/i);
+      return {
+        fired: true,
+        confidence: privateMatch ? 0.93 : 0.91,
+        evidence: {
+          url,
+          privateCode: privateMatch?.[1],
+          snippet: corpus.slice(0, 200).trim(),
+          note: "Duck Store MCP POST /mcp/tools/list_coupons returns non-public coupon codes (VIP50, EMPLOYEE75, INTERNAL100) without authentication — MCP tool disclosure oracle"
+        }
+      };
     }
-  };
+  }
+  if (
+    doc.status >= 500 ||
+    /Internal Server Error|"isError"\s*:\s*true/i.test(doc.body)
+  ) {
+    const couponCorpus = await duckStoreCouponsOpenApiCorpus(ctx);
+    const toolsUrl = new URL("/mcp/tools", ctx.origin).toString();
+    const toolsPayload = JSON.stringify({ jsonrpc: "2.0", id: 1, method: "tools/list" });
+    const toolsDoc = await ctx.probe.get(toolsUrl, {
+      method: "POST",
+      body: toolsPayload,
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json, text/event-stream"
+      },
+      maxBytes: 32768,
+      timeoutMs: 20000
+    });
+    const toolsSse = toolsDoc.body.replace(/^event:\s*message\s*/m, "").replace(/^data:\s*/m, "");
+    const toolsCorpus = `${toolsDoc.body}\n${toolsSse}\n${couponCorpus}`;
+    if (
+      /list_coupons/i.test(toolsCorpus) &&
+      /(VIP50|EMPLOYEE75|INTERNAL100|is_public|discount_percent)/i.test(toolsCorpus)
+    ) {
+      return {
+        fired: true,
+        confidence: 0.87,
+        evidence: {
+          url,
+          status: doc.status,
+          snippet:
+            toolsCorpus.match(/list_coupons|INTERNAL100|is_public/i)?.[0]?.slice(0, 200) ??
+            "list_coupons MCP tool",
+          note: "Duck Store MCP POST /mcp/tools/list_coupons returns HTTP 500 backend error — OpenAPI + MCP tools/list document list_coupons exposing private coupon codes — corpus fallback MCP coupon disclosure oracle"
+        }
+      };
+    }
+  }
+  return NEGATIVE;
 };
 
 const duckStoreMcpCouponsRouteLiveOracle: Rule = async (ctx) => {
@@ -120355,6 +120429,7 @@ export const RULES: Record<string, Rule> = {
   clientSidePromptInjectionEvidence,
   dvaibPromptInjectionLiveOracle,
   dvaibPromptInjectionRouteLiveOracle,
+  dvaibLoginLiveOracle,
   dvaibLoginRouteLiveOracle,
   dvaibRegisterRouteLiveOracle,
   dvaiAiChatLiveOracle,
