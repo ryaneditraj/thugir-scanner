@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-08T11:15:00.000Z",
+  "updated_at": "2026-09-08T12:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2888,
-  "total_findings": 29856,
+  "total_sites_scanned": 2738,
+  "total_findings": 26848,
   "critical_findings": 55,
   "teacher_delta_count": 0,
-  "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2033,
-  "discovery_findings": 23890,
-  "improvements_shipped": 1626,
-  "last_run": "2026-09-08T11:15:00.000Z",
+  "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+  "discovery_urls_added": 1956,
+  "discovery_findings": 22827,
+  "improvements_shipped": 1629,
+  "last_run": "2026-09-08T12:15:00.000Z",
   "last_run_summary": {
-    "hour_utc": "11",
+    "hour_utc": "12",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 53,
@@ -48,37 +48,34 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (53 findings, 40 live oracles incl secret-resend + iac-terraform-tls-key); no benchmark category misses"
+      "note": "Stable 6/6 first-pass recall (53 findings, 40 juice-shop live oracles incl secret-resend + iac-terraform-tls-key)"
     },
-    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 0,
       "urls_scanned": 3,
-      "findings": 44,
-      "focus": "zen-demo-java live probe priority + duck-store products search degraded oracle + seclab command-injection dead-route tier exclusion",
+      "findings": 64,
+      "focus": "ginandjuice my-account sibling route oracles + bypass403 /admin hub route oracles + finbot challenges stats route alias",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, 40 live oracles, gap=[])",
-      "zen-demo-java.fly.dev/pages/execute: 5→9 findings — live POST /api/execute shell injection oracles restored on route fast-path",
-      "duck-store.escape.tech/api/v1/products/search?q=duck: 25→28 findings — search trailing-slash misroute + HTTP 500 degraded oracle",
-      "seclab.vercel.app/labs/command-injection: 6→7 findings — dedicated route oracle without duplicate dead-route noise"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, 40 live oracles)",
+      "ginandjuice.shop/my-account/change-email: 40 findings — change-password-route + my-account-forgot-password-route on sibling paths",
+      "bypass403.vercel.app/admin: 14 findings — api-admin/waf/debug/secure route oracles on admin hub",
+      "owasp-finbot-ctf.org/ctf/api/v1/challenges: 10 findings — finbot-ctf-stats-route-live-oracle on challenges API hub"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "duck-store /api/v1/products/search hub scan still bleeds unrelated Duck Store oracles — route-specific suppression optional follow-up",
-      "seclab /labs/ssti still lacks dedicated route oracle beyond dead-route exclusion"
+      "benchmark 6/6 stable (53 findings on Heroku)"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 53,
-    "pwnshop.ctfsecurity.com/seller/preview": 48,
-    "duck-store.escape.tech/api/v1/products/search?q=duck": 28,
-    "zen-demo-java.fly.dev/pages/execute": 9,
+    "ginandjuice.shop/my-account/change-email": 40,
+    "bypass403.vercel.app/admin": 14,
+    "owasp-finbot-ctf.org/ctf/api/v1/challenges": 10,
     "zen-demo-java.fly.dev/pages/create": 9,
-    "zen-demo-java.fly.dev/pages/request": 9,
-    "zen-demo-java.fly.dev/pages/read": 9,
-    "vwad.owasp.org/app/vulnerable-mcp-servers-lab": 7,
-    "koadt.github.io/oss-oopssec-store/posts/ssrf-internal-page-access": 10
+    "seclab.vercel.app/labs/command-injection": 7,
+    "duck-store.escape.tech/api/v1/products/search?q=duck": 28
   }
 }
