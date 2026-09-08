@@ -88509,5 +88509,107 @@ export const genericPatterns: Pattern[] = [
       "Our auth-vulnerable /profile?id= exposes admin data to regular users. Show IDOR remediation with session-scoped authorization.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "qabash-sample-api-users-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "QA Bash sample API users BOLA live oracle",
+    description:
+      "GET /api/tools/sample-api/users returns unauthenticated JSON user list including admin role and email addresses — the QA Bash API Playground REST BOLA training oracle.",
+    impactOneline:
+      "Unauthenticated REST user lists exposing admin roles let attackers enumerate privileged accounts and craft targeted attacks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "qaBashSampleApiUsersLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication and field-level authorization on user list endpoints.",
+      steps: [
+        "Gate /api/tools/sample-api/users behind authenticated sessions in the playground.",
+        "Redact role and email fields for unauthenticated callers.",
+        "Run QA Bash API Playground only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/tools/sample-api/users endpoint returns admin role and emails without authentication. Show BOLA remediation with auth gates and field redaction.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "qabash-sample-api-users-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "QA Bash sample API users route live oracle",
+    description:
+      "When scanning /api/tools/sample-api/users on qabash.com, GET returns unauthenticated user list with admin role — route-specific REST BOLA training oracle.",
+    impactOneline:
+      "Route-specific confirmation that QA Bash API Playground exposes unauthenticated user enumeration with privileged role fields.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "qaBashSampleApiUsersRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication and field-level authorization on user list endpoints.",
+      steps: [
+        "Gate user list routes behind authenticated sessions.",
+        "Redact role and email fields for unauthenticated callers."
+      ]
+    },
+    fixPrompt:
+      "Our /api/tools/sample-api/users route scan confirms unauthenticated admin role exposure. Show route-specific BOLA remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "qabash-sample-api-graphql-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "QA Bash sample API GraphQL BOLA live oracle",
+    description:
+      "POST /api/tools/sample-api/graphql with a users query returns unauthenticated admin email and role — the QA Bash API Playground GraphQL BOLA training oracle.",
+    impactOneline:
+      "Unauthenticated GraphQL user resolvers exposing admin roles enable account enumeration and privilege mapping.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "qaBashSampleApiGraphqlLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication on GraphQL resolvers and restrict sensitive fields.",
+      steps: [
+        "Gate GraphQL playground endpoints behind authenticated sessions.",
+        "Apply field-level authorization on role and email resolvers.",
+        "Disable introspection and unauthenticated queries in production."
+      ]
+    },
+    fixPrompt:
+      "Our /api/tools/sample-api/graphql users query returns admin email/role without authentication. Show GraphQL authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "qabash-sample-api-graphql-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "QA Bash sample API GraphQL route live oracle",
+    description:
+      "When scanning /api/tools/sample-api/graphql on qabash.com, POST users query returns unauthenticated admin role and email — route-specific GraphQL BOLA training oracle.",
+    impactOneline:
+      "Route-specific confirmation that QA Bash GraphQL playground exposes unauthenticated user data with privileged roles.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "qaBashSampleApiGraphqlRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication on GraphQL resolvers and restrict sensitive fields.",
+      steps: [
+        "Gate GraphQL routes behind authenticated sessions.",
+        "Apply field-level authorization on role and email resolvers."
+      ]
+    },
+    fixPrompt:
+      "Our /api/tools/sample-api/graphql route scan confirms unauthenticated users query exposing admin data. Show route-specific GraphQL authorization remediation.",
+    version: 1,
+    enabled: true
   }
 ];

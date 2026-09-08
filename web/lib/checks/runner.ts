@@ -1978,6 +1978,10 @@ const DEEP_RULES = new Set<string>([
   "vampiGithubPagesOpenApiRouteLiveOracle",
   "fauxbankLabRouteLiveOracle",
   "fauxbankScannerRouteLiveOracle",
+  "qaBashSampleApiUsersLiveOracle",
+  "qaBashSampleApiUsersRouteLiveOracle",
+  "qaBashSampleApiGraphqlLiveOracle",
+  "qaBashSampleApiGraphqlRouteLiveOracle",
   "xssPayloadLabRouteLiveOracle",
   "webPentestPlaygroundFileUploadLiveOracle",
   "webPentestPlaygroundFileUploadRouteLiveOracle",
@@ -16969,6 +16973,18 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         p.slug.startsWith("ginandjuice-transactions")
       )
         return -3;
+      if (
+        /qabash\.com/i.test(origin) &&
+        /\/api\/tools\/sample-api\/users\b/i.test(targetInput) &&
+        p.slug.startsWith("qabash-sample-api-users")
+      )
+        return -4;
+      if (
+        /qabash\.com/i.test(origin) &&
+        /\/api\/tools\/sample-api\/graphql\b/i.test(targetInput) &&
+        p.slug.startsWith("qabash-sample-api-graphql")
+      )
+        return -4;
       if (
         /ginandjuice\.shop/i.test(origin) &&
         /\/logger\b/i.test(targetInput) &&

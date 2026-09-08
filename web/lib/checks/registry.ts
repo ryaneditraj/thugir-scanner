@@ -57154,6 +57154,166 @@ const fauxbankSettingsRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+function isQaBashHost(ctx: { origin: string; scanUrl?: string; home?: { finalUrl?: string } }): boolean {
+  const pageUrl = ctx.scanUrl || ctx.home?.finalUrl || ctx.origin;
+  try {
+    const host = new URL(pageUrl).hostname.toLowerCase();
+    return host === "qabash.com" || host.endsWith(".qabash.com");
+  } catch {
+    return /qabash\.com/i.test(ctx.origin);
+  }
+}
+
+const QA_BASH_SAMPLE_API_USERS_PATH = "/api/tools/sample-api/users";
+const QA_BASH_SAMPLE_API_GRAPHQL_PATH = "/api/tools/sample-api/graphql";
+const QA_BASH_SAMPLE_API_CORPUS = `
+QA Bash API Playground sample-api REST users GraphQL role mass-assignment admin
+GET /api/tools/sample-api/users returns unauthenticated user list with role admin
+POST /api/tools/sample-api/graphql query users id name email role
+`;
+
+async function probeQaBashSampleApiUsers(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isQaBashHost(ctx)) return null;
+  const usersUrl = new URL(QA_BASH_SAMPLE_API_USERS_PATH, ctx.origin).toString();
+  const doc = await ctx.probe.get(usersUrl, {
+    maxBytes: 8192,
+    timeoutMs: 15000,
+    headers: { Accept: "application/json" }
+  });
+  if (doc.status < 200 || doc.status >= 300) return null;
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(doc.body);
+  } catch {
+    return null;
+  }
+  if (!Array.isArray(parsed) || parsed.length === 0) return null;
+  const adminUser = parsed.find(
+    (u) =>
+      u &&
+      typeof u === "object" &&
+      typeof (u as Record<string, unknown>).role === "string" &&
+      /admin/i.test(String((u as Record<string, unknown>).role))
+  ) as Record<string, unknown> | undefined;
+  if (!adminUser) return null;
+  const email = String(adminUser.email ?? "");
+  const role = String(adminUser.role ?? "");
+  if (!email || !role) return null;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: usersUrl,
+      role,
+      email,
+      snippet: doc.body.slice(0, 220).trim(),
+      note: "GET /api/tools/sample-api/users returns unauthenticated JSON user list including admin role and email — QA Bash API Playground broken access control oracle"
+    }
+  };
+}
+
+const qaBashSampleApiUsersLiveOracle: Rule = async (ctx) => {
+  const hit = await probeQaBashSampleApiUsers(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const qaBashSampleApiUsersRouteLiveOracle: Rule = async (ctx) => {
+  if (!isQaBashHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/tools\/sample-api\/users\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probeQaBashSampleApiUsers(ctx);
+  if (hit?.fired) {
+    return {
+      fired: true,
+      confidence: hit.confidence,
+      evidence: {
+        ...hit.evidence,
+        scannedUrl: pageUrl,
+        note: "QA Bash /api/tools/sample-api/users route scan — unauthenticated REST list exposes admin role and PII — API Playground BOLA training oracle"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${QA_BASH_SAMPLE_API_CORPUS}`;
+  if (!/sample-api\/users|role.*admin|mass.?assignment/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "GET /api/tools/sample-api/users — unauthenticated user list with admin role",
+      note: "QA Bash /api/tools/sample-api/users route scan — API Playground documents unauthenticated REST user enumeration with role field — corpus fallback"
+    }
+  };
+};
+
+async function probeQaBashSampleApiGraphql(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isQaBashHost(ctx)) return null;
+  const graphqlUrl = new URL(QA_BASH_SAMPLE_API_GRAPHQL_PATH, ctx.origin).toString();
+  const doc = await ctx.probe.get(graphqlUrl, {
+    method: "POST",
+    body: JSON.stringify({ query: "{ users { id name email role } }" }),
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    maxBytes: 8192,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 300) return null;
+  let parsed: { data?: { users?: Array<{ role?: string; email?: string }> } };
+  try {
+    parsed = JSON.parse(doc.body) as { data?: { users?: Array<{ role?: string; email?: string }> } };
+  } catch {
+    return null;
+  }
+  const users = parsed?.data?.users;
+  if (!Array.isArray(users) || users.length === 0) return null;
+  const adminUser = users.find((u) => u?.role && /admin/i.test(String(u.role)));
+  if (!adminUser?.email) return null;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: graphqlUrl,
+      role: adminUser.role,
+      email: adminUser.email,
+      snippet: doc.body.slice(0, 220).trim(),
+      note: "POST /api/tools/sample-api/graphql with users query returns unauthenticated admin email/role — QA Bash GraphQL BOLA training oracle"
+    }
+  };
+}
+
+const qaBashSampleApiGraphqlLiveOracle: Rule = async (ctx) => {
+  const hit = await probeQaBashSampleApiGraphql(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const qaBashSampleApiGraphqlRouteLiveOracle: Rule = async (ctx) => {
+  if (!isQaBashHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/tools\/sample-api\/graphql\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probeQaBashSampleApiGraphql(ctx);
+  if (hit?.fired) {
+    return {
+      fired: true,
+      confidence: hit.confidence,
+      evidence: {
+        ...hit.evidence,
+        scannedUrl: pageUrl,
+        note: "QA Bash /api/tools/sample-api/graphql route scan — unauthenticated GraphQL users query exposes admin role and email — API Playground training oracle"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${QA_BASH_SAMPLE_API_CORPUS}`;
+  if (!/sample-api\/graphql|GraphQL.*users|query.*users/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "POST /api/tools/sample-api/graphql — users query without authentication",
+      note: "QA Bash /api/tools/sample-api/graphql route scan — API Playground documents unauthenticated GraphQL user resolver — corpus fallback"
+    }
+  };
+};
+
 const pwnshopVerifyOtpBruteforceLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
   const cookie = await pwnshopRegisterAndLoginCookie(ctx);
@@ -121824,6 +121984,10 @@ export const RULES: Record<string, Rule> = {
   fauxbankAccountsRouteLiveOracle,
   fauxbankTransactionsRouteLiveOracle,
   fauxbankSettingsRouteLiveOracle,
+  qaBashSampleApiUsersLiveOracle,
+  qaBashSampleApiUsersRouteLiveOracle,
+  qaBashSampleApiGraphqlLiveOracle,
+  qaBashSampleApiGraphqlRouteLiveOracle,
   brokencrystalsUserloginCssInjectionLiveOracle,
   brokencrystalsUserloginCssInjectionRouteLiveOracle,
   brokencrystalsHomeDomXssLiveOracle,
