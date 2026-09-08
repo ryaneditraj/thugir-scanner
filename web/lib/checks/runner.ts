@@ -992,6 +992,71 @@ async function scanHttpProbe(
   return null;
 }
 
+/** Route-specific slug allowlist for Broken Crystals hub scans — suppress cross-module live-oracle bleed. */
+function brokencrystalsRouteSlugPatterns(pathname: string): RegExp[] | null {
+  const p = pathname.toLowerCase();
+  const routes: [RegExp, RegExp[]][] = [
+    [/\/api\/render\b|\/render\.dot\b/, [/brokencrystals-render-dot-ssti/, /^ssti-template-injection$/]],
+    [/\/api\/spawn\b/, [/brokencrystals-spawn/, /brokencrystals-command/]],
+    [/\/api\/command\b/, [/brokencrystals-command/, /brokencrystals-spawn/]],
+    [/\/api\/jwt\b/, [/brokencrystals-jwt/]],
+    [/\/api\/photo\b/, [/brokencrystals-photo/]],
+    [/\/api\/users\/fullinfo\b/, [/brokencrystals-fullinfo/]],
+    [
+      /\/api\/users\/(?:id|\d+)\b/,
+      [/brokencrystals-users-id-bola/, /brokencrystals-mass-assignment/]
+    ],
+    [
+      /\/api\/email\b/,
+      [/brokencrystals-email/, /brokencrystals-send-support-email/, /brokencrystals-delete-emails/]
+    ],
+    [/\/api\/partners\/partnerlogin\b/, [/brokencrystals-partner-login-xpath/]],
+    [/\/api\/config\b/, [/brokencrystals-config/, /brokencrystals-oidc/]],
+    [/\/api\/process_numbers\b/, [/brokencrystals-process-numbers/, /brokencrystals-mcp-process/]],
+    [
+      /\/api\/file\b/,
+      [
+        /brokencrystals-api-file/,
+        /brokencrystals-file-(?:raw-)?lfi/,
+        /brokencrystals-file-(?:aws|azure|digital-ocean|google)/
+      ]
+    ],
+    [/\/api\/fetch\b/, [/brokencrystals-api-fetch/]],
+    [/\/api\/goto\b/, [/brokencrystals-goto/]],
+    [/\/api\/metadata\b/, [/brokencrystals-metadata/, /brokencrystals-get-metadata/]],
+    [/\/api\/chat\b/, [/brokencrystals-chat/]],
+    [/\/api\/ldap\b/, [/brokencrystals-ldap/]],
+    [/\/graphql\b|\/graphiql\b/, [/brokencrystals-graphql/]],
+    [/\/vendor\b/, [/brokencrystals-vendor/]],
+    [/\/userlogin\b/, [/brokencrystals-userlogin/, /brokencrystals-home-dom-xss/]],
+    [/\/api\/mcp\b/, [/brokencrystals-mcp/]],
+    [/\/api\/secrets\b/, [/brokencrystals-secrets/]],
+    [/\/api\/v1\/userinfo\b/, [/brokencrystals-v1-userinfo/]],
+    [/\/api\/testimonials\b/, [/brokencrystals-testimonials/]],
+    [/\/api\/subscriptions\b/, [/brokencrystals-subscriptions/]],
+    [/\/api\/products\b/, [/brokencrystals-products/]],
+    [/\/api\/adminlogin\b/, [/brokencrystals-admin-login-bfla/]],
+    [
+      /\/api\/users\/search\b|\/api\/searchadmin\b/,
+      [/brokencrystals-users-search/, /brokencrystals-search-admin/]
+    ],
+    [/\/api\/marketplace\b/, [/brokencrystals-marketplace/]],
+    [/\/api\/signup\b/, [/brokencrystals-signup/]],
+    [/\/domcsrf\b/, [/brokencrystals-dom-csrf/]],
+    [/\/metadata\b/, [/brokencrystals-(?:aws|azure|digital-ocean|google)-metadata/]]
+  ];
+  for (const [pathRe, slugRes] of routes) {
+    if (pathRe.test(p)) return slugRes;
+  }
+  const apiMatch = p.match(/^\/api\/([^/?]+)/);
+  if (apiMatch) {
+    const seg = apiMatch[1].replace(/_/g, "-");
+    const escaped = seg.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    return [new RegExp(`brokencrystals-(?:[a-z0-9-]*-)?${escaped}`)];
+  }
+  return null;
+}
+
 async function scanRule(pattern: Pattern, ctx: RuleContext, allowed: Set<string>): Promise<PatternFinding | null> {
   if (pattern.detectorKind !== "rule_ref") return null;
   const cfg = pattern.detectorConfig as { rule: string; options?: Record<string, unknown> };
@@ -10795,6 +10860,78 @@ function canonicalDeepScanTarget(raw: string): string {
   return raw;
 }
 
+function applyRouteOracleHubFilters(
+  findings: PatternFinding[],
+  seen: Set<string>,
+  origin: string,
+  targetInput: string
+): void {
+  if (
+    /juice-shop|owasp-juice|\.juice\.shop$/i.test(origin) &&
+    seen.has("juice-shop-resend-key-live-oracle") &&
+    !seen.has("secret-resend")
+  ) {
+    const resendPattern = findPattern("secret-resend");
+    const resendOracle = findings.find(
+      (f: PatternFinding) => f.patternSlug === "juice-shop-resend-key-live-oracle"
+    );
+    if (resendPattern && resendOracle) {
+      seen.add("secret-resend");
+      findings.push({
+        patternSlug: resendPattern.slug,
+        category: resendPattern.category,
+        title: resendPattern.title,
+        severity: resendPattern.severityDefault,
+        tierRequired: resendPattern.tierRequired,
+        impactOneline: resendPattern.impactOneline,
+        evidence: {
+          ...resendOracle.evidence,
+          note: "secret-resend slug bridged from juice-shop-resend-key-live-oracle — Resend API key validated against api.resend.com/domains (Leaked Resend API Key challenge)"
+        },
+        remediation: resendPattern.remediation,
+        fixPrompt: resendPattern.fixPrompt,
+        confidence: resendOracle.confidence
+      });
+    }
+  }
+
+  if (/dvga2?\.tools\.escape\.tech/i.test(origin)) {
+    try {
+      const pathname = new URL(targetInput).pathname.toLowerCase();
+      if (/\/(?:graphql|graphiql|my_pastes|import_paste|create_paste)\b/.test(pathname)) {
+        const deduped = findings.filter((f: PatternFinding) => {
+          const slug = f.patternSlug || "";
+          if (!slug.startsWith("dvga-")) return true;
+          if (slug.endsWith("-route-live-oracle")) return true;
+          return false;
+        });
+        findings.length = 0;
+        findings.push(...deduped);
+      }
+    } catch {
+      /* ignore */
+    }
+  }
+
+  if (/brokencrystals\.com/i.test(origin)) {
+    try {
+      const pathname = new URL(targetInput).pathname.toLowerCase();
+      const allowed = brokencrystalsRouteSlugPatterns(pathname);
+      if (allowed) {
+        const deduped = findings.filter((f: PatternFinding) => {
+          const slug = f.patternSlug || "";
+          if (!slug.startsWith("brokencrystals-")) return true;
+          return allowed.some((re) => re.test(slug));
+        });
+        findings.length = 0;
+        findings.push(...deduped);
+      }
+    } catch {
+      /* ignore */
+    }
+  }
+}
+
 export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {}): Promise<DeepScanResult> {
   let effectiveTargetInput = canonicalDeepScanTarget(targetInput);
   let target = normalizeTarget(effectiveTargetInput);
@@ -18488,56 +18625,13 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
     }
   }
 
-  if (
-    /juice-shop|owasp-juice|\.juice\.shop$/i.test(origin) &&
-    seen.has("juice-shop-resend-key-live-oracle") &&
-    !seen.has("secret-resend")
-  ) {
-    const resendPattern = findPattern("secret-resend");
-    const resendOracle = findings.find((f) => f.patternSlug === "juice-shop-resend-key-live-oracle");
-    if (resendPattern && resendOracle) {
-      seen.add("secret-resend");
-      findings.push({
-        patternSlug: resendPattern.slug,
-        category: resendPattern.category,
-        title: resendPattern.title,
-        severity: resendPattern.severityDefault,
-        tierRequired: resendPattern.tierRequired,
-        impactOneline: resendPattern.impactOneline,
-        evidence: {
-          ...resendOracle.evidence,
-          note: "secret-resend slug bridged from juice-shop-resend-key-live-oracle — Resend API key validated against api.resend.com/domains (Leaked Resend API Key challenge)"
-        },
-        remediation: resendPattern.remediation,
-        fixPrompt: resendPattern.fixPrompt,
-        confidence: resendOracle.confidence
-      });
-    }
-  }
-
-  if (/dvga2?\.tools\.escape\.tech/i.test(origin)) {
-    try {
-      const pathname = new URL(targetInput).pathname.toLowerCase();
-      if (/\/(?:graphql|graphiql|my_pastes|import_paste|create_paste)\b/.test(pathname)) {
-        const deduped = findings.filter((f) => {
-          const slug = f.patternSlug || "";
-          if (!slug.startsWith("dvga-")) return true;
-          if (slug.endsWith("-route-live-oracle")) return true;
-          return false;
-        });
-        findings.length = 0;
-        findings.push(...deduped);
-      }
-    } catch {
-      /* ignore */
-    }
-  }
+  applyRouteOracleHubFilters(findings, seen, origin, targetInput);
 
   return {
     target: target.toString(),
     finalUrl: home.finalUrl,
     detectedPlatform: detection.platform,
-    pagesCrawled: pages.map((p) => p.finalUrl),
+    pagesCrawled: pages.map((p: { finalUrl: string }) => p.finalUrl),
     findings,
     combined,
     probesRun: probe.size

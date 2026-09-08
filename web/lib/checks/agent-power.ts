@@ -248,6 +248,12 @@ function ctfChallange3ReflexionSuppressed(ctx: PowerCtx): boolean {
   return /ctf-challange-3\.vercel\.app/i.test(pageUrl);
 }
 
+/** OWASP FinBot CTF demo on Render is a Next.js SPA — reflexion SSTI probes hit coincidental '49' in bundles. */
+function finbotDemoReflexionSuppressed(ctx: PowerCtx): boolean {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  return /owasp-finbot-ctf(?:-demo)?\.(?:onrender\.com|org)/i.test(pageUrl);
+}
+
 /** the0x-pwn XSS labs are static GitHub Pages with client-side eval/innerHTML sinks — no server-side SSTI. */
 function the0xPwnLabXssReflexionSuppressed(ctx: PowerCtx): boolean {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
@@ -497,6 +503,7 @@ export const reflexionEscalatedSsti: PowerRule = async (ctx) => {
   if (aiThreatlabReflexionSuppressed(ctx)) return NEGATIVE;
   if (yogsecGitHubPagesReflexionSuppressed(ctx)) return NEGATIVE;
   if (ctfChallange3ReflexionSuppressed(ctx)) return NEGATIVE;
+  if (finbotDemoReflexionSuppressed(ctx)) return NEGATIVE;
   if (the0xPwnLabXssReflexionSuppressed(ctx)) return NEGATIVE;
   if (povzaydXssLabsReflexionSuppressed(ctx)) return NEGATIVE;
   if (ucuOwaspCtfReflexionSuppressed(ctx)) return NEGATIVE;

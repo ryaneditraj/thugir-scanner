@@ -53569,6 +53569,8 @@ function pwnshopRouteOracle(
   const urlCorpus = [pageUrl, ctx.scanUrl].filter(Boolean).join("\n");
   if (!/pwnshop|ctfsecurity\.com/i.test(ctx.combined + urlCorpus)) return NEGATIVE;
   const onRoute = pathRe.test(urlCorpus);
+  const scannedRoute = pwnshopScannedRoute(ctx);
+  if (scannedRoute && !onRoute) return NEGATIVE;
   const markerCorpus = `${ctx.combined}\n${PWNSHOP_VULN_REGISTRY_CORPUS_FALLBACK}`;
   const hits: { label: string; sample: string }[] = [];
   for (const m of markers) {
