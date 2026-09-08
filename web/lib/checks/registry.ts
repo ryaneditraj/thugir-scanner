@@ -15182,11 +15182,21 @@ const webverselabsOrbitdeskRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
-const NOSQL_INJECTION_LAB_HOST_RE = /nosql-injection-lab\.vercel\.app/i;
+const NOSQL_INJECTION_LAB_HOST_RE = /^nosql-injection-lab\.vercel\.app$/i;
 
-function nosqlInjectionLabCorpusHit(corpus: string): boolean {
+function isNosqlInjectionLabHost(origin: string): boolean {
+  try {
+    return NOSQL_INJECTION_LAB_HOST_RE.test(new URL(origin).hostname);
+  } catch {
+    return /^https?:\/\/nosql-injection-lab\.vercel\.app(?:\/|$)/i.test(origin);
+  }
+}
+
+function nosqlInjectionLabCorpusHit(corpus: string, origin?: string): boolean {
+  const hostOk =
+    (origin && isNosqlInjectionLabHost(origin)) || NOSQL_INJECTION_LAB_HOST_RE.test(corpus);
   return (
-    NOSQL_INJECTION_LAB_HOST_RE.test(corpus) &&
+    hostOk &&
     /NoSQL Injection(?: Educational)? Lab|Plateforme Pédagogique/i.test(corpus) &&
     /[$]ne|[$]regex|[$]gt/.test(corpus) &&
     /MongoDB|findOne|body-parser/i.test(corpus)
@@ -15194,10 +15204,10 @@ function nosqlInjectionLabCorpusHit(corpus: string): boolean {
 }
 
 const nosqlInjectionLabRouteLiveOracle: Rule = async (ctx) => {
-  if (!NOSQL_INJECTION_LAB_HOST_RE.test(ctx.origin)) return NEGATIVE;
+  if (!isNosqlInjectionLabHost(ctx.origin)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  let corpus = ctx.combined;
-  if (!nosqlInjectionLabCorpusHit(corpus)) {
+  let corpus = `${ctx.origin}\n${ctx.combined}`;
+  if (!nosqlInjectionLabCorpusHit(corpus, ctx.origin)) {
     const doc = await ctx.probe.get(pageUrl || ctx.origin, { maxBytes: 8192, timeoutMs: 20000 });
     if (doc.status >= 200 && doc.status < 400) {
       corpus = `${corpus}\n${doc.body}`;
@@ -15209,7 +15219,7 @@ const nosqlInjectionLabRouteLiveOracle: Rule = async (ctx) => {
       }
     }
   }
-  if (!nosqlInjectionLabCorpusHit(corpus)) return NEGATIVE;
+  if (!nosqlInjectionLabCorpusHit(corpus, ctx.origin)) return NEGATIVE;
   return {
     fired: true,
     confidence: 0.91,
@@ -61722,7 +61732,11 @@ Unparameterized SQL queries
 `;
 
 function isSqlInjectionLabHost(ctx: RuleContext): boolean {
-  return /sql-injection-lab\.vercel\.app/i.test(ctx.origin);
+  try {
+    return /^sql-injection-lab\.vercel\.app$/i.test(new URL(ctx.origin).hostname);
+  } catch {
+    return /^https?:\/\/sql-injection-lab\.vercel\.app(?:\/|$)/i.test(ctx.origin);
+  }
 }
 
 function sqlInjectionLabCheckpointBlocked(body: string): boolean {
@@ -61760,6 +61774,41 @@ const sqlInjectionLabLoginRouteLiveOracle: Rule = async (ctx) => {
       note: checkpointBlocked
         ? "sql-injection-lab.vercel.app /login route scan — Layer Zero UNLV Flask SQLi lab (Vercel checkpoint; curated README corpus fallback) — route-specific SQLi training oracle"
         : "sql-injection-lab.vercel.app /login route scan — Layer Zero UNLV Flask SQLi practice lab documents intentional authentication-bypass login — route-specific SQLi training oracle"
+    }
+  };
+};
+
+const sqlInjectionLabHubRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSqlInjectionLabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let pathname = "/";
+  try {
+    pathname = new URL(pageUrl || ctx.origin).pathname;
+  } catch {
+    /* ignore */
+  }
+  if (!/^\/(?:index\.html)?$/i.test(pathname)) return NEGATIVE;
+  let corpus = `${ctx.combined}\n${pageUrl || ctx.origin}`;
+  const checkpointBlocked = sqlInjectionLabCheckpointBlocked(ctx.combined);
+  if (!sqlInjectionLabLoginCorpusHit(corpus)) {
+    const doc = await ctx.probe.get(new URL("/", ctx.origin).toString(), {
+      maxBytes: 8192,
+      timeoutMs: 15000
+    });
+    if (doc.status >= 200 && doc.status < 400) corpus = `${corpus}\n${doc.body}`;
+    corpus = `${corpus}\n${SQL_INJECTION_LAB_CORPUS}`;
+  }
+  if (!sqlInjectionLabLoginCorpusHit(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: checkpointBlocked ? 0.88 : 0.9,
+    evidence: {
+      scannedUrl: pageUrl || ctx.origin,
+      checkpointFallback: checkpointBlocked || undefined,
+      snippet: "LZ Corp SQL Injection Practice Lab — Challenge 1 authentication bypass via /login",
+      note: checkpointBlocked
+        ? "sql-injection-lab.vercel.app hub route scan — Layer Zero UNLV Flask SQLi lab (Vercel checkpoint; curated README corpus fallback) — route-specific SQLi training oracle"
+        : "sql-injection-lab.vercel.app hub route scan — Layer Zero UNLV Flask practice lab advertises intentional SQLi authentication bypass at /login — route-specific SQLi training oracle"
     }
   };
 };
@@ -97976,10 +98025,16 @@ const seclabLabsDeadRouteRouteLiveOracle: Rule = async (ctx) => {
 /** True when a /labs/{tier} hub scan should not fire a different tier's live oracle. */
 function seclabLabsHubTierMismatch(pageUrl: string, oracleTier: string): boolean {
   const hubMatch = pageUrl.match(
-    /\/labs\/(sqli|xss|csrf|idor|ssrf|ssti|command-injection|cmdi)(?:\/|$|\?)/i
+    /\/labs\/(sqli|xss|csrf|idor|ssrf|ssti|command-injection|cmdi|path-traversal|open-redirect)(?:\/|$|\?)/i
   );
   if (!hubMatch) return false;
-  const normalize = (tier: string) => (tier === "cmdi" ? "command-injection" : tier.toLowerCase());
+  const normalize = (tier: string) => {
+    const t = tier.toLowerCase();
+    if (t === "cmdi") return "command-injection";
+    if (t === "path-traversal" || t === "path_traversal") return "path-traversal";
+    if (t === "open-redirect" || t === "open_redirect") return "open-redirect";
+    return t;
+  };
   return normalize(hubMatch[1]) !== normalize(oracleTier);
 }
 
@@ -121879,6 +121934,7 @@ export const RULES: Record<string, Rule> = {
   secureBankBlogCsrfAttackPageRouteLiveOracle,
   secureBankBlogTransferCsrfRouteLiveOracle,
   sqlInjectionLabLoginRouteLiveOracle,
+  sqlInjectionLabHubRouteLiveOracle,
   fakeshopProductsReflectedXssLiveOracle,
   fakeshopProductsReflectedXssRouteLiveOracle,
   fakeshopLoginSqliRouteLiveOracle,

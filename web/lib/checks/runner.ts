@@ -2554,6 +2554,7 @@ const DEEP_RULES = new Set<string>([
   "secureBankBlogCsrfAttackPageRouteLiveOracle",
   "secureBankBlogTransferCsrfRouteLiveOracle",
   "sqlInjectionLabLoginRouteLiveOracle",
+  "sqlInjectionLabHubRouteLiveOracle",
   "fakeshopProductsReflectedXssLiveOracle",
   "fakeshopProductsReflectedXssRouteLiveOracle",
   "fakeshopLoginSqliRouteLiveOracle",
@@ -15887,14 +15888,20 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
       )
         return -3;
       if (
-        /nosql-injection-lab\.vercel\.app/i.test(origin) &&
+        /^nosql-injection-lab\.vercel\.app$/i.test(origin) &&
         p.slug === "nosql-injection-lab-route-live-oracle"
       )
         return -3;
       if (
-        /sql-injection-lab\.vercel\.app/i.test(origin) &&
+        /^sql-injection-lab\.vercel\.app$/i.test(origin) &&
         /\/login\b/i.test(targetInput) &&
         p.slug.startsWith("sql-injection-lab-login")
+      )
+        return -4;
+      if (
+        /^sql-injection-lab\.vercel\.app$/i.test(origin) &&
+        /^https?:\/\/[^/]+\/?(?:index\.html)?$/i.test(targetInput.replace(/\/$/, "/")) &&
+        p.slug === "sql-injection-lab-hub-route-live-oracle"
       )
         return -4;
       if (

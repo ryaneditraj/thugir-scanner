@@ -53899,6 +53899,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "sql-injection-lab-hub-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "SQL Injection Lab hub route live oracle",
+    description:
+      "When scanning the sql-injection-lab.vercel.app homepage, the Layer Zero UNLV Flask practice lab advertises intentional authentication-bypass SQL injection at /login — route-specific SQLi training oracle.",
+    impactOneline:
+      "Educational Flask SQLi lab hub confirms intentional login bypass training surface for route-specific scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sqlInjectionLabHubRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "SQL Injection Lab is intentional training software — use parameterized queries in production.",
+      steps: [
+        "Never concatenate user input into SQL queries.",
+        "Use parameterized queries or ORM bindings for all authentication.",
+        "Run practice labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our sql-injection-lab homepage documents intentional SQLi auth bypass at /login. Show parameterized query remediation for Flask login handlers.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "secure-bank-bay-stored-xss-comments-route-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",

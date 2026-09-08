@@ -202,6 +202,12 @@ function yogsecGitHubPagesReflexionSuppressed(ctx: PowerCtx): boolean {
   return /yogsec\.github\.io/i.test(pageUrl);
 }
 
+/** NoSQL Injection Lab is a client-side React SPA — reflexion SSTI probes hit coincidental '49' in bundles. */
+function nosqlInjectionLabReflexionSuppressed(ctx: PowerCtx): boolean {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  return /nosql-injection-lab\.vercel\.app/i.test(pageUrl);
+}
+
 /** ctf-challange-3 is a static Next.js middleware bypass demo — no server-side SSTI. */
 function ctfChallange3ReflexionSuppressed(ctx: PowerCtx): boolean {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
@@ -454,6 +460,7 @@ export const reflexionEscalatedSsti: PowerRule = async (ctx) => {
   if (zeroHealthVercelDashboardReflexionSuppressed(ctx)) return NEGATIVE;
   if (cve55182SaasReflexionSuppressed(ctx)) return NEGATIVE;
   if (qaBashApiPlaygroundReflexionSuppressed(ctx)) return NEGATIVE;
+  if (nosqlInjectionLabReflexionSuppressed(ctx)) return NEGATIVE;
   const params = ["name", "q", "template", "message", "content"];
   const paths = ["/", "/search", "/template"];
 
