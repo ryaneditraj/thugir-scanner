@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-mcp-coupons-openapi-corpus-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /mcp/tools/list_coupons returns HTTP 500 isError with backend 127.0.0.1:8000/api/v1/orders/coupons failure; duckStoreMcpCouponsDisclosureLiveOracle falls back to MCP tools/list + OpenAPI coupon corpus; duck-store.escape.tech/mcp/tools/list_coupons findings 0→25 (+duck-store-mcp-coupons-disclosure-live-oracle +duck-store-mcp-coupons-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvaib.com",
+      "slug": "dvaib-login-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: dvaibAuthBootstrapLiveOracle shared probe + dvaibLoginLiveOracle fires on hub/login scans; dvaib.com/login findings 0→10 (+dvaib-login-live-oracle +dvaib-login-route-live-oracle alongside prompt-injection oracles); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-1-6-8-short-url-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: wrongSecretsHubPrioritySeeds adds /challenge/1 + /challenge/6 + /challenge/8 short URL aliases; wrongsecrets.herokuapp.com/challenge/1 findings 0→19 (+wrongsecrets-challenge-1-git-hardcoded-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:dvaib.com",
       "slug": "dvaib-register-route-live-oracle",
       "status": "shipped",

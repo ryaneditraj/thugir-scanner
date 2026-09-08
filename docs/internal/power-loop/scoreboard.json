@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-08T02:10:27.363Z",
+  "updated_at": "2026-09-08T03:12:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 2800,
-  "total_findings": 28054,
+  "total_sites_scanned": 2805,
+  "total_findings": 28129,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1993,
-  "discovery_findings": 23655,
-  "improvements_shipped": 1602,
-  "last_run": "2026-09-08T02:10:27.363Z",
+  "discovery_urls_added": 1995,
+  "discovery_findings": 23730,
+  "improvements_shipped": 1605,
+  "last_run": "2026-09-08T03:12:00.000Z",
   "last_run_summary": {
-    "hour_utc": "02",
+    "hour_utc": "03",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 52,
+      "oracle_findings": 53,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -49,48 +49,38 @@
           ]
         }
       },
-      "note": "Primary Heroku stable 6/6 first-pass recall (52 findings; gap=[]; 39 live oracles incl secret-resend + iac-terraform-tls-key)"
+      "note": "Primary Heroku stable 6/6 first-pass recall (53 findings; gap=[]; no benchmark misses)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 167,
-      "focus": "WrongSecrets Docker/buildx challenges 4/50-51/55-56/66 + SekuMart OpenAPI spec + preview.owasp-juice.shop wallet BOLA; queued crAPI2 OTP/JWT-none, Duck Store MCP coupons, vAPI BOLA, WrongSecrets-6, DVAIB login/register, duck-store cart/coupons, wrongsecrets 1/2/8",
+      "urls_added": 2,
+      "urls_scanned": 5,
+      "findings": 108,
+      "focus": "Duck Store MCP coupons corpus fallback + DVAIB login live oracle + WrongSecrets /challenge/1 short URL seed validation",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, 39 live oracles, gap=[])",
-      "preview.owasp-juice.shop/rest/wallet/balance: 35 findings — juice-shop-wallet-balance-bola-live-oracle on preview host",
-      "wrongsecrets.herokuapp.com/challenge/challenge-55: 19 (+wrongsecrets-challenge-55-ssh-bastion-route-live-oracle)",
-      "wrongsecrets.herokuapp.com/challenge/challenge-56: 19 (+wrongsecrets-challenge-56-project-spec-route-live-oracle)",
-      "wrongsecrets.herokuapp.com/challenge/challenge-50: 19 (+wrongsecrets-challenge-50-dotnet-binary-route-live-oracle)",
-      "wrongsecrets.herokuapp.com/challenge/challenge-51: 19 (+wrongsecrets-challenge-51-docker-secrets-route-live-oracle)",
-      "wrongsecrets.herokuapp.com/challenge/challenge-4: 19 (Docker ARG-based password oracle corpus)",
-      "sekumart.sekuripy.hr/openapi.json: 18 (OpenAPI SQLi/NoSQL oracle surface)",
-      "dvaib.com/register: 9 (+dvaib-register-route-live-oracle)",
-      "ai-security-platform-iota.vercel.app/challenges/command-injection: 8 (+ai-security-command-injection-live-oracle)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, gap=[])",
+      "duck-store.escape.tech/mcp/tools/list_coupons: 25 findings — duck-store-mcp-coupons-disclosure-live-oracle corpus fallback (was 0)",
+      "dvaib.com/login: 10 findings — dvaib-login-live-oracle + dvaib-login-route-live-oracle (first scan)",
+      "wrongsecrets.herokuapp.com/challenge/1: 19 findings — wrongsecrets-challenge-1-git-hardcoded-route-live-oracle via short URL seed",
+      "dvaib.com/register: 9 findings — register route oracle maintained",
+      "ai-security-platform-iota.vercel.app/challenges/command-injection: 12 findings — command-injection live oracle maintained"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "Queue tail not reached: WrongSecrets 1/2/6/8, DVAIB login, duck-store cart/coupons, crAPI2 OTP/JWT-none, vAPI BOLA, Duck Store MCP coupons still queued",
-      "WrongSecrets Docker/K8s challenges 4/50-51/55-56/66: route oracles confirm walkthrough text but cloud-only container/K8s execution not testable on Heroku"
+      "Queue tail not reached: WrongSecrets 2/6/8 short URLs, DVAIB hub, duck-store cart, crAPI2 OTP/JWT-none, vAPI BOLA still queued",
+      "Duck Store MCP list_coupons backend returns HTTP 500 — corpus fallback confirms tool disclosure from OpenAPI + tools/list"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 52,
+    "juice-shop.herokuapp.com": 53,
+    "duck-store.escape.tech/mcp/tools/list_coupons": 25,
+    "dvaib.com/login": 10,
+    "wrongsecrets.herokuapp.com/challenge/1": 19,
     "preview.owasp-juice.shop/rest/wallet/balance": 35,
-    "wrongsecrets.herokuapp.com/challenge/challenge-55": 19,
-    "wrongsecrets.herokuapp.com/challenge/challenge-56": 19,
-    "wrongsecrets.herokuapp.com/challenge/challenge-50": 19,
-    "wrongsecrets.herokuapp.com/challenge/challenge-51": 19,
-    "wrongsecrets.herokuapp.com/challenge/challenge-66": 19,
-    "wrongsecrets.herokuapp.com/challenge/challenge-4": 19,
     "sekumart.sekuripy.hr/openapi.json": 18,
-    "dvaib.com/register": 9,
-    "ai-security-platform-iota.vercel.app/challenges/command-injection": 8,
-    "demo.owasp-juice.shop/rest/basket": 25,
-    "pwnshop.ctfsecurity.com/mail/1": 47,
-    "brokencrystals.com/api/file/aws": 95
+    "brokencrystals.com/api/file/aws": 92,
+    "pwnshop.ctfsecurity.com/mail/1": 50
   }
 }

@@ -1,6 +1,16 @@
 {
-  "updated_at": "2026-09-08T02:00:00.000Z",
+  "updated_at": "2026-09-08T03:00:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://duck-store.escape.tech/mcp/tools/list_coupons",
+      "source": "Escape Duck Store — MCP coupon disclosure POST /mcp/tools/list_coupons (03 UTC validation)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/1",
+      "source": "OWASP WrongSecrets challenge-1 Git hardcoded password — short URL alias (03 UTC validation)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://dvaib.com/login",
       "source": "DVAIB Damn Vulnerable AI Bank — auth/login surface for prompt-injection scenarios (02 UTC queue drain)",

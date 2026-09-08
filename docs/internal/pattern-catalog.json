@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-08T02:02:19.719Z",
-  "total": 3444,
-  "uniqueSlugs": 3436,
+  "generatedAt": "2026-09-08T03:06:57.650Z",
+  "total": 3445,
+  "uniqueSlugs": 3437,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3426,
+    "generic": 3427,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3359,
+    "deep": 3360,
     "continuous": 0
   },
   "byCategory": {
@@ -39,7 +39,7 @@
     "AI / LLM security": 4,
     "Cross-site request forgery": 15,
     "Prompt injection": 17,
-    "Authentication bypass": 5,
+    "Authentication bypass": 6,
     "Insecure file upload": 2,
     "Command injection": 2,
     "XML external entity injection": 1,
@@ -1271,6 +1271,7 @@
     "dvai-oracle-logprob-route-live-oracle",
     "dvai-schemapoison-rag-live-oracle",
     "dvai-schemapoison-rag-route-live-oracle",
+    "dvaib-login-live-oracle",
     "dvaib-login-route-live-oracle",
     "dvaib-prompt-injection-live-oracle",
     "dvaib-prompt-injection-route-live-oracle",
