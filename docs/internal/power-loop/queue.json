@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-08T13:05:00.000Z",
+  "updated_at": "2026-09-08T14:05:00.000Z",
   "priority_discovery_urls": [
     {
       "url": "https://seclab.vercel.app/labs/path-traversal",
@@ -11530,6 +11530,31 @@
     {
       "url": "https://duck-store.escape.tech/nonexistent?redirect=https://evil.com",
       "source": "Escape Duck Store — open redirect oracle GET /nonexistent?redirect= (vulnerabilities page)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-fauxbank.vercel.app/api/accounts/1",
+      "source": "alfredang/pentest FauxBank — IDOR oracle GET /api/accounts/[id] (GitHub README lesson 1; web search 14 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-fauxbank.vercel.app/api/profile",
+      "source": "alfredang/pentest FauxBank — sensitive data exposure oracle GET /api/profile (GitHub README lesson 4; web search 14 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-fauxbank.vercel.app/api/transfer",
+      "source": "alfredang/pentest FauxBank — missing CSRF on transfers POST /api/transfer (GitHub README lesson 7; web search 14 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/api/checkout",
+      "source": "PortSwigger Gin & Juice Shop — mass assignment choose_discount oracle POST /api/checkout (PortSwigger API lab writeup; web search 14 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/catalog?category=",
+      "source": "PortSwigger Gin & Juice Shop — SQLi oracle GET /catalog?category= (autopentest-ai pentest report FINDING-003; web search 14 UTC)",
       "auth": "public_demo"
     }
   ]
