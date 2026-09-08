@@ -36839,6 +36839,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "ssti-vulnlab-blocklist-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "ssti.vulnlab.dev /blocklist route SSTI live oracle",
+    description:
+      "When scanning /blocklist/, the hub catalog alias maps to /filtered/ where GET ?greeting={{7*7}} evaluates Jinja2 past substring blocklist — route-specific blocklist-bypass SSTI oracle.",
+    impactOneline:
+      "Vanity /blocklist/ paths on ssti.vulnlab.dev should resolve to the filtered SSTI lab without false negatives from 404 stubs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sstiVulnlabBlocklistRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass user input into render_template_string — blocklists are not a substitute — ssti.vulnlab.dev is intentional training software.",
+      steps: [
+        "Render templates from static files with bound context variables.",
+        "Avoid deny-list filtering of template syntax; eliminate dynamic template compilation.",
+        "Run SSTI training labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /blocklist route aliases the filtered SSTI lab with substring blocklist bypass. Show safe templating without user-controlled template strings.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "sqli-vulnlab-union-live-oracle",
     platform: "generic",
     category: "Injection",
@@ -36993,6 +37019,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /blind-time route is injectable with SLEEP-based timing oracles. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "sqli-vulnlab-blind-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "sqli.vulnlab.dev /blind route SQLi live oracle",
+    description:
+      "When scanning /blind/, the hub catalog alias maps to /blind-bool/ and /blind-time/ boolean and time-based blind SQLi training labs — route-specific blind SQLi catalog oracle.",
+    impactOneline:
+      "Vanity /blind/ paths on sqli.vulnlab.dev should resolve to blind SQLi labs without misrouting to error-based SQLi oracles.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sqliVulnlabBlindRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries for every blind predicate — sqli.vulnlab.dev is intentional training software.",
+      steps: [
+        "Replace string-concatenated SQL with prepared statements / ORM parameter binding.",
+        "Avoid boolean/time-based existence oracles on injectable id/username parameters.",
+        "Run SQLi training labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /blind route aliases boolean and time-based blind SQLi labs. Show parameterized query remediation.",
     version: 1,
     enabled: true
   },

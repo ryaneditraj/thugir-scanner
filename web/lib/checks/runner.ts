@@ -13715,6 +13715,32 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         return -4;
       if (
         /sqli\.vulnlab\.dev/i.test(origin) &&
+        /\/blind\/?(?:[#?]|$)/i.test(targetInput) &&
+        p.slug.startsWith("sqli-vulnlab-blind") &&
+        /-route-/.test(p.slug)
+      )
+        return -8;
+      if (
+        /sqli\.vulnlab\.dev/i.test(origin) &&
+        /\/blind\/?(?:[#?]|$)/i.test(targetInput) &&
+        p.slug.startsWith("sqli-vulnlab-blind")
+      )
+        return -4;
+      if (
+        /ssti\.vulnlab\.dev/i.test(origin) &&
+        /\/blocklist\b/i.test(targetInput) &&
+        p.slug.startsWith("ssti-vulnlab-blocklist") &&
+        /-route-/.test(p.slug)
+      )
+        return -8;
+      if (
+        /ssti\.vulnlab\.dev/i.test(origin) &&
+        /\/blocklist\b/i.test(targetInput) &&
+        p.slug.startsWith("ssti-vulnlab-blocklist")
+      )
+        return -4;
+      if (
+        /sqli\.vulnlab\.dev/i.test(origin) &&
         /\/second-order\b/i.test(targetInput) &&
         p.slug.startsWith("sqli-vulnlab-second-order") &&
         /-route-/.test(p.slug)

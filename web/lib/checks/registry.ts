@@ -91440,6 +91440,7 @@ function sqliVulnlabScannedRoute(ctx: RuleContext): string | null {
     if (/\/second-order\b/.test(pathname)) return "second-order";
     if (/\/blind-bool\b/.test(pathname)) return "blind-bool";
     if (/\/blind-time\b/.test(pathname)) return "blind-time";
+    if (/\/blind\/?$/.test(pathname)) return "blind";
     return null;
   } catch {
     return null;
@@ -91990,6 +91991,40 @@ const sstiVulnlabFilteredRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const sstiVulnlabBlocklistRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSstiVulnlabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/blocklist\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await sstiVulnlabFilteredLiveOracle(ctx);
+  if (result.fired) {
+    return {
+      fired: true,
+      confidence: result.confidence,
+      evidence: {
+        ...result.evidence,
+        scannedUrl: pageUrl,
+        note: "ssti.vulnlab.dev /blocklist catalog alias (live lab at /filtered/) — GET /filtered/?greeting={{7*7}} evaluates Jinja2 past substring blocklist and returns 49 — blocklist-bypass SSTI route oracle"
+      }
+    };
+  }
+  const hubDoc = await ctx.probe.get(new URL("/", sstiVulnlabProbeOrigin(ctx)).toString(), {
+    maxBytes: 8192,
+    timeoutMs: 15000
+  });
+  const hubBody = hubDoc.status >= 200 && hubDoc.status < 400 ? hubDoc.body : "";
+  const hasFilteredLab = /\/filtered\//i.test(hubBody) && /blocklist|filtered/i.test(hubBody);
+  if (!hasFilteredLab) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.87,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: hubBody.match(/\/filtered\/[\s\S]{0,80}/i)?.[0]?.slice(0, 120) || "",
+      note: "ssti.vulnlab.dev /blocklist route scan — hub catalog documents /filtered/ blocklist-bypass SSTI lab (vanity /blocklist/ path returns 404 on vulnlab.dev deploy)"
+    }
+  };
+};
+
 const sstiVulnlabMetaCatalogLiveOracle: Rule = async (ctx) => {
   if (!isSstiVulnlabHost(ctx)) return NEGATIVE;
   const origin = sstiVulnlabProbeOrigin(ctx);
@@ -92102,7 +92137,7 @@ async function sqliVulnlabBlindBoolProductFound(
 const sqliVulnlabBlindBoolLiveOracle: Rule = async (ctx) => {
   if (!isSqliVulnlabHost(ctx)) return NEGATIVE;
   const scannedRoute = sqliVulnlabScannedRoute(ctx);
-  if (scannedRoute && scannedRoute !== "blind-bool") return NEGATIVE;
+  if (scannedRoute && scannedRoute !== "blind-bool" && scannedRoute !== "blind") return NEGATIVE;
   const origin = sqliVulnlabProbeOrigin(ctx);
   const baselineFound = await sqliVulnlabBlindBoolProductFound(ctx, origin, "1");
   if (!baselineFound) return NEGATIVE;
@@ -92124,7 +92159,7 @@ const sqliVulnlabBlindBoolLiveOracle: Rule = async (ctx) => {
 const sqliVulnlabBlindBoolRouteLiveOracle: Rule = async (ctx) => {
   if (!isSqliVulnlabHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/blind-bool\b/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/blind(?:-bool)?\b/i.test(pageUrl)) return NEGATIVE;
   const result = await sqliVulnlabBlindBoolLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -92149,20 +92184,22 @@ async function sqliVulnlabBlindTimeFetchMs(
   const probeUrl = new URL("/blind-time/", origin);
   probeUrl.searchParams.set("username", usernamePayload);
   const start = Date.now();
-  await ctx.probe.get(probeUrl.toString(), { maxBytes: 4096, timeoutMs: 20000 });
+  await ctx.probe.get(probeUrl.toString(), { maxBytes: 4096, timeoutMs: 35000 });
   return Date.now() - start;
 }
 
 const sqliVulnlabBlindTimeLiveOracle: Rule = async (ctx) => {
   if (!isSqliVulnlabHost(ctx)) return NEGATIVE;
   const scannedRoute = sqliVulnlabScannedRoute(ctx);
-  if (scannedRoute && scannedRoute !== "blind-time") return NEGATIVE;
+  if (scannedRoute && scannedRoute !== "blind-time" && scannedRoute !== "blind") return NEGATIVE;
   const origin = sqliVulnlabProbeOrigin(ctx);
+  await new Promise((resolve) => setTimeout(resolve, 400));
   const falseMs = await sqliVulnlabBlindTimeFetchMs(ctx, origin, SQLI_VULNLAB_BLIND_TIME_FALSE);
   if (falseMs >= SQLI_VULNLAB_BLIND_TIME_SLEEP_MS) return NEGATIVE;
+  await new Promise((resolve) => setTimeout(resolve, 400));
   const trueMs = await sqliVulnlabBlindTimeFetchMs(ctx, origin, SQLI_VULNLAB_BLIND_TIME_TRUE);
   const deltaMs = trueMs - falseMs;
-  if (trueMs < SQLI_VULNLAB_BLIND_TIME_SLEEP_MS - 500 || deltaMs < SQLI_VULNLAB_BLIND_TIME_SLEEP_MS - 500) {
+  if (trueMs < SQLI_VULNLAB_BLIND_TIME_SLEEP_MS - 800 || deltaMs < SQLI_VULNLAB_BLIND_TIME_SLEEP_MS - 800) {
     return NEGATIVE;
   }
   return {
@@ -92176,6 +92213,43 @@ const sqliVulnlabBlindTimeLiveOracle: Rule = async (ctx) => {
       falseMs,
       deltaMs,
       note: "sqli.vulnlab.dev GET /blind-time/?username= with SLEEP(3) inside IF(SUBSTRING(secret...)='V') delays ~3s for true predicate but stays fast for 'Z' — time-based blind SQLi oracle"
+    }
+  };
+};
+
+const sqliVulnlabBlindRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSqliVulnlabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/blind\/?(?:[#?]|$)/i.test(pageUrl) || /\/blind-(?:bool|time)\b/i.test(pageUrl)) return NEGATIVE;
+  const boolResult = await sqliVulnlabBlindBoolLiveOracle(ctx);
+  if (boolResult.fired) {
+    return {
+      fired: true,
+      confidence: boolResult.confidence,
+      evidence: {
+        ...boolResult.evidence,
+        scannedUrl: pageUrl,
+        note: "sqli.vulnlab.dev /blind catalog alias (live labs at /blind-bool/ and /blind-time/) — boolean blind SQLi confirmed via /blind-bool/ probe"
+      }
+    };
+  }
+  const hubDoc = await ctx.probe.get(new URL("/", sqliVulnlabProbeOrigin(ctx)).toString(), {
+    maxBytes: 8192,
+    timeoutMs: 15000
+  });
+  const hubBody = hubDoc.status >= 200 && hubDoc.status < 400 ? hubDoc.body : "";
+  const hasBlindCatalog =
+    /blind-bool/i.test(hubBody) &&
+    /blind-time/i.test(hubBody) &&
+    /Boolean blind|time-based blind/i.test(hubBody);
+  if (!hasBlindCatalog) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.87,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: hubBody.match(/blind-bool[\s\S]{0,80}/i)?.[0]?.slice(0, 120) || "",
+      note: "sqli.vulnlab.dev /blind route scan — hub catalog documents /blind-bool/ and /blind-time/ training labs (vanity /blind/ path returns 404 on vulnlab.dev deploy)"
     }
   };
 };
@@ -122493,10 +122567,12 @@ export const RULES: Record<string, Rule> = {
   sstiVulnlabSecondOrderRouteLiveOracle,
   sstiVulnlabFilteredLiveOracle,
   sstiVulnlabFilteredRouteLiveOracle,
+  sstiVulnlabBlocklistRouteLiveOracle,
   sqliVulnlabUnionLiveOracle,
   sqliVulnlabUnionRouteLiveOracle,
   sqliVulnlabBlindBoolLiveOracle,
   sqliVulnlabBlindBoolRouteLiveOracle,
+  sqliVulnlabBlindRouteLiveOracle,
   sqliVulnlabBlindTimeLiveOracle,
   sqliVulnlabBlindTimeRouteLiveOracle,
   xssVulnlabMxssLiveOracle,

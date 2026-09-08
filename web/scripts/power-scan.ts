@@ -88,6 +88,14 @@ function canonicalDiscoveryUrl(url: string): string {
       u.pathname = `/backend/includes/levels/medium/level${vfChallenge[1]}.php`;
       return u.toString();
     }
+    if (/^sqli\.vulnlab\.dev$/i.test(u.hostname) && /^\/blind\/?$/i.test(u.pathname)) {
+      u.pathname = "/blind-bool/";
+      return u.toString();
+    }
+    if (/^ssti\.vulnlab\.dev$/i.test(u.hostname) && /^\/blocklist\/?$/i.test(u.pathname)) {
+      u.pathname = "/filtered/";
+      return u.toString();
+    }
   } catch {
     /* ignore */
   }
