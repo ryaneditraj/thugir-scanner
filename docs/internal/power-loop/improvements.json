@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:dvaib.com",
+      "slug": "dvaib-register-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: dvaibRegisterRouteLiveOracle delegates to dvaibAuthBootstrapRouteOracle on /register; dvaib.com/register findings 8→9 (+dvaib-register-route-live-oracle alongside prompt-injection oracles); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ai-security-platform-iota.vercel.app",
+      "slug": "ai-security-command-injection-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: aiSecurityAuthGatedChallengeLiveOracle confirms GET /challenges/command-injection → 307 /login?next= + CWE-78 corpus fallback; ai-security-platform-iota.vercel.app/challenges/command-injection findings 4→8 (+ai-security-command-injection-live-oracle alongside route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvaib.com",
+      "slug": "dvaib-auth-queue-priority-prepend",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: prepended dvaib.com/login + /register + ai-security command-injection to priority_discovery_urls front for 02 UTC queue drain; benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:demo.owasp-juice.shop",
       "slug": "juice-shop-basket-items-bola-mirror-fallback",
       "status": "shipped",

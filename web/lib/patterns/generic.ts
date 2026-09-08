@@ -25675,6 +25675,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "dvaib-register-route-live-oracle",
+    platform: "generic",
+    category: "Authentication bypass",
+    severityDefault: "high",
+    title: "DVAIB register route session live oracle",
+    description:
+      "When scanning /register on dvaib.com, POST /api/auth/register + POST /api/auth/login returns a bearer token and GET /api/auth/me succeeds — session bootstrap oracle for auth-gated prompt-injection lab probes.",
+    impactOneline:
+      "Route-specific confirmation that DVAIB /register exposes a working register/login API chain for AI banking assistant training scenarios.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvaibRegisterRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Harden DVAIB auth endpoints — intentional training software for prompt-injection scenarios.",
+      steps: [
+        "Require MFA before LLM tool calls can modify account balances.",
+        "Rate-limit /api/auth/register and monitor for scanner-driven account sprawl.",
+        "Run DVAIB only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our DVAIB /register route scan confirms open register/login for AI banking lab sessions. Show auth hardening for training deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "pwnshop-mass-assignment-admin-live-oracle",
     platform: "generic",
     category: "Broken access control",
@@ -41217,6 +41243,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /challenges/ssrf route redirects to login preserving a CWE-918 SSRF challenge URL. Show SSRF egress filtering remediation for Next.js server actions.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ai-security-command-injection-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "AI Security Platform command-injection challenge live oracle",
+    description:
+      "GET /challenges/command-injection returns HTTP 307 Location /login?next=/challenges/command-injection; /learn + corpus fallback documents CWE-78 OS command injection training — auth-gated command injection live oracle.",
+    impactOneline:
+      "Auth-gated command-injection challenge route confirms CWE-78 OS command injection training surface on the AI Security Platform discovery queue.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "aiSecurityCommandInjectionLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "AI Security Platform is intentional training software — never pass user input to shell commands.",
+      steps: [
+        "Use parameterized APIs instead of shelling out to system commands.",
+        "Allowlist permitted arguments when subprocess execution is unavoidable.",
+        "Require authentication before exposing command-injection lab panels."
+      ]
+    },
+    fixPrompt:
+      "Our /challenges/command-injection route redirects to login preserving a CWE-78 command injection challenge URL. Show OS command injection remediation for Next.js server actions.",
     version: 1,
     enabled: true
   },

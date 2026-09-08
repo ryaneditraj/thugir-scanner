@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-08T00:23:59.990Z",
-  "total": 3442,
-  "uniqueSlugs": 3434,
+  "generatedAt": "2026-09-08T02:02:19.719Z",
+  "total": 3444,
+  "uniqueSlugs": 3436,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3424,
+    "generic": 3426,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3357,
+    "deep": 3359,
     "continuous": 0
   },
   "byCategory": {
@@ -27,7 +27,7 @@
     "Information disclosure": 159,
     "Security misconfiguration": 288,
     "Broken authentication": 223,
-    "Injection": 568,
+    "Injection": 569,
     "Cross-site scripting": 811,
     "Open redirect": 29,
     "general": 20,
@@ -39,7 +39,7 @@
     "AI / LLM security": 4,
     "Cross-site request forgery": 15,
     "Prompt injection": 17,
-    "Authentication bypass": 4,
+    "Authentication bypass": 5,
     "Insecure file upload": 2,
     "Command injection": 2,
     "XML external entity injection": 1,
@@ -69,6 +69,7 @@
     "ai-security-ai-phishing-route-live-oracle",
     "ai-security-api-security-route-live-oracle",
     "ai-security-broken-auth-route-live-oracle",
+    "ai-security-command-injection-live-oracle",
     "ai-security-command-injection-route-live-oracle",
     "ai-security-cookie-auth-route-live-oracle",
     "ai-security-csrf-route-live-oracle",
@@ -1273,6 +1274,7 @@
     "dvaib-login-route-live-oracle",
     "dvaib-prompt-injection-live-oracle",
     "dvaib-prompt-injection-route-live-oracle",
+    "dvaib-register-route-live-oracle",
     "dvga-create-paste-stored-xss-live-oracle",
     "dvga-create-paste-stored-xss-route-live-oracle",
     "dvga-graphiql-route-live-oracle",

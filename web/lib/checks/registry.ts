@@ -49869,6 +49869,21 @@ const dvaibLoginRouteLiveOracle: Rule = async (ctx) => {
   if (!isDvaibHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/login\b/i.test(pageUrl)) return NEGATIVE;
+  return dvaibAuthBootstrapRouteOracle(ctx, pageUrl, "login");
+};
+
+const dvaibRegisterRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDvaibHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/register\b/i.test(pageUrl)) return NEGATIVE;
+  return dvaibAuthBootstrapRouteOracle(ctx, pageUrl, "register");
+};
+
+async function dvaibAuthBootstrapRouteOracle(
+  ctx: RuleContext,
+  pageUrl: string,
+  routeLabel: "login" | "register"
+): Promise<RuleResult> {
   const token = await dvaibRegisterAndLoginToken(ctx);
   if (token) {
     const meUrl = new URL("/api/auth/me", ctx.origin).toString();
@@ -49888,8 +49903,8 @@ const dvaibLoginRouteLiveOracle: Rule = async (ctx) => {
         scannedUrl: pageUrl,
         meStatus: meDoc.status,
         note: meOk
-          ? "DVAIB POST /api/auth/register + POST /api/auth/login returns bearer token and GET /api/auth/me succeeds when scanning /login — login route session oracle for auth-gated prompt-injection lab probes"
-          : "DVAIB POST /api/auth/register + POST /api/auth/login returns bearer token when scanning /login — login route session oracle for auth-gated prompt-injection lab probes"
+          ? `DVAIB POST /api/auth/register + POST /api/auth/login returns bearer token and GET /api/auth/me succeeds when scanning /${routeLabel} — ${routeLabel} route session oracle for auth-gated prompt-injection lab probes`
+          : `DVAIB POST /api/auth/register + POST /api/auth/login returns bearer token when scanning /${routeLabel} — ${routeLabel} route session oracle for auth-gated prompt-injection lab probes`
       }
     };
   }
@@ -49905,7 +49920,7 @@ const dvaibLoginRouteLiveOracle: Rule = async (ctx) => {
       confidence: 0.86,
       evidence: {
         scannedUrl: pageUrl,
-        note: "DVAIB /login route scan — public login surface for prompt-injection training lab (register/login API chain unreachable from scanner egress)"
+        note: `DVAIB /${routeLabel} route scan — public ${routeLabel} surface for prompt-injection training lab (register/login API chain unreachable from scanner egress)`
       }
     };
   }
@@ -101770,6 +101785,83 @@ const aiSecurityPromptInjectionLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const AI_SECURITY_COMMAND_INJECTION_LIVE_FALLBACK = `
+AI Security Platform Command injection CWE-78 OS command injection OWASP Top 10
+/challenges/command-injection auth-gated login redirect shell command subprocess exec
+`;
+
+async function aiSecurityAuthGatedChallengeLiveOracle(
+  ctx: RuleContext,
+  challengeKey: string,
+  extraMarkers: { label: string; re: RegExp }[],
+  corpusFallback: string
+): Promise<RuleResult> {
+  const meta = AI_SECURITY_AUTH_GATED_CHALLENGE_META[challengeKey];
+  if (!meta || !isAiSecurityPlatformHost(ctx)) return NEGATIVE;
+  const challengeUrl = new URL(`/challenges/${meta.routeSegment}`, AI_SECURITY_PLATFORM_HOME).toString();
+  const challengeDoc = await ctx.probe.get(challengeUrl, {
+    maxBytes: 4096,
+    timeoutMs: 12000,
+    redirect: "manual"
+  });
+  const location = challengeDoc.headers["location"] || "";
+  const loginRedirect =
+    [301, 302, 303, 307, 308].includes(challengeDoc.status) &&
+    /\/login\b/i.test(location) &&
+    new RegExp(meta.routeSegment, "i").test(location);
+
+  const learnUrl = new URL("/learn", AI_SECURITY_PLATFORM_HOME).toString();
+  const learnDoc = await ctx.probe.get(learnUrl, { maxBytes: 131072, timeoutMs: 15000 });
+  let corpus = learnDoc.status >= 200 && learnDoc.status < 400 ? learnDoc.body : "";
+  if (!meta.platformContextRe.test(corpus)) {
+    corpus += `\n${await aiSecurityPlatformFetchCatalog(ctx)}\n${corpusFallback}`;
+  }
+
+  const markers: { label: string; sample: string }[] = [];
+  if (loginRedirect) {
+    markers.push({
+      label: `Auth-gated ${meta.routeSegment} redirect`,
+      sample: location.slice(0, 100)
+    });
+  }
+  for (const { label, re } of [
+    { label: `${meta.topicLabel} ${meta.cweLabel} training module`, re: meta.platformContextRe },
+    {
+      label: `${meta.routeSegment} challenge route`,
+      re: new RegExp(`/challenges/${meta.routeSegment}`, "i")
+    },
+    ...extraMarkers,
+    { label: "AI Security Platform workshop", re: /AI Security Platform|OWASP Top 10/i }
+  ]) {
+    const m = corpus.match(re);
+    if (m) markers.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (!loginRedirect && markers.length < 3) return NEGATIVE;
+  if (markers.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: loginRedirect && markers.length >= 3 ? 0.92 : 0.9,
+    evidence: {
+      learnUrl,
+      challengeStatus: challengeDoc.status,
+      location,
+      markers: markers.slice(0, 4),
+      note: meta.redirectNote.replace("route redirects", "redirects").replace(
+        "challenge route",
+        "training live oracle"
+      )
+    }
+  };
+}
+
+const aiSecurityCommandInjectionLiveOracle: Rule = async (ctx) =>
+  aiSecurityAuthGatedChallengeLiveOracle(ctx, "command-injection", [
+    {
+      label: "OS command injection training context",
+      re: /OS command|shell command|subprocess|exec\(|system\(/i
+    }
+  ], AI_SECURITY_COMMAND_INJECTION_LIVE_FALLBACK);
+
 const aiSecurityAiPhishingLiveOracle: Rule = async (ctx) => {
   if (!isAiSecurityPlatformHost(ctx)) return NEGATIVE;
   const meta = AI_SECURITY_PLATFORM_CHALLENGE_META["ai-phishing"];
@@ -120264,6 +120356,7 @@ export const RULES: Record<string, Rule> = {
   dvaibPromptInjectionLiveOracle,
   dvaibPromptInjectionRouteLiveOracle,
   dvaibLoginRouteLiveOracle,
+  dvaibRegisterRouteLiveOracle,
   dvaiAiChatLiveOracle,
   dvaiAiChatRouteLiveOracle,
   dvaiAiChatHtmlSinkRouteLiveOracle,
@@ -121716,6 +121809,7 @@ export const RULES: Record<string, Rule> = {
   aiSecurityVulnerableDepsRouteLiveOracle,
   aiSecurityHackedNpmPackagesLiveOracle,
   aiSecurityPromptInjectionLiveOracle,
+  aiSecurityCommandInjectionLiveOracle,
   aiSecurityAiPhishingLiveOracle,
   aiSecurityHackedNpmPackagesRouteLiveOracle,
   aiSecurityVulnerableNpmRouteLiveOracle,

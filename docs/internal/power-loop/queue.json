@@ -1,6 +1,21 @@
 {
-  "updated_at": "2026-09-08T01:05:00.000Z",
+  "updated_at": "2026-09-08T02:00:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://dvaib.com/login",
+      "source": "DVAIB Damn Vulnerable AI Bank — auth/login surface for prompt-injection scenarios (02 UTC queue drain)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvaib.com/register",
+      "source": "DVAIB Damn Vulnerable AI Bank — registration/auth-bypass surface (02 UTC queue drain)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/command-injection",
+      "source": "AI Security Platform — auth-gated CWE-78 command injection challenge (02 UTC queue drain)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://demo.owasp-juice.shop/rest/basket",
       "source": "OWASP Juice Shop demo \u2014 basket BOLA route (23 UTC discovery)",
