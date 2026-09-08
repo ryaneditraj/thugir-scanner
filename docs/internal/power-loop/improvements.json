@@ -9905,6 +9905,24 @@
       "slug": "brokencrystals-upload-parse-live-metadata-fallback",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: brokencrystalsApiUploadParseXxeLiveOracle falls back to sibling POST /api/metadata XXE when POST /api/upload/parse returns HTTP 404; brokencrystals.com/api/upload/parse findings gain +brokencrystals-api-upload-parse-xxe-live-oracle (alongside route + metadata oracles); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:sqli.vulnlab.dev",
+      "slug": "sqli-vulnlab-blind-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /blind/ returns 404 but hub catalogs /blind-bool/ and /blind-time/; sqliVulnlabScannedRoute maps /blind/ vanity path and sqli-vulnlab-blind-route-live-oracle probes boolean blind SQLi; sqli.vulnlab.dev/blind/ findings 5→7 (+sqli-vulnlab-blind-route-live-oracle, -sqli-vulnlab-error-live-oracle misroute); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:sqli.vulnlab.dev",
+      "slug": "sqli-vulnlab-blind-time-timing-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: sqliVulnlabBlindTimeLiveOracle adds inter-probe delay and 35s timeout so SLEEP(3) differential survives concurrent hub probes; sqli.vulnlab.dev/blind-time/ findings 4→5 (+sqli-vulnlab-blind-time-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ssti.vulnlab.dev",
+      "slug": "ssti-vulnlab-blocklist-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /blocklist/ returns 404 but /filtered/?greeting={{7*7}} evaluates Jinja2 past substring blocklist and returns 49; ssti-vulnlab-blocklist-route-live-oracle aliases vanity /blocklist/ to filtered SSTI lab; ssti.vulnlab.dev/blocklist/ findings 9→10 (+ssti-vulnlab-blocklist-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
     }
   ]
 }

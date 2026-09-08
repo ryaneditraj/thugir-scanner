@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-08T16:17:50.124Z",
+  "updated_at": "2026-09-08T16:22:13.408Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,17 +22,17 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2053,
   "discovery_findings": 24509,
-  "improvements_shipped": 1637,
-  "last_run": "2026-09-08T16:17:50.124Z",
+  "improvements_shipped": 1640,
+  "last_run": "2026-09-08T16:22:13.409Z",
   "last_run_summary": {
-    "hour_utc": "15",
+    "hour_utc": "16",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 53,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 597,
+      "probes_run": 541,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,31 +48,25 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (53 findings, 40 live oracles); primary Heroku ok on engine evolve validation pass"
+      "note": "Stable 6/6 recall (53 findings) — no category misses"
     },
-    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 57,
-      "focus": "QA Bash sample API REST/GraphQL BOLA oracles + pwnshop chat / ginandjuice cart reflexion suppression; vulnlab sqli/xss/ssti queue drain",
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 22,
+      "focus": "vulnlab.dev blind/blocklist vanity route aliases + blind-time SLEEP timing fix",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, gap=[])",
-      "www.qabash.com/api/tools/sample-api/users: 6 findings — qabash-sample-api-users live+route oracles (+graphql hub bleed)",
-      "www.qabash.com/api/tools/sample-api/graphql: 6 findings — qabash-sample-api-graphql live+route oracles",
-      "pwnshop.ctfsecurity.com/chat: 51 findings — reflexion XSS/SQLi false positives suppressed",
-      "ginandjuice.shop/catalog/cart: 45 findings — reflexion-escalated-ssti false positive suppressed",
-      "sqli.vulnlab.dev/union/: 5 findings — sqli-vulnlab-union-route-live-oracle",
-      "xss.vulnlab.dev/stored/: 8 findings — stored + mxss + CSP JSONP bypass oracles",
-      "ssti.vulnlab.dev/blocklist/: 9 findings — full ssti.vulnlab.dev tier catalog"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings)",
+      "sqli.vulnlab.dev/blind/: 5→7 — blind route alias replaces error-oracle misroute",
+      "sqli.vulnlab.dev/blind-time/: 4→5 — live SLEEP timing oracle now fires under hub concurrency",
+      "ssti.vulnlab.dev/blocklist/: 9→10 — blocklist vanity path aliases to /filtered/ SSTI lab"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "primary Heroku juice-shop can timeout at 600s — staging fallback used by parallel scan",
-      "sqli.vulnlab.dev/blind/: union oracle fires but no dedicated boolean-blind route oracle",
-      "pentest-fauxbank.vercel.app/api/* routes queued but not yet drained this hour"
+      "benchmark 6/6 stable at 53 findings on Heroku"
     ]
   },
   "discovery_highlights": {
