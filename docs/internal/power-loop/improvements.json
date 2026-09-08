@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:zen-demo-java.fly.dev",
+      "slug": "zen-demo-java-route-live-probe-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: zenDemoJavaSkipLiveProbe allows live /api/* probes on /pages/* route scans despite fast-path stub HTML; POST /api/execute invalid-command-here returns Cannot run program error=2; zen-demo-java.fly.dev/pages/execute findings 5→9 (+zen-demo-java-execute-shell-injection-live-oracle +create-sqli +request-ssrf +read-path-traversal alongside route oracles); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-products-search-degraded-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/v1/products/search/?q=duck returns HTTP 500 and /api/v1/products/search?q=duck misroutes to product_id=search (422 int_parsing); duck-store.escape.tech/api/v1/products/search?q=duck findings 25→28 (+duck-store-products-search-degraded-live-oracle +duck-store-products-search-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:seclab.vercel.app",
+      "slug": "seclab-labs-dead-route-command-injection-ssti-exclusions",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: seclabLabsDeadRouteLiveOracle excludes command-injection/cmdi/ssti tiers; seclabCommandInjectionRouteLiveOracle probes Angular stub directly; seclab.vercel.app/labs/command-injection findings 6→7 (+seclab-command-injection-route-live-oracle, -seclab-labs-dead-route-live-oracle duplicate); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:seclab.vercel.app",
       "slug": "seclab-labs-dead-route-tier-exclusions",
       "status": "shipped",
