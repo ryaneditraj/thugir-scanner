@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-08T15:24:25.706Z",
-  "total": 3465,
-  "uniqueSlugs": 3457,
+  "generatedAt": "2026-09-08T16:21:59.073Z",
+  "total": 3467,
+  "uniqueSlugs": 3459,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3447,
+    "generic": 3449,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3380,
+    "deep": 3382,
     "continuous": 0
   },
   "byCategory": {
@@ -27,7 +27,7 @@
     "Information disclosure": 159,
     "Security misconfiguration": 290,
     "Broken authentication": 223,
-    "Injection": 578,
+    "Injection": 580,
     "Cross-site scripting": 814,
     "Open redirect": 29,
     "general": 20,
@@ -2712,6 +2712,7 @@
     "sqli-query-param-injection",
     "sqli-vulnlab-blind-bool-live-oracle",
     "sqli-vulnlab-blind-bool-route-live-oracle",
+    "sqli-vulnlab-blind-route-live-oracle",
     "sqli-vulnlab-blind-time-live-oracle",
     "sqli-vulnlab-blind-time-route-live-oracle",
     "sqli-vulnlab-error-live-oracle",
@@ -2753,6 +2754,7 @@
     "ssti-template-injection",
     "ssti-vulnlab-basic-live-oracle",
     "ssti-vulnlab-basic-route-live-oracle",
+    "ssti-vulnlab-blocklist-route-live-oracle",
     "ssti-vulnlab-filtered-live-oracle",
     "ssti-vulnlab-filtered-route-live-oracle",
     "ssti-vulnlab-format-live-oracle",
