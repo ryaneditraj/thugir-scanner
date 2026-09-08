@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-08T06:08:00.000Z",
+  "updated_at": "2026-09-08T07:08:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/weak-rls",
+      "source": "AI Security Platform — Weak Supabase RLS challenge (web search 07 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/idor",
+      "source": "AI Security Platform — IDOR predictable object ID challenge (web search 07 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/cookie-auth",
+      "source": "AI Security Platform — client-writable admin cookie auth bypass (web search 07 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvwu.vercel.app/labs/jwt",
+      "source": "zahidoverflow/dvwu — JWT attacks training lab route (web search 07 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://sqli.vulnlab.dev/error/",
+      "source": "vulnlab.dev — error-based SQLi public demo oracle (web search 07 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://csrf-xss-demo.vercel.app/",
       "source": "CSRF/XSS React demo — live CSRF fund-transfer + reflected XSS execute surface (web search 06 UTC discovery)",

@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-08T06:12:00.000Z",
+  "updated_at": "2026-09-08T07:08:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2845,
-  "total_findings": 29179,
+  "total_sites_scanned": 2854,
+  "total_findings": 29312,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2013,
-  "discovery_findings": 23425,
+  "discovery_urls_added": 2018,
+  "discovery_findings": 23505,
   "improvements_shipped": 1611,
-  "last_run": "2026-09-08T06:12:00.000Z",
+  "last_run": "2026-09-08T07:08:00.000Z",
   "last_run_summary": {
-    "hour_utc": "06",
+    "hour_utc": "07",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 52,
+      "oracle_findings": 53,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 599,
+      "probes_run": 597,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,23 +48,24 @@
           ]
         }
       },
-      "note": "Primary Heroku stable 6/6 first-pass recall (52 findings, 39 juice-shop live oracles incl secret-resend + iac-terraform-tls-key)"
+      "note": "Primary Heroku stable 6/6 first-pass recall (53 findings, 40 juice-shop live oracles incl secret-resend + iac-terraform-tls-key)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 7,
-      "findings": 120,
-      "focus": "csrf-xss-demo + nextjs-cve-hackerone + AI Security Platform sqli/xss + pwnshop CSS settings API; queue drain ssrf.vulnlab.dev metadata-azure/blind",
+      "urls_scanned": 8,
+      "findings": 80,
+      "focus": "AI Security weak-rls/idor/cookie-auth + dvwu JWT lab + sqli.vulnlab error oracle; queue drain vulnforge L13 + vulnlab results + ssrf metadata-gcp",
       "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, 39 live oracles, primary Heroku stable)",
-      "csrf-xss-demo.vercel.app: 6 findings — DOM eval XSS + hardcoded demo credentials",
-      "nextjs-cve-hackerone.vercel.app: 9 findings — CVE-2025-66478 platform protection bypass lab",
-      "ai-security-platform-iota.vercel.app/challenges/sqli: 12 findings — auth-gated SQLi challenge route",
-      "ai-security-platform-iota.vercel.app/challenges/xss: 12 findings — XSS challenge route",
-      "pwnshop.ctfsecurity.com/api/settings/css: 48 findings — prototype pollution CSS settings oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, 40 live oracles, primary Heroku stable)",
+      "ai-security-platform-iota.vercel.app/challenges/idor: 13 findings — IDOR route live oracle",
+      "ai-security-platform-iota.vercel.app/challenges/weak-rls: 12 findings — Weak Supabase RLS route oracle",
+      "dvwu.vercel.app/labs/jwt: 10 findings — JWT attacks lab route oracle",
+      "sqli.vulnlab.dev/error/: 9 findings — error-based SQLi live oracle",
+      "ai-security-platform-iota.vercel.app/challenges/cookie-auth: 9 findings — client-writable admin cookie bypass",
+      "ssrf.vulnlab.dev/metadata-gcp/: 17 findings — GCP metadata SSRF queue drain"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
@@ -73,13 +74,13 @@
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 52,
-    "pwnshop.ctfsecurity.com/api/settings/css": 48,
-    "ssrf.vulnlab.dev/metadata-azure": 17,
-    "ssrf.vulnlab.dev/blind": 16,
-    "ai-security-platform-iota.vercel.app/challenges/sqli": 12,
-    "ai-security-platform-iota.vercel.app/challenges/xss": 12,
-    "nextjs-cve-hackerone.vercel.app": 9,
-    "csrf-xss-demo.vercel.app": 6
+    "juice-shop.herokuapp.com": 53,
+    "ssrf.vulnlab.dev/metadata-gcp": 17,
+    "ai-security-platform-iota.vercel.app/challenges/idor": 13,
+    "ai-security-platform-iota.vercel.app/challenges/weak-rls": 12,
+    "dvwu.vercel.app/labs/jwt": 10,
+    "sqli.vulnlab.dev/error": 9,
+    "ai-security-platform-iota.vercel.app/challenges/cookie-auth": 9,
+    "pwnshop.ctfsecurity.com/api/settings/css": 48
   }
 }
