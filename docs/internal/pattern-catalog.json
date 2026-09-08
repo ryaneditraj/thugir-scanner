@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-08T08:09:40.519Z",
-  "total": 3454,
-  "uniqueSlugs": 3446,
+  "generatedAt": "2026-09-08T09:28:58.075Z",
+  "total": 3457,
+  "uniqueSlugs": 3449,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3436,
+    "generic": 3439,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3369,
+    "deep": 3372,
     "continuous": 0
   },
   "byCategory": {
@@ -28,12 +28,12 @@
     "Security misconfiguration": 288,
     "Broken authentication": 223,
     "Injection": 576,
-    "Cross-site scripting": 812,
+    "Cross-site scripting": 814,
     "Open redirect": 29,
     "general": 20,
     "Cross-site request forgery": 16,
     "SSRF": 19,
-    "Server-side request forgery": 129,
+    "Server-side request forgery": 130,
     "Sensitive data exposure": 109,
     "AI security": 151,
     "Business logic": 43,
@@ -1196,6 +1196,8 @@
     "dreadnode-crucible-platform-live-oracle",
     "dreadnode-crucible-platform-route-live-oracle",
     "druid-monitor-exposed",
+    "duck-store-account-delete-stored-xss-live-oracle",
+    "duck-store-account-delete-stored-xss-route-live-oracle",
     "duck-store-admin-orders-exposure-live-oracle",
     "duck-store-admin-orders-exposure-route-live-oracle",
     "duck-store-admin-products-negative-price-live-oracle",
@@ -2618,6 +2620,7 @@
     "seclab-sqli-search-live-oracle",
     "seclab-sqli-search-route-live-oracle",
     "seclab-sqli-vulnerable-route-live-oracle",
+    "seclab-ssrf-vulnerable-live-oracle",
     "seclab-ssrf-vulnerable-route-live-oracle",
     "seclab-users-vulnerable-route-live-oracle",
     "seclab-xss-labs-route-live-oracle",

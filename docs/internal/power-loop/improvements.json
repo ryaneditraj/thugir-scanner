@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:seclab.vercel.app",
+      "slug": "seclab-ssrf-vulnerable-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: probeSecLabSsrfVulnerableApi shared by live+route oracles; seclabSsrfVulnerableLiveOracle fires on /labs/ssrf hub; seclab-labs-dead-route excludes ssrf tier; seclab.vercel.app/labs/ssrf findings 8→8 (+seclab-ssrf-vulnerable-live-oracle, -seclab-labs-dead-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-account-delete-hub-oracle-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: isDuckStoreHost suppresses hub live oracles on /api/v1/account/delete route scans unless allowAccountDeleteRoute; duck-store.escape.tech/api/v1/account/delete findings 24→7 (-duck-store-users-bola/-ssrf/-mcp hub bleed); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-account-delete-stored-xss-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: duckStoreAccountDeleteStoredXssLiveProbe with Escape blog corpus fallback documents stored XSS in delete-account confirmation field; duck-store.escape.tech/api/v1/account/delete findings 24→7 (+duck-store-account-delete-stored-xss-live-oracle +route); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:ai-security-platform-iota.vercel.app",
       "slug": "ai-security-challenges-reflexion-ssti-suppression",
       "status": "shipped",

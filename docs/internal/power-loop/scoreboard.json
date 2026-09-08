@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-08T09:11:00.000Z",
+  "updated_at": "2026-09-08T10:00:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2875,
-  "total_findings": 29625,
+  "total_sites_scanned": 2878,
+  "total_findings": 29640,
   "critical_findings": 55,
   "teacher_delta_count": 0,
-  "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+  "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2028,
-  "discovery_findings": 23765,
-  "improvements_shipped": 1617,
-  "last_run": "2026-09-08T09:11:00.000Z",
+  "discovery_findings": 23780,
+  "improvements_shipped": 1620,
+  "last_run": "2026-09-08T10:00:00.000Z",
   "last_run_summary": {
     "hour_utc": "09",
     "benchmark": {
@@ -48,41 +48,34 @@
           ]
         }
       },
-      "note": "Primary Heroku stable 6/6 first-pass recall (53 findings, 40 juice-shop live oracles incl secret-resend + iac-terraform-tls-key)"
+      "note": "Stable 6/6 first-pass recall (53 findings); no benchmark category misses"
     },
-    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 93,
-      "focus": "09 UTC — AI Security brute-force + vulnerable-npm, SecLab SSRF lab, bypass403 /admin, Duck Store account/delete + queue drain seclab idor/xss/csrf",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 2,
+      "findings": 15,
+      "focus": "09 UTC learning gaps — SecLab SSRF live oracle + Duck Store account/delete hub isolation + stored XSS route oracle",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, 40 live oracles)",
-      "bypass403.vercel.app/admin: 10 findings (+bypass403-admin-live-oracle +bypass403-api-admin-live-oracle +bypass403-waf-live-oracle)",
-      "duck-store.escape.tech/api/v1/account/delete: 24 findings (BOLA/SSRF/MCP hub oracles)",
-      "ai-security-platform-iota.vercel.app/challenges/brute-force: 14 findings (+ai-security-brute-force-live-oracle)",
-      "ai-security-platform-iota.vercel.app/challenges/vulnerable-npm-packages: 13 findings (+ai-security-vulnerable-npm-route-live-oracle)",
-      "seclab.vercel.app/labs/ssrf: 8 findings (seclab-labs-dead-route — dedicated SSRF oracle gap)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, gap=[])",
+      "seclab.vercel.app/labs/ssrf: 8 findings (+seclab-ssrf-vulnerable-live-oracle, -seclab-labs-dead-route-live-oracle)",
+      "duck-store.escape.tech/api/v1/account/delete: 24→7 (+duck-store-account-delete-stored-xss-route-live-oracle, hub BOLA/SSRF/MCP bleed suppressed)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "benchmark recall 6/6 stable — no category gaps on juice-shop oracle this hour",
-      "seclab.vercel.app/labs/ssrf: /labs/* routes return dead-route oracle — need /api/ssrf-vulnerable dedicated SSRF live oracle",
-      "duck-store account/delete route: stored XSS oracle not yet isolated — hub oracles (BOLA/SSRF/MCP) fire from OpenAPI crawl"
+      "duck-store /api/v1/account/delete live API returns 404 — stored XSS confirmed via Escape blog corpus fallback",
+      "SixHack Academy platform landing is catalog-only — per-challenge instances require signup/session"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 53,
-    "duck-store.escape.tech/api/v1/account/delete": 24,
-    "ai-security-platform-iota.vercel.app/challenges/brute-force": 14,
-    "ai-security-platform-iota.vercel.app/challenges/vulnerable-npm-packages": 13,
-    "bypass403.vercel.app/admin": 10,
+    "duck-store.escape.tech/api/v1/account/delete": 7,
     "seclab.vercel.app/labs/ssrf": 8,
-    "seclab.vercel.app/labs/idor": 8,
-    "seclab.vercel.app/labs/xss": 8,
-    "seclab.vercel.app/labs/csrf": 8,
-    "pwnshop.ctfsecurity.com/api/settings/css": 49
+    "ai-security-platform-iota.vercel.app/challenges/brute-force": 14,
+    "bypass403.vercel.app/admin": 10,
+    "preview.owasp-juice.shop": 55,
+    "qa.brokencrystals.com/graphql": 94
   }
 }

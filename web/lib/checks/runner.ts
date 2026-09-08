@@ -3087,6 +3087,8 @@ const DEEP_RULES = new Set<string>([
   "duckStoreProfileMassAssignmentRouteLiveOracle",
   "duckStoreTestimonialsStoredXssLiveOracle",
   "duckStoreTestimonialsStoredXssRouteLiveOracle",
+  "duckStoreAccountDeleteStoredXssLiveOracle",
+  "duckStoreAccountDeleteStoredXssRouteLiveOracle",
   "duckStoreTestimonialsGuestRouteLiveOracle",
   "duckStoreTestimonialsPageStoredXssRouteLiveOracle",
   "duckStoreReviewsStoredXssLiveOracle",
@@ -3763,6 +3765,7 @@ const DEEP_RULES = new Set<string>([
   "seclabCsrfLabsRouteLiveOracle",
   "seclabIdorVulnerableRouteLiveOracle",
   "seclabPathTraversalRouteLiveOracle",
+  "seclabSsrfVulnerableLiveOracle",
   "seclabSsrfVulnerableRouteLiveOracle",
   "seclabXxeVulnerableRouteLiveOracle",
   "vulnerableWebSiteLoginRouteLiveOracle",
@@ -15828,7 +15831,7 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /\/labs\/ssrf\b/i.test(targetInput) &&
         p.slug.startsWith("seclab-ssrf-vulnerable")
       )
-        return -3;
+        return -4;
       if (
         /(?:^|\.)seclab\.vercel\.app$/i.test(origin) &&
         /\/labs\/xxe\b/i.test(targetInput) &&
@@ -16823,6 +16826,12 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
       if (/testfire\.net/i.test(origin) && p.slug.startsWith("testfire-feedback-reflected-xss")) return -2;
       if (/testfire\.net/i.test(origin) && p.slug.startsWith("testfire-transfer")) return -2;
       if (/euri-sec-csp/i.test(origin) && p.slug.startsWith("euri-sec-csp")) return -2;
+      if (
+        /duck-store\.escape\.tech/i.test(origin) &&
+        /\/api\/v1\/account\/delete\b/i.test(targetInput) &&
+        p.slug.startsWith("duck-store-account-delete")
+      )
+        return -4;
       if (/duck-store\.escape\.tech/i.test(origin) && p.slug.startsWith("duck-store")) return -2;
       if (
         /ginandjuice\.shop/i.test(origin) &&

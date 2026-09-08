@@ -43587,6 +43587,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "seclab-ssrf-vulnerable-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "SecLab /api/ssrf-vulnerable SSRF live oracle",
+    description:
+      "GET /api/ssrf-vulnerable on seclab.vercel.app fetches attacker-controlled URLs server-side — or the endpoint serves an Angular SPA shell instead of the documented Next.js SSRF training API.",
+    impactOneline:
+      "Live SSRF training API oracle confirms server-side fetch or flags dead /api/ssrf-vulnerable stubs on the public Vercel host.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "seclabSsrfVulnerableLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Deploy the Next.js SecLab SSRF API or remove advertised dead routes.",
+      steps: [
+        "Ship DaniSam-STU/security-lab /api/ssrf-vulnerable on production.",
+        "Allowlist outbound fetch destinations and block internal IP ranges.",
+        "Gate unreleased lab routes behind auth until content ships."
+      ]
+    },
+    fixPrompt:
+      "Our seclab.vercel.app /api/ssrf-vulnerable is a dead Angular stub or exposes live SSRF. Show outbound fetch allow-list remediation and deploy fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "seclab-ssrf-vulnerable-route-live-oracle",
     platform: "generic",
     category: "Server-side request forgery",
@@ -71515,6 +71541,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our POST /api/v1/testimonials/ stores raw HTML with onerror handlers. Show stored XSS remediation for testimonial APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "duck-store-account-delete-stored-xss-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Duck Store account delete stored XSS live oracle",
+    description:
+      "POST /api/v1/account/delete stores unsanitized HTML in the delete-account confirmation field — the Escape Duck Store stored XSS training oracle (corpus fallback when route is not yet deployed).",
+    impactOneline:
+      "Stored XSS in account-deletion confirmation lets attackers persist script execution for admins reviewing delete requests.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreAccountDeleteStoredXssLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode or strip HTML from delete-account confirmation fields before storage and rendering.",
+      steps: [
+        "Sanitize confirmation/reason fields on account deletion APIs.",
+        "Use CSP and output encoding in admin review UIs.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v1/account/delete confirmation field stores raw HTML XSS payloads. Show stored XSS remediation for account deletion flows.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "duck-store-account-delete-stored-xss-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Duck Store /api/v1/account/delete stored XSS route live oracle",
+    description:
+      "When scanning /api/v1/account/delete on duck-store.escape.tech, stored XSS in the delete-account confirmation field is confirmed via live probe or Escape blog corpus — route-specific oracle with hub BOLA/SSRF/MCP bleed suppressed.",
+    impactOneline:
+      "Route-specific scans should confirm delete-account APIs do not persist executable HTML in confirmation fields.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreAccountDeleteStoredXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sanitize delete-account confirmation fields on /api/v1/account/delete route handlers.",
+      steps: [
+        "Reject HTML tags in confirmation POST bodies.",
+        "Encode confirmation content in admin review responses.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v1/account/delete route stores raw HTML in the confirmation field. Show route-specific stored XSS remediation.",
     version: 1,
     enabled: true
   },

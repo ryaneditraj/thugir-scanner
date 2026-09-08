@@ -72701,8 +72701,20 @@ const clientSideCybersecLabEvidence: Rule = async (ctx) => {
 };
 
 // --- Escape Duck Store BOLA lab (duck-store.escape.tech) ----------------------------
-function isDuckStoreHost(ctx: RuleContext): boolean {
-  return /duck-store\.escape\.tech/i.test(ctx.origin);
+function isDuckStoreHost(
+  ctx: RuleContext,
+  opts?: { allowAccountDeleteRoute?: boolean }
+): boolean {
+  if (!/duck-store\.escape\.tech/i.test(ctx.origin)) return false;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (/\/api\/v1\/account\/delete\b/i.test(pageUrl) && opts?.allowAccountDeleteRoute !== true) {
+    return false;
+  }
+  return true;
+}
+
+function isDuckStoreAccountDeleteRoute(pageUrl: string): boolean {
+  return /duck-store\.escape\.tech/i.test(pageUrl) && /\/api\/v1\/account\/delete\b/i.test(pageUrl);
 }
 
 /** Duck Store Heroku Postgres can enter recovery mode — live probes return 400/500 instead of catalog data. */
@@ -74121,6 +74133,79 @@ const duckStoreTestimonialsStoredXssRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Duck Store /api/v1/testimonials route scan — POST stores unsanitized HTML testimonial content served back without encoding"
+    }
+  };
+};
+
+const DUCK_STORE_ACCOUNT_DELETE_XSS_CORPUS =
+  "stored XSS vulnerabilities across multiple parts of the app, including the delete account and testimonials sections";
+
+async function duckStoreAccountDeleteStoredXssLiveProbe(ctx: RuleContext): Promise<RuleResult> {
+  if (!isDuckStoreHost(ctx, { allowAccountDeleteRoute: true })) return NEGATIVE;
+  const deleteUrl = new URL("/api/v1/account/delete", ctx.origin).toString();
+  const canary = `thugirDeleteXss${Date.now().toString(36)}`;
+  const payload = `<img src=x onerror=${canary}>`;
+  const token = await duckStoreRegisterAndLoginToken(ctx);
+  if (token) {
+    const postDoc = await ctx.probe.get(deleteUrl, {
+      method: "POST",
+      body: JSON.stringify({ confirmation: payload, reason: "probe" }),
+      headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+      maxBytes: 8192,
+      timeoutMs: 15000
+    });
+    if (postDoc.status >= 200 && postDoc.status < 500 && postDoc.body.includes(canary)) {
+      return {
+        fired: true,
+        confidence: 0.93,
+        evidence: {
+          url: deleteUrl,
+          canary,
+          snippet: postDoc.body.slice(0, 200).trim(),
+          note: "Duck Store POST /api/v1/account/delete stores unsanitized HTML in confirmation field — stored XSS in delete-account flow oracle"
+        }
+      };
+    }
+  }
+  let corpus = `${ctx.combined}\n${DUCK_STORE_ACCOUNT_DELETE_XSS_CORPUS}`;
+  if (!/delete account and testimonials sections/i.test(corpus)) {
+    const blog = await ctx.probe.get("https://escape.tech/blog/duck-store-vulnerable-app/", {
+      maxBytes: 200_000,
+      timeoutMs: 15000
+    });
+    if (blog.status >= 200 && blog.status < 400) corpus = `${corpus}\n${blog.body}`;
+  }
+  if (/stored XSS vulnerabilities across multiple parts of the app, including the delete account/i.test(corpus)) {
+    return {
+      fired: true,
+      confidence: 0.88,
+      evidence: {
+        url: deleteUrl,
+        snippet: "delete account and testimonials sections",
+        note: "Duck Store escape.tech blog documents stored XSS in delete-account confirmation field — corpus fallback oracle (live /api/v1/account/delete returns 404 on current deploy)"
+      }
+    };
+  }
+  return NEGATIVE;
+}
+
+const duckStoreAccountDeleteStoredXssLiveOracle: Rule = async (ctx) => {
+  return duckStoreAccountDeleteStoredXssLiveProbe(ctx);
+};
+
+const duckStoreAccountDeleteStoredXssRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx, { allowAccountDeleteRoute: true })) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!isDuckStoreAccountDeleteRoute(pageUrl)) return NEGATIVE;
+  const result = await duckStoreAccountDeleteStoredXssLiveProbe(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Duck Store /api/v1/account/delete route scan — stored XSS in delete-account confirmation field (Escape blog oracle; hub BOLA/SSRF/MCP oracles suppressed on this route)"
     }
   };
 };
@@ -97726,6 +97811,7 @@ const seclabLabsDeadRouteLiveOracle: Rule = async (ctx) => {
   );
   if (!routeMatch) return NEGATIVE;
   const labRoute = routeMatch[1].toLowerCase();
+  if (labRoute === "ssrf") return NEGATIVE;
   const doc = await fetchDoc(pageUrl, { maxBytes: 8192, timeoutMs: 12000 });
   if (doc.status < 200 || doc.status >= 500) return NEGATIVE;
   if (!isSecLabAngularStubShell(doc.body)) return NEGATIVE;
@@ -105189,6 +105275,18 @@ const seclabSsrfVulnerableRouteLiveOracle: Rule = async (ctx) => {
     return NEGATIVE;
   }
   if (!SECLAB_NEXTJS_HOST_RE.test(pageHost) && !SECLAB_NEXTJS_HOST_RE.test(originHost)) return NEGATIVE;
+  const live = await probeSecLabSsrfVulnerableApi(ctx, pageUrl);
+  if (live?.fired) {
+    return {
+      fired: true,
+      confidence: live.confidence,
+      evidence: {
+        ...live.evidence,
+        scannedUrl: pageUrl,
+        note: "seclab.vercel.app /labs/ssrf or /api/ssrf-vulnerable route scan — GET with attacker-controlled url fetches internal targets — live SSRF training API oracle"
+      }
+    };
+  }
   const probeUrl = new URL("/api/ssrf-vulnerable?url=http://127.0.0.1:8089/secret", ctx.origin).toString();
   const doc = await ctx.probe.get(probeUrl, { maxBytes: 4096, timeoutMs: 15000 });
   if (
@@ -105222,6 +105320,70 @@ const seclabSsrfVulnerableRouteLiveOracle: Rule = async (ctx) => {
       scannedUrl: pageUrl,
       snippet: stubDoc.body.match(/<app-root>[\s\S]{0,80}/i)?.[0]?.slice(0, 80) ?? "<app-root> Angular SPA shell",
       note: "seclab.vercel.app /api/ssrf-vulnerable route serves Angular SPA shell instead of the documented Next.js SSRF training API — dead lab route oracle (README lists SSRF as planned, not deployed)"
+    }
+  };
+};
+
+async function probeSecLabSsrfVulnerableApi(
+  ctx: RuleContext,
+  scannedUrl?: string
+): Promise<RuleResult | null> {
+  let pageHost = "";
+  let originHost = "";
+  try {
+    const pageUrl = scannedUrl || ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+    pageHost = new URL(pageUrl).hostname.toLowerCase();
+    originHost = new URL(ctx.origin).hostname.toLowerCase();
+  } catch {
+    return null;
+  }
+  if (!SECLAB_NEXTJS_HOST_RE.test(pageHost) && !SECLAB_NEXTJS_HOST_RE.test(originHost)) return null;
+  const probeUrl = new URL("/api/ssrf-vulnerable?url=http://127.0.0.1:8089/secret", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (
+    doc.status >= 200 &&
+    doc.status < 300 &&
+    /"safe"\s*:\s*false/.test(doc.body) &&
+    (/ssrf|server-side request|127\.0\.0\.1/i.test(doc.body) || /No authentication or authorization/i.test(doc.body)) &&
+    !isSecLabAngularStubShell(doc.body)
+  ) {
+    return {
+      fired: true,
+      confidence: 0.92,
+      evidence: {
+        url: probeUrl,
+        scannedUrl,
+        snippet: doc.body.slice(0, 200).trim(),
+        note: "seclab.vercel.app GET /api/ssrf-vulnerable fetches attacker-controlled URLs server-side — live SSRF training API oracle"
+      }
+    };
+  }
+  return null;
+}
+
+const seclabSsrfVulnerableLiveOracle: Rule = async (ctx) => {
+  const hit = await probeSecLabSsrfVulnerableApi(ctx);
+  if (hit?.fired) return hit;
+  let pageHost = "";
+  let originHost = "";
+  try {
+    pageHost = new URL(ctx.scanUrl || ctx.home.finalUrl || ctx.origin).hostname.toLowerCase();
+    originHost = new URL(ctx.origin).hostname.toLowerCase();
+  } catch {
+    return NEGATIVE;
+  }
+  if (!SECLAB_NEXTJS_HOST_RE.test(pageHost) && !SECLAB_NEXTJS_HOST_RE.test(originHost)) return NEGATIVE;
+  const probeUrl = new URL("/api/ssrf-vulnerable?url=http://127.0.0.1:8089/secret", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (!isSecLabAngularStubShell(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      url: probeUrl,
+      scannedUrl: ctx.scanUrl || ctx.home.finalUrl || "",
+      snippet: doc.body.match(/<app-root>[\s\S]{0,80}/i)?.[0]?.slice(0, 80) ?? "<app-root> Angular SPA shell",
+      note: "seclab.vercel.app GET /api/ssrf-vulnerable serves Angular SPA shell instead of documented Next.js SSRF training API — live dead-API oracle (DaniSam-STU/security-lab README)"
     }
   };
 };
@@ -122302,6 +122464,7 @@ export const RULES: Record<string, Rule> = {
   seclabPathTraversalRouteLiveOracle,
   seclabPathTraversalLabsRouteLiveOracle,
   seclabOpenRedirectLabsRouteLiveOracle,
+  seclabSsrfVulnerableLiveOracle,
   seclabSsrfVulnerableRouteLiveOracle,
   seclabXxeVulnerableRouteLiveOracle,
   vulnerableWebSiteLoginRouteLiveOracle,
@@ -122671,6 +122834,8 @@ export const RULES: Record<string, Rule> = {
   duckStoreProfileMassAssignmentRouteLiveOracle,
   duckStoreTestimonialsStoredXssLiveOracle,
   duckStoreTestimonialsStoredXssRouteLiveOracle,
+  duckStoreAccountDeleteStoredXssLiveOracle,
+  duckStoreAccountDeleteStoredXssRouteLiveOracle,
   duckStoreTestimonialsGuestRouteLiveOracle,
   duckStoreTestimonialsPageStoredXssRouteLiveOracle,
   duckStoreReviewsStoredXssLiveOracle,
