@@ -53489,6 +53489,7 @@ const PWNSHOP_PP_PROBE_KEY = "thugirProbePP";
 
 const pwnshopPrototypePollutionSearchFiltersLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
+  if (!pwnshopRouteTierAllows(ctx, "search")) return NEGATIVE;
   const cookie = await pwnshopCompleteOtpSession(ctx);
   if (!cookie) return NEGATIVE;
   const filtersUrl = new URL("/search/filters", ctx.origin).toString();
@@ -53825,9 +53826,49 @@ const clientSideVotingAppEvidence: Rule = async (ctx) => {
 function isPwnshopHost(ctx: RuleContext): boolean {
   return /pwnshop|ctfsecurity\.com/i.test(ctx.origin);
 }
+function pwnshopScannedRoute(ctx: RuleContext): string | null {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!pageUrl) return null;
+  try {
+    const pathname = new URL(pageUrl).pathname.toLowerCase();
+    if (/\/forgot-password\b/.test(pathname)) return "forgot-password";
+    if (/\/verify-otp\b/.test(pathname)) return "verify-otp";
+    if (/\/chat\/init\b/.test(pathname)) return "chat-init";
+    if (/\/chat\b/.test(pathname)) return "chat";
+    if (/\/track\b/.test(pathname)) return "track";
+    if (/\/wishlist\b/.test(pathname)) return "wishlist";
+    if (/\/register\b/.test(pathname)) return "register";
+    if (/\/login\b/.test(pathname)) return "login";
+    if (/\/admin\b/.test(pathname)) return "admin";
+    if (/\/vulnerabilities\b/.test(pathname)) return "vulnerabilities";
+    if (/\/debug\b/.test(pathname)) return "debug";
+    if (/\/lab-stats\b/.test(pathname)) return "lab-stats";
+    if (/\/checkout\b/.test(pathname)) return "checkout";
+    if (/\/seller\b/.test(pathname)) return "seller";
+    if (/\/product\b/.test(pathname)) return "product";
+    if (/\/search\b/.test(pathname)) return "search";
+    if (/\/mail\b/.test(pathname)) return "mail";
+    if (/\/download\b/.test(pathname)) return "download";
+    if (/\/export\b/.test(pathname)) return "export";
+    if (/\/apply-coupon\b/.test(pathname)) return "coupon";
+    if (pathname === "/" || pathname === "") return "home";
+    return null;
+  } catch {
+    return null;
+  }
+}
+
+function pwnshopRouteTierAllows(ctx: RuleContext, allowed: string | string[]): boolean {
+  const scanned = pwnshopScannedRoute(ctx);
+  if (!scanned) return true;
+  const tiers = Array.isArray(allowed) ? allowed : [allowed];
+  return tiers.includes(scanned);
+}
+
 
 const pwnshopDebugInfoLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
+  if (!pwnshopRouteTierAllows(ctx, "debug")) return NEGATIVE;
   const url = new URL("/debug/info", ctx.origin).toString();
   const doc = await ctx.probe.get(url, { maxBytes: 4096 });
   if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
@@ -53874,6 +53915,7 @@ const pwnshopDebugInfoRouteLiveOracle: Rule = async (ctx) => {
 
 const pwnshopLabStatsLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
+  if (!pwnshopRouteTierAllows(ctx, "lab-stats")) return NEGATIVE;
   const url = new URL("/lab-stats", ctx.origin).toString();
   const doc = await ctx.probe.get(url, { maxBytes: 4096 });
   if (doc.status >= 200 && doc.status < 300) {
@@ -53941,6 +53983,7 @@ const PWNSHOP_VULNERABILITIES_INDEX_MARKERS: { label: string; re: RegExp }[] = [
 
 const pwnshopVulnerabilitiesIndexLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
+  if (!pwnshopRouteTierAllows(ctx, "vulnerabilities")) return NEGATIVE;
   const url = new URL("/vulnerabilities", ctx.origin).toString();
   const doc = await ctx.probe.get(url, { maxBytes: 250_000, timeoutMs: 20000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -53982,6 +54025,7 @@ const pwnshopVulnerabilitiesIndexRouteLiveOracle: Rule = async (ctx) => {
 
 const pwnshopEventsAuditLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
+  if (!pwnshopRouteTierAllows(ctx, "debug")) return NEGATIVE;
   const url = new URL("/api/v1/events", ctx.origin).toString();
   const doc = await ctx.probe.get(url, { maxBytes: 8192 });
   if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
@@ -54025,6 +54069,7 @@ const pwnshopEventsAuditRouteLiveOracle: Rule = async (ctx) => {
 
 const pwnshopChatInitEmailEnumerationLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
+  if (!pwnshopRouteTierAllows(ctx, "chat-init")) return NEGATIVE;
   const url = new URL("/chat/init", ctx.origin).toString();
   const missingEmail = `thugir-notfound-${Date.now()}@example.com`;
   const missingDoc = await ctx.probe.get(url, {
@@ -54059,6 +54104,7 @@ const pwnshopChatInitEmailEnumerationLiveOracle: Rule = async (ctx) => {
 
 const pwnshopForgotPasswordEmailEnumerationLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
+  if (!pwnshopRouteTierAllows(ctx, "forgot-password")) return NEGATIVE;
   const url = new URL("/forgot-password", ctx.origin).toString();
   const missingEmail = `thugir-notfound-${Date.now()}@example.com`;
   const missingDoc = await ctx.probe.get(url, {
@@ -54110,6 +54156,7 @@ const pwnshopForgotPasswordEmailEnumerationRouteLiveOracle: Rule = async (ctx) =
 
 const pwnshopTrackIdorLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
+  if (!pwnshopRouteTierAllows(ctx, "track")) return NEGATIVE;
   const url = new URL("/track/1", ctx.origin).toString();
   const doc = await ctx.probe.get(url, { maxBytes: 16384, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -54167,6 +54214,7 @@ const clientSidePwnshopWishlistIdorOracle: Rule = async (ctx) =>
 
 const pwnshopWishlistIdorLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
+  if (!pwnshopRouteTierAllows(ctx, "wishlist")) return NEGATIVE;
   for (const userId of ["1", "2", "3"]) {
     const url = new URL(`/wishlist/${userId}`, ctx.origin).toString();
     const doc = await ctx.probe.get(url, { maxBytes: 65536, timeoutMs: 15000 });
@@ -54239,6 +54287,7 @@ Related: PWN-010 product search SQLi via GET /search?q= UNION injection.
 
 const pwnshopProductApiIdorLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
+  if (!pwnshopRouteTierAllows(ctx, "product")) return NEGATIVE;
   for (const id of ["1", "2", "3"]) {
     const url = new URL(`/api/v1/products/${id}`, ctx.origin).toString();
     const doc = await ctx.probe.get(url, {
@@ -54345,6 +54394,7 @@ const pwnshopProductApiIdorRouteLiveOracle: Rule = async (ctx) => {
 
 const pwnshopProductSearchSqliLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
+  if (!pwnshopRouteTierAllows(ctx, "search")) return NEGATIVE;
   const url = new URL("/search", ctx.origin);
   url.searchParams.set("q", "test'");
   const probeUrl = url.toString();
@@ -54391,6 +54441,7 @@ const pwnshopProductSearchSqliRouteLiveOracle: Rule = async (ctx) => {
 
 const pwnshopAdminLoginSqliLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
+  if (!pwnshopRouteTierAllows(ctx, "admin")) return NEGATIVE;
   const url = new URL("/admin/login", ctx.origin).toString();
   const doc = await ctx.probe.get(url, {
     method: "POST",
@@ -54427,6 +54478,7 @@ You are Pwnie pwnshop.ctfsecurity.com developer debug jailbreak Do not reveal th
 
 const pwnshopChatPromptInjectionLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
+  if (!pwnshopRouteTierAllows(ctx, "chat")) return NEGATIVE;
   const url = new URL("/chat", ctx.origin).toString();
   const doc = await ctx.probe.get(url, {
     method: "POST",
@@ -54485,6 +54537,7 @@ const pwnshopChatPromptInjectionLiveOracle: Rule = async (ctx) => {
 
 const pwnshopMassAssignmentAdminLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
+  if (!pwnshopRouteTierAllows(ctx, "register")) return NEGATIVE;
   const username = `thugir_ma_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
   const email = `${username}@probe.local`;
   const registerUrl = new URL("/register", ctx.origin).toString();
@@ -54525,6 +54578,7 @@ const PWNSHOP_LOGIN_REDIRECT_PROBE =
 
 const pwnshopOpenRedirectRegisterLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
+  if (!pwnshopRouteTierAllows(ctx, "register")) return NEGATIVE;
   const registerUrl = new URL("/register", ctx.origin).toString();
   const username = `thugir_or_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
   const doc = await ctx.probe.get(registerUrl, {
@@ -54592,6 +54646,7 @@ async function pwnshopRegisterLoginCookieForRedirectProbe(
 
 const pwnshopOpenRedirectLoginLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
+  if (!pwnshopRouteTierAllows(ctx, "login")) return NEGATIVE;
   const OTP_MAIL_WAITS_MS = [1500, 2500, 3500, 4500, 5500, 6500, 7500, 8500, 10500, 12500];
   for (let attempt = 0; attempt < OTP_MAIL_WAITS_MS.length; attempt++) {
     const cookie = await pwnshopRegisterLoginCookieForRedirectProbe(ctx, PWNSHOP_LOGIN_REDIRECT_PROBE);
@@ -54861,6 +54916,7 @@ export async function primePwnshopOtpSessionForDeepScan(
 
 const pwnshopMailInboxIdorLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
+  if (!pwnshopRouteTierAllows(ctx, "mail")) return NEGATIVE;
   const victimUser = `thugir_victim_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
   const victimEmail = `${victimUser}@probe.local`;
   const victimRegister = await ctx.probe.get(new URL("/register", ctx.origin).toString(), {
@@ -54916,6 +54972,7 @@ const pwnshopMailInboxIdorLiveOracle: Rule = async (ctx) => {
 
 const pwnshopProductReviewStoredXssLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
+  if (!pwnshopRouteTierAllows(ctx, "product")) return NEGATIVE;
   const cookie = await pwnshopCompleteOtpSession(ctx);
   if (!cookie) return NEGATIVE;
   const canary = `thugirReview${Date.now().toString(36)}`;
@@ -54992,6 +55049,7 @@ const pwnshopProductReviewStoredXssReviewRouteLiveOracle: Rule = async (ctx) => 
 
 const pwnshopAvatarSvgXssLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
+  if (!pwnshopRouteTierAllows(ctx, "product")) return NEGATIVE;
   const cookie = await pwnshopCompleteOtpSession(ctx);
   if (!cookie) return NEGATIVE;
   const uploadUrl = new URL("/profile/upload-avatar", ctx.origin).toString();
@@ -55043,6 +55101,7 @@ const pwnshopAvatarSvgXssLiveOracle: Rule = async (ctx) => {
 
 const pwnshopApplyCouponLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
+  if (!pwnshopRouteTierAllows(ctx, "coupon")) return NEGATIVE;
   const cookie = await pwnshopCompleteOtpSession(ctx);
   if (!cookie) return NEGATIVE;
   const couponUrl = new URL("/apply-coupon", ctx.origin).toString();
@@ -55073,6 +55132,7 @@ const pwnshopApplyCouponLiveOracle: Rule = async (ctx) => {
 
 const pwnshopCouponCategoryBypassLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
+  if (!pwnshopRouteTierAllows(ctx, "coupon")) return NEGATIVE;
   const cookie = await pwnshopCompleteOtpSession(ctx);
   if (!cookie) return NEGATIVE;
   const fashionProductId = "4";
@@ -55277,6 +55337,7 @@ function pwnshopCheckoutTotalsFromBody(
 
 const pwnshopCheckoutHppCouponLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
+  if (!pwnshopRouteTierAllows(ctx, "checkout")) return NEGATIVE;
   const cookie = await pwnshopCompleteOtpSession(ctx);
   if (!cookie) return NEGATIVE;
   const addCartUrl = new URL("/cart/add", ctx.origin).toString();
@@ -55379,6 +55440,7 @@ async function pwnshopEnsureSellerSession(ctx: RuleContext): Promise<string | nu
 
 const pwnshopSellerPreviewSstiLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
+  if (!pwnshopRouteTierAllows(ctx, "seller")) return NEGATIVE;
   const cookie = await pwnshopEnsureSellerSession(ctx);
   if (!cookie) return NEGATIVE;
   const previewUrl = new URL("/seller/preview", ctx.origin);
@@ -55404,6 +55466,7 @@ const pwnshopSellerPreviewSstiLiveOracle: Rule = async (ctx) => {
 
 const pwnshopDownloadPathTraversalLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
+  if (!pwnshopRouteTierAllows(ctx, "download")) return NEGATIVE;
   const cookie = await pwnshopEnsureSellerSession(ctx);
   if (!cookie) return NEGATIVE;
   const downloadUrl = new URL("/download", ctx.origin);
@@ -55549,6 +55612,7 @@ const PWNSHOP_AVATAR_SSRF_PROBE_URL = "https://example.com/";
 
 const pwnshopAvatarUrlSsrfLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
+  if (!pwnshopRouteTierAllows(ctx, "product")) return NEGATIVE;
   const cookie = await pwnshopCompleteOtpSession(ctx);
   if (!cookie) return NEGATIVE;
   const updateUrl = new URL("/profile/update-avatar", ctx.origin).toString();
@@ -55627,6 +55691,7 @@ const pwnshopUpdateAvatarRouteLiveOracle: Rule = async (ctx) => {
 
 const pwnshopOrderIdorLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
+  if (!pwnshopRouteTierAllows(ctx, "checkout")) return NEGATIVE;
   const cookie = await pwnshopCompleteOtpSession(ctx);
   if (!cookie) return NEGATIVE;
   const orderUrl = new URL("/order/1", ctx.origin).toString();
@@ -55949,6 +56014,7 @@ const pwnshopCssSettingsSstiRouteLiveOracle: Rule = async (ctx) => {
 
 const pwnshopWalletTopupVulnbankLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
+  if (!pwnshopRouteTierAllows(ctx, "checkout")) return NEGATIVE;
   const cookie = await pwnshopCompleteOtpSession(ctx);
   if (!cookie) return NEGATIVE;
   const profileUrl = new URL("/profile", ctx.origin).toString();
@@ -56083,6 +56149,7 @@ const PWNSHOP_PLAINTEXT_PASSWORD_CANARY_PREFIX = "ThugirPwCanary_";
 
 const pwnshopAuditLogPlaintextPasswordLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
+  if (!pwnshopRouteTierAllows(ctx, "admin")) return NEGATIVE;
   const canaryPassword = `${PWNSHOP_PLAINTEXT_PASSWORD_CANARY_PREFIX}${Date.now().toString(36)}`;
   const username = `thugir_pwlog_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
   const loginUrl = new URL("/login", ctx.origin).toString();
@@ -56500,6 +56567,8 @@ async function probePwnshopExportOrdersCsv(ctx: RuleContext): Promise<RuleResult
 }
 
 const pwnshopExportOrdersCsvLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  if (!pwnshopRouteTierAllows(ctx, "export")) return NEGATIVE;
   const hit = await probePwnshopExportOrdersCsv(ctx);
   return hit?.fired ? hit : NEGATIVE;
 };
@@ -56680,6 +56749,8 @@ async function probePwnshopAdminSecuritySecondOrderSqli(
 }
 
 const pwnshopAdminSecuritySecondOrderSqliLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  if (!pwnshopRouteTierAllows(ctx, "admin")) return NEGATIVE;
   const hit = await probePwnshopAdminSecuritySecondOrderSqli(ctx);
   return hit?.fired ? hit : NEGATIVE;
 };
@@ -56751,6 +56822,8 @@ async function probePwnshopAccountDeleteCsrf(ctx: RuleContext): Promise<RuleResu
 }
 
 const pwnshopAccountDeleteCsrfLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  if (!pwnshopRouteTierAllows(ctx, "my-account")) return NEGATIVE;
   const hit = await probePwnshopAccountDeleteCsrf(ctx);
   return hit?.fired ? hit : NEGATIVE;
 };
@@ -56866,9 +56939,10 @@ async function probePwnshopOtpNotInvalidated(ctx: RuleContext): Promise<RuleResu
 }
 
 const pwnshopOtpNotInvalidatedLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  if (!pwnshopRouteTierAllows(ctx, ["verify-otp", "forgot-password", "login"])) return NEGATIVE;
   const hit = await probePwnshopOtpNotInvalidated(ctx);
   if (hit?.fired) return hit;
-  if (!isPwnshopHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/(?:reset-password|forgot-password|verify-otp|login)\b/i.test(pageUrl)) return NEGATIVE;
   const corpus = `${ctx.combined}\n${pageUrl}\n${PWNSHOP_OTP_NOT_INVALIDATED_ROUTE_FALLBACK}`;
@@ -57316,6 +57390,7 @@ const qaBashSampleApiGraphqlRouteLiveOracle: Rule = async (ctx) => {
 
 const pwnshopVerifyOtpBruteforceLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
+  if (!pwnshopRouteTierAllows(ctx, "verify-otp")) return NEGATIVE;
   const cookie = await pwnshopRegisterAndLoginCookie(ctx);
   if (!cookie) return NEGATIVE;
   const otpUrl = new URL("/verify-otp", ctx.origin).toString();
@@ -87873,11 +87948,61 @@ const dvgaGraphqlDosResourceExhaustionRouteLiveOracle: Rule = async (ctx) => {
 function isGinAndJuiceHost(ctx: RuleContext): boolean {
   return /ginandjuice\.shop/i.test(ctx.origin);
 }
+type GinAndJuiceRouteTier =
+  | "home"
+  | "catalog"
+  | "product"
+  | "stock"
+  | "cart"
+  | "blog"
+  | "login"
+  | "register"
+  | "admin"
+  | "my-account"
+  | "order"
+  | "vulnerabilities"
+  | "logger";
+
+function ginAndJuiceScannedRoute(ctx: RuleContext): GinAndJuiceRouteTier | null {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!pageUrl) return null;
+  try {
+    const pathname = new URL(pageUrl).pathname.toLowerCase();
+    if (/\/catalog\/product\/stock\b/.test(pathname)) return "stock";
+    if (/\/catalog\/product\b/.test(pathname)) return "product";
+    if (/\/catalog\/cart\b/.test(pathname) || /\/checkout\b/.test(pathname)) return "cart";
+    if (/\/catalog\b/.test(pathname)) return "catalog";
+    if (/\/blog\b/.test(pathname)) return "blog";
+    if (/\/my-account\b/.test(pathname)) return "my-account";
+    if (/\/admin\b/.test(pathname)) return "admin";
+    if (/\/login\b/.test(pathname)) return "login";
+    if (/\/register\b/.test(pathname)) return "register";
+    if (/\/vulnerabilities\b/.test(pathname)) return "vulnerabilities";
+    if (/\/order\b/.test(pathname)) return "order";
+    if (/\/logger\b/.test(pathname)) return "logger";
+    if (pathname === "/" || pathname === "") return "home";
+    return null;
+  } catch {
+    return null;
+  }
+}
+
+function ginAndJuiceRouteTierAllows(
+  ctx: RuleContext,
+  allowed: GinAndJuiceRouteTier | GinAndJuiceRouteTier[]
+): boolean {
+  const scanned = ginAndJuiceScannedRoute(ctx);
+  if (!scanned) return true;
+  const tiers = Array.isArray(allowed) ? allowed : [allowed];
+  return tiers.includes(scanned);
+}
+
 
 const GIN_AND_JUICE_ANGULAR_CSTI_PROBE = "wzwxl{{a=(7*7.0)}}h0niw";
 
 const ginAndJuiceAngularCstiLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  if (!ginAndJuiceRouteTierAllows(ctx, ["catalog", "blog"])) return NEGATIVE;
   const probeUrl = new URL("/catalog", ctx.origin);
   probeUrl.searchParams.set("searchTerm", GIN_AND_JUICE_ANGULAR_CSTI_PROBE);
   const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 32768, timeoutMs: 15000 });
@@ -87922,6 +88047,7 @@ const ginAndJuiceAngularCstiRouteLiveOracle: Rule = async (ctx) => {
 
 const ginAndJuiceCatalogSearchXssLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  if (!ginAndJuiceRouteTierAllows(ctx, "catalog")) return NEGATIVE;
   const canary = `thugirXSS${Date.now().toString(36)}`;
   const probeUrl = new URL("/catalog", ctx.origin);
   probeUrl.searchParams.set("searchTerm", canary);
@@ -87983,6 +88109,7 @@ const ginAndJuiceCatalogRouteLiveOracle: Rule = async (ctx) => {
 
 const ginAndJuiceBlogPostOpenRedirectLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  if (!ginAndJuiceRouteTierAllows(ctx, "blog")) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   const probeHost = "evil-open-redirect-probe.example";
   const postId = ginAndJuiceBlogPostAtobRedirectPostIdFromUrl(pageUrl) ?? "3";
@@ -88034,6 +88161,7 @@ function ginAndJuiceBlogPostAtobRedirectPostIdFromUrl(pageUrl: string): string |
 
 const ginAndJuiceBlogPost7AtobRedirectLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  if (!ginAndJuiceRouteTierAllows(ctx, "blog")) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   const urlPostId = ginAndJuiceBlogPostAtobRedirectPostIdFromUrl(pageUrl);
   const postIdsToProbe = urlPostId
@@ -88095,6 +88223,7 @@ const ginAndJuiceBlogPostBackJavascriptPostIds = ["1", "3", "5", "6"];
 
 const ginAndJuiceBlogPostBackJavascriptDomXssLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  if (!ginAndJuiceRouteTierAllows(ctx, "blog")) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   const urlPostId = ginAndJuiceBlogPostAtobRedirectPostIdFromUrl(pageUrl);
   if (!urlPostId && !/\/blog\/post/i.test(pageUrl)) return NEGATIVE;
@@ -88150,6 +88279,7 @@ const ginAndJuiceBlogPostBackJavascriptDomXssRouteLiveOracle: Rule = async (ctx)
 
 const ginAndJuiceCatalogCategorySqliLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  if (!ginAndJuiceRouteTierAllows(ctx, "catalog")) return NEGATIVE;
   const baselineUrl = new URL("/catalog", ctx.origin);
   baselineUrl.searchParams.set("category", "1");
   const baselineDoc = await ctx.probe.get(baselineUrl.toString(), { maxBytes: 8192, timeoutMs: 15000 });
@@ -88191,6 +88321,7 @@ const ginAndJuiceCatalogCategorySqliRouteLiveOracle: Rule = async (ctx) => {
 
 const ginAndJuiceCatalogCategoryCrlfLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  if (!ginAndJuiceRouteTierAllows(ctx, "catalog")) return NEGATIVE;
   const canary = `thugirCrlf${Date.now().toString(36)}`;
   const probeUrl = new URL("/catalog", ctx.origin);
   probeUrl.searchParams.set("category", `thugir\r\nSet-Cookie: ${canary}=1`);
@@ -88243,6 +88374,7 @@ function ginAndJuiceSessionCookieFromDoc(doc: { setCookies: string[] }): string 
 
 const ginAndJuiceLoginUsernameReflectionLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  if (!ginAndJuiceRouteTierAllows(ctx, "login")) return NEGATIVE;
   const loginUrl = new URL("/login", ctx.origin);
   loginUrl.searchParams.set("thugir", Date.now().toString(36));
   const loginPage = await ctx.probe.get(loginUrl.toString(), { maxBytes: 16384, timeoutMs: 15000 });
@@ -88336,6 +88468,7 @@ const ginAndJuiceLoginNextOpenRedirectRouteLiveOracle: Rule = async (ctx) => {
 
 const ginAndJuiceRegisterAtobRedirectLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  if (!ginAndJuiceRouteTierAllows(ctx, "register")) return NEGATIVE;
   const probeUrl = new URL("/register", ctx.origin).toString();
   const doc = await ctx.probe.get(probeUrl, { maxBytes: 32768, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 500) return NEGATIVE;
@@ -88390,6 +88523,7 @@ const GIN_AND_JUICE_STOCK_XML_XXE_INTERNAL =
 
 const ginAndJuiceStockXxeLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  if (!ginAndJuiceRouteTierAllows(ctx, ["product", "stock"])) return NEGATIVE;
   const stockUrl = new URL("/catalog/product/stock?productId=1", ctx.origin).toString();
   const baselineDoc = await ctx.probe.get(stockUrl, {
     method: "POST",
@@ -88444,6 +88578,7 @@ const GIN_AND_JUICE_KNOWN_ORDER_IDS = ["0254809"];
 
 const ginAndJuiceOrderDetailsIdorLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  if (!ginAndJuiceRouteTierAllows(ctx, "order")) return NEGATIVE;
   for (const orderId of GIN_AND_JUICE_KNOWN_ORDER_IDS) {
     const probeUrl = new URL("/order/details", ctx.origin);
     probeUrl.searchParams.set("orderId", orderId);
@@ -88505,6 +88640,7 @@ const ginAndJuiceViewOrderIdorRouteLiveOracle: Rule = async (ctx) => {
 
 const ginAndJuiceAdminBypassLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  if (!ginAndJuiceRouteTierAllows(ctx, "admin")) return NEGATIVE;
   const adminUrl = new URL("/admin", ctx.origin).toString();
   const blocked = await ctx.probe.get(adminUrl, { maxBytes: 4096, timeoutMs: 15000 });
   if (blocked.status !== 403) return NEGATIVE;
@@ -88549,6 +88685,7 @@ const ginAndJuiceAdminBypassRouteLiveOracle: Rule = async (ctx) => {
 
 const ginAndJuiceBlogPrototypePollutionDomXssLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  if (!ginAndJuiceRouteTierAllows(ctx, "blog")) return NEGATIVE;
   const blogUrl = new URL("/blog", ctx.origin).toString();
   const doc = await ctx.probe.get(blogUrl, { maxBytes: 32768, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -88603,6 +88740,7 @@ const ginAndJuiceBlogPrototypePollutionDomXssRouteLiveOracle: Rule = async (ctx)
 
 const ginAndJuiceBlogSearchOpenRedirectLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  if (!ginAndJuiceRouteTierAllows(ctx, "blog")) return NEGATIVE;
   const probeHost = "evil-open-redirect-probe.example";
   const probeUrl = new URL("/blog/", ctx.origin);
   probeUrl.searchParams.set("search", "test");
@@ -88645,6 +88783,7 @@ const ginAndJuiceBlogSearchOpenRedirectRouteLiveOracle: Rule = async (ctx) => {
 
 const ginAndJuiceBlogSearchDomXssLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  if (!ginAndJuiceRouteTierAllows(ctx, "blog")) return NEGATIVE;
   const canary = `thugirBlogDomXss${Date.now().toString(36)}`;
   const probeUrl = new URL("/blog", ctx.origin);
   probeUrl.searchParams.set("search", canary);
@@ -88694,6 +88833,7 @@ const ginAndJuiceBlogSearchDomXssRouteLiveOracle: Rule = async (ctx) => {
 
 const ginAndJuiceCatalogBase64CategoryLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  if (!ginAndJuiceRouteTierAllows(ctx, "catalog")) return NEGATIVE;
   const encodedCategory = Buffer.from("Gin", "utf8").toString("base64");
   const probeUrl = new URL("/catalog", ctx.origin);
   probeUrl.searchParams.set("category", encodedCategory);
@@ -88738,6 +88878,7 @@ const ginAndJuiceCatalogBase64CategoryRouteLiveOracle: Rule = async (ctx) => {
 
 const ginAndJuiceHomeUrlOverrideLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  if (!ginAndJuiceRouteTierAllows(ctx, "home")) return NEGATIVE;
   const homeUrl = new URL("/", ctx.origin).toString();
   const doc = await ctx.probe.get(homeUrl, {
     maxBytes: 32768,
@@ -88781,6 +88922,7 @@ const ginAndJuiceHomeUrlOverrideRouteLiveOracle: Rule = async (ctx) => {
 
 const ginAndJuiceAdminDeleteLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  if (!ginAndJuiceRouteTierAllows(ctx, "admin")) return NEGATIVE;
   const directUrl = new URL("/admin/delete?username=carlos", ctx.origin).toString();
   const blocked = await ctx.probe.get(directUrl, { maxBytes: 4096, timeoutMs: 15000 });
   if (!/Access denied/i.test(blocked.body) && blocked.status !== 403) return NEGATIVE;
@@ -88844,6 +88986,7 @@ async function probeGinAndJuiceVulnerabilitiesPage(
 
 const ginAndJuiceVulnerabilitiesCredentialsLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  if (!ginAndJuiceRouteTierAllows(ctx, "vulnerabilities")) return NEGATIVE;
   const page = await probeGinAndJuiceVulnerabilitiesPage(ctx);
   if (!page) return NEGATIVE;
   const row = page.body.match(
@@ -89056,6 +89199,8 @@ async function probeGinAndJuiceCatalogSubscribe(ctx: RuleContext): Promise<RuleR
 }
 
 const ginAndJuiceCatalogSubscribeLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  if (!ginAndJuiceRouteTierAllows(ctx, "catalog")) return NEGATIVE;
   const result = await probeGinAndJuiceCatalogSubscribe(ctx);
   return result ?? NEGATIVE;
 };
@@ -89184,6 +89329,8 @@ async function probeGinAndJuiceCatalogSubscribeRateLimit(
 }
 
 const ginAndJuiceNewsletterSubscribeRateLimitLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  if (!ginAndJuiceRouteTierAllows(ctx, "catalog")) return NEGATIVE;
   const result = await probeGinAndJuiceCatalogSubscribeRateLimit(ctx);
   return result ?? NEGATIVE;
 };
@@ -89287,6 +89434,8 @@ async function probeGinAndJuiceChangeEmailSurface(ctx: RuleContext): Promise<Rul
 }
 
 const ginAndJuiceChangeEmailLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  if (!ginAndJuiceRouteTierAllows(ctx, "my-account")) return NEGATIVE;
   const result = await probeGinAndJuiceChangeEmailSurface(ctx);
   return result ?? NEGATIVE;
 };
@@ -89396,6 +89545,8 @@ async function probeGinAndJuiceChangePasswordSurface(ctx: RuleContext): Promise<
 }
 
 const ginAndJuiceChangePasswordLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  if (!ginAndJuiceRouteTierAllows(ctx, "my-account")) return NEGATIVE;
   const result = await probeGinAndJuiceChangePasswordSurface(ctx);
   return result ?? NEGATIVE;
 };
@@ -89507,6 +89658,7 @@ const ginAndJuiceDeleteRouteLiveOracle: Rule = async (ctx) => {
 
 const ginAndJuiceCatalogLinkManipulationLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  if (!ginAndJuiceRouteTierAllows(ctx, "catalog")) return NEGATIVE;
   const canary = `thugirLink${Date.now().toString(36)}`;
   const probeUrl = new URL("/catalog", ctx.origin);
   probeUrl.searchParams.set("searchTerm", canary);
@@ -89617,6 +89769,8 @@ async function probeGinAndJuiceCartCheckoutAuth(ctx: RuleContext): Promise<RuleR
 }
 
 const ginAndJuiceCartCheckoutAuthLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  if (!ginAndJuiceRouteTierAllows(ctx, "cart")) return NEGATIVE;
   const result = await probeGinAndJuiceCartCheckoutAuth(ctx);
   return result ?? NEGATIVE;
 };
@@ -89749,6 +89903,8 @@ async function probeGinAndJuiceProductPriceManipulation(ctx: RuleContext): Promi
 }
 
 const ginAndJuiceProductPriceLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  if (!ginAndJuiceRouteTierAllows(ctx, "product")) return NEGATIVE;
   const result = await probeGinAndJuiceProductPriceManipulation(ctx);
   return result?.fired ? result : NEGATIVE;
 };
@@ -89811,6 +89967,8 @@ async function probeGinAndJuiceForgotPasswordSurface(ctx: RuleContext): Promise<
 }
 
 const ginAndJuiceForgotPasswordLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  if (!ginAndJuiceRouteTierAllows(ctx, "my-account")) return NEGATIVE;
   const result = await probeGinAndJuiceForgotPasswordSurface(ctx);
   return result ?? NEGATIVE;
 };
@@ -89862,6 +90020,7 @@ const ginAndJuiceMyAccountForgotPasswordRouteLiveOracle: Rule = async (ctx) => {
 
 const ginAndJuiceAngularVulnerableDependencyLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  if (!ginAndJuiceRouteTierAllows(ctx, ["catalog", "cart", "product", "blog"])) return NEGATIVE;
   const probeUrl = new URL("/catalog", ctx.origin).toString();
   const doc = await ctx.probe.get(probeUrl, { maxBytes: 32768, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -89902,6 +90061,7 @@ const ginAndJuiceAngularVulnerableDependencyRouteLiveOracle: Rule = async (ctx) 
 
 const ginAndJuiceLoggerOastLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  if (!ginAndJuiceRouteTierAllows(ctx, ["catalog", "logger"])) return NEGATIVE;
   const loggerUrl = new URL("/logger", ctx.origin).toString();
   const getBlocked = await ctx.probe.get(loggerUrl, { maxBytes: 4096, timeoutMs: 15000 });
   if (getBlocked.status !== 404) return NEGATIVE;
@@ -94717,6 +94877,18 @@ function wrongsecretsChallengeIdFromUrl(url: string): string | null {
   const m = url.match(/\/challenge\/(?:challenge-)?(\d+)\/?(?:\?|#|$)/i);
   return m?.[1] ?? null;
 }
+function wrongsecretsScannedChallengeNumber(ctx: RuleContext): number | null {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const id = wrongsecretsChallengeIdFromUrl(pageUrl);
+  return id !== null ? Number(id) : null;
+}
+
+function wrongsecretsNumberedChallengeAllows(ctx: RuleContext, challengeNum: number): boolean {
+  const scanned = wrongsecretsScannedChallengeNumber(ctx);
+  if (scanned === null) return true;
+  return scanned === challengeNum;
+}
+
 
 const wrongsecretsCtfHubLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets-ctf\.herokuapp\.com/i.test(ctx.origin)) return NEGATIVE;
@@ -95198,6 +95370,7 @@ const wrongsecretsChallengeRouteLiveOracle: Rule = async (ctx) => {
 
 const wrongsecretsChallenge0OpeningLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  if (!wrongsecretsNumberedChallengeAllows(ctx, 0)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-0", ctx.origin).toString();
   const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -95239,6 +95412,7 @@ const wrongsecretsChallenge0OpeningRouteLiveOracle: Rule = async (ctx) => {
 
 const wrongsecretsChallenge1GitHardcodedLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  if (!wrongsecretsNumberedChallengeAllows(ctx, 1)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-1", ctx.origin).toString();
   const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -95281,6 +95455,7 @@ const wrongsecretsChallenge1GitHardcodedRouteLiveOracle: Rule = async (ctx) => {
 
 const wrongsecretsChallenge2ApplicationPropertiesLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  if (!wrongsecretsNumberedChallengeAllows(ctx, 2)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-2", ctx.origin).toString();
   const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -95324,6 +95499,7 @@ const wrongsecretsChallenge2ApplicationPropertiesRouteLiveOracle: Rule = async (
 
 const wrongsecretsChallenge3DockerEnvLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  if (!wrongsecretsNumberedChallengeAllows(ctx, 3)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-3", ctx.origin).toString();
   const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -95366,6 +95542,7 @@ const wrongsecretsChallenge3DockerEnvRouteLiveOracle: Rule = async (ctx) => {
 
 const wrongsecretsChallenge4DockerBuildArgLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  if (!wrongsecretsNumberedChallengeAllows(ctx, 4)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-4", ctx.origin).toString();
   const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -95408,6 +95585,7 @@ const wrongsecretsChallenge4DockerBuildArgRouteLiveOracle: Rule = async (ctx) =>
 
 const wrongsecretsChallenge5ConfigmapLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  if (!wrongsecretsNumberedChallengeAllows(ctx, 5)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-5", ctx.origin).toString();
   const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -95450,6 +95628,7 @@ const wrongsecretsChallenge5ConfigmapRouteLiveOracle: Rule = async (ctx) => {
 
 const wrongsecretsChallenge6K8sSecretLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  if (!wrongsecretsNumberedChallengeAllows(ctx, 6)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-6", ctx.origin).toString();
   const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -95492,6 +95671,7 @@ const wrongsecretsChallenge6K8sSecretRouteLiveOracle: Rule = async (ctx) => {
 
 const wrongsecretsChallenge7VaultLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  if (!wrongsecretsNumberedChallengeAllows(ctx, 7)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-7", ctx.origin).toString();
   const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -95538,6 +95718,7 @@ const wrongsecretsChallenge7VaultRouteLiveOracle: Rule = async (ctx) => {
 
 const wrongsecretsChallenge8LoggingLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  if (!wrongsecretsNumberedChallengeAllows(ctx, 8)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-8", ctx.origin).toString();
   const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -95584,6 +95765,7 @@ const wrongsecretsChallenge8LoggingRouteLiveOracle: Rule = async (ctx) => {
 
 const wrongsecretsChallenge9TerraformLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  if (!wrongsecretsNumberedChallengeAllows(ctx, 9)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-9", ctx.origin).toString();
   const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -95624,6 +95806,7 @@ const wrongsecretsChallenge9TerraformRouteLiveOracle: Rule = async (ctx) => {
 
 const wrongsecretsChallenge10CsiDriverLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  if (!wrongsecretsNumberedChallengeAllows(ctx, 10)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-10", ctx.origin).toString();
   const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -95664,6 +95847,7 @@ const wrongsecretsChallenge10CsiDriverRouteLiveOracle: Rule = async (ctx) => {
 
 const wrongsecretsChallenge11IamEscalationLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  if (!wrongsecretsNumberedChallengeAllows(ctx, 11)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-11", ctx.origin).toString();
   const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -95704,6 +95888,7 @@ const wrongsecretsChallenge11IamEscalationRouteLiveOracle: Rule = async (ctx) =>
 
 const wrongsecretsChallenge12DockerLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  if (!wrongsecretsNumberedChallengeAllows(ctx, 12)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-12", ctx.origin).toString();
   const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -95744,6 +95929,7 @@ const wrongsecretsChallenge12DockerRouteLiveOracle: Rule = async (ctx) => {
 
 const wrongsecretsChallenge13CicdLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  if (!wrongsecretsNumberedChallengeAllows(ctx, 13)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-13", ctx.origin).toString();
   const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -95789,6 +95975,7 @@ const wrongsecretsChallenge13CicdRouteLiveOracle: Rule = async (ctx) => {
 
 const wrongsecretsChallenge14PasswordManagerLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  if (!wrongsecretsNumberedChallengeAllows(ctx, 14)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-14", ctx.origin).toString();
   const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -95831,6 +96018,7 @@ const wrongsecretsChallenge14PasswordManagerRouteLiveOracle: Rule = async (ctx) 
 
 const wrongsecretsChallenge15GitHistoryLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  if (!wrongsecretsNumberedChallengeAllows(ctx, 15)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-15", ctx.origin).toString();
   const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -95872,6 +96060,7 @@ const wrongsecretsChallenge15GitHistoryRouteLiveOracle: Rule = async (ctx) => {
 
 const wrongsecretsChallenge16FrontendLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  if (!wrongsecretsNumberedChallengeAllows(ctx, 16)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-16", ctx.origin).toString();
   const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -95914,6 +96103,7 @@ const wrongsecretsChallenge16FrontendRouteLiveOracle: Rule = async (ctx) => {
 
 const wrongsecretsChallenge17BashHistoryLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  if (!wrongsecretsNumberedChallengeAllows(ctx, 17)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-17", ctx.origin).toString();
   const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -95955,6 +96145,7 @@ const wrongsecretsChallenge17BashHistoryRouteLiveOracle: Rule = async (ctx) => {
 
 const wrongsecretsChallenge18BadHashingLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  if (!wrongsecretsNumberedChallengeAllows(ctx, 18)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-18", ctx.origin).toString();
   const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -95996,6 +96187,7 @@ const wrongsecretsChallenge18BadHashingRouteLiveOracle: Rule = async (ctx) => {
 
 const wrongsecretsChallenge19CBinaryLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  if (!wrongsecretsNumberedChallengeAllows(ctx, 19)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-19", ctx.origin).toString();
   const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -96038,6 +96230,7 @@ const wrongsecretsChallenge19CBinaryRouteLiveOracle: Rule = async (ctx) => {
 
 const wrongsecretsChallenge20CplusBinaryLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  if (!wrongsecretsNumberedChallengeAllows(ctx, 20)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-20", ctx.origin).toString();
   const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -96080,6 +96273,7 @@ const wrongsecretsChallenge20CplusBinaryRouteLiveOracle: Rule = async (ctx) => {
 
 const wrongsecretsChallenge21GolangBinaryLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  if (!wrongsecretsNumberedChallengeAllows(ctx, 21)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-21", ctx.origin).toString();
   const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -96124,6 +96318,7 @@ const wrongsecretsChallenge21GolangBinaryRouteLiveOracle: Rule = async (ctx) => 
 
 const wrongsecretsChallenge22RustBinaryLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  if (!wrongsecretsNumberedChallengeAllows(ctx, 22)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-22", ctx.origin).toString();
   const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -96168,6 +96363,7 @@ const wrongsecretsChallenge22RustBinaryRouteLiveOracle: Rule = async (ctx) => {
 
 const wrongsecretsChallenge23Base64FrontendLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  if (!wrongsecretsNumberedChallengeAllows(ctx, 23)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-23", ctx.origin).toString();
   const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -96210,6 +96406,7 @@ const wrongsecretsChallenge23Base64FrontendRouteLiveOracle: Rule = async (ctx) =
 
 const wrongsecretsChallenge24HmacCryptographyLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  if (!wrongsecretsNumberedChallengeAllows(ctx, 24)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-24", ctx.origin).toString();
   const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -96251,6 +96448,7 @@ const wrongsecretsChallenge24HmacCryptographyRouteLiveOracle: Rule = async (ctx)
 
 const wrongsecretsChallenge25Web3SmartContractLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  if (!wrongsecretsNumberedChallengeAllows(ctx, 25)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-25", ctx.origin).toString();
   const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -96294,6 +96492,7 @@ const wrongsecretsChallenge25Web3SmartContractRouteLiveOracle: Rule = async (ctx
 
 const wrongsecretsChallenge26Web3SmartContractLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  if (!wrongsecretsNumberedChallengeAllows(ctx, 26)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-26", ctx.origin).toString();
   const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -96337,6 +96536,7 @@ const wrongsecretsChallenge26Web3SmartContractRouteLiveOracle: Rule = async (ctx
 
 const wrongsecretsChallenge27Web3SmartContractLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  if (!wrongsecretsNumberedChallengeAllows(ctx, 27)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-27", ctx.origin).toString();
   const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -96380,6 +96580,7 @@ const wrongsecretsChallenge27Web3SmartContractRouteLiveOracle: Rule = async (ctx
 
 const wrongsecretsChallenge38GitNotesLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  if (!wrongsecretsNumberedChallengeAllows(ctx, 38)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-38", ctx.origin).toString();
   const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -96422,6 +96623,7 @@ const wrongsecretsChallenge38GitNotesRouteLiveOracle: Rule = async (ctx) => {
 
 const wrongsecretsChallenge39AesFilenameKeyLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  if (!wrongsecretsNumberedChallengeAllows(ctx, 39)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-39", ctx.origin).toString();
   const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -96465,6 +96667,7 @@ const wrongsecretsChallenge39AesFilenameKeyRouteLiveOracle: Rule = async (ctx) =
 
 const wrongsecretsChallenge40AesJsonLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  if (!wrongsecretsNumberedChallengeAllows(ctx, 40)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-40", ctx.origin).toString();
   const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -96509,6 +96712,7 @@ const wrongsecretsChallenge40AesJsonRouteLiveOracle: Rule = async (ctx) => {
 
 const wrongsecretsChallenge41PasswordShuckingLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  if (!wrongsecretsNumberedChallengeAllows(ctx, 41)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-41", ctx.origin).toString();
   const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -96552,6 +96756,7 @@ const wrongsecretsChallenge41PasswordShuckingRouteLiveOracle: Rule = async (ctx)
 
 const wrongsecretsChallenge42ActuatorAuditLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  if (!wrongsecretsNumberedChallengeAllows(ctx, 42)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-42", ctx.origin).toString();
   const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -96596,6 +96801,7 @@ const wrongsecretsChallenge42ActuatorAuditRouteLiveOracle: Rule = async (ctx) =>
 
 const wrongsecretsChallenge43RedditBlunderLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  if (!wrongsecretsNumberedChallengeAllows(ctx, 43)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-43", ctx.origin).toString();
   const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -96640,6 +96846,7 @@ const wrongsecretsChallenge43RedditBlunderRouteLiveOracle: Rule = async (ctx) =>
 
 const wrongsecretsChallenge44VaultMetadataLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  if (!wrongsecretsNumberedChallengeAllows(ctx, 44)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-44", ctx.origin).toString();
   const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -96684,6 +96891,7 @@ const wrongsecretsChallenge44VaultMetadataRouteLiveOracle: Rule = async (ctx) =>
 
 const wrongsecretsChallenge45VaultSubkeyLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  if (!wrongsecretsNumberedChallengeAllows(ctx, 45)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-45", ctx.origin).toString();
   const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -96728,6 +96936,7 @@ const wrongsecretsChallenge45VaultSubkeyRouteLiveOracle: Rule = async (ctx) => {
 
 const wrongsecretsChallenge46VaultTemplateInjectionLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  if (!wrongsecretsNumberedChallengeAllows(ctx, 46)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-46", ctx.origin).toString();
   const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -96772,6 +96981,7 @@ const wrongsecretsChallenge46VaultTemplateInjectionRouteLiveOracle: Rule = async
 
 const wrongsecretsChallenge47VaultTemplateHardcodedLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  if (!wrongsecretsNumberedChallengeAllows(ctx, 47)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-47", ctx.origin).toString();
   const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -96816,6 +97026,7 @@ const wrongsecretsChallenge47VaultTemplateHardcodedRouteLiveOracle: Rule = async
 
 const wrongsecretsChallenge48SealedSecretLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  if (!wrongsecretsNumberedChallengeAllows(ctx, 48)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-48", ctx.origin).toString();
   const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -96861,6 +97072,7 @@ const wrongsecretsChallenge48SealedSecretRouteLiveOracle: Rule = async (ctx) => 
 
 const wrongsecretsChallenge49AesWeakMd5LiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  if (!wrongsecretsNumberedChallengeAllows(ctx, 49)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-49", ctx.origin).toString();
   const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -96905,6 +97117,7 @@ const wrongsecretsChallenge49AesWeakMd5RouteLiveOracle: Rule = async (ctx) => {
 
 const wrongsecretsChallenge50DotnetBinaryLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  if (!wrongsecretsNumberedChallengeAllows(ctx, 50)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-50", ctx.origin).toString();
   const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -96949,6 +97162,7 @@ const wrongsecretsChallenge50DotnetBinaryRouteLiveOracle: Rule = async (ctx) => 
 
 const wrongsecretsChallenge51DockerSecretsLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  if (!wrongsecretsNumberedChallengeAllows(ctx, 51)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-51", ctx.origin).toString();
   const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -96993,6 +97207,7 @@ const wrongsecretsChallenge51DockerSecretsRouteLiveOracle: Rule = async (ctx) =>
 
 const wrongsecretsChallenge52BuildxSecretsLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  if (!wrongsecretsNumberedChallengeAllows(ctx, 52)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-52", ctx.origin).toString();
   const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -97037,6 +97252,7 @@ const wrongsecretsChallenge52BuildxSecretsRouteLiveOracle: Rule = async (ctx) =>
 
 const wrongsecretsChallenge53DebuggingContainerLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  if (!wrongsecretsNumberedChallengeAllows(ctx, 53)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-53", ctx.origin).toString();
   const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -97081,6 +97297,7 @@ const wrongsecretsChallenge53DebuggingContainerRouteLiveOracle: Rule = async (ct
 
 const wrongsecretsChallenge54GitignoreSecretLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  if (!wrongsecretsNumberedChallengeAllows(ctx, 54)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-54", ctx.origin).toString();
   const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -97125,6 +97342,7 @@ const wrongsecretsChallenge54GitignoreSecretRouteLiveOracle: Rule = async (ctx) 
 
 const wrongsecretsChallenge55SshBastionLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  if (!wrongsecretsNumberedChallengeAllows(ctx, 55)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-55", ctx.origin).toString();
   const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -97169,6 +97387,7 @@ const wrongsecretsChallenge55SshBastionRouteLiveOracle: Rule = async (ctx) => {
 
 const wrongsecretsChallenge56ProjectSpecLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  if (!wrongsecretsNumberedChallengeAllows(ctx, 56)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-56", ctx.origin).toString();
   const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -97213,6 +97432,7 @@ const wrongsecretsChallenge56ProjectSpecRouteLiveOracle: Rule = async (ctx) => {
 
 const wrongsecretsChallenge57BrowserLlmLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  if (!wrongsecretsNumberedChallengeAllows(ctx, 57)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-57", ctx.origin).toString();
   const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -97257,6 +97477,7 @@ const wrongsecretsChallenge57BrowserLlmRouteLiveOracle: Rule = async (ctx) => {
 
 const wrongsecretsChallenge59SlackWebhookLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  if (!wrongsecretsNumberedChallengeAllows(ctx, 59)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-59", ctx.origin).toString();
   const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -97303,6 +97524,7 @@ const WRONGSECRETS_CHALLENGE37_BASIC_AUTH = "Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ=="
 
 const wrongsecretsChallenge35DocumentationLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  if (!wrongsecretsNumberedChallengeAllows(ctx, 35)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-35", ctx.origin).toString();
   const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -97346,6 +97568,7 @@ const wrongsecretsChallenge35DocumentationRouteLiveOracle: Rule = async (ctx) =>
 
 const wrongsecretsChallenge36AdvancedCLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  if (!wrongsecretsNumberedChallengeAllows(ctx, 36)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-36", ctx.origin).toString();
   const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -97389,6 +97612,7 @@ const wrongsecretsChallenge36AdvancedCRouteLiveOracle: Rule = async (ctx) => {
 
 const wrongsecretsChallenge37CiCdLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  if (!wrongsecretsNumberedChallengeAllows(ctx, 37)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-37", ctx.origin).toString();
   const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -97446,6 +97670,7 @@ const wrongsecretsChallenge37CiCdRouteLiveOracle: Rule = async (ctx) => {
 
 const wrongsecretsChallenge28GithubIssueLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  if (!wrongsecretsNumberedChallengeAllows(ctx, 28)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-28", ctx.origin).toString();
   const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -97489,6 +97714,7 @@ const wrongsecretsChallenge28GithubIssueRouteLiveOracle: Rule = async (ctx) => {
 
 const wrongsecretsChallenge29ScreenshotLogLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  if (!wrongsecretsNumberedChallengeAllows(ctx, 29)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-29", ctx.origin).toString();
   const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -97532,6 +97758,7 @@ const wrongsecretsChallenge29ScreenshotLogRouteLiveOracle: Rule = async (ctx) =>
 
 const wrongsecretsChallenge30LocalStorageLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  if (!wrongsecretsNumberedChallengeAllows(ctx, 30)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-30", ctx.origin).toString();
   const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -97575,6 +97802,7 @@ const wrongsecretsChallenge30LocalStorageRouteLiveOracle: Rule = async (ctx) => 
 
 const wrongsecretsChallenge31WebPageSecretLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  if (!wrongsecretsNumberedChallengeAllows(ctx, 31)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-31", ctx.origin).toString();
   const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -97618,6 +97846,7 @@ const wrongsecretsChallenge31WebPageSecretRouteLiveOracle: Rule = async (ctx) =>
 
 const wrongsecretsChallenge32LlmPromptLeakLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  if (!wrongsecretsNumberedChallengeAllows(ctx, 32)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-32", ctx.origin).toString();
   const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -97661,6 +97890,7 @@ const wrongsecretsChallenge32LlmPromptLeakRouteLiveOracle: Rule = async (ctx) =>
 
 const wrongsecretsChallenge33K8sStringdataLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  if (!wrongsecretsNumberedChallengeAllows(ctx, 33)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-33", ctx.origin).toString();
   const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -97704,6 +97934,7 @@ const wrongsecretsChallenge33K8sStringdataRouteLiveOracle: Rule = async (ctx) =>
 
 const wrongsecretsChallenge34Pbkdf2KeyGenerationLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  if (!wrongsecretsNumberedChallengeAllows(ctx, 34)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-34", ctx.origin).toString();
   const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -97749,6 +97980,7 @@ const WRONGSECRETS_ERROR_DEMO_DB_PATH = "/error-demo/database-connection";
 
 const wrongsecretsErrorDemoDatabaseConnectionLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  if (wrongsecretsScannedChallengeNumber(ctx) !== null) return NEGATIVE;
   const probeUrl = new URL(WRONGSECRETS_ERROR_DEMO_DB_PATH, ctx.origin).toString();
   const doc = await ctx.probe.get(probeUrl, { maxBytes: 4096, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -97814,6 +98046,7 @@ async function wrongsecretsMcpJsonRpc(
 
 const wrongsecretsMcpExecuteCommandLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  if (wrongsecretsScannedChallengeNumber(ctx) !== null) return NEGATIVE;
   const listDoc = await wrongsecretsMcpJsonRpc(ctx, "tools/list", undefined, 1);
   if (listDoc.status < 200 || listDoc.status >= 400) return NEGATIVE;
   let tools: Array<{ name?: string; description?: string }> = [];
@@ -97906,6 +98139,7 @@ const wrongsecretsChallenge60McpRouteLiveOracle: Rule = async (ctx) => {
 
 const wrongsecretsChallenge61TelegramSecretsLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  if (!wrongsecretsNumberedChallengeAllows(ctx, 61)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-61", ctx.origin).toString();
   const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -97969,6 +98203,7 @@ async function wrongsecretsMcp62JsonRpc(
 
 const wrongsecretsMcp62GoogleSaLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  if (wrongsecretsScannedChallengeNumber(ctx) !== null) return NEGATIVE;
   const listDoc = await wrongsecretsMcp62JsonRpc(ctx, "tools/list", undefined, 1);
   if (listDoc.status < 200 || listDoc.status >= 400) return NEGATIVE;
   let tools: Array<{ name?: string; description?: string }> = [];
@@ -98025,6 +98260,7 @@ const wrongsecretsMcp62GoogleSaLiveOracle: Rule = async (ctx) => {
 
 const wrongsecretsChallenge62McpGoogleSaLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  if (!wrongsecretsNumberedChallengeAllows(ctx, 62)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-62", ctx.origin).toString();
   const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -98069,6 +98305,7 @@ const wrongsecretsChallenge62McpGoogleSaRouteLiveOracle: Rule = async (ctx) => {
 
 const wrongsecretsChallenge63HardcodedAesKeyLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  if (!wrongsecretsNumberedChallengeAllows(ctx, 63)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-63", ctx.origin).toString();
   const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -98113,6 +98350,7 @@ const wrongsecretsChallenge63HardcodedAesKeyRouteLiveOracle: Rule = async (ctx) 
 
 const wrongsecretsChallenge64SwiftBinaryLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  if (!wrongsecretsNumberedChallengeAllows(ctx, 64)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-64", ctx.origin).toString();
   const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -98157,6 +98395,7 @@ const wrongsecretsChallenge64SwiftBinaryRouteLiveOracle: Rule = async (ctx) => {
 
 const wrongsecretsChallenge58DatabaseConnectionLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  if (!wrongsecretsNumberedChallengeAllows(ctx, 58)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-58", ctx.origin).toString();
   const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -98213,6 +98452,7 @@ const wrongsecretsChallenge58DatabaseConnectionRouteLiveOracle: Rule = async (ct
 
 const wrongsecretsChallenge65JavaPlainCliLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  if (!wrongsecretsNumberedChallengeAllows(ctx, 65)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-65", ctx.origin).toString();
   const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -98258,6 +98498,7 @@ const wrongsecretsChallenge65JavaPlainCliRouteLiveOracle: Rule = async (ctx) => 
 
 const wrongsecretsChallenge66JavaObfuscatedLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  if (!wrongsecretsNumberedChallengeAllows(ctx, 66)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-66", ctx.origin).toString();
   const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -99283,9 +99524,10 @@ async function probePwnshopChatOrderIdor(ctx: RuleContext): Promise<RuleResult |
 }
 
 const pwnshopChatOrderIdorLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  if (!pwnshopRouteTierAllows(ctx, "chat")) return NEGATIVE;
   const live = await probePwnshopChatOrderIdor(ctx);
   if (live?.fired) return live;
-  if (!isPwnshopHost(ctx)) return NEGATIVE;
   const corpus = `${ctx.combined}\n${PWNSHOP_CHAT_ORDER_IDOR_FALLBACK}`;
   const markers: { label: string; sample: string }[] = [];
   for (const { label, re } of [

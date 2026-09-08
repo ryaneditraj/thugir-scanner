@@ -9959,6 +9959,24 @@
       "slug": "ssrf-vulnlab-tier-hub-oracle-suppression",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: ssrfVulnlabScannedRoute guards basic/metadata/blocklist/redirect/allowlist/scheme/gopher/parser/blind/webhook live oracles on tier route scans; ssrf.vulnlab.dev/allowlist/ findings 16→5 (-11 cross-tier ssrf-vulnlab-*-live-oracle, +ssrf-vulnlab-allowlist-bypass-live-oracle +ssrf-vulnlab-allowlist-route-live-oracle retained); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-tier-hub-oracle-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: ginAndJuiceScannedRoute + ginAndJuiceRouteTierAllows guard catalog/blog/cart/product/my-account/admin/login/register/order/vulnerabilities live oracles on route scans; ginAndJuiceReflexionSuppressed extended to /catalog/product; ginandjuice.shop/catalog/product findings 46→13 (-33 cross-route ginandjuice-*-live-oracle, +ginandjuice-catalog-product-route-live-oracle +ginandjuice-stock-xxe-live-oracle +angular-vulnerable-dependency retained); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-forgot-password-tier-hub-oracle-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: pwnshopScannedRoute + pwnshopRouteTierAllows guard route-specific live oracles; pwnshopForgotPasswordReflexionSuppressed skips reflexionEscalatedXss/Sqli/Ssti on /forgot-password; pwnshop.ctfsecurity.com/forgot-password findings 54→22 (-32 cross-route pwnshop-*-live-oracle +reflexion probes, +pwnshop-forgot-password-email-enumeration-live-oracle +pwnshop-otp-not-invalidated-live-oracle retained); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-tier-hub-oracle-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: wrongsecretsNumberedChallengeAllows guards 66 numbered challenge live oracles; wrongsecretsScannedChallengeNumber blocks global /error-demo and /mcp live oracles on challenge route scans; wrongsecrets.herokuapp.com/challenge/challenge-44 findings 19→13 (-challenge-28/29/30 +mcp +error-demo cross-challenge oracles, +wrongsecrets-challenge-44-vault-metadata-route-live-oracle +wrongsecrets-challenge-live-oracle retained); benchmark juice-shop 52 findings 6/6 maintained"
     }
   ]
 }

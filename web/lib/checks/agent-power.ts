@@ -150,6 +150,12 @@ function pwnshopWishlistReflexionSuppressed(ctx: PowerCtx): boolean {
 }
 
 /** Pwnshop /chat is an AI chatbot SPA — generic reflexion XSS/SQLi probes false-positive on chat UI echoes. */
+function pwnshopForgotPasswordReflexionSuppressed(ctx: PowerCtx): boolean {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  if (!/pwnshop|ctfsecurity\.com/i.test(pageUrl)) return false;
+  return /\/forgot-password\b/i.test(pageUrl);
+}
+
 function pwnshopChatReflexionSuppressed(ctx: PowerCtx): boolean {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
   if (!/pwnshop|ctfsecurity\.com/i.test(pageUrl)) return false;
@@ -163,6 +169,7 @@ function ginAndJuiceReflexionSuppressed(ctx: PowerCtx): boolean {
   return (
     /\/api(?:\/|$)/i.test(pageUrl) ||
     /\/catalog\/cart\b/i.test(pageUrl) ||
+    /\/catalog\/product\b/i.test(pageUrl) ||
     /\/checkout\b/i.test(pageUrl) ||
     (/\/cart\b/i.test(pageUrl) && !/\/catalog\/cart\b/i.test(pageUrl))
   );
@@ -364,6 +371,7 @@ export const reflexionEscalatedXss: PowerRule = async (ctx) => {
   if (supportReliabilityLabReflexionSuppressed(ctx)) return NEGATIVE;
   if (pwnshopWishlistReflexionSuppressed(ctx)) return NEGATIVE;
   if (pwnshopChatReflexionSuppressed(ctx)) return NEGATIVE;
+  if (pwnshopForgotPasswordReflexionSuppressed(ctx)) return NEGATIVE;
   if (appsecCiLoginReflexionSuppressed(ctx)) return NEGATIVE;
   if (zeroHealthVercelDashboardReflexionSuppressed(ctx)) return NEGATIVE;
   if (hackminaazizReflexionSuppressed(ctx)) return NEGATIVE;
@@ -410,6 +418,7 @@ export const reflexionEscalatedSqli: PowerRule = async (ctx) => {
   if (supportReliabilityLabReflexionSuppressed(ctx)) return NEGATIVE;
   if (pwnshopWishlistReflexionSuppressed(ctx)) return NEGATIVE;
   if (pwnshopChatReflexionSuppressed(ctx)) return NEGATIVE;
+  if (pwnshopForgotPasswordReflexionSuppressed(ctx)) return NEGATIVE;
   if (zeroHealthVercelDashboardReflexionSuppressed(ctx)) return NEGATIVE;
   const params = ["id", "user", "name", "q", "search"];
   const paths = ["/", "/api/users", "/search"];
@@ -461,6 +470,7 @@ export const reflexionEscalatedSsti: PowerRule = async (ctx) => {
   if (atlascrewDocsReflexionSuppressed(ctx)) return NEGATIVE;
   if (securebankBlogReflexionSuppressed(ctx)) return NEGATIVE;
   if (ginAndJuiceReflexionSuppressed(ctx)) return NEGATIVE;
+  if (pwnshopForgotPasswordReflexionSuppressed(ctx)) return NEGATIVE;
   if (oopssecGitHubPagesReflexionSuppressed(ctx)) return NEGATIVE;
   if (mcpgoatGitHubPagesReflexionSuppressed(ctx)) return NEGATIVE;
   if (aiThreatlabReflexionSuppressed(ctx)) return NEGATIVE;
