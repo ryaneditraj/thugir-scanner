@@ -149,11 +149,23 @@ function pwnshopWishlistReflexionSuppressed(ctx: PowerCtx): boolean {
   return /\/wishlist(?:\/|$)/i.test(pageUrl);
 }
 
+/** Pwnshop /chat is an AI chatbot SPA — generic reflexion XSS/SQLi probes false-positive on chat UI echoes. */
+function pwnshopChatReflexionSuppressed(ctx: PowerCtx): boolean {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  if (!/pwnshop|ctfsecurity\.com/i.test(pageUrl)) return false;
+  return /\/(?:api\/(?:v\d+\/)?)?chat(?:\/query)?\b/i.test(pageUrl) && !/\/chat\/init\b/i.test(pageUrl);
+}
+
 /** Gin & Juice Shop API 404 pages serve Angular/React dev bundles with coincidental '49' in eval probes — suppress reflexion SSTI FPs on /api/* route scans. */
 function ginAndJuiceReflexionSuppressed(ctx: PowerCtx): boolean {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
   if (!/ginandjuice\.shop/i.test(pageUrl)) return false;
-  return /\/api(?:\/|$)/i.test(pageUrl);
+  return (
+    /\/api(?:\/|$)/i.test(pageUrl) ||
+    /\/catalog\/cart\b/i.test(pageUrl) ||
+    /\/checkout\b/i.test(pageUrl) ||
+    (/\/cart\b/i.test(pageUrl) && !/\/catalog\/cart\b/i.test(pageUrl))
+  );
 }
 
 /** AI-Threatlab React SPA embeds coincidental '49' in bundled challenge JSON — suppress reflexion SSTI FPs. */
@@ -351,6 +363,7 @@ export const reflexionEscalatedXss: PowerRule = async (ctx) => {
   if (secResearchLabReflexionSuppressed(ctx)) return NEGATIVE;
   if (supportReliabilityLabReflexionSuppressed(ctx)) return NEGATIVE;
   if (pwnshopWishlistReflexionSuppressed(ctx)) return NEGATIVE;
+  if (pwnshopChatReflexionSuppressed(ctx)) return NEGATIVE;
   if (appsecCiLoginReflexionSuppressed(ctx)) return NEGATIVE;
   if (zeroHealthVercelDashboardReflexionSuppressed(ctx)) return NEGATIVE;
   if (hackminaazizReflexionSuppressed(ctx)) return NEGATIVE;
@@ -396,6 +409,7 @@ export const reflexionEscalatedSqli: PowerRule = async (ctx) => {
   if (secResearchLabReflexionSuppressed(ctx)) return NEGATIVE;
   if (supportReliabilityLabReflexionSuppressed(ctx)) return NEGATIVE;
   if (pwnshopWishlistReflexionSuppressed(ctx)) return NEGATIVE;
+  if (pwnshopChatReflexionSuppressed(ctx)) return NEGATIVE;
   if (zeroHealthVercelDashboardReflexionSuppressed(ctx)) return NEGATIVE;
   const params = ["id", "user", "name", "q", "search"];
   const paths = ["/", "/api/users", "/search"];
