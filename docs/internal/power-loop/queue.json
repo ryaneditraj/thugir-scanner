@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-08T19:05:00.000Z",
+  "updated_at": "2026-09-08T20:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/tutorial",
+      "source": "OWASP Node Goat — interactive OWASP Top 10 tutorial on Heroku demo (nodegoat-websec.herokuapp.com; web search 20 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/profile",
+      "source": "OWASP Node Goat — profile/IDOR and session management lab routes (nodegoat-websec.herokuapp.com; web search 20 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-53",
+      "source": "OWASP WrongSecrets — Challenge 53 Vault/K8s secrets oracle (wrongsecrets.herokuapp.com challenge table; web search 20 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssrf.vulnlab.dev/metadata/",
+      "source": "sampsonc/vulnlab.dev — AWS IMDSv1 metadata SSRF oracle at /metadata/ (GitHub README; web search 20 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvga.tools.escape.tech/graphql",
+      "source": "Damn Vulnerable GraphQL — public GraphQL injection/introspection/SSRF lab (dvga.tools.escape.tech; web search 20 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://ginandjuice.shop/logger",
       "source": "PortSwigger Gin & Juice Shop — search logger endpoint linked from /catalog (ginandjuice.shop/vulnerabilities; web search 19 UTC discovery)",
@@ -11680,6 +11705,31 @@
     {
       "url": "https://ginandjuice.shop/catalog?category=",
       "source": "PortSwigger Gin & Juice Shop — SQLi oracle GET /catalog?category= (autopentest-ai pentest report FINDING-003; web search 14 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/tutorial",
+      "source": "OWASP Node Goat — interactive OWASP Top 10 tutorial on Heroku demo (nodegoat-websec.herokuapp.com; web search 20 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/profile",
+      "source": "OWASP Node Goat — profile/IDOR and session management lab routes (nodegoat-websec.herokuapp.com; web search 20 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-53",
+      "source": "OWASP WrongSecrets — Challenge 53 Vault/K8s secrets oracle (wrongsecrets.herokuapp.com challenge table; web search 20 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssrf.vulnlab.dev/metadata/",
+      "source": "sampsonc/vulnlab.dev — AWS IMDSv1 metadata SSRF oracle at /metadata/ (GitHub README; web search 20 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvga.tools.escape.tech/graphql",
+      "source": "Damn Vulnerable GraphQL — public GraphQL injection/introspection/SSRF lab (dvga.tools.escape.tech; web search 20 UTC discovery)",
       "auth": "public_demo"
     }
   ]
