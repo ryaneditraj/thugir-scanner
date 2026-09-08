@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:sql-injection-lab.vercel.app",
+      "slug": "sql-injection-lab-hub-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: sqlInjectionLabHubRouteLiveOracle fires on homepage / when /login route oracle requires /login path; sql-injection-lab.vercel.app/ findings 3→5 (+sql-injection-lab-hub-route-live-oracle +thugir-dir-discovery); hostname guard tightened to avoid nosql-injection-lab substring match; benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:nosql-injection-lab.vercel.app",
+      "slug": "nosql-injection-lab-route-oracle-corpus-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: nosqlInjectionLabCorpusHit accepts ctx.origin host without requiring hostname in fetched corpus; nosql-injection-lab.vercel.app/ findings 5→6 (+nosql-injection-lab-route-live-oracle); nosqlInjectionLabReflexionSuppressed prevents reflexion-escalated-ssti false positive on React SPA; benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:seclab.vercel.app",
+      "slug": "seclab-labs-hub-tier-path-open-redirect-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: seclabLabsHubTierMismatch extended with path-traversal + open-redirect tiers; seclab.vercel.app/labs/path-traversal findings 7→5 (-seclab-sqli-search-live-oracle -seclab-ssrf-vulnerable-live-oracle cross-tier bleed), /labs/open-redirect 7→5; benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:seclab.vercel.app",
       "slug": "seclab-ssti-labs-route-live-oracle",
       "status": "shipped",

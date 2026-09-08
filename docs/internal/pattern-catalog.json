@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-08T13:17:43.627Z",
-  "total": 3460,
-  "uniqueSlugs": 3452,
+  "generatedAt": "2026-09-08T14:08:37.833Z",
+  "total": 3461,
+  "uniqueSlugs": 3453,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3442,
+    "generic": 3443,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3375,
+    "deep": 3376,
     "continuous": 0
   },
   "byCategory": {
@@ -27,7 +27,7 @@
     "Information disclosure": 159,
     "Security misconfiguration": 290,
     "Broken authentication": 223,
-    "Injection": 577,
+    "Injection": 578,
     "Cross-site scripting": 814,
     "Open redirect": 29,
     "general": 20,
@@ -2702,6 +2702,7 @@
     "sql-error-disclosure",
     "sql-injection-challenge-login-sqli-live-oracle",
     "sql-injection-challenge-login-sqli-route-live-oracle",
+    "sql-injection-lab-hub-route-live-oracle",
     "sql-injection-lab-login-route-live-oracle",
     "sqli-header-error-disclosure",
     "sqli-query-param-injection",
