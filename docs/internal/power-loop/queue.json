@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-08T11:05:00.000Z",
+  "updated_at": "2026-09-08T12:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://www.qabash.com/api/tools/sample-api/users",
+      "source": "QA Bash API Playground — REST users CRUD + role field mass-assignment oracle (qabash.com/learning/api-playground; web search 12 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.qabash.com/api/tools/sample-api/graphql",
+      "source": "QA Bash API Playground — minimal GraphQL users resolver for BOLA/introspection practice (web search 12 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://seclab.vercel.app/labs/ssti",
+      "source": "DaniSam-STU/security-lab — server-side template injection lab page (seclab.vercel.app; web search 12 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://seclab.vercel.app/labs/sqli",
+      "source": "DaniSam-STU/security-lab — interactive SQLi lab page with live exploit UI (queue drain; web search 12 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnbank.org/login",
+      "source": "Commando-X/vuln-bank — login SQLi + weak session oracle POST /login (OpenAPI; queue drain web search 12 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://ginandjuice.shop/my-account/change-email",
       "source": "PortSwigger Gin & Juice Shop — change-email account takeover oracle (VWAD gin-juice-shop; web search 11 UTC discovery)",
