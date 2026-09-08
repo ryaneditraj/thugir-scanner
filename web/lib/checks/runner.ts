@@ -2172,6 +2172,7 @@ const DEEP_RULES = new Set<string>([
   "websecLevel31OpenBasedirEvalRouteLiveOracle",
   "clientSideWebsecDynamicFunctionCallChallengeEvidence",
   "clientSideSixHackCtfLabEvidence",
+  "sixhackCtfLabsRouteLiveOracle",
   "sixhackPlatformRouteLiveOracle",
   "clientSideRootMeChallengeEvidence",
   "clientSidePentesterLabEvidence",
@@ -14697,6 +14698,12 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
           p.slug === "ai-security-ai-phishing-route-live-oracle")
       )
         return -3;
+      if (
+        /sixhackacademy\.com/i.test(origin) &&
+        /\/ctf-labs\/?/i.test(targetInput) &&
+        p.slug.startsWith("sixhack-ctf-labs")
+      )
+        return -4;
       if (
         /platform\.sixhackacademy\.com/i.test(origin) &&
         /^https?:\/\/[^/]+\/?(?:es\/accounts\/(?:login|register)|accounts\/(?:login|register))?\/?$/i.test(

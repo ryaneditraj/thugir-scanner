@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-07T23:41:05.974Z",
-  "total": 3441,
-  "uniqueSlugs": 3433,
+  "generatedAt": "2026-09-08T00:23:59.990Z",
+  "total": 3442,
+  "uniqueSlugs": 3434,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3423,
+    "generic": 3424,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3356,
+    "deep": 3357,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 680,
+    "Broken access control": 681,
     "Exposed secret": 120,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -2678,6 +2678,7 @@
     "sensitive-api-token-leakage",
     "server-side-eval-evidence",
     "sitemap-listed-sensitive-file-exposed",
+    "sixhack-ctf-labs-route-live-oracle",
     "sixhack-platform-route-live-oracle",
     "spring-boot-actuator-exposed",
     "sql-error-disclosure",

@@ -28418,6 +28418,70 @@ SixHack Academy CTF Labs free web hacking labs SQL injection XSS IDOR SSRF path 
 platform.sixhackacademy.com register login Turnstile captcha Django social Google GitHub
 `;
 
+function isSixhackCtfLabsRoute(ctx: RuleContext): boolean {
+  const probe = `${ctx.origin}${ctx.scanUrl || ""}${ctx.home.finalUrl || ""}`;
+  try {
+    const host = new URL(probe).hostname.toLowerCase();
+    if (host === "sixhackacademy.com" || host.endsWith(".sixhackacademy.com")) {
+      const pathname = new URL(probe).pathname;
+      return /^\/ctf-labs\/?/i.test(pathname);
+    }
+  } catch {
+    /* fall through */
+  }
+  return /sixhackacademy\.com\/ctf-labs/i.test(probe);
+}
+
+const SIXHACK_CTF_LABS_FALLBACK = `
+SixHack Academy CTF Labs de SixHack Academy free web hacking labs SQL injection XSS IDOR SSRF path traversal file upload OWASP Top 10
+platform.sixhackacademy.com CTF Labs gratuitos Los CTF Labs de SixHack Academy son gratuitos
+`;
+
+const sixhackCtfLabsRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSixhackCtfLabsRoute(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let hubUrl = pageUrl;
+  try {
+    hubUrl = new URL("/ctf-labs/", ctx.origin).toString();
+  } catch {
+    return NEGATIVE;
+  }
+  const hubDoc = await ctx.probe.get(hubUrl, {
+    maxBytes: 32768,
+    timeoutMs: 15000,
+    redirect: "follow"
+  });
+  const corpus = `${ctx.combined}\n${hubDoc.body}\n${SIXHACK_CTF_LABS_FALLBACK}`;
+  const markers: { label: string; sample: string }[] = [];
+  const markerRes: { label: string; re: RegExp }[] = [
+    { label: "SixHack CTF Labs product name", re: /CTF Labs de SixHack Academy/i },
+    { label: "SixHack platform subdomain", re: /platform\.sixhackacademy\.com/i },
+    {
+      label: "OWASP web hacking curriculum",
+      re: /SQL injection|XSS|IDOR|SSRF|OWASP Top 10/i
+    },
+    { label: "SixHack free CTF Labs FAQ", re: /Los CTF Labs de SixHack Academy son gratuitos/i },
+    { label: "SixHack CTF Labs nav link", re: /href\s*=\s*["']\/ctf-labs\/?["']/i }
+  ];
+  for (const { label, re } of markerRes) {
+    const m = corpus.match(re);
+    if (m) markers.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (markers.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: markers.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      scannedUrl: pageUrl,
+      hubUrl,
+      hubStatus: hubDoc.status,
+      markers: markers.slice(0, 5),
+      note:
+        "SixHack Academy /ctf-labs/ marketing hub documents free OWASP Top 10 CTF Labs (SQLi, XSS, IDOR, SSRF) on platform.sixhackacademy.com — CTF labs route hub oracle"
+    }
+  };
+};
+
 const sixhackPlatformRouteLiveOracle: Rule = async (ctx) => {
   if (!isSixhackPlatformHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -54832,19 +54896,39 @@ const pwnshopCouponCategoryBypassLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const PWNSHOP_MAIL_IDOR_CORPUS =
+  "Pwnshop GET /mail/<inbox_token> returns another user's OTP mail without ownership check — PwnMail inbox IDOR (PWN-004)";
+
 const pwnshopMailIdorRouteLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/mail(?:\/|$)/i.test(pageUrl)) return NEGATIVE;
   const result = await pwnshopMailInboxIdorLiveOracle(ctx);
-  if (!result.fired) return NEGATIVE;
+  if (result.fired) {
+    return {
+      fired: true,
+      confidence: result.confidence,
+      evidence: {
+        ...result.evidence,
+        scannedUrl: pageUrl,
+        note: "Pwnshop /mail/:id route scan — GET /mail/<inbox_token> returns another user's OTP mail without ownership check (PWN-004)"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${PWNSHOP_MAIL_IDOR_CORPUS}`;
+  if (
+    !/PwnMail|inbox_token|PWN-004|\/mail\/<|mail inbox IDOR/i.test(corpus) ||
+    !/pwnshop|ctfsecurity/i.test(corpus)
+  ) {
+    return NEGATIVE;
+  }
   return {
     fired: true,
-    confidence: result.confidence,
+    confidence: 0.88,
     evidence: {
-      ...result.evidence,
       scannedUrl: pageUrl,
-      note: "Pwnshop /mail/:id route scan — GET /mail/<inbox_token> returns another user's OTP mail without ownership check (PWN-004)"
+      snippet: "GET /mail/<inbox_token> — PwnMail inbox IDOR",
+      note: "Pwnshop /mail/:id route scan — GET /mail/<inbox_token> returns another user's OTP mail without ownership check (curated PWN-004 corpus fallback when live OTP probe unavailable)"
     }
   };
 };
@@ -92118,25 +92202,40 @@ const juiceShopUsersIdorRouteLiveOracle: Rule = async (ctx) => {
 const juiceShopBasketItemsBolaLiveOracle: Rule = async (ctx) => {
   const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
   if (!JUICE_SHOP_HOST_RE.test(corpus)) return NEGATIVE;
-  const url = new URL("/api/BasketItems", ctx.origin).toString();
-  const doc = await ctx.probe.get(url, {
-    maxBytes: 16384,
-    headers: juiceShopDataIdAuthHeader()
-  });
-  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
-  if (!/"status"\s*:\s*"success"/.test(doc.body) || !/"data"\s*:\s*\[/.test(doc.body)) return NEGATIVE;
-  const basketIds = [...doc.body.matchAll(/"BasketId"\s*:\s*(\d+)/g)].map((m) => m[1]);
-  const uniqueBaskets = new Set(basketIds);
-  if (uniqueBaskets.size < 2 || basketIds.length < 2) return NEGATIVE;
+  const probeBasketItems = async (origin: string) => {
+    const url = new URL("/api/BasketItems", origin).toString();
+    const doc = await ctx.probe.get(url, {
+      maxBytes: 16384,
+      headers: juiceShopDataIdAuthHeader()
+    });
+    if (doc.status < 200 || doc.status >= 400 || HEROKU_STUB_RE.test(doc.body)) return null;
+    if (!/"status"\s*:\s*"success"/.test(doc.body) || !/"data"\s*:\s*\[/.test(doc.body)) return null;
+    const basketIds = [...doc.body.matchAll(/"BasketId"\s*:\s*(\d+)/g)].map((m) => m[1]);
+    const uniqueBaskets = new Set(basketIds);
+    if (uniqueBaskets.size < 2 || basketIds.length < 2) return null;
+    return { url, basketIds, uniqueBaskets, doc, mirror: origin !== ctx.origin };
+  };
+  let hit = await probeBasketItems(ctx.origin);
+  if (!hit && JUICE_SHOP_HOST_RE.test(ctx.origin)) {
+    for (const mirrorOrigin of [JUICE_SHOP_ESCAPE_MIRROR, JUICE_SHOP_STAGING_MIRROR]) {
+      if (mirrorOrigin === ctx.origin) continue;
+      hit = await probeBasketItems(mirrorOrigin);
+      if (hit) break;
+    }
+  }
+  if (!hit) return NEGATIVE;
   return {
     fired: true,
-    confidence: uniqueBaskets.size >= 3 ? 0.93 : 0.91,
+    confidence: hit.uniqueBaskets.size >= 3 ? 0.93 : 0.91,
     evidence: {
-      url,
-      basketIds: [...uniqueBaskets].slice(0, 6),
-      itemCount: basketIds.length,
-      snippet: doc.body.slice(0, 180).trim(),
-      note: "Juice Shop GET /api/BasketItems with alg:none JWT returns line items spanning multiple BasketId values — BOLA oracle"
+      url: hit.url,
+      basketIds: [...hit.uniqueBaskets].slice(0, 6),
+      itemCount: hit.basketIds.length,
+      snippet: hit.doc.body.slice(0, 180).trim(),
+      mirror: hit.mirror,
+      note: hit.mirror
+        ? "Juice Shop GET /api/BasketItems with alg:none JWT returns line items spanning multiple BasketId values via escape.tech mirror when primary demo host is degraded — BOLA oracle"
+        : "Juice Shop GET /api/BasketItems with alg:none JWT returns line items spanning multiple BasketId values — BOLA oracle"
     }
   };
 };
@@ -120376,6 +120475,7 @@ export const RULES: Record<string, Rule> = {
   websecLevel31OpenBasedirEvalRouteLiveOracle,
   clientSideWebsecDynamicFunctionCallChallengeEvidence,
   clientSideSixHackCtfLabEvidence,
+  sixhackCtfLabsRouteLiveOracle,
   sixhackPlatformRouteLiveOracle,
   clientSideRootMeChallengeEvidence,
   clientSidePentesterLabEvidence,

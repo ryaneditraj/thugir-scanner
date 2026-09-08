@@ -17796,6 +17796,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "sixhack-ctf-labs-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "SixHack Academy CTF labs marketing hub route live oracle",
+    description:
+      "When scanning sixhackacademy.com /ctf-labs/, the marketing hub documents free OWASP Top 10 CTF Labs (SQLi, XSS, IDOR, SSRF) hosted on platform.sixhackacademy.com — CTF labs route hub oracle.",
+    impactOneline:
+      "Marketing route scans need hub-level documentation of the SixHack CTF lab catalog and platform subdomain.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sixhackCtfLabsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate CTF lab platforms behind registration and rate limits; isolate from production data.",
+      steps: [
+        "Require authentication before exposing injectable lab endpoints.",
+        "Run labs on dedicated subdomains with no production database access.",
+        "Reset lab state frequently and monitor for abuse."
+      ]
+    },
+    fixPrompt:
+      "Our sixhackacademy.com /ctf-labs/ hub advertises free OWASP CTF Labs on platform.sixhackacademy.com. Show how to isolate lab infrastructure from production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "sixhack-platform-route-live-oracle",
     platform: "generic",
     category: "Broken access control",
