@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:ai-security-platform-iota.vercel.app",
+      "slug": "ai-security-challenges-reflexion-ssti-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: aiSecurityPlatformLoginGatedReflexionSuppressed now matches all /challenges/* login-gated shells (Next.js redirect pages embed coincidental '49' in chunks); ai-security-platform-iota.vercel.app/challenges/idor findings 13→9 (-reflexion-escalated-ssti false positive, +ai-security-idor-route-live-oracle retained); /challenges/cookie-auth 9→8 (-reflexion-escalated-ssti); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:nextjs-cve-hackerone.vercel.app",
+      "slug": "nextjs-cve-hackerone-reflexion-xss-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: nextjsCveHackeroneReflexionSuppressed skips reflexionEscalatedXss on intentional CVE-2025-66478 RSC demo; nextjs-cve-hackerone.vercel.app/ findings 9→5 (-reflexion-escalated-xss false positive, +nextjs-rsc-cve-live-oracle +nextjs-rsc-cve-route-live-oracle retained); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:sqli.vulnlab.dev",
+      "slug": "sqli-vulnlab-tier-hub-oracle-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: sqliVulnlabScannedRoute refined to blind-bool/blind-time tiers; second-order/union/blind hub live oracles skip when route scan targets a different tier; sqli.vulnlab.dev/error/ findings 9→5 (-sqli-vulnlab-second-order-live-oracle -sqli-vulnlab-union-live-oracle -sqli-vulnlab-blind-bool-live-oracle -sqli-vulnlab-blind-time-live-oracle, +sqli-vulnlab-error-live-oracle +sqli-vulnlab-error-route-live-oracle retained); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:csrf-xss-demo.vercel.app",
       "slug": "csrf-xss-demo-route-live-oracle",
       "status": "shipped",

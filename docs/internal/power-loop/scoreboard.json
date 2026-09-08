@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-08T07:12:00.000Z",
+  "updated_at": "2026-09-08T08:12:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2854,
-  "total_findings": 29315,
+  "total_sites_scanned": 2858,
+  "total_findings": 29324,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2018,
-  "discovery_findings": 23508,
-  "improvements_shipped": 1614,
-  "last_run": "2026-09-08T07:12:00.000Z",
+  "discovery_findings": 23517,
+  "improvements_shipped": 1617,
+  "last_run": "2026-09-08T08:12:00.000Z",
   "last_run_summary": {
-    "hour_utc": "07",
+    "hour_utc": "08",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 53,
@@ -53,15 +53,17 @@
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 0,
-      "urls_scanned": 2,
-      "findings": 57,
-      "focus": "06 UTC queue gap closure — csrf-xss-demo route oracles + pwnshop PUT /api/settings/css SSTI chain",
+      "urls_scanned": 4,
+      "findings": 27,
+      "focus": "07 UTC queue gap — reflexion FP suppression on AI Security challenges + Next.js CVE demo + sqli.vulnlab tier isolation",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, 40 live oracles, primary Heroku stable)",
-      "csrf-xss-demo.vercel.app: 8 findings (+csrf-xss-demo-route-live-oracle +csrf-xss-demo-csrf-transfer-live-oracle)",
-      "pwnshop.ctfsecurity.com/api/settings/css: 49 findings (+pwnshop-css-settings-ssti-route-live-oracle PWN-040 data-uri chain)"
+      "ai-security-platform-iota.vercel.app/challenges/idor: 9 findings (-reflexion-escalated-ssti FP, +ai-security-idor-route-live-oracle retained)",
+      "ai-security-platform-iota.vercel.app/challenges/cookie-auth: 8 findings (-reflexion-escalated-ssti FP)",
+      "nextjs-cve-hackerone.vercel.app: 5 findings (-reflexion-escalated-xss FP, +nextjs-rsc-cve oracles retained)",
+      "sqli.vulnlab.dev/error/: 5 findings (-hub cross-tier oracles, +error route oracles retained)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
@@ -74,9 +76,9 @@
     "pwnshop.ctfsecurity.com/api/settings/css": 49,
     "csrf-xss-demo.vercel.app": 8,
     "ssrf.vulnlab.dev/metadata-gcp": 17,
-    "ai-security-platform-iota.vercel.app/challenges/idor": 13,
+    "ai-security-platform-iota.vercel.app/challenges/idor": 9,
     "ai-security-platform-iota.vercel.app/challenges/weak-rls": 12,
     "dvwu.vercel.app/labs/jwt": 10,
-    "sqli.vulnlab.dev/error": 9
+    "sqli.vulnlab.dev/error": 5
   }
 }
