@@ -11771,6 +11771,28 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         "https://wrongsecrets.herokuapp.com/challenge/challenge-42",
         "https://wrongsecrets.herokuapp.com/challenge/43",
         "https://wrongsecrets.herokuapp.com/challenge/challenge-43",
+        "https://wrongsecrets.herokuapp.com/challenge/44",
+        "https://wrongsecrets.herokuapp.com/challenge/challenge-44",
+        "https://wrongsecrets.herokuapp.com/challenge/45",
+        "https://wrongsecrets.herokuapp.com/challenge/challenge-45",
+        "https://wrongsecrets.herokuapp.com/challenge/46",
+        "https://wrongsecrets.herokuapp.com/challenge/challenge-46",
+        "https://wrongsecrets.herokuapp.com/challenge/47",
+        "https://wrongsecrets.herokuapp.com/challenge/challenge-47",
+        "https://wrongsecrets.herokuapp.com/challenge/48",
+        "https://wrongsecrets.herokuapp.com/challenge/challenge-48",
+        "https://wrongsecrets.herokuapp.com/challenge/49",
+        "https://wrongsecrets.herokuapp.com/challenge/challenge-49",
+        "https://wrongsecrets.herokuapp.com/challenge/50",
+        "https://wrongsecrets.herokuapp.com/challenge/challenge-50",
+        "https://wrongsecrets.herokuapp.com/challenge/51",
+        "https://wrongsecrets.herokuapp.com/challenge/challenge-51",
+        "https://wrongsecrets.herokuapp.com/challenge/52",
+        "https://wrongsecrets.herokuapp.com/challenge/challenge-52",
+        "https://wrongsecrets.herokuapp.com/challenge/53",
+        "https://wrongsecrets.herokuapp.com/challenge/challenge-53",
+        "https://wrongsecrets.herokuapp.com/challenge/54",
+        "https://wrongsecrets.herokuapp.com/challenge/challenge-54",
         "https://wrongsecrets.herokuapp.com/challenge/55",
         "https://wrongsecrets.herokuapp.com/challenge/challenge-55",
         "https://wrongsecrets.herokuapp.com/challenge/56",
@@ -15621,8 +15643,44 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         return -4;
       if (
         /wrongsecrets\.herokuapp\.com/i.test(origin) &&
+        /\/challenge\/(?:challenge-)?48\b/i.test(targetInput) &&
+        wrongsecretsChallengeSlugMatches(48, p.slug)
+      )
+        return -4;
+      if (
+        /wrongsecrets\.herokuapp\.com/i.test(origin) &&
+        /\/challenge\/(?:challenge-)?49\b/i.test(targetInput) &&
+        wrongsecretsChallengeSlugMatches(49, p.slug)
+      )
+        return -4;
+      if (
+        /wrongsecrets\.herokuapp\.com/i.test(origin) &&
+        /\/challenge\/(?:challenge-)?50\b/i.test(targetInput) &&
+        wrongsecretsChallengeSlugMatches(50, p.slug)
+      )
+        return -4;
+      if (
+        /wrongsecrets\.herokuapp\.com/i.test(origin) &&
+        /\/challenge\/(?:challenge-)?51\b/i.test(targetInput) &&
+        wrongsecretsChallengeSlugMatches(51, p.slug)
+      )
+        return -4;
+      if (
+        /wrongsecrets\.herokuapp\.com/i.test(origin) &&
+        /\/challenge\/(?:challenge-)?52\b/i.test(targetInput) &&
+        wrongsecretsChallengeSlugMatches(52, p.slug)
+      )
+        return -4;
+      if (
+        /wrongsecrets\.herokuapp\.com/i.test(origin) &&
         /\/challenge\/(?:challenge-)?53\b/i.test(targetInput) &&
         wrongsecretsChallengeSlugMatches(53, p.slug)
+      )
+        return -4;
+      if (
+        /wrongsecrets\.herokuapp\.com/i.test(origin) &&
+        /\/challenge\/(?:challenge-)?54\b/i.test(targetInput) &&
+        wrongsecretsChallengeSlugMatches(54, p.slug)
       )
         return -4;
       if (
@@ -16180,6 +16238,12 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /vapi\.tools\.escape\.tech/i.test(origin) &&
         /\/identity\/api\/auth\/login/i.test(targetInput) &&
         p.slug.startsWith("vapi-identity-auth-login")
+      )
+        return -4;
+      if (
+        /crapi2?\.apisec\.ai/i.test(origin) &&
+        /\/auth\/v2\/check-otp/i.test(targetInput) &&
+        p.slug.startsWith("crapi-check-otp")
       )
         return -4;
       if (

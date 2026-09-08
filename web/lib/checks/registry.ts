@@ -109248,13 +109248,20 @@ const crapiCheckOtpRouteLiveOracle: Rule = async (ctx) => {
   if (!/\/check-otp/i.test(pageUrl)) return NEGATIVE;
   const result = await crapiOtpBruteforceLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
+  const otpPath = (() => {
+    try {
+      return new URL(pageUrl).pathname;
+    } catch {
+      return pageUrl;
+    }
+  })();
   return {
     fired: true,
     confidence: result.confidence,
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: "crAPI /identity/api/auth/v3/check-otp route scan — legacy v2/check-otp lacks rate limiting that v3 enforces after ~10 attempts — OTP brute-force oracle (API2)"
+      note: `crAPI ${otpPath} route scan — legacy v2/check-otp lacks rate limiting that v3 enforces after ~10 attempts — OTP brute-force oracle (API2)`
     }
   };
 };
