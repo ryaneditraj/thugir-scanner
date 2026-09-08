@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-08T12:05:00.000Z",
+  "updated_at": "2026-09-08T13:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://seclab.vercel.app/labs/path-traversal",
+      "source": "DaniSam-STU/security-lab — path traversal / LFI lab page with live exploit UI (seclab.vercel.app; web search 13 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://seclab.vercel.app/labs/open-redirect",
+      "source": "DaniSam-STU/security-lab — open redirect lab page with live exploit UI (seclab.vercel.app; web search 13 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://nosql-injection-lab.vercel.app/",
+      "source": "NoSQL injection practice lab — MongoDB operator injection auth bypass (Vercel OSS deploy; web search 13 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://sql-injection-lab.vercel.app/",
+      "source": "layer-zero-unlv/sql-injection-lab — Flask SQLi auth-bypass practice lab (GitHub homepage; web search 13 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/my-account/change-password",
+      "source": "PortSwigger Gin & Juice Shop — change-password account takeover oracle sibling to change-email (VWAD gin-juice-shop; web search 13 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://www.qabash.com/api/tools/sample-api/users",
       "source": "QA Bash API Playground — REST users CRUD + role field mass-assignment oracle (qabash.com/learning/api-playground; web search 12 UTC discovery)",
