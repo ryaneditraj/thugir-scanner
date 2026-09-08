@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-08T05:22:00.000Z",
+  "updated_at": "2026-09-08T06:08:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://csrf-xss-demo.vercel.app/",
+      "source": "CSRF/XSS React demo — live CSRF fund-transfer + reflected XSS execute surface (web search 06 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://nextjs-cve-hackerone.vercel.app/",
+      "source": "Vercel CVE-2025-66478 HackerOne demo — platform protection bypass lab (web search 06 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/sqli",
+      "source": "AI Security Platform — auth-gated SQLi challenge module (queue gap 06 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/xss",
+      "source": "AI Security Platform — stored/reflected XSS challenge module (queue gap 06 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/api/settings/css",
+      "source": "ctfsec/pwnshop — prototype pollution via CSS settings API oracle PWN-039 (queue gap 06 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://sekumart.sekuripy.hr/login.php",
       "source": "SekuriPy SekuMart sqlmap playground — auth-bypass SQLi oracle POST /login.php (OpenAPI 05 UTC discovery)",

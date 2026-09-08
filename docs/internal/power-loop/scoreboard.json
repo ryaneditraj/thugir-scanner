@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-08T05:32:00.000Z",
+  "updated_at": "2026-09-08T06:12:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,19 @@
       ]
     }
   },
-  "total_sites_scanned": 2834,
-  "total_findings": 28920,
+  "total_sites_scanned": 2842,
+  "total_findings": 29092,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2008,
-  "discovery_findings": 23305,
+  "discovery_urls_added": 2013,
+  "discovery_findings": 23425,
   "improvements_shipped": 1608,
-  "last_run": "2026-09-08T05:32:00.000Z",
+  "last_run": "2026-09-08T06:12:00.000Z",
   "last_run_summary": {
-    "hour_utc": "05",
+    "hour_utc": "06",
     "benchmark": {
-      "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "primary_error": "https://juice-shop.herokuapp.com scan timeout after 600000ms",
+      "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 52,
       "oracle_recall": "6/6",
       "gap": [],
@@ -49,36 +48,38 @@
           ]
         }
       },
-      "note": "Primary Heroku cold-start timeout; staging fallback stable 6/6 (52 findings, 39 juice-shop live oracles incl secret-resend + iac-terraform-tls-key)"
+      "note": "Primary Heroku stable 6/6 first-pass recall (52 findings, 39 juice-shop live oracles incl secret-resend + iac-terraform-tls-key)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 138,
-      "focus": "SekuMart OpenAPI tail (login/apiv1/category) + vAPI api7/api8 login; queue drain crAPI2 v2/check-otp + wrongsecrets 2/8",
+      "urls_scanned": 7,
+      "findings": 120,
+      "focus": "csrf-xss-demo + nextjs-cve-hackerone + AI Security Platform sqli/xss + pwnshop CSS settings API; queue drain ssrf.vulnlab.dev metadata-azure/blind",
       "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (52 findings, primary Heroku timeout)",
-      "sekumart.sekuripy.hr/login.php: 19 findings — OpenAPI sqlmap playground auth-bypass surface",
-      "sekumart.sekuripy.hr/apiv1.php: 19 findings — JSON-body SQLi oracle",
-      "vapi.apisec.ai/vapi/api7/user/login: 17 findings — vAPI broken-auth live oracles",
-      "crapi2.apisec.ai/identity/api/auth/v2/check-otp: 9 findings — v2 OTP brute-force route oracle",
-      "wrongsecrets.herokuapp.com/challenge/8: 19 findings — challenge-8 logging route live oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, 39 live oracles, primary Heroku stable)",
+      "csrf-xss-demo.vercel.app: 6 findings — DOM eval XSS + hardcoded demo credentials",
+      "nextjs-cve-hackerone.vercel.app: 9 findings — CVE-2025-66478 platform protection bypass lab",
+      "ai-security-platform-iota.vercel.app/challenges/sqli: 12 findings — auth-gated SQLi challenge route",
+      "ai-security-platform-iota.vercel.app/challenges/xss: 12 findings — XSS challenge route",
+      "pwnshop.ctfsecurity.com/api/settings/css: 48 findings — prototype pollution CSS settings oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "juice-shop.herokuapp.com primary oracle unstable (600s timeout) — prefer staging fallback for recall scoring",
+      "crapi.lab.pentest-forge.com unreachable from cloud agent — DNS/connectivity",
       "demo.owasp-juice.shop/rest/basket still 503 — basket BOLA oracle blocked"
     ]
   },
   "discovery_highlights": {
-    "juice-shop-staging.herokuapp.com": 52,
-    "sekumart.sekuripy.hr/login.php": 19,
-    "sekumart.sekuripy.hr/apiv1.php": 19,
-    "vapi.apisec.ai/vapi/api7/user/login": 17,
-    "wrongsecrets.herokuapp.com/challenge/8": 19,
-    "crapi2.apisec.ai/identity/api/auth/v2/check-otp": 9
+    "juice-shop.herokuapp.com": 52,
+    "pwnshop.ctfsecurity.com/api/settings/css": 48,
+    "ssrf.vulnlab.dev/metadata-azure": 17,
+    "ssrf.vulnlab.dev/blind": 16,
+    "ai-security-platform-iota.vercel.app/challenges/sqli": 12,
+    "ai-security-platform-iota.vercel.app/challenges/xss": 12,
+    "nextjs-cve-hackerone.vercel.app": 9,
+    "csrf-xss-demo.vercel.app": 6
   }
 }
