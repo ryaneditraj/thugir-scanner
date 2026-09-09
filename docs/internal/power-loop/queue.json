@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-09T19:15:00.000Z",
+  "updated_at": "2026-09-09T20:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://preview.owasp-juice.shop/rest/basket/1",
+      "source": "Official preview.owasp-juice.shop — basket BOLA oracle GET /rest/basket/:id (benchmarks.json fallback_urls; web search 20 UTC discovery)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://preview.owasp-juice.shop/rest/products/search?q=test",
+      "source": "Official preview.owasp-juice.shop — SQLi search oracle GET /rest/products/search (Pwning Juice Shop companion; web search 20 UTC discovery)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://brokencrystals.com/api/render?url=https://example.com",
+      "source": "NeuraLegion/brokencrystals — SSRF render oracle GET /api/render url param (README + swagger; web search 20 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnforge-academy.vercel.app/challenges/19",
+      "source": "webspoilt/vulnforge-academy — Level 19 RCE command-injection SPA route (GitHub README Nightmare tier; web search 20 UTC discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/xss",
+      "source": "AI Security Platform — client-side XSS challenge demo (14-challenge index sidebar; web search 20 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://sekumart.sekuripy.hr/reviews.php",
       "source": "SekuriPy SekuMart sqlmap playground — stored XSS via product reviews POST /reviews.php (help.php attack index; web search 19 UTC discovery)",
