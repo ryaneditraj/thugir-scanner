@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-09T09:05:00.000Z",
+  "updated_at": "2026-09-09T10:05:00.000Z",
   "priority_discovery_urls": [
     {
       "url": "https://pentest-fauxbank.vercel.app/api/profile",
@@ -12105,6 +12105,31 @@
     {
       "url": "https://fvb.vchan.in/api/transfers/1",
       "source": "vchan-in/fvb \u2014 First Vulnerable Bank REST BOLA GET /api/transfers/{id} (GitHub README; web search 09 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://urban-vampi-production.up.railway.app/users/v1/name1",
+      "source": "erev0s/VAmPI \u2014 GET /users/v1/{username} BOLA user lookup oracle (urban-VAmPI Railway; web search 10 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://urban-vampi-production.up.railway.app/users/v1/name1/password",
+      "source": "erev0s/VAmPI \u2014 PUT /users/v1/{username}/password BOLA password-change oracle (Medium BOLA write-up; web search 10 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://urban-vampi-production.up.railway.app/users/v1/login",
+      "source": "erev0s/VAmPI \u2014 POST /users/v1/login JWT auth weakness oracle (OWASP API Top 10 lab; web search 10 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://fvb.vchan.in/api/users/1",
+      "source": "vchan-in/fvb \u2014 First Vulnerable Bank REST user profile BOLA GET /api/users/{id} (GitHub README apidoc.fvb.vchan.in; web search 10 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://fvb.vchan.in/api/transactions/1",
+      "source": "vchan-in/fvb \u2014 First Vulnerable Bank transaction history BOLA GET /api/transactions/{id} (GitHub README; web search 10 UTC discovery)",
       "auth": "public_demo"
     }
   ]
