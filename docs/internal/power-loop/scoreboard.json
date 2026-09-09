@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-09T14:02:11.000Z",
+  "updated_at": "2026-09-09T14:25:04.671Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 3159,
-  "total_findings": 35034,
+  "total_sites_scanned": 3166,
+  "total_findings": 35136,
   "critical_findings": 57,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2186,
-  "discovery_findings": 27162,
+  "discovery_urls_added": 2191,
+  "discovery_findings": 27264,
   "improvements_shipped": 1691,
-  "last_run": "2026-09-09T14:02:11.000Z",
+  "last_run": "2026-09-09T14:25:04.671Z",
   "last_run_summary": {
     "hour_utc": "14",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 51,
+      "oracle_findings": 52,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 591,
+      "probes_run": 589,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,35 +48,42 @@
           ]
         }
       },
-      "note": "Primary Heroku stable 6/6 (51 findings, 37 live oracles) — thinner than typical 53 pass; secret-resend slug absent"
+      "note": "Primary Heroku stable 6/6 (52 findings, 40 live oracles) — secret-resend present; probes_run=589"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 4,
-      "findings": 21,
-      "focus": "vAPI api6/api10 tier-hub suppression + brokencrystals /api/file/aws generic bleed + fauxbank API runner hub filter validation",
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 102,
+      "focus": "vAPI route oracles api2/details + api7/key + api8/secret + api4/user + api10/flag + queue drain qabash secure + vulnbank merchants/login + duck-store users/",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, 37 live oracles, gap=[])",
-      "vapi.apisec.ai/vapi/api6/user: 16→4 findings — vapi-tier-hub-oracle-suppression (+vapi-api6-mass-assignment-live-oracle retained)",
-      "vapi.apisec.ai/vapi/api10/user: 16→4 findings — vapi-tier-hub-oracle-suppression (+vapi-api10-logging-live-oracle retained)",
-      "brokencrystals.com/api/file/aws: 35→11 findings — brokencrystals-file-route-generic-oracle-suppression (+brokencrystals-file-aws-route-live-oracle retained)",
-      "pentest-fauxbank.vercel.app/api/accounts/1: 7→2 findings — fauxbank-api-runner-hub-filter-reinforcement (-generic bleed; fauxbank oracles intermittent on Vercel checkpoint)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, 40 live oracles, gap=[])",
+      "vapi.apisec.ai/vapi/api2/user/details: 16 findings — vAPI API2 broken-auth BOLA surface",
+      "vapi.apisec.ai/vapi/api7/user/key: 16 findings — vAPI API7 CORS misconfig surface",
+      "vapi.apisec.ai/vapi/api8/user/secret: 16 findings — vAPI API8 injection surface",
+      "vapi.apisec.ai/vapi/api4/user: 17 findings — vAPI API4 excessive data exposure surface",
+      "vapi.apisec.ai/vapi/api10/user/flag: 16 findings — vAPI API10 logging failure surface",
+      "vulnbank.org/api/v1/merchants/login: 9 findings — merchant auth bypass oracle",
+      "duck-store.escape.tech/api/v1/users/: 6 findings — thin BOLA pass"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "benchmark thin pass — 51 findings vs typical 53; secret-resend slug still absent",
-      "brokencrystals /api/file/aws metadata SSRF needs cloud-metadata oracle validation beyond httpbin probe",
-      "priority tail still pending: duck-store MCP/cart, ginandjuice change-address/delete, vAPI serversurfer/jwt tier-hub filters"
+      "vAPI route scans share host-level oracles — route-specific api2/api4/api7/api8/api10 live oracles may need dedicated corpus entries",
+      "duck-store /api/v1/users/ thin pass (6 findings) — may need auth session for BOLA proof",
+      "vulnbank merchants/login (9 findings) — merchant auth bypass oracle may need follow-up on /payments routes",
+      "parallel 14 UTC validation run shipped 3 improvements (vapi-tier-hub suppression, brokencrystals file-route filter, fauxbank hub filter)"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 51,
-    "brokencrystals.com/api/file/aws": 11,
-    "vapi.apisec.ai/vapi/api6/user": 4,
-    "vapi.apisec.ai/vapi/api10/user": 4,
-    "pentest-fauxbank.vercel.app/api/accounts/1": 2
+    "vapi.apisec.ai/vapi/api2/user/details": 16,
+    "vapi.apisec.ai/vapi/api7/user/key": 16,
+    "vapi.apisec.ai/vapi/api8/user/secret": 16,
+    "vapi.apisec.ai/vapi/api4/user": 17,
+    "vapi.apisec.ai/vapi/api10/user/flag": 16,
+    "vulnbank.org/api/v1/merchants/login": 9,
+    "duck-store.escape.tech/api/v1/users/": 6,
+    "www.qabash.com/api/tools/sample-api/secure": 6
   }
 }

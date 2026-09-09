@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-09T13:05:17.046Z",
+  "updated_at": "2026-09-09T14:05:01.588Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://vapi.apisec.ai/vapi/api2/user/details",
+      "source": "roottusk/vAPI public instance — broken auth BOLA oracle GET /api2/user/details returns all users (vapi.apisec.ai swagger; web search 14 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vapi.apisec.ai/vapi/api7/user/key",
+      "source": "roottusk/vAPI public instance — CORS misconfig oracle GET /api7/user/key (vapi.apisec.ai swagger; web search 14 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vapi.apisec.ai/vapi/api8/user/secret",
+      "source": "roottusk/vAPI public instance — injection oracle GET /api8/user/secret (vapi.apisec.ai swagger; web search 14 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vapi.apisec.ai/vapi/api4/user",
+      "source": "roottusk/vAPI public instance — excessive data exposure oracle GET /api4/user (vapi.apisec.ai swagger; web search 14 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vapi.apisec.ai/vapi/api10/user/flag",
+      "source": "roottusk/vAPI public instance — insufficient logging oracle GET /api10/user/flag (vapi.apisec.ai swagger; web search 14 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://brokencrystals.com/api/file?path=https://httpbin.org/get",
       "source": "NeuraLegion/brokencrystals — SSRF oracle GET /api/file external fetch (README + context7; web search 13 UTC discovery)",
