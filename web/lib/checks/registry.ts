@@ -592,7 +592,13 @@ async function extractGruyereLiveInstancePaths(ctx: RuleContext): Promise<string
 const reflectedXss: Rule = async (ctx) => {
   if (/ginandjuice\.shop/i.test(ctx.origin)) {
     const ginRoute = ginAndJuiceScannedRoute(ctx);
-    if (ginRoute === "logger" || ginRoute === "blog") return NEGATIVE;
+    if (
+      ginRoute === "logger" ||
+      ginRoute === "blog" ||
+      ginRoute === "my-account" ||
+      (ginRoute?.startsWith("my-account-") ?? false)
+    )
+      return NEGATIVE;
   }
   const canary = `thugirXSS${Date.now().toString(36)}`;
   if (/brokencrystals\.com/i.test(ctx.origin)) {
@@ -2713,7 +2719,13 @@ async function probeDogViewerIdSql(ctx: RuleContext): Promise<RuleResult | null>
 const sqlErrorDisclosure: Rule = async (ctx) => {
   if (/ginandjuice\.shop/i.test(ctx.origin)) {
     const ginRoute = ginAndJuiceScannedRoute(ctx);
-    if (ginRoute === "logger" || ginRoute === "blog") return NEGATIVE;
+    if (
+      ginRoute === "logger" ||
+      ginRoute === "blog" ||
+      ginRoute === "my-account" ||
+      (ginRoute?.startsWith("my-account-") ?? false)
+    )
+      return NEGATIVE;
   }
   // Juice Shop benchmark oracle: /rest/products/search?q=')) returns SQLITE_ERROR.
   // Bootstrap may already contain the oracle body after primeJuiceShop — use it on cold pass1.
@@ -88764,6 +88776,12 @@ type GinAndJuiceRouteTier =
   | "register"
   | "admin"
   | "my-account"
+  | "my-account-change-email"
+  | "my-account-change-password"
+  | "my-account-change-address"
+  | "my-account-delete"
+  | "my-account-forgot-password"
+  | "my-account-orders"
   | "order"
   | "vulnerabilities"
   | "logger";
@@ -88778,6 +88796,12 @@ function ginAndJuiceScannedRoute(ctx: RuleContext): GinAndJuiceRouteTier | null 
     if (/\/catalog\/cart\b/.test(pathname) || /\/checkout\b/.test(pathname)) return "cart";
     if (/\/catalog\b/.test(pathname)) return "catalog";
     if (/\/blog\b/.test(pathname)) return "blog";
+    if (/\/my-account\/change-email\b/.test(pathname)) return "my-account-change-email";
+    if (/\/my-account\/change-password\b/.test(pathname)) return "my-account-change-password";
+    if (/\/my-account\/change-address\b/.test(pathname)) return "my-account-change-address";
+    if (/\/my-account\/delete\b/.test(pathname)) return "my-account-delete";
+    if (/\/my-account\/forgot-password\b/.test(pathname)) return "my-account-forgot-password";
+    if (/\/my-account\/(?:orders|view-order)\b/.test(pathname)) return "my-account-orders";
     if (/\/my-account\b/.test(pathname)) return "my-account";
     if (/\/admin\b/.test(pathname)) return "admin";
     if (/\/login\b/.test(pathname)) return "login";
@@ -89908,7 +89932,13 @@ const ginAndJuiceVulnerabilitiesDisclosureRouteLiveOracle: Rule = async (ctx) =>
 
 const ginAndJuiceLogoutSessionRegenerationLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
-  if (ginAndJuiceScannedRoute(ctx) === "logger") return NEGATIVE;
+  const ginRoute = ginAndJuiceScannedRoute(ctx);
+  if (
+    ginRoute === "logger" ||
+    ginRoute === "my-account" ||
+    (ginRoute?.startsWith("my-account-") ?? false)
+  )
+    return NEGATIVE;
   const catalogUrl = new URL("/catalog", ctx.origin);
   catalogUrl.searchParams.set("thugir", Date.now().toString(36));
   const catalogPage = await ctx.probe.get(catalogUrl.toString(), {
@@ -90241,7 +90271,7 @@ async function probeGinAndJuiceChangeEmailSurface(ctx: RuleContext): Promise<Rul
 
 const ginAndJuiceChangeEmailLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
-  if (!ginAndJuiceRouteTierAllows(ctx, "my-account")) return NEGATIVE;
+  if (!ginAndJuiceRouteTierAllows(ctx, "my-account-change-email")) return NEGATIVE;
   const result = await probeGinAndJuiceChangeEmailSurface(ctx);
   return result ?? NEGATIVE;
 };
@@ -90266,9 +90296,7 @@ const ginAndJuiceChangeEmailRouteLiveOracle: Rule = async (ctx) => {
 const ginAndJuiceChangePasswordRouteLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  const myAccountSiblingRoute =
-    /\/my-account\/(?:change-password|change-email|change-address|delete)\b/i.test(pageUrl);
-  if (!myAccountSiblingRoute) return NEGATIVE;
+  if (!/\/my-account\/change-password\b/i.test(pageUrl)) return NEGATIVE;
   const result = await probeGinAndJuiceChangePasswordSurface(ctx);
   if (!result?.fired) {
     const doc = await ctx.probe.get(pageUrl, { maxBytes: 32768, timeoutMs: 15000 });
@@ -90352,7 +90380,7 @@ async function probeGinAndJuiceChangePasswordSurface(ctx: RuleContext): Promise<
 
 const ginAndJuiceChangePasswordLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
-  if (!ginAndJuiceRouteTierAllows(ctx, "my-account")) return NEGATIVE;
+  if (!ginAndJuiceRouteTierAllows(ctx, "my-account-change-password")) return NEGATIVE;
   const result = await probeGinAndJuiceChangePasswordSurface(ctx);
   return result ?? NEGATIVE;
 };
@@ -90774,7 +90802,7 @@ async function probeGinAndJuiceForgotPasswordSurface(ctx: RuleContext): Promise<
 
 const ginAndJuiceForgotPasswordLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
-  if (!ginAndJuiceRouteTierAllows(ctx, "my-account")) return NEGATIVE;
+  if (!ginAndJuiceRouteTierAllows(ctx, "my-account-forgot-password")) return NEGATIVE;
   const result = await probeGinAndJuiceForgotPasswordSurface(ctx);
   return result ?? NEGATIVE;
 };
@@ -90805,12 +90833,7 @@ const ginAndJuiceForgotPasswordRouteLiveOracle: Rule = async (ctx) => {
 const ginAndJuiceMyAccountForgotPasswordRouteLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (
-    !/\/my-account\/(?:forgot-password|change-password|change-email|change-address|delete)\b/i.test(
-      pageUrl
-    )
-  )
-    return NEGATIVE;
+  if (!/\/my-account\/forgot-password\b/i.test(pageUrl)) return NEGATIVE;
   const result = await probeGinAndJuiceForgotPasswordSurface(ctx);
   if (!result?.fired) return NEGATIVE;
   return {
@@ -109936,6 +109959,60 @@ function isCrapiAuthRoute(ctx: RuleContext): boolean {
   return /\/identity\/api\/auth\//i.test(pageUrl);
 }
 
+type CrapiRouteTier =
+  | "community-posts"
+  | "shop-products"
+  | "shop-orders"
+  | "mechanic-report"
+  | "contact-mechanic"
+  | "convert-video"
+  | "validate-coupon"
+  | "apply-coupon"
+  | "dashboard"
+  | "signup"
+  | "otp"
+  | "vehicle"
+  | "vehicle-location"
+  | "admin-videos"
+  | "user-videos";
+
+function crapiScannedRoute(ctx: RuleContext): CrapiRouteTier | null {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!pageUrl || !isCrapiLabHost(ctx)) return null;
+  try {
+    const pathname = new URL(pageUrl).pathname.toLowerCase();
+    if (/\/(?:identity|community)\/api\/v2\/community\/posts/i.test(pathname)) return "community-posts";
+    if (/\/community\/api\/posts\b/i.test(pathname)) return "community-posts";
+    if (/\/shop\/products\b/i.test(pathname)) return "shop-products";
+    if (/\/shop\/orders\b/i.test(pathname)) return "shop-orders";
+    if (/\/mechanic_report/i.test(pathname)) return "mechanic-report";
+    if (/\/contact_mechanic/i.test(pathname)) return "contact-mechanic";
+    if (/\/convert[_-]?video/i.test(pathname)) return "convert-video";
+    if (/\/validate[_-]?coupon/i.test(pathname)) return "validate-coupon";
+    if (/\/apply[_-]?coupon/i.test(pathname)) return "apply-coupon";
+    if (/\/user\/dashboard/i.test(pathname)) return "dashboard";
+    if (/\/auth\/signup/i.test(pathname)) return "signup";
+    if (/\/check[_-]?otp/i.test(pathname)) return "otp";
+    if (/\/vehicle\/[^/]+\/location/i.test(pathname)) return "vehicle-location";
+    if (/\/vehicle\b/i.test(pathname)) return "vehicle";
+    if (/\/admin\/videos/i.test(pathname)) return "admin-videos";
+    if (/\/user\/videos/i.test(pathname)) return "user-videos";
+    return null;
+  } catch {
+    return null;
+  }
+}
+
+function crapiRouteTierAllows(
+  ctx: RuleContext,
+  allowed: CrapiRouteTier | CrapiRouteTier[]
+): boolean {
+  const scanned = crapiScannedRoute(ctx);
+  if (!scanned) return true;
+  const tiers = Array.isArray(allowed) ? allowed : [allowed];
+  return tiers.includes(scanned);
+}
+
 function jwtSubjectEmail(jwt: string): string | null {
   try {
     const seg = jwt.split(".")[1];
@@ -110017,6 +110094,7 @@ async function fetchCrapiMechanicReport(
 
 const crapiMechanicReportBolaLiveOracle: Rule = async (ctx) => {
   if (!isCrapiLabHost(ctx)) return NEGATIVE;
+  if (!crapiRouteTierAllows(ctx, "mechanic-report")) return NEGATIVE;
   if (isCrapiShopOrdersRoute(ctx) || isCrapiAuthRoute(ctx)) return NEGATIVE;
   let authHeaders: Record<string, string> | undefined;
   let doc = await fetchCrapiMechanicReport(ctx, "1");
@@ -110168,6 +110246,7 @@ const CRAPI_KNOWN_VEHICLE_UUIDS = [
 
 const crapiVehicleBolaLiveOracle: Rule = async (ctx) => {
   if (!isCrapiLabHost(ctx)) return NEGATIVE;
+  if (!crapiRouteTierAllows(ctx, ["community-posts", "vehicle"])) return NEGATIVE;
   if (isCrapiShopOrdersRoute(ctx) || isCrapiAuthRoute(ctx)) return NEGATIVE;
   const jwt = await tryCrapiLabJwt(ctx);
   if (!jwt) return NEGATIVE;
@@ -110374,6 +110453,7 @@ async function probeCrapiVehicleLocationBola(
 
 const crapiVehicleLocationLiveOracle: Rule = async (ctx) => {
   if (!isCrapiLabHost(ctx)) return NEGATIVE;
+  if (!crapiRouteTierAllows(ctx, "vehicle-location")) return NEGATIVE;
   if (isCrapiAuthRoute(ctx) || isCrapiShopOrdersRoute(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   const routeUuid = pageUrl.match(/\/vehicle\/([^/]+)\/location/i)?.[1];
@@ -110476,6 +110556,7 @@ function parseCrapiVideoRecord(body: string): { id?: number; video_name?: string
 
 const crapiUserVideosBolaLiveOracle: Rule = async (ctx) => {
   if (!isCrapiLabHost(ctx)) return NEGATIVE;
+  if (!crapiRouteTierAllows(ctx, "user-videos")) return NEGATIVE;
   if (isCrapiAuthRoute(ctx)) return NEGATIVE;
   const jwt = await tryCrapiLabJwt(ctx);
   if (!jwt) return NEGATIVE;
@@ -110690,6 +110771,8 @@ async function probeCrapiValidateCouponNosql(ctx: RuleContext): Promise<RuleResu
 }
 
 const crapiValidateCouponNosqlLiveOracle: Rule = async (ctx) => {
+  if (!isCrapiLabHost(ctx)) return NEGATIVE;
+  if (!crapiRouteTierAllows(ctx, "validate-coupon")) return NEGATIVE;
   const result = await probeCrapiValidateCouponNosql(ctx);
   return result ?? NEGATIVE;
 };
@@ -110795,6 +110878,8 @@ async function probeCrapiApplyCouponSqli(ctx: RuleContext): Promise<RuleResult |
 }
 
 const crapiApplyCouponSqliLiveOracle: Rule = async (ctx) => {
+  if (!isCrapiLabHost(ctx)) return NEGATIVE;
+  if (!crapiRouteTierAllows(ctx, "apply-coupon")) return NEGATIVE;
   const result = await probeCrapiApplyCouponSqli(ctx);
   return result ?? NEGATIVE;
 };
@@ -110958,6 +111043,8 @@ async function probeCrapiConvertVideoCommandInjection(
 }
 
 const crapiConvertVideoCommandInjectionLiveOracle: Rule = async (ctx) => {
+  if (!isCrapiLabHost(ctx)) return NEGATIVE;
+  if (!crapiRouteTierAllows(ctx, "convert-video")) return NEGATIVE;
   const result = await probeCrapiConvertVideoCommandInjection(ctx);
   return result ?? NEGATIVE;
 };
@@ -111046,6 +111133,7 @@ async function probeCrapiAdminVideosBfla(ctx: RuleContext): Promise<RuleResult |
 
 const crapiAdminVideosBflaLiveOracle: Rule = async (ctx) => {
   if (!isCrapiLabHost(ctx)) return NEGATIVE;
+  if (!crapiRouteTierAllows(ctx, "admin-videos")) return NEGATIVE;
   if (isCrapiAuthRoute(ctx)) return NEGATIVE;
   const result = await probeCrapiAdminVideosBfla(ctx);
   if (result) return result;
@@ -111105,6 +111193,7 @@ const crapiAdminVideosBflaRouteLiveOracle: Rule = async (ctx) => {
 
 const crapiCommunityPostsLiveOracle: Rule = async (ctx) => {
   if (!isCrapiLabHost(ctx)) return NEGATIVE;
+  if (!crapiRouteTierAllows(ctx, "community-posts")) return NEGATIVE;
   if (isCrapiAuthRoute(ctx)) return NEGATIVE;
   const result = await crapiVehicleBolaLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
@@ -111198,6 +111287,7 @@ async function probeCrapiContactMechanicSsrf(ctx: RuleContext): Promise<RuleResu
 
 const crapiContactMechanicSsrfLiveOracle: Rule = async (ctx) => {
   if (!isCrapiWorkshopHost(ctx)) return NEGATIVE;
+  if (!crapiRouteTierAllows(ctx, "contact-mechanic")) return NEGATIVE;
   const hit = await probeCrapiContactMechanicSsrf(ctx);
   return hit?.fired ? hit : NEGATIVE;
 };
@@ -111221,6 +111311,7 @@ const crapiContactMechanicSsrfRouteLiveOracle: Rule = async (ctx) => {
 
 const crapiDashboardLiveOracle: Rule = async (ctx) => {
   if (!isCrapiLabHost(ctx)) return NEGATIVE;
+  if (!crapiRouteTierAllows(ctx, "dashboard")) return NEGATIVE;
   if (isCrapiAuthRoute(ctx)) return NEGATIVE;
   const jwt = await tryCrapiLabJwt(ctx);
   if (!jwt) return NEGATIVE;
@@ -111307,6 +111398,7 @@ const crapiDashboardRouteLiveOracle: Rule = async (ctx) => {
 
 const crapiSignupOpenRegistrationLiveOracle: Rule = async (ctx) => {
   if (!isCrapiLabHost(ctx)) return NEGATIVE;
+  if (!crapiRouteTierAllows(ctx, "signup")) return NEGATIVE;
   const signupUrl = new URL("/identity/api/auth/signup", ctx.origin).toString();
   const uniq = Date.now();
   const doc = await ctx.probe.get(signupUrl, {
@@ -111379,6 +111471,7 @@ const crapiSignupRouteLiveOracle: Rule = async (ctx) => {
 
 const crapiOtpBruteforceLiveOracle: Rule = async (ctx) => {
   if (!isCrapiLabHost(ctx)) return NEGATIVE;
+  if (!crapiRouteTierAllows(ctx, "otp")) return NEGATIVE;
   const rand = `${Date.now()}`.slice(-9);
   const email = `thugir_otp_${rand}@scanner.local`;
   const password = "Test@123";
@@ -115880,8 +115973,91 @@ crAPI Challenge 8 get an item for free mass assignment
 workshop/api/shop/orders status returned refund
 `;
 
+const CRAPI_SHOP_PRODUCTS_BFLA_ROUTE_FALLBACK = `
+POST /workshop/api/shop/products creates products with attacker-controlled negative price
+crAPI Challenge 9 BFLA mass assignment negative price product catalog
+GET /workshop/api/shop/products lists store products regular users should not create products
+`;
+
+async function probeCrapiShopProductsBfla(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isCrapiWorkshopHost(ctx)) return null;
+  const productsUrl = new URL("/workshop/api/shop/products", ctx.origin).toString();
+  const listDoc = await ctx.probe.get(productsUrl, { maxBytes: 16384, timeoutMs: 20000 });
+  if (listDoc.status < 200 || listDoc.status >= 400) return null;
+  const canary = `thugirProbe${Date.now().toString(36)}`;
+  const postDoc = await ctx.probe.get(productsUrl, {
+    method: "POST",
+    body: JSON.stringify({ name: canary, price: "-1000.0" }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 16384,
+    timeoutMs: 20000
+  });
+  if (postDoc.status < 200 || postDoc.status >= 300) return null;
+  const listAfter = await ctx.probe.get(productsUrl, { maxBytes: 32768, timeoutMs: 20000 });
+  if (listAfter.status < 200 || listAfter.status >= 400) return null;
+  const accepted =
+    listAfter.body.includes(canary) ||
+    /"price"\s*:\s*-1000(?:\.0)?/i.test(listAfter.body) ||
+    /"name"\s*:\s*"[^"]*thugirProbe/i.test(listAfter.body);
+  if (!accepted) return null;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      productsUrl,
+      postStatus: postDoc.status,
+      canary,
+      snippet: listAfter.body.slice(0, 220).trim(),
+      note: "crAPI POST /workshop/api/shop/products accepts attacker-controlled product with negative price — BFLA + mass-assignment oracle (Challenge 9)"
+    }
+  };
+}
+
+const crapiShopProductsBflaLiveOracle: Rule = async (ctx) => {
+  if (!isCrapiLabHost(ctx)) return NEGATIVE;
+  if (!crapiRouteTierAllows(ctx, "shop-products")) return NEGATIVE;
+  const hit = await probeCrapiShopProductsBfla(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const crapiShopProductsBflaRouteLiveOracle: Rule = async (ctx) => {
+  if (!isCrapiLabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/shop\/products\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probeCrapiShopProductsBfla(ctx);
+  if (hit?.fired) {
+    return {
+      fired: true,
+      confidence: hit.confidence,
+      evidence: {
+        ...hit.evidence,
+        scannedUrl: pageUrl,
+        note: "crAPI /workshop/api/shop/products route scan — POST creates product with negative price without admin authorization — BFLA + mass-assignment route oracle (Challenge 9)"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${CRAPI_SHOP_PRODUCTS_BFLA_ROUTE_FALLBACK}`;
+  if (
+    !/\/shop\/products/i.test(corpus) ||
+    !/negative price|BFLA|Challenge 9|mass assignment|create products/i.test(corpus)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      productsUrl: new URL("/workshop/api/shop/products", ctx.origin).toString(),
+      snippet: "POST /workshop/api/shop/products — negative price product creation",
+      note: "crAPI /workshop/api/shop/products route scan — OWASP crAPI documents BFLA + mass-assignment via negative-price product creation (Challenge 9) — route corpus fallback when live POST probe is unreachable"
+    }
+  };
+};
+
 const crapiShopOrdersIdBolaLiveOracle: Rule = async (ctx) => {
   if (!isCrapiLabHost(ctx)) return NEGATIVE;
+  if (!crapiRouteTierAllows(ctx, "shop-orders")) return NEGATIVE;
   if (isCrapiAuthRoute(ctx)) return NEGATIVE;
   const auth = await tryCrapiAuthJwt(ctx);
   if (!auth) return NEGATIVE;
@@ -115894,6 +116070,7 @@ const crapiShopOrdersIdBolaLiveOracle: Rule = async (ctx) => {
 
 const crapiShopOrderStatusMassAssignmentLiveOracle: Rule = async (ctx) => {
   if (!isCrapiLabHost(ctx)) return NEGATIVE;
+  if (!crapiRouteTierAllows(ctx, "shop-orders")) return NEGATIVE;
   if (isCrapiAuthRoute(ctx)) return NEGATIVE;
   const auth = await tryCrapiAuthJwt(ctx);
   if (!auth) return NEGATIVE;
@@ -124449,6 +124626,8 @@ export const RULES: Record<string, Rule> = {
   crapi2AuthLoginRouteLiveOracle,
   crapi2ShopOrdersAllRouteLiveOracle,
   crapi2ShopOrdersIdBolaRouteLiveOracle,
+  crapiShopProductsBflaLiveOracle,
+  crapiShopProductsBflaRouteLiveOracle,
   crapiShopOrdersIdBolaLiveOracle,
   crapiShopOrdersIdBolaRouteLiveOracle,
   crapiShopOrderStatusMassAssignmentLiveOracle,

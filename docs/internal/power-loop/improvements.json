@@ -10175,6 +10175,24 @@
       "slug": "securebank-blog-api-idor-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: secureBankBlogApiIdorRouteLiveOracle matches /api/* paths with FAST-NUCES SecureBank Medium article IDOR corpus fallback when Vercel checkpoint blocks /api/posts/1; securebank-blog.vercel.app/api/posts/1 findings 4→5 (+securebank-blog-api-idor-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-my-account-tier-hub-oracle-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: ginAndJuiceScannedRoute adds my-account sub-tiers (change-email/password/address/delete/forgot-password/orders); sqlErrorDisclosure + reflectedXss skip my-account routes; change-email/password/forgot-password/logout live oracles scoped to matching tier; ginandjuice.shop/my-account/change-address findings 15→7 (-change-email/password/forgot-password/logout +sql-error-disclosure +reflected-xss, +change-address-route retained); /my-account/delete 15→7 (+delete-route retained); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:crapi.apisec.ai",
+      "slug": "crapi-tier-hub-oracle-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: crapiScannedRoute + crapiRouteTierAllows guard 18 live oracles to matching workshop/community/identity tiers; crapi.apisec.ai/workshop/api/shop/products findings 11→5 (-mechanic-report/dashboard/convert-video/validate-coupon/signup/otp/ssrf cross-tier bleed, +shop-products-bfla-route retained); /community/api/v2/community/posts/recent 15→8 (-workshop oracle bleed, +community-posts +vehicle-bola retained); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:crapi.apisec.ai",
+      "slug": "crapi-shop-products-bfla-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /workshop/api/shop/products {name,price:-1000.0} accepted and product appears in GET catalog — BFLA + mass-assignment Challenge 9; crapi.apisec.ai/workshop/api/shop/products findings 11→5 (+crapi-shop-products-bfla-route-live-oracle alongside tier-scoped misconfig); benchmark juice-shop 53 findings 6/6 maintained"
     }
   ]
 }

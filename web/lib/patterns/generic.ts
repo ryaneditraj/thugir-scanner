@@ -51975,6 +51975,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "crapi-shop-products-bfla-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "crAPI shop products BFLA live oracle",
+    description:
+      "POST /workshop/api/shop/products accepts attacker-controlled products with negative prices without admin authorization — the crAPI Challenge 9 BFLA + mass-assignment oracle.",
+    impactOneline:
+      "Writable shop product endpoints let regular users create negative-price items and inflate account balances.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "crapiShopProductsBflaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "crAPI is intentional API security training — restrict product creation to privileged roles in production.",
+      steps: [
+        "Reject POST /workshop/api/shop/products from non-admin callers.",
+        "Validate product price is a positive number server-side.",
+        "Run crAPI only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our POST /workshop/api/shop/products endpoint accepts negative-price products. Show BFLA and mass-assignment remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "crapi-shop-products-bfla-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "crAPI shop products BFLA route live oracle",
+    description:
+      "When scanning /workshop/api/shop/products, POST creates products with negative prices without admin authorization — route-specific crAPI Challenge 9 BFLA oracle.",
+    impactOneline:
+      "Route scans on shop product endpoints should confirm product creation is restricted to administrators.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "crapiShopProductsBflaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "crAPI is intentional API security training — restrict product creation to privileged roles in production.",
+      steps: [
+        "Reject POST /workshop/api/shop/products from non-admin callers.",
+        "Validate product price is a positive number server-side.",
+        "Run crAPI only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /workshop/api/shop/products route scan confirms BFLA via negative-price product creation. Show route-level remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "crapi-shop-order-status-mass-assignment-route-live-oracle",
     platform: "generic",
     category: "Broken access control",

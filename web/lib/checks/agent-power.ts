@@ -186,6 +186,7 @@ function ginAndJuiceReflexionSuppressed(ctx: PowerCtx): boolean {
     /\/catalog\/product\b/i.test(pageUrl) ||
     /\/checkout\b/i.test(pageUrl) ||
     /\/logger\b/i.test(pageUrl) ||
+    /\/my-account\b/i.test(pageUrl) ||
     (/\/cart\b/i.test(pageUrl) && !/\/catalog\/cart\b/i.test(pageUrl))
   );
 }
