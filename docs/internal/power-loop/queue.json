@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-09T18:05:00.000Z",
+  "updated_at": "2026-09-09T19:15:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://sekumart.sekuripy.hr/reviews.php",
+      "source": "SekuriPy SekuMart sqlmap playground — stored XSS via product reviews POST /reviews.php (help.php attack index; web search 19 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://sekumart.sekuripy.hr/cart.php",
+      "source": "SekuriPy SekuMart sqlmap playground — cart coupon SQLi oracle POST /cart.php (help.php injection playground; web search 19 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/reset-password",
+      "source": "OWASP Node Goat — password reset / session-management oracle (nodegoat-websec.herokuapp.com tutorial A2; web search 19 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/supply-chain",
+      "source": "AI Security Platform — supply-chain attack challenge demo (ai-security-platform-iota.vercel.app 14-challenge index; web search 19 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://websec.fr/level23/",
+      "source": "WebSec.fr level 23 — hard-rated PHP filter bypass / RCE training challenge (websec.fr catalog; web search 19 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://brokencrystals.com/api/auth/jwt/weak-key/login",
       "source": "NeuraLegion/brokencrystals — JWT weak-key login chain POST /api/auth/jwt/weak-key/login (swagger-json; power-loop 18 UTC)",
