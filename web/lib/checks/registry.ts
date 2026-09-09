@@ -45821,6 +45821,59 @@ function looksLikeFauxbankLab(origin: string, combined: string, pageUrl?: string
   );
 }
 
+type FauxbankRouteTier =
+  | "accounts"
+  | "transfer"
+  | "profile"
+  | "search"
+  | "support"
+  | "loans"
+  | "admin"
+  | "instructor"
+  | "lab"
+  | "scanner"
+  | "auth-login"
+  | "transactions"
+  | "settings";
+
+function fauxbankScannedRoute(ctx: RuleContext): FauxbankRouteTier | null {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!pageUrl || !/pentest-fauxbank\.vercel\.app|fauxbank/i.test(pageUrl)) return null;
+  try {
+    const pathname = new URL(pageUrl).pathname.toLowerCase();
+    if (/\/api\/accounts/i.test(pathname)) return "accounts";
+    if (/\/api\/transfer/i.test(pathname)) return "transfer";
+    if (/\/api\/profile/i.test(pathname)) return "profile";
+    if (/\/api\/search/i.test(pathname)) return "search";
+    if (/\/api\/support/i.test(pathname)) return "support";
+    if (/\/api\/loans/i.test(pathname)) return "loans";
+    if (/\/api\/auth\/login/i.test(pathname)) return "auth-login";
+    if (/\/admin\b/i.test(pathname)) return "admin";
+    if (/\/instructor\b/i.test(pathname)) return "instructor";
+    if (/\/lab\b/i.test(pathname)) return "lab";
+    if (/\/scanner\b/i.test(pathname)) return "scanner";
+    if (/\/transactions\b/i.test(pathname)) return "transactions";
+    if (/\/settings\b/i.test(pathname)) return "settings";
+    if (/\/profile\b/i.test(pathname)) return "profile";
+    if (/\/transfer\b/i.test(pathname)) return "transfer";
+    if (/\/loans\b/i.test(pathname)) return "loans";
+    if (/\/(?:api\/)?support\b/i.test(pathname)) return "support";
+    return null;
+  } catch {
+    return null;
+  }
+}
+
+function fauxbankRouteTierAllows(
+  ctx: RuleContext,
+  allowed: FauxbankRouteTier | FauxbankRouteTier[]
+): boolean {
+  const scanned = fauxbankScannedRoute(ctx);
+  if (!scanned) return true;
+  const tiers = Array.isArray(allowed) ? allowed : [allowed];
+  return tiers.includes(scanned);
+}
+
 const clientSideFauxbankLabEvidence: Rule = async (ctx) => {
   const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
   const corpus = `${ctx.combined}\n${pageUrl}`;
@@ -45942,6 +45995,7 @@ async function ensureFauxbankAdminSession(ctx: RuleContext): Promise<string | nu
 }
 
 const fauxbankAuthenticatedSqlInjectionProbe: Rule = async (ctx) => {
+  if (!fauxbankRouteTierAllows(ctx, "search")) return NEGATIVE;
   const cookie = await ensureFauxbankSession(ctx);
   if (!cookie) return NEGATIVE;
   const searchUrl = new URL("/api/search", ctx.origin);
@@ -45965,6 +46019,7 @@ const fauxbankAuthenticatedSqlInjectionProbe: Rule = async (ctx) => {
 };
 
 const fauxbankIdorAccountsProbe: Rule = async (ctx) => {
+  if (!fauxbankRouteTierAllows(ctx, ["accounts", "transactions"])) return NEGATIVE;
   const cookie = await ensureFauxbankSession(ctx);
   if (!cookie) return NEGATIVE;
   const ownUrl = new URL("/api/accounts/1001", ctx.origin).toString();
@@ -45992,6 +46047,7 @@ const fauxbankIdorAccountsProbe: Rule = async (ctx) => {
 
 const fauxbankCsrfTransferProbe: Rule = async (ctx) => {
   if (!looksLikeFauxbankLab(ctx.origin, ctx.combined, ctx.scanUrl)) return NEGATIVE;
+  if (!fauxbankRouteTierAllows(ctx, "transfer")) return NEGATIVE;
   const cookie = await ensureFauxbankSession(ctx);
   if (!cookie) return NEGATIVE;
   const ownUrl = new URL("/api/accounts/1001", ctx.origin).toString();
@@ -46021,6 +46077,7 @@ const fauxbankCsrfTransferProbe: Rule = async (ctx) => {
 
 const fauxbankStoredXssSupportProbe: Rule = async (ctx) => {
   if (!looksLikeFauxbankLab(ctx.origin, ctx.combined, ctx.scanUrl)) return NEGATIVE;
+  if (!fauxbankRouteTierAllows(ctx, "support")) return NEGATIVE;
   const cookie = await ensureFauxbankSession(ctx);
   if (!cookie) return NEGATIVE;
   const canary = "thugirXSScanary" + Date.now().toString(36);
@@ -46049,6 +46106,7 @@ const fauxbankStoredXssSupportProbe: Rule = async (ctx) => {
 
 const fauxbankSupportRouteLiveOracle: Rule = async (ctx) => {
   if (!looksLikeFauxbankLab(ctx.origin, ctx.combined, ctx.scanUrl)) return NEGATIVE;
+  if (!fauxbankRouteTierAllows(ctx, "support")) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/(?:api\/)?support\b/i.test(pageUrl)) return NEGATIVE;
   const result = await fauxbankStoredXssSupportProbe(ctx);
@@ -46066,6 +46124,7 @@ const fauxbankSupportRouteLiveOracle: Rule = async (ctx) => {
 
 const fauxbankSearchSqliRouteLiveOracle: Rule = async (ctx) => {
   if (!looksLikeFauxbankLab(ctx.origin, ctx.combined, ctx.scanUrl)) return NEGATIVE;
+  if (!fauxbankRouteTierAllows(ctx, "search")) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/api\/search\b/i.test(pageUrl)) return NEGATIVE;
   const result = await fauxbankAuthenticatedSqlInjectionProbe(ctx);
@@ -46083,6 +46142,7 @@ const fauxbankSearchSqliRouteLiveOracle: Rule = async (ctx) => {
 
 const fauxbankLoansRequestLiveOracle: Rule = async (ctx) => {
   if (!looksLikeFauxbankLab(ctx.origin, ctx.combined, ctx.scanUrl)) return NEGATIVE;
+  if (!fauxbankRouteTierAllows(ctx, "loans")) return NEGATIVE;
   const cookie = await ensureFauxbankSession(ctx);
   if (!cookie) return NEGATIVE;
   const listUrl = new URL("/api/loans", ctx.origin).toString();
@@ -46138,6 +46198,7 @@ const fauxbankLoansRequestLiveOracle: Rule = async (ctx) => {
 
 const fauxbankLoansNegativeAmountLiveOracle: Rule = async (ctx) => {
   if (!looksLikeFauxbankLab(ctx.origin, ctx.combined, ctx.scanUrl)) return NEGATIVE;
+  if (!fauxbankRouteTierAllows(ctx, "loans")) return NEGATIVE;
   const cookie = await ensureFauxbankSession(ctx);
   if (!cookie) return NEGATIVE;
   const loanAmount = -1000 - (Date.now() % 500);
@@ -46179,6 +46240,7 @@ const fauxbankLoansNegativeAmountLiveOracle: Rule = async (ctx) => {
 
 const fauxbankAdminPanelLiveOracle: Rule = async (ctx) => {
   if (!looksLikeFauxbankLab(ctx.origin, ctx.combined, ctx.scanUrl)) return NEGATIVE;
+  if (!fauxbankRouteTierAllows(ctx, "admin")) return NEGATIVE;
   const cookie = await ensureFauxbankAdminSession(ctx);
   if (!cookie) return NEGATIVE;
   const adminUrl = new URL("/admin", ctx.origin).toString();
@@ -46207,6 +46269,7 @@ const fauxbankAdminPanelLiveOracle: Rule = async (ctx) => {
 
 const fauxbankAdminRouteLiveOracle: Rule = async (ctx) => {
   if (!looksLikeFauxbankLab(ctx.origin, ctx.combined, ctx.scanUrl)) return NEGATIVE;
+  if (!fauxbankRouteTierAllows(ctx, "admin")) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/admin\b/i.test(pageUrl)) return NEGATIVE;
   const result = await fauxbankAdminPanelLiveOracle(ctx);
@@ -46223,6 +46286,7 @@ const fauxbankAdminRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const fauxbankInstructorLiveOracle: Rule = async (ctx) => {
+  if (!fauxbankRouteTierAllows(ctx, "instructor")) return NEGATIVE;
   const cookie = await ensureFauxbankAdminSession(ctx);
   if (!cookie) return NEGATIVE;
   const url = new URL("/api/instructor", ctx.origin).toString();
@@ -46245,6 +46309,7 @@ const fauxbankInstructorLiveOracle: Rule = async (ctx) => {
 
 const fauxbankInstructorRouteLiveOracle: Rule = async (ctx) => {
   if (!looksLikeFauxbankLab(ctx.origin, ctx.combined, ctx.scanUrl)) return NEGATIVE;
+  if (!fauxbankRouteTierAllows(ctx, "instructor")) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   let pathname = "";
   try {
@@ -46284,6 +46349,7 @@ const fauxbankInstructorRouteLiveOracle: Rule = async (ctx) => {
 
 const fauxbankLabRouteLiveOracle: Rule = async (ctx) => {
   if (!looksLikeFauxbankLab(ctx.origin, ctx.combined, ctx.scanUrl)) return NEGATIVE;
+  if (!fauxbankRouteTierAllows(ctx, "lab")) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   let pathname = "";
   try {
@@ -46331,6 +46397,7 @@ OWASP severity module evidence remediation
 
 async function fauxbankScannerProbe(ctx: RuleContext): Promise<RuleResult> {
   if (!looksLikeFauxbankLab(ctx.origin, ctx.combined, ctx.scanUrl)) return NEGATIVE;
+  if (!fauxbankRouteTierAllows(ctx, "scanner")) return NEGATIVE;
   let corpus = ctx.combined;
   if (!/Vulnerability scanner|\/api\/scanner/i.test(corpus)) {
     const bundle = await fauxbankSpaBundleCorpus(ctx);
@@ -46357,6 +46424,7 @@ async function fauxbankScannerProbe(ctx: RuleContext): Promise<RuleResult> {
 
 const fauxbankScannerRouteLiveOracle: Rule = async (ctx) => {
   if (!looksLikeFauxbankLab(ctx.origin, ctx.combined, ctx.scanUrl)) return NEGATIVE;
+  if (!fauxbankRouteTierAllows(ctx, "scanner")) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   let pathname = "";
   try {
@@ -57455,6 +57523,7 @@ const pwnshopOtpNotInvalidatedRouteLiveOracle: Rule = async (ctx) => {
 
 const fauxbankProfileSensitiveDataLiveOracle: Rule = async (ctx) => {
   if (!looksLikeFauxbankLab(ctx.origin, ctx.combined, ctx.scanUrl)) return NEGATIVE;
+  if (!fauxbankRouteTierAllows(ctx, ["profile", "settings"])) return NEGATIVE;
   const cookie = await ensureFauxbankSession(ctx);
   if (!cookie) return NEGATIVE;
   const profileUrl = new URL("/api/profile", ctx.origin).toString();
@@ -57482,6 +57551,7 @@ const fauxbankProfileSensitiveDataLiveOracle: Rule = async (ctx) => {
 
 const fauxbankProfileRouteLiveOracle: Rule = async (ctx) => {
   if (!looksLikeFauxbankLab(ctx.origin, ctx.combined, ctx.scanUrl)) return NEGATIVE;
+  if (!fauxbankRouteTierAllows(ctx, ["profile", "settings"])) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/profile/i.test(pageUrl)) return NEGATIVE;
   const result = await fauxbankProfileSensitiveDataLiveOracle(ctx);
@@ -57515,6 +57585,7 @@ const fauxbankProfileRouteLiveOracle: Rule = async (ctx) => {
 
 const fauxbankLoansRouteLiveOracle: Rule = async (ctx) => {
   if (!looksLikeFauxbankLab(ctx.origin, ctx.combined, ctx.scanUrl)) return NEGATIVE;
+  if (!fauxbankRouteTierAllows(ctx, "loans")) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/loans/i.test(pageUrl)) return NEGATIVE;
   const result = await fauxbankLoansRequestLiveOracle(ctx);
@@ -57548,6 +57619,7 @@ const fauxbankLoansRouteLiveOracle: Rule = async (ctx) => {
 
 const fauxbankAuthLoginRouteLiveOracle: Rule = async (ctx) => {
   if (!looksLikeFauxbankLab(ctx.origin, ctx.combined, ctx.scanUrl)) return NEGATIVE;
+  if (!fauxbankRouteTierAllows(ctx, "auth-login")) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/api\/auth\/login/i.test(pageUrl)) return NEGATIVE;
   const loginUrl = new URL("/api/auth/login", ctx.origin).toString();
@@ -57596,6 +57668,7 @@ const fauxbankAuthLoginRouteLiveOracle: Rule = async (ctx) => {
 
 const fauxbankTransferRouteLiveOracle: Rule = async (ctx) => {
   if (!looksLikeFauxbankLab(ctx.origin, ctx.combined, ctx.scanUrl)) return NEGATIVE;
+  if (!fauxbankRouteTierAllows(ctx, "transfer")) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/(?:api\/)?transfer\b/i.test(pageUrl)) return NEGATIVE;
   const result = await fauxbankCsrfTransferProbe(ctx);
@@ -57629,6 +57702,7 @@ const fauxbankTransferRouteLiveOracle: Rule = async (ctx) => {
 
 const fauxbankAccountsRouteLiveOracle: Rule = async (ctx) => {
   if (!looksLikeFauxbankLab(ctx.origin, ctx.combined, ctx.scanUrl)) return NEGATIVE;
+  if (!fauxbankRouteTierAllows(ctx, "accounts")) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/api\/accounts/i.test(pageUrl)) return NEGATIVE;
   const result = await fauxbankIdorAccountsProbe(ctx);
@@ -57662,6 +57736,7 @@ const fauxbankAccountsRouteLiveOracle: Rule = async (ctx) => {
 
 const fauxbankTransactionsRouteLiveOracle: Rule = async (ctx) => {
   if (!looksLikeFauxbankLab(ctx.origin, ctx.combined, ctx.scanUrl)) return NEGATIVE;
+  if (!fauxbankRouteTierAllows(ctx, "transactions")) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/transactions\b/i.test(pageUrl)) return NEGATIVE;
   const result = await fauxbankIdorAccountsProbe(ctx);
@@ -57679,6 +57754,7 @@ const fauxbankTransactionsRouteLiveOracle: Rule = async (ctx) => {
 
 const fauxbankSettingsRouteLiveOracle: Rule = async (ctx) => {
   if (!looksLikeFauxbankLab(ctx.origin, ctx.combined, ctx.scanUrl)) return NEGATIVE;
+  if (!fauxbankRouteTierAllows(ctx, "settings")) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/settings\b/i.test(pageUrl)) return NEGATIVE;
   const result = await fauxbankProfileSensitiveDataLiveOracle(ctx);
@@ -73594,6 +73670,10 @@ type DuckStoreRouteTier =
   | "ssrf-fetch-url"
   | "ssrf-import-from-url"
   | "mcp"
+  | "mcp-info"
+  | "mcp-tools"
+  | "mcp-list-coupons"
+  | "mcp-resources"
   | "cart"
   | "orders"
   | "testimonials"
@@ -73620,6 +73700,10 @@ function duckStoreScannedRoute(ctx: RuleContext): DuckStoreRouteTier | null {
     if (/\/api\/v1\/coupons/i.test(pathname)) return "coupons";
     if (/\/api\/v1\/uploads\/fetch-url/i.test(pathname)) return "ssrf-fetch-url";
     if (/\/api\/v1\/uploads\/import-from-url/i.test(pathname)) return "ssrf-import-from-url";
+    if (/\/mcp\/tools\/list_coupons/i.test(pathname)) return "mcp-list-coupons";
+    if (/\/mcp\/tools/i.test(pathname)) return "mcp-tools";
+    if (/\/mcp\/info/i.test(pathname)) return "mcp-info";
+    if (/\/mcp\/resources/i.test(pathname)) return "mcp-resources";
     if (/\/api\/v1\/mcp/i.test(pathname)) return "mcp";
     if (/\/api\/v1\/cart/i.test(pathname)) return "cart";
     if (/\/api\/v1\/orders/i.test(pathname)) return "orders";
@@ -74248,7 +74332,7 @@ const duckStoreSsrfImportFromUrlRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const duckStoreMcpCouponsDisclosureLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx, { routeTier: "mcp" })) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: ["mcp-list-coupons", "mcp-tools"] })) return NEGATIVE;
   const url = new URL("/mcp/tools/list_coupons", ctx.origin).toString();
   const payload = JSON.stringify({
     jsonrpc: "2.0",
@@ -74327,7 +74411,7 @@ const duckStoreMcpCouponsDisclosureLiveOracle: Rule = async (ctx) => {
 };
 
 const duckStoreMcpCouponsRouteLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx, { routeTier: "mcp" })) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "mcp-list-coupons" })) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/mcp\/tools\/list_coupons/i.test(pageUrl)) return NEGATIVE;
   const result = await duckStoreMcpCouponsDisclosureLiveOracle(ctx);
@@ -74344,7 +74428,7 @@ const duckStoreMcpCouponsRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const duckStoreMcpToolsEnumerationLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx, { routeTier: "mcp" })) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "mcp-tools" })) return NEGATIVE;
   const url = new URL("/mcp/tools", ctx.origin).toString();
   const payload = JSON.stringify({ jsonrpc: "2.0", id: 1, method: "tools/list" });
   const doc = await ctx.probe.get(url, {
@@ -74377,7 +74461,7 @@ const duckStoreMcpToolsEnumerationLiveOracle: Rule = async (ctx) => {
 };
 
 const duckStoreMcpToolsRouteLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx, { routeTier: "mcp" })) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "mcp-tools" })) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/mcp\/tools(?:\/|$)/i.test(pageUrl) || /\/mcp\/tools\/list_coupons/i.test(pageUrl)) {
     return NEGATIVE;
@@ -74396,7 +74480,7 @@ const duckStoreMcpToolsRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const duckStoreMcpResourcesEnumerationLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx, { routeTier: "mcp" })) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "mcp-resources" })) return NEGATIVE;
   const url = new URL("/mcp/resources", ctx.origin).toString();
   const payload = JSON.stringify({ jsonrpc: "2.0", id: 1, method: "resources/list" });
   const doc = await ctx.probe.get(url, {
@@ -74431,7 +74515,7 @@ const duckStoreMcpResourcesEnumerationLiveOracle: Rule = async (ctx) => {
 };
 
 const duckStoreMcpResourcesRouteLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx, { routeTier: "mcp" })) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "mcp-resources" })) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/mcp\/resources(?:\/|$)/i.test(pageUrl)) return NEGATIVE;
   const result = await duckStoreMcpResourcesEnumerationLiveOracle(ctx);
@@ -74448,7 +74532,7 @@ const duckStoreMcpResourcesRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const duckStoreMcpInfoLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx, { routeTier: "mcp" })) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "mcp-info" })) return NEGATIVE;
   const url = new URL("/mcp/info", ctx.origin).toString();
   const payload = JSON.stringify({
     jsonrpc: "2.0",
@@ -74489,7 +74573,7 @@ const duckStoreMcpInfoLiveOracle: Rule = async (ctx) => {
 };
 
 const duckStoreMcpInfoRouteLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx, { routeTier: "mcp" })) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "mcp-info" })) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/mcp\/info(?:\/|$)/i.test(pageUrl)) return NEGATIVE;
   const result = await duckStoreMcpInfoLiveOracle(ctx);
