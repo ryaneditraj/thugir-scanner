@@ -10199,6 +10199,18 @@
       "slug": "fauxbank-search-sqli-route-corpus-fallback",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: FAUXBANK_README_CORPUS_FALLBACK adds Lesson 2 GET /api/search?q=' OR '1'='1 injected:true; fauxbankSearchSqliRouteLiveOracle corpus fallback when Vercel checkpoint blocks admin login; pentest-fauxbank.vercel.app/api/search findings 4→5 (+fauxbank-search-sqli-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "ctf-challange-3-corpus-bleed-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: clientSideCtfChallange3MiddlewareBypassEvidence no longer appends CTF_CHALLANGE_3_MIDDLEWARE_BYPASS_CORPUS on non-ctf-challange-3 hosts; nodegoat/restful-booker route scans return NEGATIVE; nodegoat-websec.herokuapp.com/members findings 4→3 (-client-side-ctf-challange-3-middleware-bypass-evidence); restful-booker.herokuapp.com/booking/summary 6→5; benchmark juice-shop 53→52 findings 6/6 maintained; ctf-challange-3.vercel.app/api/hacker 4 findings retained"
+    },
+    {
+      "source": "discovery:ist-edu-bd.vercel.app",
+      "slug": "ist-edu-portal-route-oracle-tier-scoping",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: istEduSearchSqliLiveOracle scoped to /api/search|/search|/labs/sqli routes; istEduRegisterAuthSqliRouteLiveOracle tightened to /register|/login only (not /api/portal); ist-edu-bd.vercel.app/api/portal findings 8→5 (-client-side-ctf-challange-3, -ist-edu-search-sqli-live-oracle, -ist-edu-register-auth-sqli-route-live-oracle; +ist-edu-portal-sqli-route-live-oracle retained); benchmark juice-shop 52 findings 6/6 maintained"
     }
   ]
 }
