@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-09T01:29:05.499Z",
+  "updated_at": "2026-09-09T02:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 3017,
-  "total_findings": 32653,
+  "total_sites_scanned": 3026,
+  "total_findings": 32812,
   "critical_findings": 57,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2088,
-  "discovery_findings": 25786,
+  "discovery_urls_added": 2090,
+  "discovery_findings": 25892,
   "improvements_shipped": 1662,
-  "last_run": "2026-09-09T01:35:00.000Z",
+  "last_run": "2026-09-09T02:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "01",
+    "hour_utc": "02",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 53,
@@ -48,37 +48,42 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (53 findings); no benchmark category misses"
+      "note": "Stable 6/6 recall (53 findings, 40 live oracles incl secret-resend + jwt-alg-none + captcha-bypass); no category gaps"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 5,
-      "findings": 37,
-      "focus": "VulnBank /console Werkzeug debugger + Restful Booker auth/BOLA + Node Goat login + QA Bash bearer auth",
-      "improvements_shipped_this_run": 1
+      "urls_scanned": 8,
+      "findings": 106,
+      "focus": "Node Goat register + Restful Booker /auth + Pwnshop path traversal + BrokenCrystals AWS SSRF + VulnBank transfer IDOR",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, gap=[])",
-      "sql-injection-lab.vercel.app/login: 5 findings — sql-injection-lab-login-live-oracle with checkpoint corpus fallback (was 4)",
-      "vulnbank.org/console: 8 findings — vulnbank-werkzeug-console live+route oracles (critical)",
-      "restful-booker.herokuapp.com/: 6 findings — weak-creds + unauth booking access oracles",
-      "restful-booker.herokuapp.com/booking/1: 7 findings — booking BOLA route oracle",
-      "nodegoat-websec.herokuapp.com/login: 11 findings — Node Goat session/auth surface",
-      "www.qabash.com/api/tools/sample-api/secure: 5 findings — bearer-token auth oracle"
+      "nodegoat-websec.herokuapp.com/register: 13 findings — signup open-registration + SSJS injection + stored XSS oracles",
+      "restful-booker.herokuapp.com/auth: 7 findings — weak-creds token + /auth route live oracles",
+      "pwnshop.ctfsecurity.com/download: 15 findings — PWN-038 path traversal live+route oracles",
+      "brokencrystals.com/api/file/aws: 38 findings — AWS SSRF + LFI + SSTI + GraphQL introspection",
+      "vulnbank.org/transfer: 9 findings — IDOR transfer oracle",
+      "owasp-finbot-ctf.org/ctf/api/v1/challenges: 10 findings — agentic AI CTF challenge surface",
+      "seclab.vercel.app/labs/command-injection: 5 findings — command injection lab",
+      "zen-demo-java.fly.dev/pages/execute: 9 findings — Java command injection demo"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "benchmark 6/6 stable at 53 findings on Heroku primary — no category gaps to chase"
+      "benchmark 6/6 stable at 53 findings on Heroku primary — no category gaps to chase",
+      "brokencrystals.com/api/file/aws: rich 38-finding pass but brokencrystals-hidden-upload-xss-live-oracle still absent on route scan"
     ]
   },
   "discovery_highlights": {
-    "sql-injection-lab.vercel.app/login": 5,
     "juice-shop.herokuapp.com": 53,
-    "vulnbank.org/console": 8,
-    "restful-booker.herokuapp.com/": 6,
-    "restful-booker.herokuapp.com/booking/1": 7,
-    "nodegoat-websec.herokuapp.com/login": 11,
-    "www.qabash.com/api/tools/sample-api/secure": 5
+    "nodegoat-websec.herokuapp.com/register": 13,
+    "restful-booker.herokuapp.com/auth": 7,
+    "pwnshop.ctfsecurity.com/download": 15,
+    "brokencrystals.com/api/file/aws": 38,
+    "vulnbank.org/transfer": 9,
+    "owasp-finbot-ctf.org/ctf/api/v1/challenges": 10,
+    "seclab.vercel.app/labs/command-injection": 5,
+    "zen-demo-java.fly.dev/pages/execute": 9
   }
 }

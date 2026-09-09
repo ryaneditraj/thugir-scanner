@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-09T01:05:00.000Z",
+  "updated_at": "2026-09-09T02:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/register",
+      "source": "OWASP Node Goat — registration NoSQL injection + weak password policy oracle (nodegoat-websec.herokuapp.com; web search 02 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://restful-booker.herokuapp.com/auth",
+      "source": "Restful Booker — POST /auth token issuance oracle for weak-creds + auth bypass (restful-booker Postman collection; web search 02 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/download",
+      "source": "ctfsec/pwnshop — PWN-038 path traversal GET /download?file= oracle (pwnshop.ctfsecurity.com/vulnerabilities; web search 02 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/file/aws",
+      "source": "NeuraLegion/brokencrystals — SSRF AWS metadata oracle GET /api/file/aws?path= (GitHub README; web search 02 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnbank.org/transfer",
+      "source": "Commando-X/vuln-bank — IDOR transfer oracle POST /transfer (Medium pentest report; web search 02 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://vulnbank.org/console",
       "source": "VulnBank — unauthenticated /console debug interface oracle (Medium pentest report; web search 01 UTC discovery)",
@@ -11855,6 +11880,16 @@
     {
       "url": "https://www.qabash.com/api/tools/sample-api/secure",
       "source": "QA Bash API Playground — bearer-token auth 401/403 oracle GET /secure (qabash.com/learning/api-playground; web search 01 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/register",
+      "source": "OWASP Node Goat — registration NoSQL injection + weak password policy oracle (nodegoat-websec.herokuapp.com; web search 02 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://restful-booker.herokuapp.com/auth",
+      "source": "Restful Booker — POST /auth token issuance oracle for weak-creds + auth bypass (restful-booker Postman collection; web search 02 UTC discovery)",
       "auth": "public_demo"
     }
   ]
