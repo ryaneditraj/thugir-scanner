@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-09T08:07:33.000Z",
+  "updated_at": "2026-09-09T09:05:00.000Z",
   "priority_discovery_urls": [
     {
       "url": "https://pentest-fauxbank.vercel.app/api/profile",
@@ -12080,6 +12080,31 @@
     {
       "url": "https://brokencrystals.com/api/partners/partnerLogin?username=walter100&password=test",
       "source": "NeuraLegion/brokencrystals \u2014 XPath injection oracle GET /api/partners/partnerLogin (GitHub issue #779; web search 08 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://urban-vampi-production.up.railway.app/users/v1/_debug",
+      "source": "erev0s/VAmPI \u2014 GET /users/v1/_debug excessive data exposure oracle (urban-VAmPI Railway; web search 09 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://urban-vampi-production.up.railway.app/users/v1/register",
+      "source": "erev0s/VAmPI \u2014 POST /users/v1/register SQLi + mass assignment oracle (urban-VAmPI Railway; web search 09 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://crapi.apisec.ai/workshop/api/shop/apply_coupon",
+      "source": "OWASP crAPI hosted \u2014 SQL injection coupon oracle POST /workshop/api/shop/apply_coupon (Shannon report + OWASPLA guide; web search 09 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://crapi.apisec.ai/community/api/v2/coupon/validate-coupon",
+      "source": "OWASP crAPI hosted \u2014 NoSQL injection oracle POST /community/api/v2/coupon/validate-coupon (OWASPLA crAPI guide; web search 09 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://fvb.vchan.in/api/transfers/1",
+      "source": "vchan-in/fvb \u2014 First Vulnerable Bank REST BOLA GET /api/transfers/{id} (GitHub README; web search 09 UTC discovery)",
       "auth": "public_demo"
     }
   ]
