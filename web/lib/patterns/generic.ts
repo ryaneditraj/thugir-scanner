@@ -56389,6 +56389,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "nodegoat-members-nosql-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "NodeGoat members NoSQL injection live oracle",
+    description:
+      "POST /login accepts MongoDB comparison-operator payloads on NodeGoat /members route scans — the A1 NoSQL injection training oracle when members query endpoints are absent on hosted deployments.",
+    impactOneline:
+      "NoSQL operator injection on login bypasses authentication and grants access to authenticated routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "nodegoatMembersNosqlLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "NodeGoat is intentional OWASP training — cast MongoDB query inputs to strings and reject operator objects in production.",
+      steps: [
+        "Validate login fields as plain strings before querying MongoDB.",
+        "Reject objects containing $gt, $ne, or other operator keys in user input.",
+        "Run NodeGoat only on isolated lab hosts or localhost."
+      ]
+    },
+    fixPrompt:
+      "Our NodeGoat /members route scan documents A1 NoSQL injection via MongoDB $gt login bypass. Show operator injection remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "nodegoat-members-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "NodeGoat /members route NoSQL injection live oracle",
+    description:
+      "When scanning /members on nodegoat-websec.herokuapp.com, live MongoDB $gt login bypass or A1 tutorial NoSQL markers confirm the NodeGoat injection training oracle.",
+    impactOneline:
+      "Route scans on /members should surface live or tutorial-documented NoSQL injection patterns.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "nodegoatMembersRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "NodeGoat is intentional OWASP training — reject operator objects in MongoDB login queries in production.",
+      steps: [
+        "Validate and sanitize all MongoDB query inputs on authentication endpoints.",
+        "Use typed schemas instead of passing request bodies directly into find() filters.",
+        "Run NodeGoat only on isolated lab hosts or localhost."
+      ]
+    },
+    fixPrompt:
+      "Our NodeGoat /members route scan documents A1 NoSQL injection. Show MongoDB operator injection remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "nodegoat-signup-open-registration-live-oracle",
     platform: "generic",
     category: "Broken authentication",

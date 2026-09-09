@@ -9811,7 +9811,8 @@ type NodegoatRouteTier =
   | "admin"
   | "upload"
   | "research"
-  | "learn";
+  | "learn"
+  | "members";
 
 function nodegoatScannedRoute(ctx: RuleContext): NodegoatRouteTier | null {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -9833,6 +9834,7 @@ function nodegoatScannedRoute(ctx: RuleContext): NodegoatRouteTier | null {
     if (/^\/upload\/?$/.test(pathname)) return "upload";
     if (/^\/research\/?$/.test(pathname)) return "research";
     if (/^\/learn\/?$/.test(pathname)) return "learn";
+    if (/^\/members\/?$/.test(pathname)) return "members";
     if (pathname === "/" || pathname === "") return "home";
     return null;
   } catch {
@@ -10573,6 +10575,79 @@ const nodegoatNosqlLoginRouteLiveOracle: Rule = async (ctx) => {
       scannedUrl: pageUrl,
       nosqlMarkers: nosqlMarkers.slice(0, 3),
       note: "NodeGoat tutorial/login route scan — client bundle documents MongoDB operator NoSQL injection on login when live $gt bypass probe did not complete"
+    }
+  };
+};
+
+const nodegoatMembersNosqlLiveOracle: Rule = async (ctx) => {
+  if (!isNodegoatHost(ctx)) return NEGATIVE;
+  if (!nodegoatRouteTierAllows(ctx, ["members", "tutorial-a1"])) return NEGATIVE;
+  const cookie = await nodegoatNosqlLoginCookie(ctx);
+  if (!cookie) return NEGATIVE;
+  const dashUrl = new URL("/dashboard", nodegoatProbeOrigin(ctx)).toString();
+  const dashDoc = await ctx.probe.get(dashUrl, {
+    maxBytes: 16384,
+    timeoutMs: 15000,
+    headers: { Cookie: cookie }
+  });
+  if (dashDoc.status < 200 || dashDoc.status >= 400) return NEGATIVE;
+  if (!nodegoatLooksAuthenticated(dashDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      dashUrl,
+      snippet: dashDoc.body.slice(0, 200).trim(),
+      note: "NodeGoat POST /login accepts MongoDB $gt operator payloads — NoSQL injection login bypass oracle (A1 injection family on /members route scans)"
+    }
+  };
+};
+
+const nodegoatMembersRouteLiveOracle: Rule = async (ctx) => {
+  if (!isNodegoatHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/members\b/i.test(pageUrl)) return NEGATIVE;
+  const live = await nodegoatMembersNosqlLiveOracle(ctx);
+  if (live.fired) {
+    return {
+      fired: true,
+      confidence: live.confidence,
+      evidence: {
+        ...live.evidence,
+        scannedUrl: pageUrl,
+        note: "NodeGoat /members route scan — live MongoDB $gt login bypass confirms A1 NoSQL injection training oracle"
+      }
+    };
+  }
+  const tutorialUrl = new URL("/tutorial/a1", nodegoatProbeOrigin(ctx)).toString();
+  const tutorialDoc = await ctx.probe.get(tutorialUrl, {
+    maxBytes: 65536,
+    timeoutMs: 20000
+  });
+  const corpus = `${ctx.combined}\n${tutorialDoc.body}`;
+  const nosqlMarkers: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_NOSQL_RES) {
+    const m = corpus.match(re);
+    if (m) nosqlMarkers.push({ label, sample: m[0].slice(0, 100) });
+  }
+  const nodegoatNosqlRes: { label: string; re: RegExp }[] = [
+    { label: "MongoDB $gt password bypass payload", re: /"password"\s*:\s*\{\s*\$gt\s*:\s*""\s*\}/i },
+    { label: "db.accounts.find NoSQL login", re: /db\.accounts\.find\s*\(\s*\{[\s\S]{0,80}password/i },
+    { label: "A1 injection tutorial title", re: /A1\s*-\s*Injection|NoSQL injection/i }
+  ];
+  for (const { label, re } of nodegoatNosqlRes) {
+    const m = corpus.match(re);
+    if (m) nosqlMarkers.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (nosqlMarkers.length < 1) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: nosqlMarkers.length >= 2 ? 0.88 : 0.85,
+    evidence: {
+      scannedUrl: pageUrl,
+      tutorialUrl,
+      nosqlMarkers: nosqlMarkers.slice(0, 3),
+      note: "NodeGoat /members route scan — A1 NoSQL injection tutorial markers when /members endpoint is absent on hosted Heroku deployment"
     }
   };
 };
@@ -125329,6 +125404,8 @@ export const RULES: Record<string, Rule> = {
   nodegoatBenefitsBacRouteLiveOracle,
   nodegoatNosqlLoginLiveOracle,
   nodegoatNosqlLoginRouteLiveOracle,
+  nodegoatMembersNosqlLiveOracle,
+  nodegoatMembersRouteLiveOracle,
   nodegoatSignupOpenRegistrationLiveOracle,
   nodegoatSignupRouteLiveOracle,
   nodegoatLoginWeakCredentialsLiveOracle,

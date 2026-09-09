@@ -10109,6 +10109,24 @@
       "slug": "ai-security-challenge-live-oracle-tier-guards",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: aiSecurityChallengeRouteAllows guards global prompt-injection/command-injection/hacked-npm/ai-phishing live oracles on challenge route scans; api-security routeRe tightened to /challenges/api-security only; ai-security-platform-iota.vercel.app/challenges/brute-force findings 14→9 (+rate-limiting-bruteforce/route live oracles retained); nodegoat-websec.herokuapp.com/research findings 7→6 (-client-side-nosql-evidence corpus bleed); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:demo.owasp-juice.shop",
+      "slug": "juice-shop-basketitems-route-companion-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: juiceShopRestRouteCompanionMatch disabled on /api/BasketItems fast-path scans — only juice-shop-basket-items-* slugs run; demo.owasp-juice.shop/api/BasketItems findings 33→2 (+basket-items-bola live+route oracles retained); benchmark juice-shop.herokuapp.com 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:preview.owasp-juice.shop",
+      "slug": "juice-shop-save-login-ip-route-companion-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: juiceShopRestRouteCompanionMatch disabled on /rest/saveLoginIp fast-path scans — only juice-shop-save-login-ip-* slugs run; preview.owasp-juice.shop/rest/saveLoginIp findings 33→2 (+save-login-ip live+route oracles retained); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-members-tier-hub-oracle-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: nodegoatScannedRoute adds members tier; nodegoatMembersRouteLiveOracle + nodegoatMembersNosqlLiveOracle confirm A1 NoSQL injection via live $gt login bypass or tutorial/a1 corpus fallback; nodegoat-websec.herokuapp.com/members findings 12→4 (-benefits/profile/contributions cross-module bleed, +nodegoat-members-route-live-oracle retained); benchmark juice-shop 53 findings 6/6 maintained"
     }
   ]
 }

@@ -4293,6 +4293,8 @@ const DEEP_RULES = new Set<string>([
   "nodegoatBenefitsBacRouteLiveOracle",
   "nodegoatNosqlLoginLiveOracle",
   "nodegoatNosqlLoginRouteLiveOracle",
+  "nodegoatMembersNosqlLiveOracle",
+  "nodegoatMembersRouteLiveOracle",
   "nodegoatSignupOpenRegistrationLiveOracle",
   "nodegoatSignupRouteLiveOracle",
   "nodegoatLoginWeakCredentialsLiveOracle",
@@ -11010,6 +11012,14 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       const chatbotRouteScan = /\/rest\/chatbot\//i.test(scanUrl);
       if (chatbotRouteScan) {
         return slug.startsWith("juice-shop-chatbot");
+      }
+      const basketItemsRouteScan = /\/api\/BasketItems\b/i.test(scanUrl);
+      if (basketItemsRouteScan) {
+        return slug.startsWith("juice-shop-basket-items");
+      }
+      const saveLoginIpRouteScan = /\/rest\/saveLoginIp\b/i.test(scanUrl);
+      if (saveLoginIpRouteScan) {
+        return slug.startsWith("juice-shop-save-login-ip");
       }
       return (
         slug.includes(routeResource) ||
