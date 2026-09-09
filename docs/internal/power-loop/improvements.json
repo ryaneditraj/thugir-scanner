@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-jwt-hmac-route-hub-filter-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: brokencrystalsRouteSlugPatterns JWT allowlist missing hmac caused /api/auth/jwt/hmac/* route scans to match generic /api/auth slug filter and drop brokencrystals-jwt-hmac-* oracles after applyRouteOracleHubFilters; added hmac+weak-key to JWT route regex; brokencrystals.com/api/auth/jwt/hmac/validate findings 4→7 (+brokencrystals-jwt-hmac-confusion-live-oracle +route +login-live); benchmark juice-shop-staging 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-jwt-hmac-weak-key-login-oracles",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/auth/jwt/hmac/login + GET /validate alg:none returns {\"secret\":\"this is our secret\"}; POST /api/auth/jwt/weak-key/login + weak-secret HS256 on /validate; brokencrystals.com/api/auth/jwt/hmac/login findings 4 (+hmac-confusion-login live+route); weak-key/login 7 (+weak-key-login live+route); benchmark juice-shop-staging 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-newsletter-subscribe-tier-hub-scope",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: ginAndJuiceRouteTierSlugPattern adds /catalog/subscribe + /api/newsletter/subscribe tier for catalog-subscribe + newsletter-subscribe-rate-limit oracles; ginandjuice.shop/catalog/subscribe findings 11 (+catalog-subscribe live+route +newsletter-subscribe-rate-limit live+route); benchmark juice-shop-staging 52 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:pwnshop.ctfsecurity.com",
       "slug": "pwnshop-products-events-live-oracle-tier-scope",
       "status": "shipped",
