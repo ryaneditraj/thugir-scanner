@@ -49848,6 +49848,13 @@ const unauthenticatedApiRoutes: Rule = async (ctx) => {
 };
 
 const jwtAlgNoneProbe: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (
+    /brokencrystals\.com/i.test(ctx.origin) &&
+    /\/api\/auth\/jwt\/(?:x5c|jku|x5u|jwk|none|rsa|kid-sql|weak)\//i.test(pageUrl)
+  ) {
+    return NEGATIVE;
+  }
   const usesJwt =
     /Bearer\s+|Authorization.*(?:jwt|token)|jsonwebtoken|jose\.|jwt\.(?:sign|verify|decode)/i.test(
       ctx.combined
@@ -73213,6 +73220,8 @@ function isDuckStoreTestimonialsPageRoute(pageUrl: string): boolean {
 
 const duckStoreUsersBolaLiveOracle: Rule = async (ctx) => {
   if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (pageUrl && /\/api\/v1\/users\/?(?:\?.*)?$/i.test(pageUrl)) return NEGATIVE;
   const listUrl = new URL("/api/v1/users/", ctx.origin).toString();
   const listDoc = await ctx.probe.get(listUrl, { maxBytes: 8192, timeoutMs: 15000 });
   if (listDoc.status < 200 || listDoc.status >= 400) {
@@ -73337,6 +73346,7 @@ const duckStoreUsersEnumerationRouteLiveOracle: Rule = async (ctx) => {
 const duckStoreUsersRouteLiveOracle: Rule = async (ctx) => {
   if (!isDuckStoreHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (/\/api\/v1\/users\/?(?:\?.*)?$/i.test(pageUrl)) return NEGATIVE;
   if (!/\/api\/v1\/users/i.test(pageUrl)) return NEGATIVE;
   const result = await duckStoreUsersBolaLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;

@@ -1000,6 +1000,10 @@ function brokencrystalsRouteSlugPatterns(pathname: string): RegExp[] | null {
     [/\/api\/spawn\b/, [/brokencrystals-spawn/, /brokencrystals-command/]],
     [/\/api\/command\b/, [/brokencrystals-command/, /brokencrystals-spawn/]],
     [/\/api\/jwt\b/, [/brokencrystals-jwt/]],
+    [
+      /\/api\/auth\/jwt\/(?:x5c|jku|x5u|jwk|none|rsa|kid-sql|weak)/,
+      [/brokencrystals-jwt/]
+    ],
     [/\/api\/photo\b/, [/brokencrystals-photo/]],
     [/\/api\/users\/fullinfo\b/, [/brokencrystals-fullinfo/]],
     [

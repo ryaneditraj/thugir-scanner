@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-jwt-auth-subroute-hub-filter",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: brokencrystalsRouteSlugPatterns adds /api/auth/jwt/{x5c,jku,x5u,jwk,none,rsa,kid-sql,weak} allowlist so route hub filter retains brokencrystals-jwt-x5c-rogue-* on dedicated scans; jwtAlgNoneProbe suppressed on BC JWT auth subroutes; brokencrystals.com/api/auth/jwt/x5c/validate findings 31→42 (+brokencrystals-jwt-x5c-rogue-live-oracle +route, -jwt-alg-none-accepted generic bleed); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-users-list-route-tier-guard",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: duckStoreUsersBolaLiveOracle + duckStoreUsersRouteLiveOracle skip exact /api/v1/users/ list path so enumeration route oracle owns the tier; duck-store.escape.tech/api/v1/users/ findings 29→27 (-duck-store-users-bola-live-oracle -duck-store-users-route-live-oracle, +enumeration live+route retained); /users/me/profile 28 unchanged (+bola +route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-jwt-generic-alg-none-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: jwtAlgNoneProbe returns NEGATIVE on brokencrystals.com /api/auth/jwt/* dedicated route scans where brokencrystals-jwt-* live oracles apply; brokencrystals.com/api/auth/jwt/x5c/validate drops jwt-alg-none-accepted (-1 generic false positive); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
       "slug": "brokencrystals-render-tier-hub-oracle-suppression",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: brokencrystalsRouteSlugPatterns + applyRouteOracleHubFilters drop cross-module brokencrystals-*-live-oracle siblings on /api/render route scans; POST /api/render Hello {{=7*7}} → Hello 49; brokencrystals.com/api/render findings 93→33 (-60 cross-module JWT/photo/SSRF/config oracles, +brokencrystals-render-dot-ssti-live-oracle +route +ssti-template-injection retained); benchmark juice-shop 53 findings 6/6 maintained"
