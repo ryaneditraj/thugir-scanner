@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-09T00:05:00.000Z",
+  "updated_at": "2026-09-09T01:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://vulnbank.org/console",
+      "source": "VulnBank — unauthenticated /console debug interface oracle (Medium pentest report; web search 01 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://restful-booker.herokuapp.com/",
+      "source": "Restful Booker — public Heroku API testing lab for auth/BOLA/SQLi (Defused15/restful-booker-api-testing README; web search 01 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://restful-booker.herokuapp.com/booking/1",
+      "source": "Restful Booker — GET /booking/{id} BOLA + schema validation oracle (restful-booker.herokuapp.com Postman collection)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/login",
+      "source": "OWASP Node Goat — login/session-management lab route (nodegoat-websec.herokuapp.com; web search 01 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.qabash.com/api/tools/sample-api/secure",
+      "source": "QA Bash API Playground — bearer-token auth 401/403 oracle GET /secure (qabash.com/learning/api-playground; web search 01 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://vulnbank.org/api/v1/merchants/login",
       "source": "Commando-X/vuln-bank — merchant SQLi login oracle POST /api/v1/merchants/login (GitHub merchant_payments.py; web search 00 UTC discovery)",
@@ -11805,6 +11830,31 @@
     {
       "url": "https://dvga.tools.escape.tech/graphql",
       "source": "Damn Vulnerable GraphQL — public GraphQL injection/introspection/SSRF lab (dvga.tools.escape.tech; web search 20 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnbank.org/console",
+      "source": "VulnBank — unauthenticated /console debug interface oracle (Medium pentest report; web search 01 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://restful-booker.herokuapp.com/",
+      "source": "Restful Booker — public Heroku API testing lab for auth/BOLA/SQLi (Defused15/restful-booker-api-testing README; web search 01 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://restful-booker.herokuapp.com/booking/1",
+      "source": "Restful Booker — GET /booking/{id} BOLA + schema validation oracle (restful-booker.herokuapp.com Postman collection)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/login",
+      "source": "OWASP Node Goat — login/session-management lab route (nodegoat-websec.herokuapp.com; web search 01 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.qabash.com/api/tools/sample-api/secure",
+      "source": "QA Bash API Playground — bearer-token auth 401/403 oracle GET /secure (qabash.com/learning/api-playground; web search 01 UTC discovery)",
       "auth": "public_demo"
     }
   ]
