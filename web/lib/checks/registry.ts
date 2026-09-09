@@ -54600,16 +54600,14 @@ const pwnshopVulnerabilitiesIndexRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
-const pwnshopEventsAuditLiveOracle: Rule = async (ctx) => {
-  if (!isPwnshopHost(ctx)) return NEGATIVE;
-  if (!pwnshopRouteTierAllows(ctx, ["events", "products"])) return NEGATIVE;
+async function probePwnshopEventsAudit(ctx: RuleContext): Promise<RuleResult | null> {
   const url = new URL("/api/v1/events", ctx.origin).toString();
   const doc = await ctx.probe.get(url, { maxBytes: 8192 });
-  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  if (doc.status < 200 || doc.status >= 300) return null;
   const ct = doc.headers["content-type"] || "";
-  if (!/json/i.test(ct) && !/^\s*\{/.test(doc.body.trim())) return NEGATIVE;
-  if (!/"logs"\s*:\s*\[/.test(doc.body) || !/"action"\s*:/.test(doc.body)) return NEGATIVE;
-  if (!/"count"\s*:\s*\d+/.test(doc.body)) return NEGATIVE;
+  if (!/json/i.test(ct) && !/^\s*\{/.test(doc.body.trim())) return null;
+  if (!/"logs"\s*:\s*\[/.test(doc.body) || !/"action"\s*:/.test(doc.body)) return null;
+  if (!/"count"\s*:\s*\d+/.test(doc.body)) return null;
   return {
     fired: true,
     confidence: /"detail"\s*:/.test(doc.body) ? 0.92 : 0.9,
@@ -54619,14 +54617,21 @@ const pwnshopEventsAuditLiveOracle: Rule = async (ctx) => {
       note: "Pwnshop GET /api/v1/events returns unauthenticated audit log entries with action/detail fields (PWN-005)"
     }
   };
+}
+
+const pwnshopEventsAuditLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  if (!pwnshopRouteTierAllows(ctx, "events")) return NEGATIVE;
+  const result = await probePwnshopEventsAudit(ctx);
+  return result ?? NEGATIVE;
 };
 
 const pwnshopEventsAuditRouteLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/api\/v1\/(?:events|products)\b/i.test(pageUrl)) return NEGATIVE;
-  const result = await pwnshopEventsAuditLiveOracle(ctx);
-  if (!result.fired) return NEGATIVE;
+  const result = await probePwnshopEventsAudit(ctx);
+  if (!result?.fired) return NEGATIVE;
   const onEventsPath = /\/api\/v1\/events\b/i.test(pageUrl);
   return {
     fired: true,
@@ -113284,7 +113289,7 @@ const brokencrystalsJwtJwkRogueLoginLiveOracle: Rule = async (ctx) => {
 const brokencrystalsJwtJwkRogueLoginRouteLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/api\/auth\/jwt\/jwk\/(?:login|validate)\b/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/api\/auth\/jwt\/jwk\/login\b/i.test(pageUrl)) return NEGATIVE;
   const result = await brokencrystalsJwtJwkRogueLoginLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -113293,7 +113298,7 @@ const brokencrystalsJwtJwkRogueLoginRouteLiveOracle: Rule = async (ctx) => {
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: "Broken Crystals /api/auth/jwt/jwk/login or /validate route scan — login issues JWT and empty-jwk rogue header bypasses JWK validation"
+      note: "Broken Crystals /api/auth/jwt/jwk/login route scan — login issues JWT and empty-jwk rogue header bypasses JWK validation"
     }
   };
 };

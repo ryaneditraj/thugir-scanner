@@ -1072,10 +1072,13 @@ function vapiRouteTierSlugPattern(pathname: string): RegExp | null {
 /** Broken Crystals /api/auth/jwt/* — keep only the JWT variant oracle matching the scanned sub-route. */
 function brokencrystalsJwtSubrouteSlugPattern(pathname: string): RegExp | null {
   const m = pathname.match(
-    /\/api\/auth\/jwt\/(x5c|jku|x5u|jwk|none|rsa|kid-sql|weak|hmac)\b/i
+    /\/api\/auth\/jwt\/(x5c|jku|x5u|jwk|none|rsa|kid-sql|weak|hmac)(?:\/(validate|login))?\b/i
   );
   if (!m) return null;
   const variant = m[1].toLowerCase().replace(/_/g, "-");
+  const action = (m[2] || "validate").toLowerCase();
+  if (variant === "jwk" && action === "validate") return /^brokencrystals-jwt-jwk-empty/;
+  if (variant === "jwk" && action === "login") return /^brokencrystals-jwt-jwk-rogue-login/;
   if (variant === "rsa") return /^brokencrystals-jwt-(?:alg-none|rsa-signature|route)(?:-|$)/;
   if (variant === "kid-sql") return /^brokencrystals-jwt-kid-sql/;
   if (variant === "weak") return /^brokencrystals-jwt-weak-key/;
@@ -1086,7 +1089,7 @@ function brokencrystalsJwtSubrouteSlugPattern(pathname: string): RegExp | null {
 function pwnshopRouteTierSlugPattern(pathname: string): RegExp | null {
   const p = pathname.toLowerCase();
   if (/\/api\/v1\/events\b/.test(p)) return /^pwnshop-events/;
-  if (/\/api\/v1\/products\b/.test(p)) return /^pwnshop-(?:events-audit|product-api-idor)/;
+  if (/\/api\/v1\/products\b/.test(p)) return /^pwnshop-(?:events-audit-route|product-api-idor)/;
   if (/\/api\/v1\/payments\b/.test(p)) return /^pwnshop-api-v1-payments/;
   return null;
 }
@@ -11062,7 +11065,10 @@ function applyRouteOracleHubFilters(
         const deduped = findings.filter((f: PatternFinding) => {
           const slug = f.patternSlug || "";
           if (!slug.startsWith("ginandjuice-")) return genericKeep.test(slug);
-          return tierSlugRe.test(slug) || /^ginandjuice-angular-vulnerable-dependency/.test(slug);
+          return (
+            tierSlugRe.test(slug) ||
+            /^ginandjuice-angular-(?:vulnerable-dependency|csti)/.test(slug)
+          );
         });
         findings.length = 0;
         findings.push(...deduped);

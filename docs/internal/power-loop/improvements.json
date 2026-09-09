@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-products-events-live-oracle-tier-scope",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: probePwnshopEventsAudit extracted; pwnshopEventsAuditLiveOracle scoped to events tier only; products hub pattern keeps events-audit-route + product-api-idor; pwnshop.ctfsecurity.com/api/v1/products/1 findings 7→6 (-pwnshop-events-audit-live-oracle duplicate, +events-audit-route +product-api-idor-route retained); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-jwt-jwk-validate-login-bleed-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: brokencrystalsJwtSubrouteSlugPattern splits jwk validate vs login actions; brokencrystalsJwtJwkRogueLoginRouteLiveOracle scoped to /jwk/login only; brokencrystals.com/api/auth/jwt/jwk/validate findings 8→6 (-jwk-rogue-login live+route bleed, +jwk-empty live+route retained); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-catalog-angular-csti-hub-retention",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: applyRouteOracleHubFilters catalog-tier genericKeep retains ginandjuice-angular-csti alongside angular-vulnerable-dependency on /catalog route scans; ginandjuice.shop/catalog?category=Accessories findings 17→19 (+angular-csti live+route, catalog SQLi/CRLF/base64 oracles retained); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
       "slug": "pwnshop-api-v1-payments-tier-hub-suppression",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: pwnshopScannedRoute adds payments/events/products API tiers; pwnshopRouteTierSlugPattern + applyRouteOracleHubFilters keep only tier-matching pwnshop-* on /api/v1/* route scans; pwnshopEventsAuditRouteLiveOracle scoped to events/products only; pwnshopApiV1PaymentsPhantomRouteLiveOracle documents GET /api/v1/payments 404 HTML; pwnshop.ctfsecurity.com/api/v1/payments findings 48→5 (+pwnshop-api-v1-payments-phantom-route-live-oracle, -43 cross-module pwnshop-* +reflexion +client-side bleed); benchmark juice-shop 51 findings 6/6 maintained"
