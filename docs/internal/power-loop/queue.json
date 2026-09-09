@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-09T21:05:00.000Z",
+  "updated_at": "2026-09-09T22:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://ginandjuice.shop/rest/wallet/balance",
+      "source": "PortSwigger Gin & Juice Shop — unauthenticated wallet balance BOLA oracle GET /rest/wallet/balance (ZAP testapp docs + pentest report; web search 22 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/catalog?searchTerm=test",
+      "source": "PortSwigger Gin & Juice Shop — reflected XSS via searchTerm param GET /catalog?searchTerm= (pentest-2026-ginandjuice FINDING-021; web search 22 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/api-docs",
+      "source": "PortSwigger Gin & Juice Shop — OpenAPI/Swagger docs exposure GET /api-docs (ZAP ginandjuice testapp env; web search 22 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/actuator/auditevents",
+      "source": "OWASP WrongSecrets challenge-42 — Spring Boot Actuator audit events API key leak GET /actuator/auditevents (Heroku demo; web search 22 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/mcp",
+      "source": "OWASP WrongSecrets challenge-60 — insecure MCP server execute_command env leak POST /mcp JSON-RPC (Heroku demo; web search 22 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://brokencrystals.com/api/auth/jwt/jku/login",
       "source": "NeuraLegion/brokencrystals — JWT JKU rogue-key login chain POST /api/auth/jwt/jku/login (swagger-json; web search 21 UTC discovery)",
@@ -12415,6 +12440,31 @@
     {
       "url": "http://vapi.apisec.ai/vapi/api9/user",
       "source": "roottusk/vAPI — API9 improper inventory management oracle GET /vapi/api9/user (Postman OWASP API Top 10 workspace; web search 12 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/rest/wallet/balance",
+      "source": "PortSwigger Gin & Juice Shop — unauthenticated wallet balance BOLA oracle GET /rest/wallet/balance (ZAP testapp docs + pentest report; web search 22 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/catalog?searchTerm=test",
+      "source": "PortSwigger Gin & Juice Shop — reflected XSS via searchTerm param GET /catalog?searchTerm= (pentest-2026-ginandjuice FINDING-021; web search 22 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/api-docs",
+      "source": "PortSwigger Gin & Juice Shop — OpenAPI/Swagger docs exposure GET /api-docs (ZAP ginandjuice testapp env; web search 22 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/actuator/auditevents",
+      "source": "OWASP WrongSecrets challenge-42 — Spring Boot Actuator audit events API key leak GET /actuator/auditevents (Heroku demo; web search 22 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/mcp",
+      "source": "OWASP WrongSecrets challenge-60 — insecure MCP server execute_command env leak POST /mcp JSON-RPC (Heroku demo; web search 22 UTC discovery)",
       "auth": "public_demo"
     }
   ]
