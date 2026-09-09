@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-09T08:10:23.519Z",
+  "updated_at": "2026-09-09T08:12:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,8 +22,8 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2161,
   "discovery_findings": 26714,
-  "improvements_shipped": 1677,
-  "last_run": "2026-09-09T08:10:23.519Z",
+  "improvements_shipped": 1680,
+  "last_run": "2026-09-09T08:12:00.000Z",
   "last_run_summary": {
     "hour_utc": "08",
     "benchmark": {
@@ -53,35 +53,33 @@
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 146,
-      "focus": "VAmPI users/books BOLA + crAPI vehicle location + FVB accounts IDOR + brokencrystals XPath partnerLogin queued; priority drain fauxbank api routes + duck-store MCP + brokencrystals marketplace/products/latest + fvb GraphQL",
-      "improvements_shipped_this_run": 0
+      "urls_scanned": 5,
+      "findings": 38,
+      "focus": "fauxbank API tier hub suppression + duck-store MCP sub-route tiers + brokencrystals marketplace generic bleed fix",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, 40 live oracles, gap=[])",
-      "pentest-fauxbank.vercel.app/api/profile: 16 findings — profile PII route oracle",
-      "pentest-fauxbank.vercel.app/api/accounts/1: 16 findings — account IDOR route oracle",
-      "duck-store.escape.tech/mcp/info: 28 findings — MCP unauthenticated access oracle",
-      "duck-store.escape.tech/mcp/tools: 28 findings — MCP tools enumeration oracle",
-      "brokencrystals.com/api/marketplace: 32 findings — prototype pollution route oracle",
-      "brokencrystals.com/api/products/latest?limit=999: 14 findings — business constraint bypass oracle",
-      "fvb.vchan.in/graphql: 7 findings — GraphQL introspection oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, gap=[])",
+      "pentest-fauxbank.vercel.app/api/accounts/1: 8 findings — IDOR route oracle only (-hub bleed 16→8)",
+      "pentest-fauxbank.vercel.app/api/transfer: 8 findings — CSRF route oracle only (-hub bleed 16→8)",
+      "duck-store.escape.tech/mcp/info: 7 findings — MCP info route oracle only (-cross-tier bleed 28→7)",
+      "duck-store.escape.tech/mcp/tools: 8 findings — MCP tools enumeration oracle (-cross-tier bleed 28→8)",
+      "brokencrystals.com/api/marketplace: 7 findings — prototype pollution route oracle (-generic bleed 33→7)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "5 new discovery URLs queued at tail (VAmPI BOLA, crAPI vehicle location, FVB accounts, brokencrystals XPath) — drain on next pass",
-      "duck-store MCP info/tools share hub oracle fingerprint — dedup candidate",
-      "pentest-fauxbank.vercel.app/api/transfer: thin pass (5 findings) — CSRF oracle may need authenticated session"
+      "fauxbank api/* queue drained — accounts/transfer hub suppression shipped",
+      "duck-store MCP sub-route tiers shipped — info/tools deduped from full-store bleed"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 53,
-    "pentest-fauxbank.vercel.app/api/profile": 16,
-    "pentest-fauxbank.vercel.app/api/accounts/1": 16,
-    "duck-store.escape.tech/mcp/info": 28,
-    "duck-store.escape.tech/mcp/tools": 28,
-    "brokencrystals.com/api/marketplace": 32,
+    "pentest-fauxbank.vercel.app/api/accounts/1": 8,
+    "pentest-fauxbank.vercel.app/api/transfer": 8,
+    "duck-store.escape.tech/mcp/info": 7,
+    "duck-store.escape.tech/mcp/tools": 8,
+    "brokencrystals.com/api/marketplace": 7,
     "brokencrystals.com/api/products/latest?limit=999": 14,
     "fvb.vchan.in/graphql": 7
   }

@@ -10145,6 +10145,24 @@
       "slug": "nodegoat-members-tier-hub-oracle-suppression",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: nodegoatScannedRoute adds members tier; nodegoatMembersRouteLiveOracle + nodegoatMembersNosqlLiveOracle confirm A1 NoSQL injection via live $gt login bypass or tutorial/a1 corpus fallback; nodegoat-websec.herokuapp.com/members findings 12→4 (-benefits/profile/contributions cross-module bleed, +nodegoat-members-route-live-oracle retained); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-fauxbank.vercel.app",
+      "slug": "fauxbank-api-tier-hub-oracle-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: fauxbankScannedRoute + fauxbankRouteTierAllows guard 13 fauxbank live probes/oracles on API route scans; pentest-fauxbank.vercel.app/api/accounts/1 findings 16→8 (+fauxbank-accounts-route-live-oracle +fauxbank-idor-accounts-probe retained); /api/transfer 16→8 (+fauxbank-transfer-route-live-oracle +fauxbank-csrf-transfer-probe retained); benchmark juice-shop.herokuapp.com 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-mcp-tier-hub-oracle-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: duckStoreScannedRoute adds mcp-info/mcp-tools/mcp-list-coupons/mcp-resources sub-tiers; MCP live oracles scoped to matching tier — duck-store.escape.tech/mcp/info findings 28→7 (+mcp-info live+route oracles retained); /mcp/tools 28→8 (+mcp-tools +coupons disclosure oracles retained, -products/users/ssrf cross-tier bleed); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-marketplace-generic-oracle-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: applyRouteOracleHubFilters keeps brokencrystals-marketplace-* + client-side-brokencrystals-* + misconfig on /api/marketplace route scans; brokencrystals.com/api/marketplace findings 33→7 (-sqli/ssti/ssrf/jwt generic bleed, +marketplace prototype-pollution live+route oracles retained); benchmark juice-shop 53 findings 6/6 maintained"
     }
   ]
 }
