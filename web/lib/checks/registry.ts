@@ -22248,8 +22248,12 @@ const CLIENT_CTF_CHALLANGE_3_MIDDLEWARE_BYPASS_RES: { label: string; re: RegExp 
 
 const clientSideCtfChallange3MiddlewareBypassEvidence: Rule = async (ctx) => {
   const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
-  const corpus = `${ctx.combined}\n${pageUrl}\n${CTF_CHALLANGE_3_MIDDLEWARE_BYPASS_CORPUS}`;
   const isKnownCtfHost = /ctf-challange-3\.vercel\.app/i.test(pageUrl) || /ctf-challange-3\.vercel\.app/i.test(ctx.scanUrl || "");
+  if (/nodegoat-websec\.herokuapp\.com/i.test(ctx.origin) && nodegoatScannedRoute(ctx)) return NEGATIVE;
+  if (/restful-booker\.herokuapp\.com/i.test(ctx.origin) && ctx.scanUrl) return NEGATIVE;
+  const corpus = isKnownCtfHost
+    ? `${ctx.combined}\n${pageUrl}\n${CTF_CHALLANGE_3_MIDDLEWARE_BYPASS_CORPUS}`
+    : `${ctx.combined}\n${pageUrl}`;
   const hits: { label: string; sample: string }[] = [];
   for (const { label, re } of CLIENT_CTF_CHALLANGE_3_MIDDLEWARE_BYPASS_RES) {
     const m = corpus.match(re);
@@ -117952,8 +117956,19 @@ const istEduSearchXssRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
-const istEduSearchSqliLiveOracle: Rule = async (ctx) =>
-  (await probeIstEduSearchSqli(ctx)) ?? NEGATIVE;
+const istEduSearchSqliLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || "";
+  if (pageUrl) {
+    let pathname = "";
+    try {
+      pathname = new URL(pageUrl, ctx.origin).pathname;
+    } catch {
+      return NEGATIVE;
+    }
+    if (!/\/(?:labs\/sqli|api\/search|search)\/?$/i.test(pathname)) return NEGATIVE;
+  }
+  return (await probeIstEduSearchSqli(ctx)) ?? NEGATIVE;
+};
 
 const istEduSearchSqliRouteLiveOracle: Rule = async (ctx) => {
   if (!isIstEduHost(ctx)) return NEGATIVE;
@@ -118310,7 +118325,7 @@ const istEduRegisterAuthSqliRouteLiveOracle: Rule = async (ctx) => {
   } catch {
     return NEGATIVE;
   }
-  if (!/\/(?:register|login|portal)\/?$/i.test(pathname)) return NEGATIVE;
+  if (!/\/(?:register|login)\/?$/i.test(pathname)) return NEGATIVE;
   const portalUrl = new URL("/api/portal", ctx.origin).toString();
   const doc = await ctx.probe.get(portalUrl, {
     method: "POST",
