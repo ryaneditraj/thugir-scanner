@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-09T03:05:00.000Z",
+  "updated_at": "2026-09-09T04:07:31.021Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/research",
+      "source": "OWASP Node Goat — SSRF via GET /research?url= needle proxy (nodegoat-websec.herokuapp.com tutorial A10; web search 04 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://restful-booker.herokuapp.com/ping",
+      "source": "Restful Booker — health/ping oracle for unauthenticated API surface (restful-booker Postman collection; web search 04 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ist-edu-bd.vercel.app/api/portal",
+      "source": "Damn Vulnerable Web University — SQLi auth-bypass POST /api/portal (zahidoverflow/dvwu README; web search 04 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://preview.owasp-juice.shop/rest/chatbot/respond",
+      "source": "OWASP Juice Shop preview — chatbot LLM proxy POST /rest/chatbot/respond (juice-shop develop preview; web search 04 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/dashboard",
+      "source": "OWASP Node Goat — weak-credentials dashboard access oracle GET /dashboard (nodegoat-websec.herokuapp.com; web search 04 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://nodegoat-websec.herokuapp.com/contributions",
       "source": "OWASP Node Goat — server-side JS injection via preTax eval on POST /contributions (improvements.json nodegoat-contributions-ssjs; web search 03 UTC discovery)",
