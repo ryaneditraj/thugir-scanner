@@ -997,6 +997,14 @@ function brokencrystalsRouteSlugPatterns(pathname: string): RegExp[] | null {
   const p = pathname.toLowerCase();
   const routes: [RegExp, RegExp[]][] = [
     [/\/api\/render\b|\/render\.dot\b/, [/brokencrystals-render-dot-ssti/, /^ssti-template-injection$/]],
+    [
+      /\/api\/products\/views\b/,
+      [/brokencrystals-products-views-sqli/, /^sqli-header-error-disclosure$/]
+    ],
+    [
+      /\/api\/testimonials\/count\b/,
+      [/brokencrystals-testimonials-(?:count|sqli|xss|route)/]
+    ],
     [/\/api\/spawn\b/, [/brokencrystals-spawn/, /brokencrystals-command/]],
     [/\/api\/command\b/, [/brokencrystals-command/, /brokencrystals-spawn/]],
     [/\/api\/jwt\b/, [/brokencrystals-jwt/]],
@@ -11018,6 +11026,27 @@ function applyRouteOracleHubFilters(
         const fileKeep =
           /^(?:brokencrystals-(?:api-file|file-(?:raw-)?lfi|file-(?:aws|azure|digital-ocean|google))|missing-security-headers|insecure-cookies|thugir-dir-discovery|client-side-brokencrystals)/;
         const deduped = findings.filter((f: PatternFinding) => fileKeep.test(f.patternSlug || ""));
+        findings.length = 0;
+        findings.push(...deduped);
+      }
+      if (/\/api\/spawn\b/.test(pathname)) {
+        const spawnKeep =
+          /^(?:brokencrystals-spawn|brokencrystals-command|command-injection-form-probe|missing-security-headers|insecure-cookies|thugir-dir-discovery|client-side-brokencrystals-evidence)/;
+        const deduped = findings.filter((f: PatternFinding) => spawnKeep.test(f.patternSlug || ""));
+        findings.length = 0;
+        findings.push(...deduped);
+      }
+      if (/\/api\/products\/views\b/.test(pathname)) {
+        const viewsKeep =
+          /^(?:brokencrystals-products-views|sqli-header-error-disclosure|missing-security-headers|thugir-dir-discovery)/;
+        const deduped = findings.filter((f: PatternFinding) => viewsKeep.test(f.patternSlug || ""));
+        findings.length = 0;
+        findings.push(...deduped);
+      }
+      if (/\/api\/testimonials\/count\b/.test(pathname)) {
+        const countKeep =
+          /^(?:brokencrystals-testimonials-(?:count|sqli|xss|route)|missing-security-headers|thugir-dir-discovery)/;
+        const deduped = findings.filter((f: PatternFinding) => countKeep.test(f.patternSlug || ""));
         findings.length = 0;
         findings.push(...deduped);
       }

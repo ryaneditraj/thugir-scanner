@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-spawn-tier-hub-oracle-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: applyRouteOracleHubFilters spawnKeep retains brokencrystals-spawn/command-injection + minimal misconfig on /api/spawn route scans; brokencrystals.com/api/spawn findings 15→5 (-exposed-git-dir -xpath -ssti -postmessage -vibe-* -stack-database generic bleed, +spawn live+route +command-injection-form-probe retained); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-products-views-tier-hub-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: brokencrystalsRouteSlugPatterns adds /api/products/views before generic /api/products + viewsKeep generic filter; brokencrystals.com/api/products/views findings 14→4 (-products-latest-limit-bypass -products-date-manipulation -xpath -ssti -vibe-* generic bleed, +products-views-sqli-route +sqli-header-error-disclosure retained); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-testimonials-count-tier-hub-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: brokencrystalsRouteSlugPatterns adds /api/testimonials/count tier + countKeep filter drops iframe-injection + generic sqli/xpath/ssti bleed; brokencrystals.com/api/testimonials/count findings 16→6 (-iframe-injection live+route -sqli-query-param -xpath -vibe-* generic bleed, +testimonials sqli/xss/count-route oracles retained); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
       "slug": "brokencrystals-jwt-hmac-route-hub-filter-fix",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: brokencrystalsRouteSlugPatterns JWT allowlist missing hmac caused /api/auth/jwt/hmac/* route scans to match generic /api/auth slug filter and drop brokencrystals-jwt-hmac-* oracles after applyRouteOracleHubFilters; added hmac+weak-key to JWT route regex; brokencrystals.com/api/auth/jwt/hmac/validate findings 4→7 (+brokencrystals-jwt-hmac-confusion-live-oracle +route +login-live); benchmark juice-shop-staging 52 findings 6/6 maintained"
