@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-09T11:05:00.000Z",
+  "updated_at": "2026-09-09T12:15:00.000Z",
   "priority_discovery_urls": [
     {
       "url": "https://pentest-fauxbank.vercel.app/api/profile",
@@ -12155,6 +12155,31 @@
     {
       "url": "https://payapi.vercel.app/",
       "source": "PayAPI Website Challenge \u2014 intentionally vulnerable payment API demo on Vercel (web search 11 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://vapi.apisec.ai/vapi/api3/user",
+      "source": "roottusk/vAPI \u2014 API3 excessive data exposure oracle GET /vapi/api3/user (Postman OWASP API Top 10 workspace; web search 12 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://vapi.apisec.ai/vapi/api4/login",
+      "source": "roottusk/vAPI \u2014 API4 rate limiting bypass oracle POST /vapi/api4/login (Postman workspace; web search 12 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://vapi.apisec.ai/vapi/api4/otp/verify",
+      "source": "roottusk/vAPI \u2014 API4 OTP brute-force oracle POST /vapi/api4/otp/verify (Postman workspace; web search 12 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://vapi.apisec.ai/vapi/api5/user",
+      "source": "roottusk/vAPI \u2014 API5 broken function level authorization oracle GET /vapi/api5/user (Postman workspace; web search 12 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://vapi.apisec.ai/vapi/api9/user",
+      "source": "roottusk/vAPI \u2014 API9 improper inventory management oracle GET /vapi/api9/user (Postman OWASP API Top 10 workspace; web search 12 UTC discovery)",
       "auth": "public_demo"
     }
   ]

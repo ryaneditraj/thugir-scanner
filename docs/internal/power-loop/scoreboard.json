@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-09T12:10:00.000Z",
+  "updated_at": "2026-09-09T12:21:21.117Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 3135,
-  "total_findings": 34557,
-  "critical_findings": 56,
+  "total_sites_scanned": 3148,
+  "total_findings": 34732,
+  "critical_findings": 57,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2176,
-  "discovery_findings": 26918,
+  "discovery_urls_added": 2181,
+  "discovery_findings": 27013,
   "improvements_shipped": 1688,
-  "last_run": "2026-09-09T12:10:00.000Z",
+  "last_run": "2026-09-09T12:21:21.117Z",
   "last_run_summary": {
     "hour_utc": "12",
     "benchmark": {
-      "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 52,
+      "oracle_url": "https://juice-shop-staging.herokuapp.com",
+      "oracle_findings": 53,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 597,
+      "probes_run": 602,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,40 +48,44 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (52 findings, -1 false-positive CTF corpus bleed removed)"
+      "note": "Primary Heroku timeout → staging fallback 6/6 (53 findings, 40 live oracles). Parallel validation pass: primary 52 findings (-CTF corpus bleed, 2 improvements shipped)."
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 13,
-      "focus": "CTF corpus bleed suppression + IST Edu portal route tier scoping (validation re-scans)",
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 82,
+      "focus": "vAPI api3/api4/api5/api9 endpoints queued + queue drain NodeGoat benefits/register + Restful Booker booking/auth + Gin & Juice blog/post + VulnBank reset-password/console",
       "improvements_shipped_this_run": 2
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, gap=[]; -client-side-ctf-challange-3 false positive)",
-      "nodegoat-websec.herokuapp.com/members: 3 findings — nodegoat-members-route-live-oracle (-ctf corpus bleed)",
-      "restful-booker.herokuapp.com/booking/summary: 5 findings — restful-booker oracles (-ctf corpus bleed)",
-      "ist-edu-bd.vercel.app/api/portal: 5 findings — ist-edu-portal-sqli-route-live-oracle (-search/register/ctf cross-tier bleed)",
-      "ctf-challange-3.vercel.app/api/hacker: 4 findings — middleware bypass oracles retained"
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (53 findings, gap=[])",
+      "juice-shop.herokuapp.com: validation re-scan 52 findings (-client-side-ctf-challange-3 false positive)",
+      "nodegoat-websec.herokuapp.com/benefits: 10 findings — nodegoat-benefits-bac-live-oracle + nodegoat-benefits-nosql-route-live-oracle",
+      "nodegoat-websec.herokuapp.com/register: 13 findings — nodegoat-signup-route-live-oracle + nodegoat-login-weak-credentials-live-oracle",
+      "restful-booker.herokuapp.com/booking: 8 findings — restful-booker-booking-unauth-access-route-live-oracle",
+      "ginandjuice.shop/blog/post?postId=2: 21 findings — ginandjuice-blog-prototype-pollution-dom-xss-route-live-oracle",
+      "vulnbank.org/api/v2/reset-password: 9 findings — vulnbank-v2-reset-password-versioning-route-live-oracle",
+      "vulnbank.org/console: 8 findings — vulnbank-werkzeug-console-route-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "PentestForge lab hosts (crapi/juice-shop.lab.pentest-forge.com) queued but not reached — priority queue fills 8-slot limit",
+      "primary juice-shop Heroku timed out 600s — staging fallback required for stable 6/6",
+      "vAPI api3/api4/api5/api9 endpoints queued at priority tail — not reached in 8-slot queue drain",
+      "client-side-ctf-challange-3-middleware-bypass-evidence still bleeds on NodeGoat/Restful Booker route scans",
       "payapi.vercel.app is Frontend Mentor static site — not a security CTF; deprioritize in discovery queue"
     ]
   },
   "discovery_highlights": {
+    "juice-shop-staging.herokuapp.com": 53,
     "juice-shop.herokuapp.com": 52,
-    "nodegoat-websec.herokuapp.com/members": 3,
-    "nodegoat-websec.herokuapp.com/research": 6,
-    "restful-booker.herokuapp.com/booking/summary": 5,
-    "restful-booker.herokuapp.com/ping": 6,
-    "ist-edu-bd.vercel.app/api/portal": 5,
-    "preview.owasp-juice.shop/rest/chatbot/respond": 3,
-    "nodegoat-websec.herokuapp.com/dashboard": 7,
-    "nodegoat-websec.herokuapp.com/contributions": 7,
-    "pentest-fauxbank.vercel.app/api/search": 5,
-    "ctf-challange-3.vercel.app/api/hacker": 4
+    "nodegoat-websec.herokuapp.com/benefits": 10,
+    "nodegoat-websec.herokuapp.com/register": 13,
+    "restful-booker.herokuapp.com/booking": 8,
+    "restful-booker.herokuapp.com/auth": 7,
+    "ginandjuice.shop/blog/post?postId=2": 21,
+    "vulnbank.org/api/v2/reset-password": 9,
+    "vulnbank.org/console": 8,
+    "restful-booker.herokuapp.com/": 6
   }
 }
