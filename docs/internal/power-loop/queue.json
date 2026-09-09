@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-09T17:05:00.000Z",
+  "updated_at": "2026-09-09T18:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://brokencrystals.com/api/spawn",
+      "source": "NeuraLegion/brokencrystals — OS command injection oracle POST /api/spawn _command param (README + context7; web search 18 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/products/views",
+      "source": "NeuraLegion/brokencrystals — SQLi via x-product-name header oracle POST /api/products/views (README; web search 18 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/testimonials/count?query=test",
+      "source": "NeuraLegion/brokencrystals — SQLi/XSS oracle GET /api/testimonials/count query param (README; web search 18 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/lab-stats",
+      "source": "ctfsec/pwnshop — lab visitor/dirty-state JSON oracle GET /lab-stats (GitHub README; web search 18 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/auth/jwt/hmac/login",
+      "source": "NeuraLegion/brokencrystals — JWT RSA-to-HMAC confusion login alias POST /api/auth/jwt/hmac/login (swagger-json; web search 18 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://brokencrystals.com/api/auth/jwt/hmac/validate",
       "source": "NeuraLegion/brokencrystals — JWT RSA-to-HMAC confusion oracle GET /api/auth/jwt/hmac/validate (swagger-json; web search 17 UTC discovery)",

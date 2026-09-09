@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-09T17:45:00.000Z",
+  "updated_at": "2026-09-09T18:08:30.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 3198,
-  "total_findings": 35647,
+  "total_sites_scanned": 3207,
+  "total_findings": 35795,
   "critical_findings": 57,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2201,
-  "discovery_findings": 27412,
+  "discovery_urls_added": 2206,
+  "discovery_findings": 27508,
   "improvements_shipped": 1700,
-  "last_run": "2026-09-09T17:45:00.000Z",
+  "last_run": "2026-09-09T18:08:30.000Z",
   "last_run_summary": {
-    "hour_utc": "17",
+    "hour_utc": "18",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 51,
+      "oracle_findings": 52,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,36 +48,39 @@
           ]
         }
       },
-      "note": "Primary Heroku stable 6/6 (51 findings, 38 live oracles incl secret-resend) — no category gaps"
+      "note": "Primary Heroku stable 6/6 (52 findings, secret-resend + jwt-alg-none live oracles) — no category gaps"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 31,
-      "focus": "pwnshop products events-live tier scope + brokencrystals JWK validate login bleed + ginandjuice catalog angular-CSTI hub retention",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 96,
+      "focus": "brokencrystals spawn RCE + products/views SQLi + testimonials/count + pwnshop lab-stats + hmac/login JWT confusion alias",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, gap=[])",
-      "pwnshop.ctfsecurity.com/api/v1/products/1: 7→6 findings after events-live oracle scoped to events tier",
-      "brokencrystals.com/api/auth/jwt/jwk/validate: 8→6 findings after JWK validate/login slug split",
-      "ginandjuice.shop/catalog?category=Accessories: 17→19 findings after angular-CSTI hub retention"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, gap=[])",
+      "brokencrystals.com/api/spawn: 34 findings — command injection + SSRF hub",
+      "brokencrystals.com/api/products/views: 16 findings — x-product-name SQLi oracle",
+      "brokencrystals.com/api/testimonials/count?query=test: 16 findings — SQLi + reflected XSS",
+      "pwnshop.ctfsecurity.com/lab-stats: 9 findings — lab stats JSON disclosure",
+      "brokencrystals.com/api/auth/jwt/hmac/login: 4 findings — JWT HMAC confusion login alias",
+      "nodegoat-websec.herokuapp.com/profile: 11 findings — NodeGoat profile tier"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "brokencrystals JWT hmac/login + weak-key/login POST paths not yet queued as dedicated oracles",
-      "ginandjuice newsletter rate-limit route (/catalog/subscribe, /api/newsletter/subscribe) not re-scanned this run",
-      "pwnshop /api/v1/events hub clean at 6 findings — products tier now scoped"
+      "brokencrystals JWT weak-key/login POST path still not queued as dedicated oracle",
+      "ginandjuice newsletter rate-limit route (/catalog/subscribe, /api/newsletter/subscribe) not scanned this run",
+      "owasp-finbot-ctf-demo.onrender.com thin pass (1 finding) — may need deeper crawl"
     ]
   },
   "discovery_highlights": {
-    "ginandjuice.shop/catalog?category=Accessories": 19,
-    "pwnshop.ctfsecurity.com/api/v1/products/1": 6,
-    "brokencrystals.com/api/auth/jwt/jwk/validate": 6,
-    "brokencrystals.com/api/render": 34,
-    "ginandjuice.shop/blog/search?query=test": 10,
-    "pwnshop.ctfsecurity.com/api/v1/events": 5,
-    "brokencrystals.com/api/auth/jwt/hmac/validate": 4
+    "brokencrystals.com/api/spawn": 34,
+    "brokencrystals.com/api/products/views": 16,
+    "brokencrystals.com/api/testimonials/count?query=test": 16,
+    "pwnshop.ctfsecurity.com/lab-stats": 9,
+    "brokencrystals.com/api/auth/jwt/hmac/login": 4,
+    "nodegoat-websec.herokuapp.com/profile": 11,
+    "juice-shop.herokuapp.com": 52
   }
 }
