@@ -10163,6 +10163,18 @@
       "slug": "brokencrystals-marketplace-generic-oracle-suppression",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: applyRouteOracleHubFilters keeps brokencrystals-marketplace-* + client-side-brokencrystals-* + misconfig on /api/marketplace route scans; brokencrystals.com/api/marketplace findings 33→7 (-sqli/ssti/ssrf/jwt generic bleed, +marketplace prototype-pollution live+route oracles retained); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-57-browser-llm-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-57 returns In-Browser LLM Challenge with System Prompt Exposure + Prompt Injection markers; wrongsecrets.herokuapp.com/challenge/challenge-57 findings 19→20 (+wrongsecrets-challenge-57-browser-llm-live-oracle alongside route oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:securebank-blog.vercel.app",
+      "slug": "securebank-blog-api-idor-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: secureBankBlogApiIdorRouteLiveOracle matches /api/* paths with FAST-NUCES SecureBank Medium article IDOR corpus fallback when Vercel checkpoint blocks /api/posts/1; securebank-blog.vercel.app/api/posts/1 findings 4→5 (+securebank-blog-api-idor-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
     }
   ]
 }

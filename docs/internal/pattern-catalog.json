@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-09T08:16:59.825Z",
-  "total": 3475,
-  "uniqueSlugs": 3467,
+  "generatedAt": "2026-09-09T09:21:39.718Z",
+  "total": 3477,
+  "uniqueSlugs": 3469,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3457,
+    "generic": 3459,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3390,
+    "deep": 3392,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 687,
+    "Broken access control": 688,
     "Exposed secret": 120,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -35,7 +35,7 @@
     "SSRF": 19,
     "Server-side request forgery": 130,
     "Sensitive data exposure": 109,
-    "AI security": 151,
+    "AI security": 152,
     "Business logic": 43,
     "AI / LLM security": 4,
     "Prompt injection": 17,
@@ -2672,6 +2672,7 @@
     "secure-nextjs-lesson-login-csrf-route-live-oracle",
     "secure-nextjs-lesson-protected-route-live-oracle",
     "securebank-blog-admin-rbac-route-live-oracle",
+    "securebank-blog-api-idor-route-live-oracle",
     "securebank-blog-csrf-attack-page-route-live-oracle",
     "securebank-blog-idor-route-live-oracle",
     "securebank-blog-login-sqli-route-live-oracle",
@@ -3359,6 +3360,7 @@
     "wrongsecrets-challenge-54-gitignore-secret-route-live-oracle",
     "wrongsecrets-challenge-55-ssh-bastion-route-live-oracle",
     "wrongsecrets-challenge-56-project-spec-route-live-oracle",
+    "wrongsecrets-challenge-57-browser-llm-live-oracle",
     "wrongsecrets-challenge-57-browser-llm-route-live-oracle",
     "wrongsecrets-challenge-58-database-connection-route-live-oracle",
     "wrongsecrets-challenge-59-slack-webhook-route-live-oracle",

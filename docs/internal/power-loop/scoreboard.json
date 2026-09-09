@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-09T09:08:23.879Z",
+  "updated_at": "2026-09-09T09:35:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,12 +22,12 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2166,
   "discovery_findings": 26824,
-  "improvements_shipped": 1680,
-  "last_run": "2026-09-09T09:08:23.879Z",
+  "improvements_shipped": 1682,
+  "last_run": "2026-09-09T09:35:00.000Z",
   "last_run_summary": {
     "hour_utc": "09",
     "benchmark": {
-      "oracle_url": "https://juice-shop.herokuapp.com",
+      "oracle_url": "https://juice-shop.demo.escape.tech",
       "oracle_findings": 53,
       "oracle_recall": "6/6",
       "gap": [],
@@ -48,43 +48,33 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (53 findings, 40 live oracles incl secret-resend + jwt-alg-none + captcha-bypass); no category misses"
+      "note": "Stable 6/6 recall (53 findings, 40 live oracles); primary Heroku + staging timed out — escape.tech fallback"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 110,
-      "focus": "priority queue drain — brokencrystals MCP/SSTI, Gin & Juice account takeover routes, crAPI BFLA/community leak, Juice Shop demo basket IDOR + saveLoginIp XSS",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 2,
+      "findings": 25,
+      "focus": "wrongsecrets-57 live oracle pattern + securebank-blog /api/* IDOR route oracle",
+      "improvements_shipped_this_run": 2
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, gap=[])",
-      "brokencrystals.com/api/mcp: 36 findings — MCP JSON-RPC tool-calling + stored injection oracle",
-      "brokencrystals.com/render.dot: 14 findings — Graphviz SSTI route oracle",
-      "ginandjuice.shop/my-account/change-address: 15 findings — account takeover change-address oracle",
-      "ginandjuice.shop/my-account/delete: 15 findings — account deletion CSRF/logic oracle",
-      "crapi.apisec.ai/workshop/api/shop/products: 11 findings — BFLA product-creation oracle",
-      "crapi.apisec.ai/community/api/v2/community/posts/recent: 15 findings — vehicle UUID leak BOLA oracle",
-      "demo.owasp-juice.shop/api/BasketItems: 2 findings — cross-user basket write IDOR oracle",
-      "preview.owasp-juice.shop/rest/saveLoginIp: 2 findings — login IP spoofing XSS oracle"
+      "juice-shop.demo.escape.tech: benchmark recall 6/6 (53 findings, gap=[])",
+      "wrongsecrets.herokuapp.com/challenge/challenge-57: 20 findings — +wrongsecrets-challenge-57-browser-llm-live-oracle",
+      "securebank-blog.vercel.app/api/posts/1: 5 findings — +securebank-blog-api-idor-route-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "5 new discovery URLs queued at tail (VAmPI _debug/register, crAPI apply_coupon/validate-coupon, FVB transfers BOLA) — drain on next pass",
-      "08 UTC tail still pending: urban-vampi users/books BOLA, crapi vehicle location, fvb accounts/1, brokencrystals partnerLogin XPath",
-      "brokencrystals MCP hub still high-count (36) — route-tier dedup candidate like marketplace fix"
+      "primary Heroku juice-shop can timeout at 600s — staging + escape.tech fallback chain used",
+      "sqli.vulnlab.dev/blind/ route oracle already shipped in prior run (sqli-vulnlab-blind-route-live-oracle)"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 53,
+    "juice-shop.demo.escape.tech": 53,
+    "wrongsecrets.herokuapp.com/challenge/challenge-57": 20,
+    "securebank-blog.vercel.app/api/posts/1": 5,
     "brokencrystals.com/api/mcp": 36,
-    "brokencrystals.com/render.dot": 14,
     "ginandjuice.shop/my-account/change-address": 15,
-    "ginandjuice.shop/my-account/delete": 15,
-    "crapi.apisec.ai/workshop/api/shop/products": 11,
-    "crapi.apisec.ai/community/api/v2/community/posts/recent": 15,
-    "demo.owasp-juice.shop/api/BasketItems": 2,
-    "preview.owasp-juice.shop/rest/saveLoginIp": 2
+    "crapi.apisec.ai/community/api/v2/community/posts/recent": 15
   }
 }

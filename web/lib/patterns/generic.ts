@@ -29728,6 +29728,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "securebank-blog-api-idor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "SecureBank blog API IDOR route live oracle",
+    description:
+      "When scanning /api/* on securebank-blog.vercel.app, the Medium article documents per-user dashboard isolation where predictable user IDs enable IDOR in Attack Mode — route-specific API broken access control training oracle (checkpoint uses curated blog corpus fallback).",
+    impactOneline:
+      "Educational SecureBank blog API routes expose intentional IDOR via predictable dashboard user IDs for route-specific scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "secureBankBlogApiIdorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Educational attack/secure mode toggles must never ship to production deployments.",
+      steps: [
+        "Authorize object access server-side using the authenticated user's identity.",
+        "Avoid predictable sequential user IDs for sensitive API routes.",
+        "Host vulnerable demos on isolated lab subdomains with no production data."
+      ]
+    },
+    fixPrompt:
+      "Our securebank-blog /api/* routes document per-user dashboard IDOR via predictable user IDs. Show object-level authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "securebank-blog-transfer-csrf-route-live-oracle",
     platform: "generic",
     category: "Cross-site request forgery",
@@ -38693,6 +38719,33 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our WrongSecrets challenge-56 route documents secrets in cursor/rules/project-specification.mdc. Show remediation for preventing secrets in AI agent specification files.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "wrongsecrets-challenge-57-browser-llm-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets challenge-57 in-browser LLM live oracle",
+    description:
+      "GET /challenge/challenge-57 documents in-browser LLM with system-prompt secret extractable via prompt injection — JavaScript LLM challenge live oracle.",
+    impactOneline:
+      "Client-side LLM system prompts can leak embedded secrets when users craft prompt-injection attacks in the browser.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge57BrowserLlmLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "WrongSecrets challenge-57 is intentional — never embed secrets in client-side LLM system prompts or browser-accessible AI instructions.",
+      steps: [
+        "Keep secrets server-side; never include credentials in system prompts shipped to the browser.",
+        "Validate and sanitize user prompts to resist prompt injection attacks.",
+        "Use server-side LLM proxies with output filtering instead of in-browser models with embedded secrets."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-57 documents system-prompt secrets in an in-browser LLM. Show remediation for prompt injection and client-side AI secret exposure.",
     version: 1,
     enabled: true
   },

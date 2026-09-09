@@ -2627,6 +2627,7 @@ const DEEP_RULES = new Set<string>([
   "secureBankBlogLoginSqliRouteLiveOracle",
   "secureBankBlogMessagesXssRouteLiveOracle",
   "secureBankBlogAdminRbacRouteLiveOracle",
+  "secureBankBlogApiIdorRouteLiveOracle",
   "secureBankBlogIdorRouteLiveOracle",
   "secureBankBlogCsrfAttackPageRouteLiveOracle",
   "secureBankBlogTransferCsrfRouteLiveOracle",
@@ -17379,6 +17380,12 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /brokencrystals\.com/i.test(origin) &&
         /\/api\/get_metadata\b/i.test(targetInput) &&
         p.slug.startsWith("brokencrystals-get-metadata")
+      )
+        return -4;
+      if (
+        /securebank-blog\.vercel\.app/i.test(origin) &&
+        /\/api\//i.test(targetInput) &&
+        p.slug.startsWith("securebank-blog-api")
       )
         return -4;
       if (

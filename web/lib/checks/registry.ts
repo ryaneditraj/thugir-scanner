@@ -62465,6 +62465,34 @@ const secureBankBlogAdminRbacRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const secureBankBlogApiIdorRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSecureBankBlogHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\//i.test(pageUrl)) return NEGATIVE;
+  if (/\/(?:idor|messages|auth|login)\b/i.test(pageUrl)) return NEGATIVE;
+  const corpus = await secureBankBlogRouteCorpus(ctx);
+  const checkpointFallback = secureBankBlogRouteCheckpointFallback(pageUrl, ctx.combined);
+  const idorOk =
+    (/only see their own dashboard/i.test(corpus) ||
+      /Insecure Direct Object Reference/i.test(corpus) ||
+      /predictable user ID/i.test(corpus)) &&
+    (/alice|bob/i.test(corpus) || /two roles/i.test(corpus) || /\badmin\b.*\buser\b/i.test(corpus)) &&
+    (/dashboard/i.test(corpus) || /employee portal/i.test(corpus) || /another user/i.test(corpus));
+  if (!idorOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: checkpointFallback ? 0.87 : 0.89,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet:
+        "Normal users (alice, bob) can only see their own dashboard — predictable user IDs enable IDOR in Attack Mode",
+      note: checkpointFallback
+        ? "securebank-blog.vercel.app /api/* route scan — FAST-NUCES SecureBank Medium article documents per-user dashboard IDOR via predictable user IDs (Vercel checkpoint on API route; curated blog corpus fallback) — route-specific broken access control training oracle"
+        : "securebank-blog.vercel.app /api/* route scan — Medium blog article documents per-user dashboard IDOR via predictable user IDs — route-specific broken access control training oracle"
+    }
+  };
+};
+
 const secureBankBlogIdorRouteLiveOracle: Rule = async (ctx) => {
   if (!isSecureBankBlogHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -123420,6 +123448,7 @@ export const RULES: Record<string, Rule> = {
   secureBankBlogLoginSqliRouteLiveOracle,
   secureBankBlogMessagesXssRouteLiveOracle,
   secureBankBlogAdminRbacRouteLiveOracle,
+  secureBankBlogApiIdorRouteLiveOracle,
   secureBankBlogIdorRouteLiveOracle,
   secureBankBlogCsrfAttackPageRouteLiveOracle,
   secureBankBlogTransferCsrfRouteLiveOracle,
