@@ -1087,9 +1087,11 @@ function brokencrystalsJwtSubrouteSlugPattern(pathname: string): RegExp | null {
   const action = (m[2] || "validate").toLowerCase();
   if (variant === "jwk" && action === "validate") return /^brokencrystals-jwt-jwk-empty/;
   if (variant === "jwk" && action === "login") return /^brokencrystals-jwt-jwk-rogue-login/;
+  if (variant === "jku" && action === "login") return /^brokencrystals-jwt-jku-rogue/;
   if (variant === "hmac" && action === "login") return /^brokencrystals-jwt-hmac-confusion-login/;
   if (variant === "weak" && action === "login") return /^brokencrystals-jwt-weak-key-login/;
   if (variant === "rsa") return /^brokencrystals-jwt-(?:alg-none|rsa-signature|route)(?:-|$)/;
+  if (variant === "kid-sql" && action === "login") return /^brokencrystals-jwt-kid-sql/;
   if (variant === "kid-sql") return /^brokencrystals-jwt-kid-sql/;
   if (variant === "weak") return /^brokencrystals-jwt-weak-key/;
   return new RegExp(`^brokencrystals-jwt-${variant}`);
@@ -4035,6 +4037,8 @@ const DEEP_RULES = new Set<string>([
   "brokencrystalsJwtWeakKeyRouteLiveOracle",
   "brokencrystalsJwtKidSqlLiveOracle",
   "brokencrystalsJwtKidSqlRouteLiveOracle",
+  "brokencrystalsJwtKidSqlLoginLiveOracle",
+  "brokencrystalsJwtKidSqlLoginRouteLiveOracle",
   "brokencrystalsJwtHmacConfusionLiveOracle",
   "brokencrystalsJwtHmacConfusionRouteLiveOracle",
   "brokencrystalsJwtHmacConfusionLoginLiveOracle",
@@ -4047,6 +4051,8 @@ const DEEP_RULES = new Set<string>([
   "brokencrystalsJwtX5cRogueRouteLiveOracle",
   "brokencrystalsJwtJkuRogueLiveOracle",
   "brokencrystalsJwtJkuRogueRouteLiveOracle",
+  "brokencrystalsJwtJkuRogueLoginLiveOracle",
+  "brokencrystalsJwtJkuRogueLoginRouteLiveOracle",
   "brokencrystalsJwtX5uRogueLiveOracle",
   "brokencrystalsJwtX5uRogueRouteLiveOracle",
   "brokencrystalsJwtJwkRogueLoginLiveOracle",
@@ -17064,8 +17070,20 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         return -4;
       if (
         /brokencrystals\.com/i.test(origin) &&
+        /\/api\/auth\/jwt\/kid-sql\/login\b/i.test(targetInput) &&
+        p.slug.startsWith("brokencrystals-jwt-kid-sql-login")
+      )
+        return -4;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
         /\/api\/auth\/jwt\/kid-sql\/(?:validate|login)\b/i.test(targetInput) &&
         p.slug.startsWith("brokencrystals-jwt-kid-sql")
+      )
+        return -4;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
+        /\/api\/auth\/jwt\/jku\/login\b/i.test(targetInput) &&
+        p.slug.startsWith("brokencrystals-jwt-jku-rogue-login")
       )
         return -4;
       if (

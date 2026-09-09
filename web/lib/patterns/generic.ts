@@ -44628,6 +44628,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "brokencrystals-jwt-kid-sql-login-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "Broken Crystals JWT kid SQL injection login live oracle",
+    description:
+      "POST /api/auth/jwt/kid-sql/login issues JWT tokens; companion GET /api/auth/jwt/kid-sql/validate accepts HS256 JWTs whose kid header SQL-injects an attacker-controlled HMAC key and returns {\"secret\":\"this is our secret\"} — the Broken Crystals KID SQL login chain oracle.",
+    impactOneline:
+      "SQL injection in JWT kid key lookup combined with login-issued tokens lets attackers forge valid sessions and bypass authentication.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsJwtKidSqlLoginLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Parameterize JWT key lookups and allow-list kid values — Broken Crystals is intentional lab software.",
+      steps: [
+        "Never concatenate JWT kid header values into SQL queries.",
+        "Use prepared statements or a key-management service for key retrieval.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/auth/jwt/kid-sql/login and /validate endpoints are vulnerable to kid SQL injection. Show secure JWT key retrieval patterns.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-jwt-kid-sql-login-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "Broken Crystals /api/auth/jwt/kid-sql/login route live oracle",
+    description:
+      "When scanning /api/auth/jwt/kid-sql/login, POST login issues JWT and kid header SQL injection forges a valid HMAC signing key on companion /validate — route-specific KID SQL login confirmation oracle.",
+    impactOneline:
+      "Route-specific confirmation that Broken Crystals kid-sql login flow is vulnerable to JWT kid SQL injection key forgery.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsJwtKidSqlLoginRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Parameterize JWT key lookups — Broken Crystals is intentional lab software.",
+      steps: [
+        "Never concatenate JWT kid header values into SQL queries.",
+        "Use prepared statements or a key-management service for key retrieval.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/auth/jwt/kid-sql/login route scan confirms kid SQL injection JWT bypass. Show secure key retrieval patterns.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "brokencrystals-simple-csrf-flow-live-oracle",
     platform: "generic",
     category: "Broken authentication",
@@ -44988,6 +45040,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /api/auth/jwt/jku/validate route scan confirms rogue jku URL bypass. Show secure JKU JWT verification.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-jwt-jku-rogue-login-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "Broken Crystals JWT JKU rogue-key login live oracle",
+    description:
+      "POST /api/auth/jwt/jku/login issues JWT tokens; companion GET /api/auth/jwt/jku/validate accepts JWTs with rogue jku URLs that fetch attacker-controlled JWKS and return {\"secret\":\"this is our secret\"} — the Broken Crystals JKU rogue-key login chain oracle.",
+    impactOneline:
+      "Trusting attacker-supplied jku JWKS URLs in JWT headers lets attackers forge valid tokens and bypass authentication.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsJwtJkuRogueLoginLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Pin trusted JWKS URLs and never fetch keys from jku headers — Broken Crystals is intentional lab software.",
+      steps: [
+        "Whitelist allowed JWKS endpoints; reject jku headers pointing at untrusted hosts.",
+        "Use local key stores instead of fetching keys from JWT header URLs.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/auth/jwt/jku/login and /validate endpoints accept rogue jku URL JWTs. Show secure JKU JWT verification patterns.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-jwt-jku-rogue-login-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "Broken Crystals /api/auth/jwt/jku/login route live oracle",
+    description:
+      "When scanning /api/auth/jwt/jku/login, POST login issues JWT and rogue jku URL in JWT header bypasses JKU validation on companion /validate — route-specific JKU injection login confirmation oracle.",
+    impactOneline:
+      "Route-specific confirmation that Broken Crystals JKU login flow is vulnerable to rogue-key JWT forgery.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsJwtJkuRogueLoginRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Pin trusted JWKS URLs — Broken Crystals is intentional lab software.",
+      steps: [
+        "Whitelist allowed JWKS endpoints; reject jku headers pointing at untrusted hosts.",
+        "Use local key stores instead of fetching keys from JWT header URLs.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/auth/jwt/jku/login route scan confirms rogue jku URL JWT bypass. Show secure JKU JWT verification.",
     version: 1,
     enabled: true
   },
