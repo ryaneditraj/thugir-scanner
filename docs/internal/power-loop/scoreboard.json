@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-09T22:10:00.000Z",
+  "updated_at": "2026-09-09T23:09:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 3241,
-  "total_findings": 36321,
-  "critical_findings": 61,
+  "total_sites_scanned": 3250,
+  "total_findings": 36469,
+  "critical_findings": 63,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2224,
-  "discovery_findings": 27878,
+  "discovery_urls_added": 2226,
+  "discovery_findings": 27975,
   "improvements_shipped": 1714,
-  "last_run": "2026-09-09T22:10:00.000Z",
+  "last_run": "2026-09-09T23:09:00.000Z",
   "last_run_summary": {
-    "hour_utc": "22",
+    "hour_utc": "23",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 52,
+      "oracle_findings": 51,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,46 +48,44 @@
           ]
         }
       },
-      "note": "Primary Heroku stable 6/6 (52 findings, secret-resend present) — no category gaps"
+      "note": "Primary Heroku stable 6/6 (51 findings, 38 live oracles incl secret-resend) — no category gaps"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 148,
-      "focus": "ginandjuice wallet-balance/searchTerm/api-docs REST oracles + wrongsecrets actuator/MCP env leak + queue drain vulnbank upload + ginandjuice login + wrongsecrets-45",
-      "improvements_shipped_this_run": 2
+      "findings": 97,
+      "focus": "ginandjuice order-details IDOR + brokencrystals /api/config secrets + GraphQL SSTI + stock XXE + vulnforge L17 file-upload + queue drain wrongsecrets-46/47 + sqli blind-time",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, gap=[], secret-resend present)",
-      "ginandjuice.shop/rest/wallet/balance: 36 findings — host-tier ginandjuice live oracles (order-details-idor, stock-xxe, admin-bypass)",
-      "ginandjuice.shop/catalog?searchTerm=test: 18 findings — catalog-search-xss + category-sqli live oracles",
-      "ginandjuice.shop/api-docs: 35 findings — OpenAPI docs exposure + ginandjuice vulnerability corpus",
-      "wrongsecrets.herokuapp.com/actuator/auditevents: 16 findings — spring-boot-actuator-exposed + wrongsecrets-mcp-execute-command-live-oracle",
-      "wrongsecrets.herokuapp.com/mcp: 17 findings — wrongsecrets-mcp-execute-command-live-oracle (challenge-60 env leak)",
-      "vulnbank.org/upload_profile_picture_url: 8 findings — vulnbank-upload-profile-picture-url-ssrf-live-oracle",
-      "ginandjuice.shop/login: 6 findings — thin pass (login-username-reflection only; route oracle cold)",
-      "wrongsecrets.herokuapp.com/challenge/challenge-45: 12 findings — vault-subkey-route-live-oracle",
-      "brokencrystals.com/api/auth/jwt/kid-sql/login: 3→8 findings (+kid-sql-login live+route +validate live+route) — parallel run"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, gap=[], secret-resend present)",
+      "brokencrystals.com/api/config: 34 findings — brokencrystals-config-live-oracle + OIDC client secret disclosure",
+      "brokencrystals.com/graphql: 16 findings — GraphQL introspection + brokencrystals-graphql-ssti-live-oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-46: 12 findings — vault-template-injection-route-live-oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-47: 12 findings — vault-template-hardcoded-route-live-oracle",
+      "vulnforge-academy.vercel.app/challenges/17: 8 findings — vulnforge-level17-file-upload route corpus",
+      "ginandjuice.shop/order/details?orderId=0254809: 6 findings — ginandjuice-order-details-idor-live-oracle",
+      "ginandjuice.shop/catalog/product/stock: 6 findings — thin pass (host-tier bleed; stock-xxe route oracle cold)",
+      "sqli.vulnlab.dev/blind-time/: 3 findings — seclab-sqli-search-live-oracle only; blind-time dedicated oracle gap"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "ginandjuice.shop/login: thin pass (6 findings) — route-specific login oracles need dedicated /login tier scoping",
-      "ginandjuice.shop/rest/wallet/balance: no dedicated wallet-balance BOLA live oracle — host-tier bleed from other ginandjuice routes",
-      "wrongsecrets actuator/auditevents: spring-boot-actuator-exposed but challenge-42 API_KEY_RECEIVED audit event needs dedicated auditevents route corpus",
-      "brokencrystals.com/api/auth/jwt/hmac/login: thin pass (4 findings) — hmac-confusion-login oracles exist but may need hub-filter revalidation"
+      "ginandjuice.shop/catalog/product/stock: thin pass (6 findings) — dedicated POST /catalog/product/stock XXE live oracle needs route-tier scoping",
+      "ginandjuice.shop/order/details?orderId=: IDOR live oracle fires but thin pass — orderId param enumeration corpus may need expansion",
+      "sqli.vulnlab.dev/blind-time/: 3 findings — blind time-based SQLi needs dedicated SLEEP() oracle separate from generic seclab-sqli",
+      "vulnforge-academy/challenges/17: 8 findings — file-upload bypass may need level17 dedicated upload-validation corpus"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 52,
-    "ginandjuice.shop/rest/wallet/balance": 36,
-    "ginandjuice.shop/api-docs": 35,
-    "ginandjuice.shop/catalog?searchTerm=test": 18,
-    "wrongsecrets.herokuapp.com/mcp": 17,
-    "wrongsecrets.herokuapp.com/actuator/auditevents": 16,
-    "wrongsecrets.herokuapp.com/challenge/challenge-45": 12,
-    "brokencrystals.com/api/auth/jwt/kid-sql/login": 8,
-    "vulnbank.org/upload_profile_picture_url": 8,
-    "ginandjuice.shop/login": 6
+    "juice-shop.herokuapp.com": 51,
+    "brokencrystals.com/api/config": 34,
+    "brokencrystals.com/graphql": 16,
+    "wrongsecrets.herokuapp.com/challenge/challenge-46": 12,
+    "wrongsecrets.herokuapp.com/challenge/challenge-47": 12,
+    "vulnforge-academy.vercel.app/challenges/17": 8,
+    "ginandjuice.shop/order/details?orderId=0254809": 6,
+    "ginandjuice.shop/catalog/product/stock": 6,
+    "sqli.vulnlab.dev/blind-time/": 3
   }
 }

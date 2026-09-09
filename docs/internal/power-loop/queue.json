@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-09T22:05:00.000Z",
+  "updated_at": "2026-09-09T23:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://ginandjuice.shop/order/details?orderId=0254809",
+      "source": "PortSwigger Gin & Juice Shop — unauthenticated order IDOR oracle GET /order/details?orderId= (pentest-2026-ginandjuice FINDING-006; web search 23 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/config",
+      "source": "NeuraLegion/brokencrystals — exposed DB connection string + API keys GET /api/config (README secret-tokens; web search 23 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/graphql",
+      "source": "NeuraLegion/brokencrystals — GraphQL SSTI getCommandResult RCE POST /graphql (README + Docker Hub; web search 23 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/catalog/product/stock",
+      "source": "PortSwigger Gin & Juice Shop — XXE stock-check oracle POST /catalog/product/stock XML body (Burp scanner sample report; web search 23 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnforge-academy.vercel.app/challenges/17",
+      "source": "webspoilt/vulnforge-academy — Level 17 file-upload validation bypass SPA route (GitHub README medium tier; web search 23 UTC discovery)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://ginandjuice.shop/rest/wallet/balance",
       "source": "PortSwigger Gin & Juice Shop — unauthenticated wallet balance BOLA oracle GET /rest/wallet/balance (ZAP testapp docs + pentest report; web search 22 UTC discovery)",
