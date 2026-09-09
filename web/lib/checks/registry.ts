@@ -18959,6 +18959,8 @@ function sekumartScannedRoute(ctx: RuleContext): string | null {
     if (/login\.php/.test(pathname)) return "login";
     if (/apiv1\.php/.test(pathname)) return "apiv1";
     if (/category\.php/.test(pathname)) return "category";
+    if (/reviews\.php/.test(pathname)) return "reviews";
+    if (/cart\.php/.test(pathname)) return "cart";
     return null;
   } catch {
     return null;
@@ -19433,6 +19435,119 @@ const sekumartCategorySqliRouteLiveOracle: Rule = async (ctx) => {
       scannedUrl: pageUrl,
       note:
         "SekuMart /category.php route scan — GET ?cat=1' triggers mysqli_sql_exception in category_low.php — integer SQLi training oracle"
+    }
+  };
+};
+
+function sekumartSessionCookieFromDoc(doc: { setCookies: string[] }): string | null {
+  return doc.setCookies.find((c) => /^PHPSESSID=/i.test(c))?.split(";")[0] ?? null;
+}
+
+async function probeSekumartReviewsStoredXss(ctx: RuleContext): Promise<RuleResult | null> {
+  const canary = `thugirXSS${Date.now().toString(36)}`;
+  const payload = `<b>${canary}</b>`;
+  const reviewsUrl = new URL("/reviews.php", ctx.origin).toString();
+  await fetchDoc(reviewsUrl, {
+    method: "POST",
+    body: `product_id=1&author=thugir-probe&body=${encodeURIComponent(payload)}`,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 8192,
+    timeoutMs: 12000
+  });
+  const doc = await fetchDoc(reviewsUrl, { maxBytes: 16384, timeoutMs: 12000 });
+  if (doc.status < 200 || doc.status >= 500) return null;
+  if (!doc.body.includes(`<b>${canary}</b>`)) return null;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: reviewsUrl,
+      canary,
+      snippet: doc.body.match(new RegExp(`<b>thugir-probe</b>[\\s\\S]{0,80}${canary}`))?.[0]?.slice(0, 120) ?? doc.body.slice(0, 200).trim(),
+      note:
+        "SekuMart POST /reviews.php stores author/body verbatim and GET /reviews.php renders stored HTML without encoding — stored XSS training oracle"
+    }
+  };
+}
+
+const sekumartReviewsStoredXssLiveOracle: Rule = async (ctx) => {
+  if (!isSekumartHost(ctx)) return NEGATIVE;
+  const scannedRoute = sekumartScannedRoute(ctx);
+  if (scannedRoute && scannedRoute !== "reviews") return NEGATIVE;
+  return (await probeSekumartReviewsStoredXss(ctx)) ?? NEGATIVE;
+};
+
+const sekumartReviewsStoredXssRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSekumartHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/reviews\.php/i.test(pageUrl)) return NEGATIVE;
+  const result = await sekumartReviewsStoredXssLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note:
+        "SekuMart /reviews.php route scan — POST review body stored and rendered without HTML encoding — stored XSS training oracle"
+    }
+  };
+};
+
+async function probeSekumartCartCouponSqli(ctx: RuleContext): Promise<RuleResult | null> {
+  const addUrl = new URL("/cart.php?add=1", ctx.origin).toString();
+  const addDoc = await fetchDoc(addUrl, { maxBytes: 8192, timeoutMs: 12000 });
+  const cookie =
+    sekumartSessionCookieFromDoc(addDoc) ??
+    sekumartSessionCookieFromDoc({ setCookies: ctx.home.setCookies || [] });
+  const headers: Record<string, string> = { "Content-Type": "application/x-www-form-urlencoded" };
+  if (cookie) headers.Cookie = cookie;
+  const cartUrl = new URL("/cart.php", ctx.origin).toString();
+  const doc = await fetchDoc(cartUrl, {
+    method: "POST",
+    body: "code=test'",
+    headers,
+    maxBytes: 8192,
+    timeoutMs: 12000
+  });
+  if (doc.status < 200 || doc.status >= 500) return null;
+  if (!/mysqli_sql_exception|coupon_low\.php/i.test(doc.body)) return null;
+  const match = doc.body.match(/mysqli_sql_exception:[^<]{0,120}/i);
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url: cartUrl,
+      sqlError: match?.[0]?.slice(0, 120) ?? "mysqli SQL syntax error in coupon_low.php",
+      snippet: doc.body.slice(0, 240).trim(),
+      note:
+        "SekuMart POST /cart.php code=test' triggers mysqli_sql_exception in coupon_low.php after seeding cart — coupon SQLi training oracle"
+    }
+  };
+}
+
+const sekumartCartCouponSqliLiveOracle: Rule = async (ctx) => {
+  if (!isSekumartHost(ctx)) return NEGATIVE;
+  const scannedRoute = sekumartScannedRoute(ctx);
+  if (scannedRoute && scannedRoute !== "cart") return NEGATIVE;
+  return (await probeSekumartCartCouponSqli(ctx)) ?? NEGATIVE;
+};
+
+const sekumartCartCouponSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSekumartHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/cart\.php/i.test(pageUrl)) return NEGATIVE;
+  const result = await sekumartCartCouponSqliLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note:
+        "SekuMart /cart.php route scan — POST coupon code=test' triggers mysqli_sql_exception in coupon_low.php — coupon SQLi training oracle"
     }
   };
 };
@@ -126196,6 +126311,10 @@ export const RULES: Record<string, Rule> = {
   sekumartApiv1JsonSqliRouteLiveOracle,
   sekumartCategorySqliLiveOracle,
   sekumartCategorySqliRouteLiveOracle,
+  sekumartReviewsStoredXssLiveOracle,
+  sekumartReviewsStoredXssRouteLiveOracle,
+  sekumartCartCouponSqliLiveOracle,
+  sekumartCartCouponSqliRouteLiveOracle,
   clientSideBreakTheFlaskEvidence,
   clientSideFlaskVulnappEvidence,
   clientSideFlaskVulnappStoredXssEvidence,

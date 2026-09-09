@@ -4604,6 +4604,10 @@ const DEEP_RULES = new Set<string>([
   "sekumartApiv1JsonSqliRouteLiveOracle",
   "sekumartCategorySqliLiveOracle",
   "sekumartCategorySqliRouteLiveOracle",
+  "sekumartReviewsStoredXssLiveOracle",
+  "sekumartReviewsStoredXssRouteLiveOracle",
+  "sekumartCartCouponSqliLiveOracle",
+  "sekumartCartCouponSqliRouteLiveOracle",
   "clientSideBreakTheFlaskEvidence",
   "clientSideFlaskVulnappEvidence",
   "clientSideFlaskVulnappStoredXssEvidence",
@@ -9963,7 +9967,9 @@ function sekumartApiSeeds(pageUrl: string): string[] {
     "/category.php?cat=1",
     "/track.php?order=SK-1001",
     "/members.php?user=ada",
-    "/catalog.php?sort=id"
+    "/catalog.php?sort=id",
+    "/reviews.php",
+    "/cart.php"
   ];
   const out = new Set<string>();
   for (const p of paths) {
@@ -11144,6 +11150,38 @@ function applyRouteOracleHubFilters(
         const deduped = findings.filter((f: PatternFinding) =>
           fauxbankApiKeep.test(f.patternSlug || "")
         );
+        findings.length = 0;
+        findings.push(...deduped);
+      }
+    } catch {
+      /* ignore */
+    }
+  }
+
+  if (/sekumart\.sekuripy\.hr/i.test(origin)) {
+    try {
+      const pathname = new URL(targetInput).pathname.toLowerCase();
+      const genericKeep =
+        /^(?:missing-security-headers|tech-stack-disclosure|thugir-dir-discovery)$/;
+      if (/\/reviews\.php/.test(pathname)) {
+        const reviewsKeep =
+          /^(?:sekumart-reviews-|missing-security-headers|tech-stack-disclosure|thugir-dir-discovery)/;
+        const deduped = findings.filter((f: PatternFinding) => {
+          const slug = f.patternSlug || "";
+          if (!slug.startsWith("sekumart-")) return genericKeep.test(slug);
+          return reviewsKeep.test(slug);
+        });
+        findings.length = 0;
+        findings.push(...deduped);
+      }
+      if (/\/cart\.php/.test(pathname)) {
+        const cartKeep =
+          /^(?:sekumart-cart-|missing-security-headers|tech-stack-disclosure|thugir-dir-discovery)/;
+        const deduped = findings.filter((f: PatternFinding) => {
+          const slug = f.patternSlug || "";
+          if (!slug.startsWith("sekumart-")) return genericKeep.test(slug);
+          return cartKeep.test(slug);
+        });
         findings.length = 0;
         findings.push(...deduped);
       }
@@ -13353,6 +13391,18 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         p.slug.startsWith("pc-parts-store-")
       )
         return -3;
+      if (
+        /sekumart\.sekuripy\.hr/i.test(origin) &&
+        /\/reviews\.php/i.test(targetInput) &&
+        p.slug.startsWith("sekumart-reviews-")
+      )
+        return -4;
+      if (
+        /sekumart\.sekuripy\.hr/i.test(origin) &&
+        /\/cart\.php/i.test(targetInput) &&
+        p.slug.startsWith("sekumart-cart-")
+      )
+        return -4;
       if (
         /vuln-demo\.vercel\.app/i.test(origin) &&
         (targetInput === origin ||

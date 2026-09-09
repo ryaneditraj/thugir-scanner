@@ -63620,6 +63620,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "sekumart-reviews-stored-xss-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "SekuMart reviews.php stored XSS live oracle",
+    description:
+      "POST sekumart.sekuripy.hr/reviews.php stores author/body verbatim and GET /reviews.php renders stored HTML without encoding — the SekuriPy sqlmap playground stored XSS training oracle.",
+    impactOneline:
+      "Unsanitized review author/body fields in reviews.php enable stored HTML injection on the SekuMart demo shop.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sekumartReviewsStoredXssLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "SekuMart is intentional training software — sanitize review HTML before storage and encode on output.",
+      steps: [
+        "HTML-encode author and body fields before rendering in review listings.",
+        "Use a strict allow-list or markdown sanitizer for user-generated review content.",
+        "Run SekuMart only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our SekuMart reviews.php renders stored review HTML without encoding. Show output encoding and sanitization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "sekumart-reviews-stored-xss-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "SekuMart /reviews.php route stored XSS live oracle",
+    description:
+      "When scanning sekumart.sekuripy.hr/reviews.php, POST review body is stored and rendered without HTML encoding — route-specific stored XSS training oracle.",
+    impactOneline:
+      "Route scans on /reviews.php should confirm live stored XSS via unescaped author/body rendering.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sekumartReviewsStoredXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "SekuMart is intentional training software — sanitize review HTML before storage and encode on output.",
+      steps: [
+        "HTML-encode author and body fields before rendering.",
+        "Use a strict allow-list sanitizer for user-generated review content.",
+        "Run SekuMart labs only on isolated staging infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our SekuMart /reviews.php route stores and renders review HTML without encoding. Show sanitization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "sekumart-cart-coupon-sqli-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "SekuMart cart.php coupon SQLi live oracle",
+    description:
+      "POST sekumart.sekuripy.hr/cart.php code=test' triggers mysqli_sql_exception in coupon_low.php after seeding cart — the SekuriPy sqlmap playground coupon SQLi training oracle.",
+    impactOneline:
+      "Unsanitized coupon code parameter in cart.php enables error-based SQL injection on the SekuMart demo shop checkout flow.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sekumartCartCouponSqliLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "SekuMart is intentional training software — use parameterized queries for coupon lookups.",
+      steps: [
+        "Replace string-concatenated SQL with prepared statements for coupon validation.",
+        "Validate coupon codes against an allow-list format before querying.",
+        "Run SekuMart only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our SekuMart cart.php concatenates coupon code into SQL causing mysqli errors. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "sekumart-cart-coupon-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "SekuMart /cart.php route coupon SQLi live oracle",
+    description:
+      "When scanning sekumart.sekuripy.hr/cart.php, POST coupon code=test' triggers mysqli_sql_exception in coupon_low.php — route-specific coupon SQLi sqlmap training oracle.",
+    impactOneline:
+      "Route scans on /cart.php should confirm live mysqli SQL injection on the coupon code POST parameter.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sekumartCartCouponSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "SekuMart is intentional training software — use parameterized queries for coupon lookups.",
+      steps: [
+        "Replace string-concatenated SQL with prepared statements.",
+        "Validate coupon codes before querying.",
+        "Run SekuMart labs only on isolated staging infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our SekuMart /cart.php route has coupon SQLi on the code parameter. Show prepared statement remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "pc-parts-store-stored-xss-route-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",

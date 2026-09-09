@@ -10319,6 +10319,24 @@
       "slug": "ginandjuice-catalog-product-route-tier-suppression",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: probeGinAndJuiceStockXxe extracted; stock-xxe live oracle scoped to stock tier only; catalog-product-route oracle uses shared probe on product tier; sql/reflected skip product tier; ginandjuice.shop/catalog/product?productId=1 findings 12→7 (-stock-xxe-live-oracle duplicate +sql-error-disclosure +reflected-xss +logout-session-regeneration, +catalog-product-route +angular-vulnerable-dependency retained); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:sekumart.sekuripy.hr",
+      "slug": "sekumart-reviews-stored-xss-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /reviews.php product_id=1&body=<b>canary</b> stores and GET /reviews.php renders author/body verbatim (viewsource.php?p=reviews LOW render_review); sekumart.sekuripy.hr/reviews.php findings 21→5 (-11 host-tier sekumart SQLi/XSS bleed, +sekumart-reviews-stored-xss live+route oracles); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:sekumart.sekuripy.hr",
+      "slug": "sekumart-cart-coupon-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /cart.php?add=1 seeds cart then POST code=test' triggers mysqli_sql_exception in coupon_low.php; sekumart.sekuripy.hr/cart.php findings 21→5 (-11 host-tier sekumart oracle bleed, +sekumart-cart-coupon-sqli live+route oracles); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:sekumart.sekuripy.hr",
+      "slug": "sekumart-reviews-cart-tier-hub-oracle-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: sekumartScannedRoute adds reviews+cart tiers; applyRouteOracleHubFilters keeps sekumart-reviews-* on /reviews.php and sekumart-cart-* on /cart.php route scans; reviews.php 21→5 and cart.php 21→5 (-product/search/directory/login host bleed, +route-specific oracles retained); benchmark juice-shop 52 findings 6/6 maintained"
     }
   ]
 }
