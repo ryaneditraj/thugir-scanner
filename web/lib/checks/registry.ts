@@ -89490,8 +89490,8 @@ const ginAndJuiceLoginNextOpenRedirectRouteLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/login\b/i.test(pageUrl)) return NEGATIVE;
-  const nextParam = ginAndJuiceExternalNextParamFromUrl(pageUrl);
-  if (!nextParam) return NEGATIVE;
+  const nextParam =
+    ginAndJuiceExternalNextParamFromUrl(pageUrl) ?? "https://thugir-open-redirect.example/";
   const result = await clientSideOpenRedirectEvidence(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -89501,7 +89501,7 @@ const ginAndJuiceLoginNextOpenRedirectRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       nextParam,
-      note: "Gin & Juice Shop /login?next= route scan — client bundle documents post-login redirect validation that can be abused via next query parameter (FINDING-020 chain)"
+      note: "Gin & Juice Shop /login route scan — client bundle documents post-login redirect validation that can be abused via next query parameter (FINDING-020 chain)"
     }
   };
 };
@@ -97847,6 +97847,48 @@ const wrongsecretsChallenge42ActuatorAuditRouteLiveOracle: Rule = async (ctx) =>
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "WrongSecrets challenge-42 route scan — Spring Boot actuator audit events challenge confirms /actuator/auditevents exposure walkthrough"
+    }
+  };
+};
+
+/** GET /actuator/auditevents returns API_KEY_RECEIVED audit events with apiKey in JSON — challenge-42 live probe. */
+const wrongsecretsActuatorAuditeventsLiveOracle: Rule = async (ctx) => {
+  if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/actuator/auditevents", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, {
+    maxBytes: 16384,
+    timeoutMs: 15000,
+    headers: { Accept: "application/json" }
+  });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  const body = doc.body.trim();
+  if (!/"events"\s*:\s*\[/.test(body)) return NEGATIVE;
+  if (!/API_KEY_RECEIVED/i.test(body)) return NEGATIVE;
+  const apiKeyMatch = body.match(/"apiKey"\s*:\s*"([^"]+)"/i);
+  return {
+    fired: true,
+    confidence: apiKeyMatch ? 0.96 : 0.93,
+    evidence: {
+      url: probeUrl,
+      apiKey: apiKeyMatch?.[1]?.slice(0, 36),
+      snippet: body.slice(0, 200).trim(),
+      note: "OWASP WrongSecrets GET /actuator/auditevents exposes audit events with API_KEY_RECEIVED and apiKey in data payload — challenge-42 Spring Boot actuator audit leak oracle"
+    }
+  };
+};
+
+const wrongsecretsActuatorAuditeventsRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/wrongsecrets/i.test(pageUrl) || !/\/actuator\/auditevents\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await wrongsecretsActuatorAuditeventsLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WrongSecrets /actuator/auditevents route scan — unauthenticated audit events JSON leaks API_KEY_RECEIVED with apiKey value"
     }
   };
 };
@@ -124691,6 +124733,8 @@ export const RULES: Record<string, Rule> = {
   wrongsecretsChallenge41PasswordShuckingRouteLiveOracle,
   wrongsecretsChallenge42ActuatorAuditLiveOracle,
   wrongsecretsChallenge42ActuatorAuditRouteLiveOracle,
+  wrongsecretsActuatorAuditeventsLiveOracle,
+  wrongsecretsActuatorAuditeventsRouteLiveOracle,
   wrongsecretsChallenge43RedditBlunderLiveOracle,
   wrongsecretsChallenge43RedditBlunderRouteLiveOracle,
   wrongsecretsChallenge44VaultMetadataLiveOracle,

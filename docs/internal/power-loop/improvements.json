@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-actuator-auditevents-oracles",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /actuator/auditevents returns {\"events\":[{\"type\":\"API_KEY_RECEIVED\",\"data\":{\"apiKey\":\"...\"}}]}; wrongsecretsActuatorAuditeventsLiveOracle + route; applyRouteOracleHubFilters auditeventsKeep suppresses challenge-28/29/30/57 bleed; wrongsecrets.herokuapp.com/actuator/auditevents findings 16→7 (+wrongsecrets-actuator-auditevents-live-oracle +route, +spring-boot-actuator-exposed retained); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-rest-wallet-balance-tier-hub-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: ginAndJuiceRouteTierSlugPattern adds /rest/wallet/balance tier; applyRouteOracleHubFilters onWalletBalance drops angular-csti bleed and all cross-route ginandjuice-* oracles (endpoint 404 on ginandjuice.shop — no live wallet BOLA probe); ginandjuice.shop/rest/wallet/balance findings 36→6 (-30 host-tier ginandjuice live-oracle bleed); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-login-next-open-redirect-route-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: ginAndJuiceLoginNextOpenRedirectRouteLiveOracle fires on plain /login route scans without ?next= (synthetic external next); ginAndJuiceLoginPrioritySeeds adds /login?next= seed; ginandjuice.shop/login findings 6→7 (+ginandjuice-login-next-open-redirect-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:brokencrystals.com",
       "slug": "brokencrystals-jwt-kid-sql-login-oracles",
       "status": "shipped",

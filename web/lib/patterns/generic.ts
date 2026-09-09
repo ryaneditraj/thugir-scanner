@@ -38377,6 +38377,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "wrongsecrets-actuator-auditevents-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets actuator auditevents API key leak live oracle",
+    description:
+      "GET /actuator/auditevents returns JSON audit events including API_KEY_RECEIVED with apiKey in the data payload — the WrongSecrets challenge-42 Spring Boot actuator audit leak oracle.",
+    impactOneline:
+      "Unauthenticated actuator audit events expose API keys and other sensitive audit payloads to anyone who can reach /actuator/auditevents.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsActuatorAuditeventsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict Spring Boot actuator audit endpoints and redact sensitive fields from audit events.",
+      steps: [
+        "Disable or authenticate /actuator/auditevents in production.",
+        "Redact apiKey and other secrets from audit event payloads.",
+        "Expose actuator endpoints only on internal networks."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets /actuator/auditevents endpoint leaks API_KEY_RECEIVED audit events with apiKey values. Show Spring Boot actuator hardening remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "wrongsecrets-actuator-auditevents-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets /actuator/auditevents route live oracle",
+    description:
+      "When scanning /actuator/auditevents, unauthenticated JSON audit events include API_KEY_RECEIVED with apiKey in data — route-specific challenge-42 actuator audit leak confirmation oracle.",
+    impactOneline:
+      "Route-specific confirmation that WrongSecrets /actuator/auditevents leaks API keys via Spring Boot audit events.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsActuatorAuditeventsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict Spring Boot actuator audit endpoints and redact sensitive fields from audit events.",
+      steps: [
+        "Disable or authenticate /actuator/auditevents in production.",
+        "Redact apiKey and other secrets from audit event payloads.",
+        "Expose actuator endpoints only on internal networks."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets /actuator/auditevents route scan confirms API key leak in audit events. Show route-specific actuator hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "wrongsecrets-challenge-43-reddit-blunder-route-live-oracle",
     platform: "generic",
     category: "Exposed secret",

@@ -1157,6 +1157,7 @@ function ginAndJuiceRouteTierSlugPattern(pathname: string): RegExp | null {
   if (/\/catalog\/cart\b/.test(p) || /\/checkout\b/.test(p)) return /^ginandjuice-(?:cart|basket|checkout)/;
   if (/\/catalog\/subscribe\b/.test(p)) return /^ginandjuice-catalog-subscribe/;
   if (/\/catalog\b/.test(p)) return /^ginandjuice-catalog/;
+  if (/\/rest\/wallet\/balance\b/.test(p)) return /^ginandjuice-rest-wallet-balance/;
   if (/\/login\b/.test(p)) return /^ginandjuice-login/;
   if (/\/register\b/.test(p)) return /^ginandjuice-register/;
   if (/\/admin\b/.test(p)) return /^ginandjuice-admin/;
@@ -3634,6 +3635,8 @@ const DEEP_RULES = new Set<string>([
   "wrongsecretsChallenge41PasswordShuckingRouteLiveOracle",
   "wrongsecretsChallenge42ActuatorAuditLiveOracle",
   "wrongsecretsChallenge42ActuatorAuditRouteLiveOracle",
+  "wrongsecretsActuatorAuditeventsLiveOracle",
+  "wrongsecretsActuatorAuditeventsRouteLiveOracle",
   "wrongsecretsChallenge43RedditBlunderLiveOracle",
   "wrongsecretsChallenge43RedditBlunderRouteLiveOracle",
   "wrongsecretsChallenge44VaultMetadataLiveOracle",
@@ -11142,17 +11145,45 @@ function applyRouteOracleHubFilters(
       if (tierSlugRe) {
         const onCatalog =
           /\/catalog\b/.test(pathname) && !/\/catalog\/(?:product|cart)\b/.test(pathname);
-        const genericKeep = onCatalog
-          ? /^(?:missing-security-headers|insecure-cookies|thugir-dir-discovery|client-side-gin-and-juice)$/
-          : /^(?:missing-security-headers|insecure-cookies|thugir-dir-discovery|client-side-gin-and-juice|client-side-open-redirect-evidence)$/;
+        const onWalletBalance = /\/rest\/wallet\/balance\b/.test(pathname);
+        const genericKeep = onWalletBalance
+          ? /^(?:missing-security-headers|insecure-cookies|thugir-dir-discovery|client-side-gin-and-juice|client-side-open-redirect-evidence|sql-error-disclosure|reflected-xss-query-param)$/
+          : onCatalog
+            ? /^(?:missing-security-headers|insecure-cookies|thugir-dir-discovery|client-side-gin-and-juice)$/
+            : /^(?:missing-security-headers|insecure-cookies|thugir-dir-discovery|client-side-gin-and-juice|client-side-open-redirect-evidence)$/;
         const deduped = findings.filter((f: PatternFinding) => {
           const slug = f.patternSlug || "";
           if (!slug.startsWith("ginandjuice-")) return genericKeep.test(slug);
+          if (onWalletBalance) return tierSlugRe.test(slug);
           return (
             tierSlugRe.test(slug) ||
             /^ginandjuice-angular-(?:vulnerable-dependency|csti)/.test(slug)
           );
         });
+        findings.length = 0;
+        findings.push(...deduped);
+      }
+    } catch {
+      /* ignore */
+    }
+  }
+
+  if (/wrongsecrets/i.test(origin)) {
+    try {
+      const pathname = new URL(targetInput).pathname.toLowerCase();
+      if (/\/actuator\/auditevents\b/.test(pathname)) {
+        const auditeventsKeep =
+          /^(?:wrongsecrets-actuator-auditevents|wrongsecrets-challenge-42-actuator|spring-boot-actuator-exposed|missing-security-headers|thugir-dir-discovery|client-side-wrongsecrets)/;
+        const deduped = findings.filter((f: PatternFinding) =>
+          auditeventsKeep.test(f.patternSlug || "")
+        );
+        findings.length = 0;
+        findings.push(...deduped);
+      }
+      if (/\/mcp\b/.test(pathname)) {
+        const mcpKeep =
+          /^(?:wrongsecrets-mcp|wrongsecrets-challenge-60-mcp|spring-boot-actuator-exposed|missing-security-headers|thugir-dir-discovery|client-side-wrongsecrets)/;
+        const deduped = findings.filter((f: PatternFinding) => mcpKeep.test(f.patternSlug || ""));
         findings.length = 0;
         findings.push(...deduped);
       }
@@ -12577,7 +12608,10 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
       ? ["https://vwad.owasp.org/app/damn-vulnerable-restaurant/"]
       : [];
   const ginAndJuiceLoginPrioritySeeds = /ginandjuice\.shop/i.test(home.finalUrl)
-    ? [new URL("/login", home.finalUrl).toString()]
+    ? [
+        new URL("/login", home.finalUrl).toString(),
+        new URL("/login?next=https://thugir-open-redirect.example/", home.finalUrl).toString()
+      ]
     : [];
   const vwadHackxorPrioritySeeds =
     /vwad\.owasp\.org\/app\/hackxor/i.test(home.finalUrl)
@@ -17498,6 +17532,18 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /ginandjuice\.shop/i.test(origin) &&
         /\/(?:login|my-account)\b/i.test(targetInput) &&
         p.slug.startsWith("ginandjuice-login")
+      )
+        return -4;
+      if (
+        /ginandjuice\.shop/i.test(origin) &&
+        /\/rest\/wallet\/balance\b/i.test(targetInput) &&
+        p.slug.startsWith("ginandjuice-rest-wallet-balance")
+      )
+        return -4;
+      if (
+        /wrongsecrets/i.test(origin) &&
+        /\/actuator\/auditevents\b/i.test(targetInput) &&
+        p.slug.startsWith("wrongsecrets-actuator-auditevents")
       )
         return -4;
       if (
