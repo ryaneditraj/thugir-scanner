@@ -72,7 +72,6 @@
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: sekumartScannedRoute suppresses cross-tier live oracles on route scans; sekumart.sekuripy.hr/members.php findings 13 (+sekumart-members-nosql-live-oracle +route, -product/search/catalog/login/apiv1 live oracle cross-tier bleed); benchmark juice-shop 53 findings 6/6 maintained"
     },
-    },
     {
       "source": "discovery:qabash.com",
       "slug": "qabash-sample-api-users-live-oracle",
