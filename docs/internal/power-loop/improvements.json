@@ -1,6 +1,18 @@
 {
   "candidates": [
     {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-jwt-kid-sql-login-oracles",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/auth/jwt/kid-sql/login issues JWT; forged kid UNION SELECT HS256 JWT on GET /validate returns {\"secret\":\"this is our secret\"}; brokencrystals.com/api/auth/jwt/kid-sql/login findings 3→8 (+brokencrystals-jwt-kid-sql-login-live-oracle +route +validate live+route retained); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-jwt-jku-rogue-login-oracles",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/auth/jwt/jku/login issues JWT; rogue jku URL JWT on GET /validate returns secret; brokencrystals.com/api/auth/jwt/jku/login findings 6 (+brokencrystals-jwt-jku-rogue-login-live-oracle +route +jku-rogue validate live+route retained); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:pwnshop.ctfsecurity.com",
       "slug": "pwnshop-api-v1-payments-tier-hub-oracle-suppression",
       "status": "shipped",
