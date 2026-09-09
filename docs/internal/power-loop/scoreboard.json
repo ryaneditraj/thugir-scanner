@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-09T20:22:00.000Z",
+  "updated_at": "2026-09-09T21:09:40.495Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 3220,
-  "total_findings": 36014,
+  "total_sites_scanned": 3229,
+  "total_findings": 36138,
   "critical_findings": 61,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2214,
-  "discovery_findings": 27675,
+  "discovery_urls_added": 2219,
+  "discovery_findings": 27747,
   "improvements_shipped": 1709,
-  "last_run": "2026-09-09T20:22:00.000Z",
+  "last_run": "2026-09-09T21:09:40.495Z",
   "last_run_summary": {
-    "hour_utc": "20",
+    "hour_utc": "21",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 52,
@@ -48,32 +48,41 @@
           ]
         }
       },
-      "note": "Primary Heroku stable 6/6 (52 findings, gap=[]); no category misses"
+      "note": "Primary Heroku stable 6/6 (52 findings, 38 live oracles incl secret-resend; gap=[])"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 2,
-      "findings": 10,
-      "focus": "SekuMart reviews stored-XSS + cart coupon SQLi route oracles + tier-hub suppression",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 72,
+      "focus": "brokencrystals JWT JKU/JWK login chains + products/latest limit bypass + vulnforge L20 SSTI + pwnshop avatar SSRF + vulnbank reset-password",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, gap=[])",
-      "sekumart.sekuripy.hr/reviews.php: 5 findings — sekumart-reviews-stored-xss live+route oracles (was 21 host-tier bleed)",
-      "sekumart.sekuripy.hr/cart.php: 5 findings — sekumart-cart-coupon-sqli live+route oracles (was 21 host-tier bleed)"
+      "brokencrystals.com/api/auth/jwt/jku/login: 6 findings — JWT JKU rogue-key live+route oracles",
+      "brokencrystals.com/api/auth/jwt/jwk/login: 5 findings — JWT JWK rogue-key login live+route oracles",
+      "brokencrystals.com/api/products/latest: 15 findings — products limit-bypass live+route oracles + exposed-env",
+      "vulnforge-academy.vercel.app/challenges/20: 8 findings — reflexion-escalated-ssti + SQLi/XSS bundle",
+      "pwnshop.ctfsecurity.com/profile/update-avatar: 18 findings — avatar SSRF/XSS route oracles (PWN-012/029/042)",
+      "pwnshop.ctfsecurity.com/login?next=https://evil.com: 9 findings — open-redirect oracle",
+      "vulnbank.org/api/v1/reset-password: 8 findings — password-reset route oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "brokencrystals /api/render?url= — SSTI oracles fire but dedicated SSRF url-param corpus still missing",
-      "nodegoat-websec.herokuapp.com/reset-password returns Cannot GET — needs route corpus or alternate path"
+      "brokencrystals.com/api/auth/jwt/kid-sql/login: thin pass (3 findings) — no dedicated KID SQL injection live oracle",
+      "vulnforge-academy/challenges/20 mis-tags vulnforge-academy-level-ssrf-live-oracle — needs level20 dedicated route corpus",
+      "brokencrystals JWT login chains (jku/jwk) fire validate-route oracles but login-route corpus may need POST body probe expansion"
     ]
   },
   "discovery_highlights": {
-    "sekumart.sekuripy.hr/reviews.php": 5,
-    "sekumart.sekuripy.hr/cart.php": 5,
-    "preview.owasp-juice.shop/rest/basket/1": 36,
-    "preview.owasp-juice.shop/rest/products/search?q=test": 35,
-    "brokencrystals.com/api/render?url=https://example.com": 32
+    "juice-shop.herokuapp.com": 52,
+    "brokencrystals.com/api/auth/jwt/jku/login": 6,
+    "brokencrystals.com/api/auth/jwt/jwk/login": 5,
+    "brokencrystals.com/api/products/latest": 15,
+    "vulnforge-academy.vercel.app/challenges/20": 8,
+    "pwnshop.ctfsecurity.com/profile/update-avatar": 18,
+    "pwnshop.ctfsecurity.com/login?next=https://evil.com": 9,
+    "vulnbank.org/api/v1/reset-password": 8
   }
 }

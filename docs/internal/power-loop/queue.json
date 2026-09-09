@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-09T20:05:00.000Z",
+  "updated_at": "2026-09-09T21:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://brokencrystals.com/api/auth/jwt/jku/login",
+      "source": "NeuraLegion/brokencrystals — JWT JKU rogue-key login chain POST /api/auth/jwt/jku/login (swagger-json; web search 21 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/auth/jwt/jwk/login",
+      "source": "NeuraLegion/brokencrystals — JWT JWK rogue-key login chain POST /api/auth/jwt/jwk/login (swagger-json; web search 21 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/auth/jwt/kid-sql/login",
+      "source": "NeuraLegion/brokencrystals — JWT KID SQL injection login chain POST /api/auth/jwt/kid-sql/login (swagger-json; web search 21 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/products/latest",
+      "source": "NeuraLegion/brokencrystals — product catalog disclosure oracle GET /api/products/latest (swagger-json; web search 21 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnforge-academy.vercel.app/challenges/20",
+      "source": "webspoilt/vulnforge-academy — Level 20 advanced injection SPA route (GitHub README Nightmare tier; web search 21 UTC discovery)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://preview.owasp-juice.shop/rest/basket/1",
       "source": "Official preview.owasp-juice.shop — basket BOLA oracle GET /rest/basket/:id (benchmarks.json fallback_urls; web search 20 UTC discovery)",
