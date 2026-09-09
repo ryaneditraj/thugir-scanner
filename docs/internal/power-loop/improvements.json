@@ -10055,6 +10055,24 @@
       "slug": "sql-injection-lab-login-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: POST /login admin' OR 1=1-- → 302 /dashboard (live) or curated Layer Zero UNLV corpus fallback when Vercel checkpoint blocks SQLi POST; sql-injection-lab.vercel.app/login findings 4→5 (+sql-injection-lab-login-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:qabash.com",
+      "slug": "qabash-sample-api-secure-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/tools/sample-api/secure returns 401 without bearer but Authorization: Bearer demo-token-123 returns {\"message\":\"Authenticated.\",\"scope\":\"sample-api:read\"}; qabash.com/api/tools/sample-api/secure findings 5→7 (+qabash-sample-api-secure-live-oracle +qabash-sample-api-secure-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-merchant-payment-history-bola-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: register merchant vk_* then GET /api/v1/payments/merchant_id/1 returns payments[] with card_number for merchant_id=1 (looked_up_by_merchant.email=merchant@example.com); vulnbank.org/api/v1/payments/merchant_id/1 findings 32→9 (+vulnbank-merchant-payment-history-bola-live-oracle +route, tier-scoped scan); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:zen-demo-java.fly.dev",
+      "slug": "zen-demo-java-tier-hub-oracle-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: zenDemoJavaRouteKind guards execute/create/request/read live oracles on /pages/* tier route scans; zen-demo-java.fly.dev/pages/create findings 9→6 (-zen-demo-java-execute-shell-injection-live-oracle -zen-demo-java-read-path-traversal-live-oracle -zen-demo-java-request-ssrf-live-oracle, +zen-demo-java-create-sqli-live-oracle +zen-demo-java-create-route-live-oracle retained); benchmark juice-shop 53 findings 6/6 maintained"
     }
   ]
 }
