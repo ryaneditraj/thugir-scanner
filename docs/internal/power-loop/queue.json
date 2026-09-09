@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-09T02:05:00.000Z",
+  "updated_at": "2026-09-09T03:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/contributions",
+      "source": "OWASP Node Goat — server-side JS injection via preTax eval on POST /contributions (improvements.json nodegoat-contributions-ssjs; web search 03 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/benefits",
+      "source": "OWASP Node Goat — NoSQL injection + broken access control on /benefits (nodegoat-websec.herokuapp.com tutorial; web search 03 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://restful-booker.herokuapp.com/booking",
+      "source": "Restful Booker — unauthenticated GET/POST /booking enumeration + write oracle (Defused15/restful-booker-api-testing README; web search 03 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/blog/post?postId=2",
+      "source": "PortSwigger Gin & Juice Shop — blog postId SSTI/DOM-XSS/open-redirect oracle (bhavsec/autopentest-ai pentest report; web search 03 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnbank.org/api/v2/reset-password",
+      "source": "Commando-X/vuln-bank — API version-confusion ATO chain POST /api/v2/reset-password (meli.traleor.com + Medium pentest reports; web search 03 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://nodegoat-websec.herokuapp.com/register",
       "source": "OWASP Node Goat — registration NoSQL injection + weak password policy oracle (nodegoat-websec.herokuapp.com; web search 02 UTC discovery)",
