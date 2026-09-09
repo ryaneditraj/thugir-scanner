@@ -48600,6 +48600,57 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnbank-merchant-payment-history-bola-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Vuln Bank merchant payment history BOLA live oracle",
+    description:
+      "GET /api/v1/payments/merchant_id/:id with a merchant api_key returns another merchant's payment history including card_number fields — the Vuln Bank merchant payment history BOLA oracle.",
+    impactOneline:
+      "Missing object-level authorization on merchant payment history lets any merchant API key read other merchants' card transactions.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankMerchantPaymentHistoryBolaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Scope merchant payment history to the authenticated merchant — Vuln Bank is intentional training software.",
+      steps: [
+        "Verify the authenticated merchant owns the requested merchant_id before returning payments.",
+        "Remove card_number fields from payment history API responses.",
+        "Run Vuln Bank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v1/payments/merchant_id/:id endpoint returns other merchants' card transactions. Show merchant payment history BOLA remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnbank-merchant-payment-history-bola-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Vuln Bank merchant payment history BOLA route live oracle",
+    description:
+      "When scanning /api/v1/payments/merchant_id/:id on vulnbank.org, a merchant api_key reads another merchant's payment history with card_number fields — route-specific merchant payment history BOLA oracle.",
+    impactOneline:
+      "Route-specific scans confirm merchant payment history APIs lack object-level authorization on Vuln Bank training instances.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankMerchantPaymentHistoryBolaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Scope merchant payment history to the authenticated merchant — Vuln Bank is intentional training software.",
+      steps: [
+        "Verify merchant_id ownership before returning payment history.",
+        "Remove card_number fields from payment history responses."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v1/payments/merchant_id/:id route scan confirms cross-merchant payment history BOLA. Show route-specific authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vulnbank-virtual-cards-bola-live-oracle",
     platform: "generic",
     category: "Broken access control",
@@ -88713,6 +88764,57 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /api/tools/sample-api/graphql route scan confirms unauthenticated users query exposing admin data. Show route-specific GraphQL authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "qabash-sample-api-secure-live-oracle",
+    platform: "generic",
+    category: "Authentication bypass",
+    severityDefault: "high",
+    title: "QA Bash sample API secure bearer auth live oracle",
+    description:
+      "GET /api/tools/sample-api/secure returns 401 without bearer token but accepts the hardcoded demo-token-123 — the QA Bash API Playground weak bearer authentication training oracle.",
+    impactOneline:
+      "Hardcoded demo bearer tokens let any caller access protected API routes without real credential management.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "qaBashSampleApiSecureLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Replace demo bearer tokens with real auth and rotate secrets in the playground.",
+      steps: [
+        "Reject requests missing valid Authorization: Bearer headers.",
+        "Do not embed demo tokens in 401 error messages.",
+        "Run QA Bash API Playground only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/tools/sample-api/secure endpoint accepts hardcoded demo-token-123. Show bearer authentication remediation with secret rotation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "qabash-sample-api-secure-route-live-oracle",
+    platform: "generic",
+    category: "Authentication bypass",
+    severityDefault: "high",
+    title: "QA Bash sample API secure route live oracle",
+    description:
+      "When scanning /api/tools/sample-api/secure on qabash.com, GET returns 401 without bearer but demo-token-123 grants sample-api:read scope — route-specific bearer auth training oracle.",
+    impactOneline:
+      "Route-specific confirmation that QA Bash API Playground exposes weak bearer authentication with a documented demo token.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "qaBashSampleApiSecureRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Replace demo bearer tokens with real auth and rotate secrets in the playground.",
+      steps: [
+        "Gate secure routes behind non-guessable bearer tokens.",
+        "Do not leak demo tokens in 401 error responses."
+      ]
+    },
+    fixPrompt:
+      "Our /api/tools/sample-api/secure route scan confirms demo-token-123 grants access. Show route-specific bearer auth hardening.",
     version: 1,
     enabled: true
   }

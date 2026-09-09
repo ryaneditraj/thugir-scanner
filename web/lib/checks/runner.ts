@@ -2051,6 +2051,10 @@ const DEEP_RULES = new Set<string>([
   "qaBashSampleApiUsersRouteLiveOracle",
   "qaBashSampleApiGraphqlLiveOracle",
   "qaBashSampleApiGraphqlRouteLiveOracle",
+  "qaBashSampleApiSecureLiveOracle",
+  "qaBashSampleApiSecureRouteLiveOracle",
+  "vulnbankMerchantPaymentHistoryBolaLiveOracle",
+  "vulnbankMerchantPaymentHistoryBolaRouteLiveOracle",
   "xssPayloadLabRouteLiveOracle",
   "webPentestPlaygroundFileUploadLiveOracle",
   "webPentestPlaygroundFileUploadRouteLiveOracle",
@@ -17172,6 +17176,18 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /qabash\.com/i.test(origin) &&
         /\/api\/tools\/sample-api\/graphql\b/i.test(targetInput) &&
         p.slug.startsWith("qabash-sample-api-graphql")
+      )
+        return -4;
+      if (
+        /qabash\.com/i.test(origin) &&
+        /\/api\/tools\/sample-api\/secure\b/i.test(targetInput) &&
+        p.slug.startsWith("qabash-sample-api-secure")
+      )
+        return -4;
+      if (
+        /vulnbank\.org/i.test(origin) &&
+        /\/api\/v1\/payments\/merchant_id\b/i.test(targetInput) &&
+        p.slug.startsWith("vulnbank-merchant-payment-history")
       )
         return -4;
       if (

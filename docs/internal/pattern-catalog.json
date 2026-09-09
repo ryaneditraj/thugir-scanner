@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-09T01:29:14.475Z",
-  "total": 3469,
-  "uniqueSlugs": 3461,
+  "generatedAt": "2026-09-09T03:24:30.297Z",
+  "total": 3473,
+  "uniqueSlugs": 3465,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3451,
+    "generic": 3455,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3384,
+    "deep": 3388,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 685,
+    "Broken access control": 687,
     "Exposed secret": 120,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -39,7 +39,7 @@
     "Business logic": 43,
     "AI / LLM security": 4,
     "Prompt injection": 17,
-    "Authentication bypass": 6,
+    "Authentication bypass": 8,
     "Insecure file upload": 2,
     "Command injection": 2,
     "XML external entity injection": 1,
@@ -2565,6 +2565,8 @@
     "pygoat-ssti-lab-route-live-oracle",
     "qabash-sample-api-graphql-live-oracle",
     "qabash-sample-api-graphql-route-live-oracle",
+    "qabash-sample-api-secure-live-oracle",
+    "qabash-sample-api-secure-route-live-oracle",
     "qabash-sample-api-users-live-oracle",
     "qabash-sample-api-users-route-live-oracle",
     "ratdo-csrf-live-oracle",
@@ -3045,6 +3047,8 @@
     "vulnbank-merchant-me-debug-disclosure-route-live-oracle",
     "vulnbank-merchant-payment-charge-live-oracle",
     "vulnbank-merchant-payment-charge-route-live-oracle",
+    "vulnbank-merchant-payment-history-bola-live-oracle",
+    "vulnbank-merchant-payment-history-bola-route-live-oracle",
     "vulnbank-merchant-register-live-oracle",
     "vulnbank-merchant-register-route-live-oracle",
     "vulnbank-merchant-sqli-login-live-oracle",

