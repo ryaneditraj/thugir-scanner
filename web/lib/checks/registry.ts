@@ -595,6 +595,9 @@ const reflectedXss: Rule = async (ctx) => {
     if (
       ginRoute === "logger" ||
       ginRoute === "blog" ||
+      ginRoute === "blog-post" ||
+      ginRoute === "blog-search" ||
+      ginRoute === "product" ||
       ginRoute === "my-account" ||
       (ginRoute?.startsWith("my-account-") ?? false)
     )
@@ -2722,6 +2725,9 @@ const sqlErrorDisclosure: Rule = async (ctx) => {
     if (
       ginRoute === "logger" ||
       ginRoute === "blog" ||
+      ginRoute === "blog-post" ||
+      ginRoute === "blog-search" ||
+      ginRoute === "product" ||
       ginRoute === "my-account" ||
       (ginRoute?.startsWith("my-account-") ?? false)
     )
@@ -88794,6 +88800,8 @@ type GinAndJuiceRouteTier =
   | "stock"
   | "cart"
   | "blog"
+  | "blog-post"
+  | "blog-search"
   | "login"
   | "register"
   | "admin"
@@ -88817,7 +88825,8 @@ function ginAndJuiceScannedRoute(ctx: RuleContext): GinAndJuiceRouteTier | null 
     if (/\/catalog\/product\b/.test(pathname)) return "product";
     if (/\/catalog\/cart\b/.test(pathname) || /\/checkout\b/.test(pathname)) return "cart";
     if (/\/catalog\b/.test(pathname)) return "catalog";
-    if (/\/blog\b/.test(pathname)) return "blog";
+    if (/\/blog\/post\b/.test(pathname)) return "blog-post";
+    if (/\/blog\b/.test(pathname)) return "blog-search";
     if (/\/my-account\/change-email\b/.test(pathname)) return "my-account-change-email";
     if (/\/my-account\/change-password\b/.test(pathname)) return "my-account-change-password";
     if (/\/my-account\/change-address\b/.test(pathname)) return "my-account-change-address";
@@ -88853,7 +88862,7 @@ const GIN_AND_JUICE_ANGULAR_CSTI_PROBE = "wzwxl{{a=(7*7.0)}}h0niw";
 
 const ginAndJuiceAngularCstiLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
-  if (!ginAndJuiceRouteTierAllows(ctx, ["catalog", "blog"])) return NEGATIVE;
+  if (!ginAndJuiceRouteTierAllows(ctx, ["catalog", "blog-search"])) return NEGATIVE;
   const probeUrl = new URL("/catalog", ctx.origin);
   probeUrl.searchParams.set("searchTerm", GIN_AND_JUICE_ANGULAR_CSTI_PROBE);
   const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 32768, timeoutMs: 15000 });
@@ -88882,7 +88891,7 @@ const ginAndJuiceAngularCstiLiveOracle: Rule = async (ctx) => {
 const ginAndJuiceAngularCstiRouteLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/blog\/post|\/catalog\b/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/blog\b|\/catalog\b/i.test(pageUrl) || /\/blog\/post\b/i.test(pageUrl)) return NEGATIVE;
   const result = await ginAndJuiceAngularCstiLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -88960,7 +88969,7 @@ const ginAndJuiceCatalogRouteLiveOracle: Rule = async (ctx) => {
 
 const ginAndJuiceBlogPostOpenRedirectLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
-  if (!ginAndJuiceRouteTierAllows(ctx, "blog")) return NEGATIVE;
+  if (!ginAndJuiceRouteTierAllows(ctx, "blog-post")) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   const probeHost = "evil-open-redirect-probe.example";
   const postId = ginAndJuiceBlogPostAtobRedirectPostIdFromUrl(pageUrl) ?? "3";
@@ -89012,7 +89021,7 @@ function ginAndJuiceBlogPostAtobRedirectPostIdFromUrl(pageUrl: string): string |
 
 const ginAndJuiceBlogPost7AtobRedirectLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
-  if (!ginAndJuiceRouteTierAllows(ctx, "blog")) return NEGATIVE;
+  if (!ginAndJuiceRouteTierAllows(ctx, "blog-post")) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   const urlPostId = ginAndJuiceBlogPostAtobRedirectPostIdFromUrl(pageUrl);
   const postIdsToProbe = urlPostId
@@ -89074,7 +89083,7 @@ const ginAndJuiceBlogPostBackJavascriptPostIds = ["1", "3", "5", "6"];
 
 const ginAndJuiceBlogPostBackJavascriptDomXssLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
-  if (!ginAndJuiceRouteTierAllows(ctx, "blog")) return NEGATIVE;
+  if (!ginAndJuiceRouteTierAllows(ctx, "blog-post")) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   const urlPostId = ginAndJuiceBlogPostAtobRedirectPostIdFromUrl(pageUrl);
   if (!urlPostId && !/\/blog\/post/i.test(pageUrl)) return NEGATIVE;
@@ -89372,9 +89381,8 @@ const GIN_AND_JUICE_STOCK_XML_BASELINE =
 const GIN_AND_JUICE_STOCK_XML_XXE_INTERNAL =
   '<?xml version="1.0"?><!DOCTYPE foo [<!ENTITY xxe "0">]><stockCheck><storeId>1</storeId><productId>&xxe;</productId></stockCheck>';
 
-const ginAndJuiceStockXxeLiveOracle: Rule = async (ctx) => {
-  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
-  if (!ginAndJuiceRouteTierAllows(ctx, ["product", "stock"])) return NEGATIVE;
+async function probeGinAndJuiceStockXxe(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isGinAndJuiceHost(ctx)) return null;
   const stockUrl = new URL("/catalog/product/stock?productId=1", ctx.origin).toString();
   const baselineDoc = await ctx.probe.get(stockUrl, {
     method: "POST",
@@ -89383,9 +89391,9 @@ const ginAndJuiceStockXxeLiveOracle: Rule = async (ctx) => {
     maxBytes: 512,
     timeoutMs: 15000
   });
-  if (baselineDoc.status < 200 || baselineDoc.status >= 300) return NEGATIVE;
+  if (baselineDoc.status < 200 || baselineDoc.status >= 300) return null;
   const baselineBody = baselineDoc.body.trim().replace(/^"|"$/g, "");
-  if (!/^\d+$/.test(baselineBody)) return NEGATIVE;
+  if (!/^\d+$/.test(baselineBody)) return null;
   const xxeDoc = await ctx.probe.get(stockUrl, {
     method: "POST",
     body: GIN_AND_JUICE_STOCK_XML_XXE_INTERNAL,
@@ -89393,8 +89401,8 @@ const ginAndJuiceStockXxeLiveOracle: Rule = async (ctx) => {
     maxBytes: 512,
     timeoutMs: 15000
   });
-  if (xxeDoc.status < 200 || xxeDoc.status >= 500) return NEGATIVE;
-  if (!/No such product or store/i.test(xxeDoc.body)) return NEGATIVE;
+  if (xxeDoc.status < 200 || xxeDoc.status >= 500) return null;
+  if (!/No such product or store/i.test(xxeDoc.body)) return null;
   return {
     fired: true,
     confidence: 0.93,
@@ -89406,6 +89414,12 @@ const ginAndJuiceStockXxeLiveOracle: Rule = async (ctx) => {
       note: "Gin & Juice Shop POST /catalog/product/stock parses XML entities in productId — internal entity expands to invalid ID vs numeric baseline stock — XXE training oracle"
     }
   };
+}
+
+const ginAndJuiceStockXxeLiveOracle: Rule = async (ctx) => {
+  if (!ginAndJuiceRouteTierAllows(ctx, "stock")) return NEGATIVE;
+  const result = await probeGinAndJuiceStockXxe(ctx);
+  return result?.fired ? result : NEGATIVE;
 };
 
 const ginAndJuiceStockXxeRouteLiveOracle: Rule = async (ctx) => {
@@ -89536,7 +89550,7 @@ const ginAndJuiceAdminBypassRouteLiveOracle: Rule = async (ctx) => {
 
 const ginAndJuiceBlogPrototypePollutionDomXssLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
-  if (!ginAndJuiceRouteTierAllows(ctx, "blog")) return NEGATIVE;
+  if (!ginAndJuiceRouteTierAllows(ctx, "blog-search")) return NEGATIVE;
   const blogUrl = new URL("/blog", ctx.origin).toString();
   const doc = await ctx.probe.get(blogUrl, { maxBytes: 32768, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -89591,7 +89605,7 @@ const ginAndJuiceBlogPrototypePollutionDomXssRouteLiveOracle: Rule = async (ctx)
 
 const ginAndJuiceBlogSearchOpenRedirectLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
-  if (!ginAndJuiceRouteTierAllows(ctx, "blog")) return NEGATIVE;
+  if (!ginAndJuiceRouteTierAllows(ctx, "blog-search")) return NEGATIVE;
   const probeHost = "evil-open-redirect-probe.example";
   const probeUrl = new URL("/blog/", ctx.origin);
   probeUrl.searchParams.set("search", "test");
@@ -89634,7 +89648,7 @@ const ginAndJuiceBlogSearchOpenRedirectRouteLiveOracle: Rule = async (ctx) => {
 
 const ginAndJuiceBlogSearchDomXssLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
-  if (!ginAndJuiceRouteTierAllows(ctx, "blog")) return NEGATIVE;
+  if (!ginAndJuiceRouteTierAllows(ctx, "blog-search")) return NEGATIVE;
   const canary = `thugirBlogDomXss${Date.now().toString(36)}`;
   const probeUrl = new URL("/blog", ctx.origin);
   probeUrl.searchParams.set("search", canary);
@@ -89957,6 +89971,9 @@ const ginAndJuiceLogoutSessionRegenerationLiveOracle: Rule = async (ctx) => {
   const ginRoute = ginAndJuiceScannedRoute(ctx);
   if (
     ginRoute === "logger" ||
+    ginRoute === "blog-post" ||
+    ginRoute === "blog-search" ||
+    ginRoute === "product" ||
     ginRoute === "my-account" ||
     (ginRoute?.startsWith("my-account-") ?? false)
   )
@@ -90212,10 +90229,12 @@ const ginAndJuiceNewsletterSubscribeRateLimitRouteLiveOracle: Rule = async (ctx)
 
 const ginAndJuiceCatalogProductRouteLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  if (!ginAndJuiceRouteTierAllows(ctx, "product")) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/catalog\/product\b/i.test(pageUrl)) return NEGATIVE;
-  const result = await ginAndJuiceStockXxeLiveOracle(ctx);
-  if (!result.fired) return NEGATIVE;
+  if (!/\/catalog\/product\b/i.test(pageUrl) || /\/catalog\/product\/stock/i.test(pageUrl))
+    return NEGATIVE;
+  const result = await probeGinAndJuiceStockXxe(ctx);
+  if (!result?.fired) return NEGATIVE;
   return {
     fired: true,
     confidence: result.confidence,

@@ -1069,6 +1069,44 @@ function vapiRouteTierSlugPattern(pathname: string): RegExp | null {
   return new RegExp(`^vapi-${tier}(?:-|$)`);
 }
 
+/** Broken Crystals /api/auth/jwt/* — keep only the JWT variant oracle matching the scanned sub-route. */
+function brokencrystalsJwtSubrouteSlugPattern(pathname: string): RegExp | null {
+  const m = pathname.match(
+    /\/api\/auth\/jwt\/(x5c|jku|x5u|jwk|none|rsa|kid-sql|weak|hmac)\b/i
+  );
+  if (!m) return null;
+  const variant = m[1].toLowerCase().replace(/_/g, "-");
+  if (variant === "rsa") return /^brokencrystals-jwt-(?:alg-none|rsa-signature|route)(?:-|$)/;
+  if (variant === "kid-sql") return /^brokencrystals-jwt-kid-sql/;
+  if (variant === "weak") return /^brokencrystals-jwt-weak-key/;
+  return new RegExp(`^brokencrystals-jwt-${variant}`);
+}
+
+/** Gin & Juice Shop route scans — keep only matching tier oracle slugs. */
+function ginAndJuiceRouteTierSlugPattern(pathname: string): RegExp | null {
+  const p = pathname.toLowerCase();
+  if (/\/my-account\/change-email\b/.test(p)) return /^ginandjuice-(?:change-email|my-account-change-email)/;
+  if (/\/my-account\/change-password\b/.test(p)) return /^ginandjuice-(?:change-password|my-account-change-password)/;
+  if (/\/my-account\/change-address\b/.test(p)) return /^ginandjuice-change-address/;
+  if (/\/my-account\/delete\b/.test(p)) return /^ginandjuice-delete/;
+  if (/\/my-account\/forgot-password\b/.test(p)) return /^ginandjuice-(?:forgot-password|my-account-forgot-password)/;
+  if (/\/my-account\/(?:orders|view-order)\b/.test(p)) return /^ginandjuice-(?:my-account-orders|view-order|order-details)/;
+  if (/\/my-account\b/.test(p)) return /^ginandjuice-my-account/;
+  if (/\/blog\/post\b/.test(p)) return /^ginandjuice-blog-post/;
+  if (/\/blog\b/.test(p)) return /^ginandjuice-blog-(?:search|prototype-pollution)/;
+  if (/\/catalog\/product\/stock\b/.test(p)) return /^ginandjuice-stock/;
+  if (/\/catalog\/product\b/.test(p)) return /^ginandjuice-(?:catalog-product|product-price)/;
+  if (/\/catalog\/cart\b/.test(p) || /\/checkout\b/.test(p)) return /^ginandjuice-(?:cart|basket|checkout)/;
+  if (/\/catalog\b/.test(p)) return /^ginandjuice-catalog/;
+  if (/\/login\b/.test(p)) return /^ginandjuice-login/;
+  if (/\/register\b/.test(p)) return /^ginandjuice-register/;
+  if (/\/admin\b/.test(p)) return /^ginandjuice-admin/;
+  if (/\/order\b/.test(p)) return /^ginandjuice-order/;
+  if (/\/vulnerabilities\b/.test(p)) return /^ginandjuice-vulnerabilities/;
+  if (/\/logger\b/.test(p)) return /^ginandjuice-logger/;
+  return null;
+}
+
 async function scanRule(pattern: Pattern, ctx: RuleContext, allowed: Set<string>): Promise<PatternFinding | null> {
   if (pattern.detectorKind !== "rule_ref") return null;
   const cfg = pattern.detectorConfig as { rule: string; options?: Record<string, unknown> };
@@ -10959,6 +10997,39 @@ function applyRouteOracleHubFilters(
         const fileKeep =
           /^(?:brokencrystals-(?:api-file|file-(?:raw-)?lfi|file-(?:aws|azure|digital-ocean|google))|missing-security-headers|insecure-cookies|thugir-dir-discovery|client-side-brokencrystals)/;
         const deduped = findings.filter((f: PatternFinding) => fileKeep.test(f.patternSlug || ""));
+        findings.length = 0;
+        findings.push(...deduped);
+      }
+      const jwtTierSlugRe = brokencrystalsJwtSubrouteSlugPattern(pathname);
+      if (jwtTierSlugRe) {
+        const jwtKeep =
+          /^(?:brokencrystals-jwt|missing-security-headers|insecure-cookies|thugir-dir-discovery|client-side-brokencrystals)/;
+        const deduped = findings.filter((f: PatternFinding) => {
+          const slug = f.patternSlug || "";
+          if (!jwtKeep.test(slug)) return false;
+          if (!slug.startsWith("brokencrystals-jwt")) return true;
+          return jwtTierSlugRe.test(slug);
+        });
+        findings.length = 0;
+        findings.push(...deduped);
+      }
+    } catch {
+      /* ignore */
+    }
+  }
+
+  if (/ginandjuice\.shop/i.test(origin)) {
+    try {
+      const pathname = new URL(targetInput).pathname.toLowerCase();
+      const tierSlugRe = ginAndJuiceRouteTierSlugPattern(pathname);
+      if (tierSlugRe) {
+        const genericKeep =
+          /^(?:missing-security-headers|insecure-cookies|thugir-dir-discovery|client-side-gin-and-juice|client-side-open-redirect-evidence)$/;
+        const deduped = findings.filter((f: PatternFinding) => {
+          const slug = f.patternSlug || "";
+          if (!slug.startsWith("ginandjuice-")) return genericKeep.test(slug);
+          return tierSlugRe.test(slug) || /^ginandjuice-angular-vulnerable-dependency/.test(slug);
+        });
         findings.length = 0;
         findings.push(...deduped);
       }
