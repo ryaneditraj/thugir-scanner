@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-09T16:06:05.827Z",
+  "updated_at": "2026-09-09T16:45:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,25 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 3186,
-  "total_findings": 35497,
+  "total_sites_scanned": 3189,
+  "total_findings": 35525,
   "critical_findings": 57,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2196,
-  "discovery_findings": 27313,
-  "improvements_shipped": 1694,
-  "last_run": "2026-09-09T16:06:05.827Z",
+  "discovery_findings": 27341,
+  "improvements_shipped": 1697,
+  "last_run": "2026-09-09T16:45:00.000Z",
   "last_run_summary": {
     "hour_utc": "16",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 52,
+      "oracle_findings": 51,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
       "probes_run": 595,
-      "live_oracles": 38,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -49,38 +48,33 @@
           ]
         }
       },
-      "note": "Primary Heroku stable 6/6 (52 findings, 38 live oracles incl secret-resend) — no category gaps"
+      "note": "Primary Heroku stable 6/6 (51 findings) — no category gaps; teacher_delta skipped"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 49,
-      "focus": "brokencrystals JWT jku/jwk/kid-sql/x5u/rsa validate routes + queue drain ginandjuice blog/product + duck-store cart",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 28,
+      "focus": "pwnshop /api/v1/payments phantom REST hub + ginandjuice catalog category bleed + brokencrystals JWT sub-route client-evidence trim",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, 38 live oracles, gap=[])",
-      "brokencrystals.com/api/auth/jwt/jku/validate: 8 findings — brokencrystals-jwt-jku-rogue-live-oracle + route",
-      "brokencrystals.com/api/auth/jwt/jwk/validate: 6 findings — brokencrystals-jwt-jwk-empty-live-oracle + rogue-login route",
-      "brokencrystals.com/api/auth/jwt/kid-sql/validate: 4 findings — brokencrystals-jwt-kid-sql-live-oracle + route",
-      "brokencrystals.com/api/auth/jwt/x5u/validate: 4 findings — brokencrystals-jwt-x5u-rogue-live-oracle + route",
-      "brokencrystals.com/api/auth/jwt/rsa/signature/validate: 5 findings — brokencrystals-jwt-alg-none-live-oracle + rsa route",
-      "duck-store.escape.tech/api/v1/cart: 6 findings — duck-store-cart-negative-quantity-live-oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, gap=[])",
+      "pwnshop.ctfsecurity.com/api/v1/payments: 48→5 findings after API v1 payments tier hub filter",
+      "ginandjuice.shop/catalog?category=Accessories: 25→17 findings after catalog open-redirect suppression",
+      "brokencrystals.com/api/auth/jwt/x5c/validate: 8→6 findings after JWT sub-route client-evidence trim"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "brokencrystals JWT sub-routes still share host-level oracles — per-variant hub filters may reduce cross-bleed on jku/jwk/x5u paths",
-      "brokencrystals rsa/signature/validate tagged alg:none oracle — may need dedicated invalid-signature corpus",
-      "ginandjuice blog/product re-scans stable at 9/7 findings — blog-search tier still pending"
+      "pwnshop /api/v1/products/:id and /api/v1/events still need per-route hub validation after payments tier shipped",
+      "ginandjuice /catalog angular-csti + newsletter tiers not re-scanned this run"
     ]
   },
   "discovery_highlights": {
+    "pwnshop.ctfsecurity.com/api/v1/payments": 5,
+    "ginandjuice.shop/catalog?category=Accessories": 17,
+    "brokencrystals.com/api/auth/jwt/x5c/validate": 6,
     "brokencrystals.com/api/auth/jwt/jku/validate": 8,
-    "brokencrystals.com/api/auth/jwt/jwk/validate": 6,
-    "brokencrystals.com/api/auth/jwt/kid-sql/validate": 4,
-    "brokencrystals.com/api/auth/jwt/x5u/validate": 4,
-    "brokencrystals.com/api/auth/jwt/rsa/signature/validate": 5,
     "ginandjuice.shop/blog/post?postId=1": 9,
     "ginandjuice.shop/catalog/product?productId=1": 7,
     "duck-store.escape.tech/api/v1/cart": 6

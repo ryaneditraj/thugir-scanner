@@ -1082,6 +1082,15 @@ function brokencrystalsJwtSubrouteSlugPattern(pathname: string): RegExp | null {
   return new RegExp(`^brokencrystals-jwt-${variant}`);
 }
 
+/** Pwnshop dedicated /api/v1/* route scans — keep only matching tier oracle slugs. */
+function pwnshopRouteTierSlugPattern(pathname: string): RegExp | null {
+  const p = pathname.toLowerCase();
+  if (/\/api\/v1\/events\b/.test(p)) return /^pwnshop-events/;
+  if (/\/api\/v1\/products\b/.test(p)) return /^pwnshop-(?:events-audit|product-api-idor)/;
+  if (/\/api\/v1\/payments\b/.test(p)) return /^pwnshop-api-v1-payments/;
+  return null;
+}
+
 /** Gin & Juice Shop route scans — keep only matching tier oracle slugs. */
 function ginAndJuiceRouteTierSlugPattern(pathname: string): RegExp | null {
   const p = pathname.toLowerCase();
@@ -2561,6 +2570,7 @@ const DEEP_RULES = new Set<string>([
   "pwnshopVulnerabilitiesIndexRouteLiveOracle",
   "pwnshopEventsAuditLiveOracle",
   "pwnshopEventsAuditRouteLiveOracle",
+  "pwnshopApiV1PaymentsPhantomRouteLiveOracle",
   "pwnshopChatInitEmailEnumerationLiveOracle",
   "pwnshopChatInitRouteLiveOracle",
   "pwnshopChatOrderIdorLiveOracle",
@@ -11003,7 +11013,7 @@ function applyRouteOracleHubFilters(
       const jwtTierSlugRe = brokencrystalsJwtSubrouteSlugPattern(pathname);
       if (jwtTierSlugRe) {
         const jwtKeep =
-          /^(?:brokencrystals-jwt|missing-security-headers|insecure-cookies|thugir-dir-discovery|client-side-brokencrystals)/;
+          /^(?:brokencrystals-jwt|missing-security-headers|insecure-cookies|thugir-dir-discovery|client-side-brokencrystals-evidence)/;
         const deduped = findings.filter((f: PatternFinding) => {
           const slug = f.patternSlug || "";
           if (!jwtKeep.test(slug)) return false;
@@ -11018,13 +11028,37 @@ function applyRouteOracleHubFilters(
     }
   }
 
+  if (/pwnshop|ctfsecurity\.com/i.test(origin)) {
+    try {
+      const pathname = new URL(targetInput).pathname.toLowerCase();
+      const tierSlugRe = pwnshopRouteTierSlugPattern(pathname);
+      if (tierSlugRe) {
+        const genericKeep =
+          /^(?:missing-security-headers|insecure-cookies|tech-stack-disclosure|thugir-dir-discovery|client-side-pwnshop-evidence)$/;
+        const deduped = findings.filter((f: PatternFinding) => {
+          const slug = f.patternSlug || "";
+          if (slug.startsWith("client-side-pwnshop")) return false;
+          if (!slug.startsWith("pwnshop-")) return genericKeep.test(slug);
+          return tierSlugRe.test(slug);
+        });
+        findings.length = 0;
+        findings.push(...deduped);
+      }
+    } catch {
+      /* ignore */
+    }
+  }
+
   if (/ginandjuice\.shop/i.test(origin)) {
     try {
       const pathname = new URL(targetInput).pathname.toLowerCase();
       const tierSlugRe = ginAndJuiceRouteTierSlugPattern(pathname);
       if (tierSlugRe) {
-        const genericKeep =
-          /^(?:missing-security-headers|insecure-cookies|thugir-dir-discovery|client-side-gin-and-juice|client-side-open-redirect-evidence)$/;
+        const onCatalog =
+          /\/catalog\b/.test(pathname) && !/\/catalog\/(?:product|cart)\b/.test(pathname);
+        const genericKeep = onCatalog
+          ? /^(?:missing-security-headers|insecure-cookies|thugir-dir-discovery|client-side-gin-and-juice)$/
+          : /^(?:missing-security-headers|insecure-cookies|thugir-dir-discovery|client-side-gin-and-juice|client-side-open-redirect-evidence)$/;
         const deduped = findings.filter((f: PatternFinding) => {
           const slug = f.patternSlug || "";
           if (!slug.startsWith("ginandjuice-")) return genericKeep.test(slug);
@@ -14097,6 +14131,12 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /pwnshop\.ctfsecurity\.com/i.test(origin) &&
         /\/api\/v1\//i.test(targetInput) &&
         p.slug.startsWith("pwnshop-events-audit")
+      )
+        return -4;
+      if (
+        /pwnshop\.ctfsecurity\.com/i.test(origin) &&
+        /\/api\/v1\/payments\b/i.test(targetInput) &&
+        p.slug.startsWith("pwnshop-api-v1-payments")
       )
         return -4;
       if (

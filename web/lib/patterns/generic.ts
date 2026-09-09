@@ -76199,13 +76199,39 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "pwnshop-api-v1-payments-phantom-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Pwnshop /api/v1/payments phantom REST route live oracle",
+    description:
+      "When scanning /api/v1/payments, GET returns styled 404 HTML with no JSON payments API — phantom REST path seeded from SPA shell while wallet/checkout live on /wallet and /checkout.",
+    impactOneline:
+      "Phantom REST paths from SPA seeds create scanner noise and may hide real payment-surface flaws on adjacent routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopApiV1PaymentsPhantomRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove phantom /api/v1/payments seeds or implement documented payment APIs.",
+      steps: [
+        "Document wallet and checkout payment flows in OpenAPI.",
+        "Remove /api/v1/payments from SPA link seeds when no backing API exists.",
+        "Run Pwnshop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v1/payments route scan returns 404 HTML with no JSON API. Show phantom REST route remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "pwnshop-events-audit-route-live-oracle",
     platform: "generic",
     category: "Broken access control",
     severityDefault: "high",
     title: "Pwnshop /api/v1/events audit-log route live oracle",
     description:
-      "When scanning any /api/v1/* REST path (including /api/v1/events or /api/v1/products/:id), GET /api/v1/events returns unauthenticated security audit logs with action and detail fields — route-specific PWN-005 events API oracle.",
+      "When scanning /api/v1/events or /api/v1/products/:id, GET /api/v1/events returns unauthenticated security audit logs with action and detail fields — route-specific PWN-005 events API oracle.",
     impactOneline:
       "Route-specific scans should confirm audit logs are exposed without authentication.",
     detectorKind: "rule_ref",

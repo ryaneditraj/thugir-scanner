@@ -176,6 +176,13 @@ function pwnshopChatReflexionSuppressed(ctx: PowerCtx): boolean {
   return /\/(?:api\/(?:v\d+\/)?)?chat(?:\/query)?\b/i.test(pageUrl) && !/\/chat\/init\b/i.test(pageUrl);
 }
 
+/** Pwnshop /api/v1/* REST route scans are SPA 404 shells — suppress generic reflexion probes. */
+function pwnshopApiV1ReflexionSuppressed(ctx: PowerCtx): boolean {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  if (!/pwnshop|ctfsecurity\.com/i.test(pageUrl)) return false;
+  return /\/api\/v1\//i.test(pageUrl);
+}
+
 /** Gin & Juice Shop API 404 pages serve Angular/React dev bundles with coincidental '49' in eval probes — suppress reflexion SSTI FPs on /api/* route scans. */
 function ginAndJuiceReflexionSuppressed(ctx: PowerCtx): boolean {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
@@ -393,6 +400,7 @@ export const reflexionEscalatedXss: PowerRule = async (ctx) => {
   if (supportReliabilityLabReflexionSuppressed(ctx)) return NEGATIVE;
   if (pwnshopWishlistReflexionSuppressed(ctx)) return NEGATIVE;
   if (pwnshopChatReflexionSuppressed(ctx)) return NEGATIVE;
+  if (pwnshopApiV1ReflexionSuppressed(ctx)) return NEGATIVE;
   if (pwnshopForgotPasswordReflexionSuppressed(ctx)) return NEGATIVE;
   if (pwnshopProfileReflexionSuppressed(ctx)) return NEGATIVE;
   if (pwnshopSellerReflexionSuppressed(ctx)) return NEGATIVE;
@@ -442,6 +450,7 @@ export const reflexionEscalatedSqli: PowerRule = async (ctx) => {
   if (supportReliabilityLabReflexionSuppressed(ctx)) return NEGATIVE;
   if (pwnshopWishlistReflexionSuppressed(ctx)) return NEGATIVE;
   if (pwnshopChatReflexionSuppressed(ctx)) return NEGATIVE;
+  if (pwnshopApiV1ReflexionSuppressed(ctx)) return NEGATIVE;
   if (pwnshopForgotPasswordReflexionSuppressed(ctx)) return NEGATIVE;
   if (pwnshopProfileReflexionSuppressed(ctx)) return NEGATIVE;
   if (pwnshopSellerReflexionSuppressed(ctx)) return NEGATIVE;
@@ -496,6 +505,7 @@ export const reflexionEscalatedSsti: PowerRule = async (ctx) => {
   if (atlascrewDocsReflexionSuppressed(ctx)) return NEGATIVE;
   if (securebankBlogReflexionSuppressed(ctx)) return NEGATIVE;
   if (ginAndJuiceReflexionSuppressed(ctx)) return NEGATIVE;
+  if (pwnshopApiV1ReflexionSuppressed(ctx)) return NEGATIVE;
   if (pwnshopForgotPasswordReflexionSuppressed(ctx)) return NEGATIVE;
   if (pwnshopProfileReflexionSuppressed(ctx)) return NEGATIVE;
   if (pwnshopSellerReflexionSuppressed(ctx)) return NEGATIVE;

@@ -54425,6 +54425,9 @@ function pwnshopScannedRoute(ctx: RuleContext): string | null {
     if (/\/download\b/.test(pathname)) return "download";
     if (/\/export\b/.test(pathname)) return "export";
     if (/\/apply-coupon\b/.test(pathname)) return "coupon";
+    if (/\/api\/v1\/events\b/.test(pathname)) return "events";
+    if (/\/api\/v1\/products\b/.test(pathname)) return "products";
+    if (/\/api\/v1\/payments\b/.test(pathname)) return "payments";
     if (pathname === "/" || pathname === "") return "home";
     return null;
   } catch {
@@ -54599,7 +54602,7 @@ const pwnshopVulnerabilitiesIndexRouteLiveOracle: Rule = async (ctx) => {
 
 const pwnshopEventsAuditLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
-  if (!pwnshopRouteTierAllows(ctx, "debug")) return NEGATIVE;
+  if (!pwnshopRouteTierAllows(ctx, ["events", "products"])) return NEGATIVE;
   const url = new URL("/api/v1/events", ctx.origin).toString();
   const doc = await ctx.probe.get(url, { maxBytes: 8192 });
   if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
@@ -54621,11 +54624,10 @@ const pwnshopEventsAuditLiveOracle: Rule = async (ctx) => {
 const pwnshopEventsAuditRouteLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/api\/v1\//i.test(pageUrl)) return NEGATIVE;
+  if (!/\/api\/v1\/(?:events|products)\b/i.test(pageUrl)) return NEGATIVE;
   const result = await pwnshopEventsAuditLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   const onEventsPath = /\/api\/v1\/events\b/i.test(pageUrl);
-  const onProductsPath = /\/api\/v1\/products\b/i.test(pageUrl);
   return {
     fired: true,
     confidence: result.confidence,
@@ -54634,9 +54636,26 @@ const pwnshopEventsAuditRouteLiveOracle: Rule = async (ctx) => {
       scannedUrl: pageUrl,
       note: onEventsPath
         ? "Pwnshop /api/v1/events route scan — unauthenticated JSON audit log with action/detail fields exposed (PWN-005)"
-        : onProductsPath
-          ? "Pwnshop /api/v1/products route scan — no product REST IDOR surface; GET /api/v1/events still returns unauthenticated audit logs (PWN-005)"
-          : "Pwnshop /api/v1/* route scan — unauthenticated JSON audit log with action/detail fields exposed (PWN-005)"
+        : "Pwnshop /api/v1/products route scan — GET /api/v1/events still returns unauthenticated audit logs (PWN-005)"
+    }
+  };
+};
+
+const pwnshopApiV1PaymentsPhantomRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  if (!pwnshopRouteTierAllows(ctx, "payments")) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/payments\b/i.test(pageUrl)) return NEGATIVE;
+  const doc = await ctx.probe.get(pageUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (doc.status !== 404 && doc.status !== 403) return NEGATIVE;
+  if (!/404\s*-\s*Page Not Found|Page Not Found \| Pwnshop/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.88,
+    evidence: {
+      url: pageUrl,
+      snippet: doc.body.match(/<title>[^<]+<\/title>/i)?.[0]?.slice(0, 100),
+      note: "Pwnshop GET /api/v1/payments returns styled 404 HTML — phantom REST path from SPA seed with no payments JSON API (wallet/checkout live on /wallet and /checkout)"
     }
   };
 };
@@ -54861,7 +54880,7 @@ Related: PWN-010 product search SQLi via GET /search?q= UNION injection.
 
 const pwnshopProductApiIdorLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
-  if (!pwnshopRouteTierAllows(ctx, "product")) return NEGATIVE;
+  if (!pwnshopRouteTierAllows(ctx, ["product", "products"])) return NEGATIVE;
   for (const id of ["1", "2", "3"]) {
     const url = new URL(`/api/v1/products/${id}`, ctx.origin).toString();
     const doc = await ctx.probe.get(url, {
@@ -123492,6 +123511,7 @@ export const RULES: Record<string, Rule> = {
   pwnshopVulnerabilitiesIndexRouteLiveOracle,
   pwnshopEventsAuditLiveOracle,
   pwnshopEventsAuditRouteLiveOracle,
+  pwnshopApiV1PaymentsPhantomRouteLiveOracle,
   pwnshopChatInitEmailEnumerationLiveOracle,
   pwnshopChatInitRouteLiveOracle,
   pwnshopChatOrderIdorLiveOracle,

@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-api-v1-payments-tier-hub-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: pwnshopScannedRoute adds payments/events/products API tiers; pwnshopRouteTierSlugPattern + applyRouteOracleHubFilters keep only tier-matching pwnshop-* on /api/v1/* route scans; pwnshopEventsAuditRouteLiveOracle scoped to events/products only; pwnshopApiV1PaymentsPhantomRouteLiveOracle documents GET /api/v1/payments 404 HTML; pwnshop.ctfsecurity.com/api/v1/payments findings 48→5 (+pwnshop-api-v1-payments-phantom-route-live-oracle, -43 cross-module pwnshop-* +reflexion +client-side bleed); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-catalog-open-redirect-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: applyRouteOracleHubFilters catalog-tier genericKeep drops client-side-open-redirect-evidence on /catalog?category= route scans; ginandjuice.shop/catalog?category=Accessories findings 25→17 (-client-side-open-redirect-evidence +catalog category/search/crlf/base64 oracles retained); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-jwt-subroute-client-evidence-trim",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: applyRouteOracleHubFilters JWT sub-route jwtKeep retains only client-side-brokencrystals-evidence (drops dom-xss + prototype-pollution siblings) on /api/auth/jwt/* dedicated scans; brokencrystals.com/api/auth/jwt/x5c/validate findings 8→6 (-client-side-brokencrystals-dom-xss-evidence -client-side-brokencrystals-prototype-pollution-evidence, +x5c-rogue live+route retained); /api/auth/jwt/weak/validate 8→5; benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:brokencrystals.com",
       "slug": "brokencrystals-jwt-auth-subroute-hub-filter",
       "status": "shipped",

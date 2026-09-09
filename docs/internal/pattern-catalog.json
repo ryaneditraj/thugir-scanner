@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-09T15:21:48.462Z",
-  "total": 3479,
-  "uniqueSlugs": 3471,
+  "generatedAt": "2026-09-09T16:17:44.624Z",
+  "total": 3480,
+  "uniqueSlugs": 3472,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3461,
+    "generic": 3462,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3394,
+    "deep": 3395,
     "continuous": 0
   },
   "byCategory": {
@@ -24,7 +24,7 @@
     "Source exposure": 7,
     "Misconfiguration": 2,
     "Information exposure": 1,
-    "Information disclosure": 159,
+    "Information disclosure": 160,
     "Security misconfiguration": 290,
     "Broken authentication": 224,
     "Injection": 583,
@@ -2497,6 +2497,7 @@
     "pwnshop-admin-login-sqli-live-oracle",
     "pwnshop-admin-security-second-order-sqli-live-oracle",
     "pwnshop-admin-security-second-order-sqli-route-live-oracle",
+    "pwnshop-api-v1-payments-phantom-route-live-oracle",
     "pwnshop-apply-coupon-live-oracle",
     "pwnshop-apply-coupon-route-live-oracle",
     "pwnshop-audit-log-plaintext-password-live-oracle",
