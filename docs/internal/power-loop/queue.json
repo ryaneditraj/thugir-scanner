@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-09T06:05:00.000Z",
+  "updated_at": "2026-09-09T07:07:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://duck-store.escape.tech/mcp/info",
+      "source": "Escape Duck Store — MCP unauthenticated access oracle GET /mcp/info (vulnerabilities page + devroxana write-up; web search 07 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/mcp/tools",
+      "source": "Escape Duck Store — MCP tools enumeration oracle GET /mcp/tools (vulnerabilities page; web search 07 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/marketplace",
+      "source": "NeuraLegion/brokencrystals — prototype pollution oracle POST /api/marketplace (README partners/marketplace; web search 07 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/products/latest?limit=999",
+      "source": "NeuraLegion/brokencrystals — business constraint bypass oracle GET /api/products/latest limit param (README; web search 07 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://fvb.vchan.in/graphql",
+      "source": "vchan-in/fvb — First Vulnerable Bank GraphQL introspection + BOLA oracle (GitHub README apidoc.fvb.vchan.in; web search 07 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://brokencrystals.com/api/mcp",
       "source": "NeuraLegion/brokencrystals — MCP JSON-RPC tool-calling oracle with stored injection + admin tools (README SET-2097; web search 06 UTC discovery)",
@@ -11990,6 +12015,31 @@
     {
       "url": "https://restful-booker.herokuapp.com/auth",
       "source": "Restful Booker — POST /auth token issuance oracle for weak-creds + auth bypass (restful-booker Postman collection; web search 02 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/mcp/info",
+      "source": "Escape Duck Store — MCP unauthenticated access oracle GET /mcp/info (vulnerabilities page + devroxana write-up; web search 07 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/mcp/tools",
+      "source": "Escape Duck Store — MCP tools enumeration oracle GET /mcp/tools (vulnerabilities page; web search 07 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/marketplace",
+      "source": "NeuraLegion/brokencrystals — prototype pollution oracle POST /api/marketplace (README partners/marketplace; web search 07 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/products/latest?limit=999",
+      "source": "NeuraLegion/brokencrystals — business constraint bypass oracle GET /api/products/latest limit param (README; web search 07 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://fvb.vchan.in/graphql",
+      "source": "vchan-in/fvb — First Vulnerable Bank GraphQL introspection + BOLA oracle (GitHub README apidoc.fvb.vchan.in; web search 07 UTC discovery)",
       "auth": "public_demo"
     }
   ]
