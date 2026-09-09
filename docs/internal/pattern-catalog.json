@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-09T17:15:07.467Z",
-  "total": 3480,
-  "uniqueSlugs": 3472,
+  "generatedAt": "2026-09-09T18:08:13.144Z",
+  "total": 3484,
+  "uniqueSlugs": 3476,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3462,
+    "generic": 3466,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3395,
+    "deep": 3399,
     "continuous": 0
   },
   "byCategory": {
@@ -26,7 +26,7 @@
     "Information exposure": 1,
     "Information disclosure": 160,
     "Security misconfiguration": 290,
-    "Broken authentication": 224,
+    "Broken authentication": 228,
     "Injection": 583,
     "Cross-site scripting": 814,
     "Open redirect": 29,
@@ -176,6 +176,8 @@
     "brokencrystals-jwt-alg-none-live-oracle",
     "brokencrystals-jwt-alg-none-route-live-oracle",
     "brokencrystals-jwt-hmac-confusion-live-oracle",
+    "brokencrystals-jwt-hmac-confusion-login-live-oracle",
+    "brokencrystals-jwt-hmac-confusion-login-route-live-oracle",
     "brokencrystals-jwt-hmac-confusion-route-live-oracle",
     "brokencrystals-jwt-jku-rogue-live-oracle",
     "brokencrystals-jwt-jku-rogue-route-live-oracle",
@@ -190,6 +192,8 @@
     "brokencrystals-jwt-route-live-oracle",
     "brokencrystals-jwt-rsa-signature-login-route-live-oracle",
     "brokencrystals-jwt-weak-key-live-oracle",
+    "brokencrystals-jwt-weak-key-login-live-oracle",
+    "brokencrystals-jwt-weak-key-login-route-live-oracle",
     "brokencrystals-jwt-weak-key-route-live-oracle",
     "brokencrystals-jwt-x5c-rogue-live-oracle",
     "brokencrystals-jwt-x5c-rogue-route-live-oracle",

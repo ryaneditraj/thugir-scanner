@@ -44706,6 +44706,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "brokencrystals-jwt-hmac-confusion-login-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "Broken Crystals JWT HMAC confusion login live oracle",
+    description:
+      "POST /api/auth/jwt/hmac/login issues JWT tokens; companion GET /api/auth/jwt/hmac/validate accepts alg:none JWTs and returns {\"secret\":\"this is our secret\"} — the Broken Crystals HMAC confusion login chain oracle.",
+    impactOneline:
+      "Accepting alg:none JWTs on HMAC validation endpoints lets attackers bypass authentication after a legitimate login probe.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsJwtHmacConfusionLoginLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Pin JWT verification to expected algorithms and reject alg:none — Broken Crystals is intentional lab software.",
+      steps: [
+        "Configure your JWT library to allow only RS256/HS256 (never 'none').",
+        "Reject algorithm confusion between RS256 and HS256 verification paths.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/auth/jwt/hmac/login and /validate endpoints accept alg:none JWTs. Show secure HMAC JWT verification patterns.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-jwt-hmac-confusion-login-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "Broken Crystals /api/auth/jwt/hmac/login route live oracle",
+    description:
+      "When scanning /api/auth/jwt/hmac/login, POST login issues JWT and alg:none JWT bypasses HMAC validation on companion /validate — route-specific HMAC confusion login confirmation oracle.",
+    impactOneline:
+      "Route-specific confirmation that Broken Crystals HMAC login flow is vulnerable to alg:none JWT forgery.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsJwtHmacConfusionLoginRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Pin JWT verification to expected algorithms — Broken Crystals is intentional lab software.",
+      steps: [
+        "Configure your JWT library to allow only RS256/HS256 (never 'none').",
+        "Reject algorithm confusion between RS256 and HS256 verification paths.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/auth/jwt/hmac/login route scan confirms alg:none JWT bypass. Show secure HMAC JWT verification.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-jwt-weak-key-login-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "Broken Crystals JWT weak-key login live oracle",
+    description:
+      "POST /api/auth/jwt/weak-key/login issues JWT tokens; companion GET /api/auth/jwt/weak-key/validate accepts HS256 JWTs signed with weak secrets (1234/123) and returns {\"secret\":\"this is our secret\"} — the Broken Crystals weak-key login chain oracle.",
+    impactOneline:
+      "Accepting JWTs signed with weak HMAC secrets lets attackers brute-force signing keys and bypass authentication.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsJwtWeakKeyLoginLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use strong random JWT secrets and reject weak keys — Broken Crystals is intentional lab software.",
+      steps: [
+        "Generate JWT secrets with at least 256 bits of entropy.",
+        "Reject HS256 tokens signed with known weak secrets.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/auth/jwt/weak-key/login and /validate endpoints accept weak-secret JWTs. Show secure HMAC JWT verification patterns.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-jwt-weak-key-login-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "Broken Crystals /api/auth/jwt/weak-key/login route live oracle",
+    description:
+      "When scanning /api/auth/jwt/weak-key/login, POST login issues JWT and weak-secret HS256 JWT bypasses validation on companion /validate — route-specific weak-key login confirmation oracle.",
+    impactOneline:
+      "Route-specific confirmation that Broken Crystals weak-key login flow is vulnerable to weak HMAC secret forgery.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsJwtWeakKeyLoginRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use strong random JWT secrets — Broken Crystals is intentional lab software.",
+      steps: [
+        "Generate JWT secrets with at least 256 bits of entropy.",
+        "Reject HS256 tokens signed with known weak secrets.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/auth/jwt/weak-key/login route scan confirms weak-secret JWT bypass. Show secure HMAC JWT verification.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "brokencrystals-jwt-jwk-empty-live-oracle",
     platform: "generic",
     category: "Broken authentication",
