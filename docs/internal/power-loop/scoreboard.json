@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-09T12:21:21.117Z",
+  "updated_at": "2026-09-09T13:17:40.625Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 3148,
-  "total_findings": 34732,
+  "total_sites_scanned": 3157,
+  "total_findings": 34932,
   "critical_findings": 57,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2181,
-  "discovery_findings": 27013,
+  "discovery_urls_added": 2186,
+  "discovery_findings": 27162,
   "improvements_shipped": 1688,
-  "last_run": "2026-09-09T12:21:21.117Z",
+  "last_run": "2026-09-09T13:17:40.625Z",
   "last_run_summary": {
-    "hour_utc": "12",
+    "hour_utc": "13",
     "benchmark": {
-      "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "oracle_findings": 53,
+      "oracle_url": "https://juice-shop.herokuapp.com",
+      "oracle_findings": 51,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 602,
+      "probes_run": 599,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,44 +48,44 @@
           ]
         }
       },
-      "note": "Primary Heroku timeout → staging fallback 6/6 (53 findings, 40 live oracles). Parallel validation pass: primary 52 findings (-CTF corpus bleed, 2 improvements shipped)."
+      "note": "Primary Heroku stable 6/6 (51 findings, 37 live oracles) — thinner than typical 53 pass; secret-resend slug absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 82,
-      "focus": "vAPI api3/api4/api5/api9 endpoints queued + queue drain NodeGoat benefits/register + Restful Booker booking/auth + Gin & Juice blog/post + VulnBank reset-password/console",
-      "improvements_shipped_this_run": 2
+      "findings": 149,
+      "focus": "brokencrystals SSRF /api/file + vAPI api6/api10/serversurfer/jwt + queue drain brokencrystals /api/file/aws + Restful Booker booking/1 + NodeGoat login",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (53 findings, gap=[])",
-      "juice-shop.herokuapp.com: validation re-scan 52 findings (-client-side-ctf-challange-3 false positive)",
-      "nodegoat-websec.herokuapp.com/benefits: 10 findings — nodegoat-benefits-bac-live-oracle + nodegoat-benefits-nosql-route-live-oracle",
-      "nodegoat-websec.herokuapp.com/register: 13 findings — nodegoat-signup-route-live-oracle + nodegoat-login-weak-credentials-live-oracle",
-      "restful-booker.herokuapp.com/booking: 8 findings — restful-booker-booking-unauth-access-route-live-oracle",
-      "ginandjuice.shop/blog/post?postId=2: 21 findings — ginandjuice-blog-prototype-pollution-dom-xss-route-live-oracle",
-      "vulnbank.org/api/v2/reset-password: 9 findings — vulnbank-v2-reset-password-versioning-route-live-oracle",
-      "vulnbank.org/console: 8 findings — vulnbank-werkzeug-console-route-live-oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, 37 live oracles, gap=[])",
+      "brokencrystals.com/api/file?path=https://httpbin.org/get: 36 findings — brokencrystals-api-file-httpbin-ssrf-live-oracle + brokencrystals-file-lfi-route-live-oracle",
+      "vapi.apisec.ai/vapi/api6/user: 16 findings — vAPI API6 mass-assignment surface",
+      "vapi.apisec.ai/vapi/api10/user: 16 findings — vAPI API10 unsafe consumption surface",
+      "vapi.apisec.ai/vapi/serversurfer: 16 findings — vAPI SSRF serversurfer oracle",
+      "vapi.apisec.ai/vapi/jwt/user: 16 findings — vAPI JWT weak-token oracle",
+      "brokencrystals.com/api/file/aws: 35 findings — brokencrystals-file-aws-route-live-oracle",
+      "restful-booker.herokuapp.com/booking/1: 6 findings — restful-booker-booking-unauth-access-route-live-oracle",
+      "nodegoat-websec.herokuapp.com/login: 8 findings — nodegoat-nosql-login-route-live-oracle + nodegoat-login-weak-credentials-route-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "primary juice-shop Heroku timed out 600s — staging fallback required for stable 6/6",
-      "vAPI api3/api4/api5/api9 endpoints queued at priority tail — not reached in 8-slot queue drain",
-      "client-side-ctf-challange-3-middleware-bypass-evidence still bleeds on NodeGoat/Restful Booker route scans",
-      "payapi.vercel.app is Frontend Mentor static site — not a security CTF; deprioritize in discovery queue"
+      "benchmark thin pass — 51 findings vs typical 53; 37 live oracles vs 40; secret-resend slug still absent",
+      "vAPI api6/api10/serversurfer/jwt route scans share host-level oracles — route-specific api6/api10 live oracles may need dedicated corpus entries",
+      "brokencrystals /api/file/aws metadata SSRF needs cloud-metadata oracle validation beyond httpbin probe",
+      "priority tail still pending: fauxbank api routes, duck-store MCP/cart, ginandjuice change-address/delete"
     ]
   },
   "discovery_highlights": {
-    "juice-shop-staging.herokuapp.com": 53,
-    "juice-shop.herokuapp.com": 52,
-    "nodegoat-websec.herokuapp.com/benefits": 10,
-    "nodegoat-websec.herokuapp.com/register": 13,
-    "restful-booker.herokuapp.com/booking": 8,
-    "restful-booker.herokuapp.com/auth": 7,
-    "ginandjuice.shop/blog/post?postId=2": 21,
-    "vulnbank.org/api/v2/reset-password": 9,
-    "vulnbank.org/console": 8,
-    "restful-booker.herokuapp.com/": 6
+    "juice-shop.herokuapp.com": 51,
+    "brokencrystals.com/api/file?path=https://httpbin.org/get": 36,
+    "brokencrystals.com/api/file/aws": 35,
+    "vapi.apisec.ai/vapi/api6/user": 16,
+    "vapi.apisec.ai/vapi/api10/user": 16,
+    "vapi.apisec.ai/vapi/serversurfer": 16,
+    "vapi.apisec.ai/vapi/jwt/user": 16,
+    "restful-booker.herokuapp.com/booking/1": 6,
+    "nodegoat-websec.herokuapp.com/login": 8
   }
 }
