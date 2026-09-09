@@ -1044,7 +1044,7 @@ function brokencrystalsRouteSlugPatterns(pathname: string): RegExp[] | null {
       /\/api\/users\/search\b|\/api\/searchadmin\b/,
       [/brokencrystals-users-search/, /brokencrystals-search-admin/]
     ],
-    [/\/api\/marketplace\b/, [/brokencrystals-marketplace/]],
+    [/\/api\/marketplace\b/, [/brokencrystals-marketplace/, /^client-side-brokencrystals/]],
     [/\/api\/signup\b/, [/brokencrystals-signup/]],
     [/\/domcsrf\b/, [/brokencrystals-dom-csrf/]],
     [/\/metadata\b/, [/brokencrystals-(?:aws|azure|digital-ocean|google)-metadata/]]
@@ -10934,6 +10934,13 @@ function applyRouteOracleHubFilters(
           if (!slug.startsWith("brokencrystals-")) return true;
           return allowed.some((re) => re.test(slug));
         });
+        findings.length = 0;
+        findings.push(...deduped);
+      }
+      if (/\/api\/marketplace\b/.test(pathname)) {
+        const marketplaceKeep =
+          /^(?:brokencrystals-marketplace|client-side-brokencrystals|missing-security-headers|thugir-dir-discovery)/;
+        const deduped = findings.filter((f: PatternFinding) => marketplaceKeep.test(f.patternSlug || ""));
         findings.length = 0;
         findings.push(...deduped);
       }
