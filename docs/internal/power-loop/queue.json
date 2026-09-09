@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-08T22:05:32.403Z",
+  "updated_at": "2026-09-09T00:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://vulnbank.org/api/v1/merchants/login",
+      "source": "Commando-X/vuln-bank — merchant SQLi login oracle POST /api/v1/merchants/login (GitHub merchant_payments.py; web search 00 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/users/",
+      "source": "Escape Duck Store — user enumeration oracle GET /api/v1/users/ (duck-store.escape.tech/vulnerabilities; web search 00 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/testimonials/1",
+      "source": "Escape Duck Store — unauthenticated PUT testimonials BOLA oracle (escape.tech blog benchmarking; web search 00 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/auth/jwt/x5c/validate",
+      "source": "NeuraLegion/brokencrystals — JWT x5c certificate confusion bypass oracle (Swagger README; web search 00 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnbank.org/api/v1/payments/merchant_id/1",
+      "source": "Commando-X/vuln-bank — merchant payment history BOLA oracle GET /api/v1/payments/merchant_id/:id (GitHub README; web search 00 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://ginandjuice.shop/blog/post?postId=1",
       "source": "PortSwigger Web Security Academy ginandjuice — blog post XSS oracle (ginandjuice.shop; web search 22 UTC discovery)",
