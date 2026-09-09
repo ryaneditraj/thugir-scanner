@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-09T10:05:00.000Z",
+  "updated_at": "2026-09-09T11:05:00.000Z",
   "priority_discovery_urls": [
     {
       "url": "https://pentest-fauxbank.vercel.app/api/profile",
@@ -12130,6 +12130,31 @@
     {
       "url": "https://fvb.vchan.in/api/transactions/1",
       "source": "vchan-in/fvb \u2014 First Vulnerable Bank transaction history BOLA GET /api/transactions/{id} (GitHub README; web search 10 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://crapi.lab.pentest-forge.com/workshop/api/shop/products",
+      "source": "PentestForge Lab \u2014 crAPI shop products BFLA oracle GET /workshop/api/shop/products (lab.pentest-forge.com; web search 11 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://crapi.lab.pentest-forge.com/workshop/api/shop/apply_coupon",
+      "source": "PentestForge Lab \u2014 crAPI coupon SQLi oracle POST /workshop/api/shop/apply_coupon (lab.pentest-forge.com; web search 11 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://urban-vampi-production.up.railway.app/books/v1",
+      "source": "erev0s/VAmPI \u2014 GET /books/v1 book collection BOLA oracle (urban-VAmPI Railway; web search 11 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop.lab.pentest-forge.com/rest/user/login",
+      "source": "PentestForge Lab \u2014 Juice Shop login SQLi oracle POST /rest/user/login (lab.pentest-forge.com; web search 11 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://payapi.vercel.app/",
+      "source": "PayAPI Website Challenge \u2014 intentionally vulnerable payment API demo on Vercel (web search 11 UTC discovery)",
       "auth": "public_demo"
     }
   ]

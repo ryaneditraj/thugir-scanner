@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-09T10:15:00.000Z",
+  "updated_at": "2026-09-09T11:10:16.485Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 3121,
-  "total_findings": 34349,
+  "total_sites_scanned": 3130,
+  "total_findings": 34449,
   "critical_findings": 57,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2171,
-  "discovery_findings": 26871,
+  "discovery_urls_added": 2176,
+  "discovery_findings": 26918,
   "improvements_shipped": 1685,
-  "last_run": "2026-09-09T10:15:00.000Z",
+  "last_run": "2026-09-09T11:10:16.485Z",
   "last_run_summary": {
-    "hour_utc": "10",
+    "hour_utc": "11",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 53,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 599,
+      "probes_run": 597,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,41 +48,39 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (53 findings, 40 live oracles incl secret-resend + iac-terraform-tls-key)"
+      "note": "Stable 6/6 recall (53 findings, 40 live oracles incl secret-resend + jwt-alg-none + captcha-bypass)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 4,
-      "findings": 27,
-      "focus": "ginandjuice my-account tier hub + crAPI shop-products BFLA + crAPI tier hub suppression",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 47,
+      "focus": "PentestForge crAPI shop + Juice Shop login + VAmPI books collection + PayAPI CTF + queue drain NodeGoat/Restful Booker/IST Edu/DVWU chatbot",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, gap=[])",
-      "ginandjuice.shop/my-account/change-address: 15→7 findings — my-account tier hub suppression",
-      "ginandjuice.shop/my-account/delete: 15→7 findings — my-account tier hub suppression",
-      "crapi.apisec.ai/workshop/api/shop/products: 11→5 findings — +shop-products BFLA route oracle + tier hub",
-      "crapi.apisec.ai/community/api/v2/community/posts/recent: 15→8 findings — crAPI tier hub suppression"
+      "nodegoat-websec.herokuapp.com/members: 4 findings — nodegoat-members-route-live-oracle NoSQL injection",
+      "nodegoat-websec.herokuapp.com/research: 6 findings — nodegoat-research-ssrf-route-live-oracle",
+      "restful-booker.herokuapp.com/booking/summary: 6 findings — weak-creds + unauth booking access oracles",
+      "ist-edu-bd.vercel.app/api/portal: 8 findings — portal API misconfig hub",
+      "preview.owasp-juice.shop/rest/chatbot/respond: 3 findings — chatbot prompt-injection route"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "client-side-ctf-challange-3-middleware-bypass-evidence still bleeds on ginandjuice/crapi route scans",
-      "crapi.apisec.ai can be slow/unreachable from cloud egress — live BFLA probe may fall back to corpus"
+      "client-side-ctf-challange-3-middleware-bypass-evidence still bleeds on NodeGoat/Restful Booker route scans",
+      "PentestForge lab hosts (crapi/juice-shop.lab.pentest-forge.com) queued but not reached — priority queue fills 8-slot limit"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 53,
-    "ginandjuice.shop/my-account/change-address": 7,
-    "ginandjuice.shop/my-account/delete": 7,
-    "crapi.apisec.ai/workshop/api/shop/products": 5,
-    "crapi.apisec.ai/community/api/v2/community/posts/recent": 8,
-    "nodegoat-websec.herokuapp.com/contributions": 7,
-    "nodegoat-websec.herokuapp.com/dashboard": 7,
-    "ist-edu-bd.vercel.app/api/portal": 8,
-    "restful-booker.herokuapp.com/booking/summary": 6,
+    "nodegoat-websec.herokuapp.com/members": 4,
     "nodegoat-websec.herokuapp.com/research": 6,
+    "restful-booker.herokuapp.com/booking/summary": 6,
+    "restful-booker.herokuapp.com/ping": 6,
+    "ist-edu-bd.vercel.app/api/portal": 8,
     "preview.owasp-juice.shop/rest/chatbot/respond": 3,
-    "nodegoat-websec.herokuapp.com/members": 4
+    "nodegoat-websec.herokuapp.com/dashboard": 7,
+    "nodegoat-websec.herokuapp.com/contributions": 7
   }
 }
