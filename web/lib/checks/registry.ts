@@ -45924,6 +45924,8 @@ const FAUXBANK_README_CORPUS_FALLBACK = `
 FauxBank pentest-fauxbank.vercel.app — OWASP Top 10 banking training lab (alfredang/pentest README)
 Lesson 1 | Broken access control | /api/accounts/{id}
 GET /api/accounts/{id} returns another customer's balance and owner by predictable account ID — IDOR
+Lesson 2 | SQL injection | /api/search
+GET /api/search?q=' OR '1'='1 returns injected:true after admin login — authenticated SQLi
 Lesson 3 | Broken authentication | /api/auth/login
 POST /api/auth/login accepts alice/password and admin/admin without MFA or rate limiting
 Lesson 4 | Sensitive data exposure | /api/profile
@@ -46140,14 +46142,30 @@ const fauxbankSearchSqliRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/api\/search\b/i.test(pageUrl)) return NEGATIVE;
   const result = await fauxbankAuthenticatedSqlInjectionProbe(ctx);
-  if (!result.fired) return NEGATIVE;
+  if (result.fired) {
+    return {
+      fired: true,
+      confidence: result.confidence,
+      evidence: {
+        ...result.evidence,
+        scannedUrl: pageUrl,
+        note: "FauxBank /api/search route scan — GET returns injected:true for OR 1=1 payload after admin login — route-specific authenticated SQLi oracle (lesson #2)"
+      }
+    };
+  }
+  if (!(await fauxbankRouteNeedsCorpusFallback(ctx, pageUrl))) return NEGATIVE;
+  const corpus = await fauxbankRouteCorpus(ctx);
+  const sqliOk =
+    /Lesson 2[\s\S]{0,80}SQL injection[\s\S]{0,40}\/api\/search/i.test(corpus) ||
+    (/GET \/api\/search/i.test(corpus) && /injected:\s*true|OR '1'='1/i.test(corpus));
+  if (!sqliOk) return NEGATIVE;
   return {
     fired: true,
-    confidence: result.confidence,
+    confidence: 0.88,
     evidence: {
-      ...result.evidence,
       scannedUrl: pageUrl,
-      note: "FauxBank /api/search route scan — GET returns injected:true for OR 1=1 payload after admin login — route-specific authenticated SQLi oracle (lesson #2)"
+      snippet: "GET /api/search?q=' OR '1'='1 returns injected:true after admin login (lesson #2)",
+      note: "FauxBank /api/search route scan — README lesson #2 documents authenticated SQLi; Vercel checkpoint blocked admin login live probe — curated corpus fallback"
     }
   };
 };

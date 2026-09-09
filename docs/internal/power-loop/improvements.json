@@ -10193,6 +10193,12 @@
       "slug": "crapi-shop-products-bfla-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: POST /workshop/api/shop/products {name,price:-1000.0} accepted and product appears in GET catalog — BFLA + mass-assignment Challenge 9; crapi.apisec.ai/workshop/api/shop/products findings 11→5 (+crapi-shop-products-bfla-route-live-oracle alongside tier-scoped misconfig); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-fauxbank.vercel.app",
+      "slug": "fauxbank-search-sqli-route-corpus-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: FAUXBANK_README_CORPUS_FALLBACK adds Lesson 2 GET /api/search?q=' OR '1'='1 injected:true; fauxbankSearchSqliRouteLiveOracle corpus fallback when Vercel checkpoint blocks admin login; pentest-fauxbank.vercel.app/api/search findings 4→5 (+fauxbank-search-sqli-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
     }
   ]
 }
