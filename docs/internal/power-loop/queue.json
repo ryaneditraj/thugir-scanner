@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-09T05:04:49.704Z",
+  "updated_at": "2026-09-09T06:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://brokencrystals.com/api/mcp",
+      "source": "NeuraLegion/brokencrystals — MCP JSON-RPC tool-calling oracle with stored injection + admin tools (README SET-2097; web search 06 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/render.dot",
+      "source": "NeuraLegion/brokencrystals — Graphviz SSTI oracle GET /render.dot (README; web search 06 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/my-account/change-address",
+      "source": "PortSwigger Gin & Juice Shop — change-address account takeover oracle sibling to change-email (ginandjuice.shop/vulnerabilities; web search 06 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/my-account/delete",
+      "source": "PortSwigger Gin & Juice Shop — account deletion CSRF/logic oracle (ginandjuice.shop/my-account; web search 06 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://crapi.apisec.ai/workshop/api/shop/products",
+      "source": "OWASP crAPI public instance — unauthenticated product catalog BOLA oracle GET /workshop/api/shop/products (crAPI walkthrough; web search 06 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://demo.owasp-juice.shop/api/BasketItems",
       "source": "OWASP Juice Shop demo — cross-user basket write IDOR oracle POST /api/BasketItems (Pwning Juice Shop solutions; web search 05 UTC discovery)",
