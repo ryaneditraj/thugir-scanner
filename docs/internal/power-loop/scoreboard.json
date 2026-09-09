@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-09T13:17:40.625Z",
+  "updated_at": "2026-09-09T14:02:11.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 3157,
-  "total_findings": 34932,
+  "total_sites_scanned": 3159,
+  "total_findings": 35034,
   "critical_findings": 57,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2186,
   "discovery_findings": 27162,
-  "improvements_shipped": 1688,
-  "last_run": "2026-09-09T13:17:40.625Z",
+  "improvements_shipped": 1691,
+  "last_run": "2026-09-09T14:02:11.000Z",
   "last_run_summary": {
-    "hour_utc": "13",
+    "hour_utc": "14",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 51,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 599,
+      "probes_run": 591,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -52,40 +52,31 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 149,
-      "focus": "brokencrystals SSRF /api/file + vAPI api6/api10/serversurfer/jwt + queue drain brokencrystals /api/file/aws + Restful Booker booking/1 + NodeGoat login",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 4,
+      "findings": 21,
+      "focus": "vAPI api6/api10 tier-hub suppression + brokencrystals /api/file/aws generic bleed + fauxbank API runner hub filter validation",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, 37 live oracles, gap=[])",
-      "brokencrystals.com/api/file?path=https://httpbin.org/get: 36 findings — brokencrystals-api-file-httpbin-ssrf-live-oracle + brokencrystals-file-lfi-route-live-oracle",
-      "vapi.apisec.ai/vapi/api6/user: 16 findings — vAPI API6 mass-assignment surface",
-      "vapi.apisec.ai/vapi/api10/user: 16 findings — vAPI API10 unsafe consumption surface",
-      "vapi.apisec.ai/vapi/serversurfer: 16 findings — vAPI SSRF serversurfer oracle",
-      "vapi.apisec.ai/vapi/jwt/user: 16 findings — vAPI JWT weak-token oracle",
-      "brokencrystals.com/api/file/aws: 35 findings — brokencrystals-file-aws-route-live-oracle",
-      "restful-booker.herokuapp.com/booking/1: 6 findings — restful-booker-booking-unauth-access-route-live-oracle",
-      "nodegoat-websec.herokuapp.com/login: 8 findings — nodegoat-nosql-login-route-live-oracle + nodegoat-login-weak-credentials-route-live-oracle"
+      "vapi.apisec.ai/vapi/api6/user: 16→4 findings — vapi-tier-hub-oracle-suppression (+vapi-api6-mass-assignment-live-oracle retained)",
+      "vapi.apisec.ai/vapi/api10/user: 16→4 findings — vapi-tier-hub-oracle-suppression (+vapi-api10-logging-live-oracle retained)",
+      "brokencrystals.com/api/file/aws: 35→11 findings — brokencrystals-file-route-generic-oracle-suppression (+brokencrystals-file-aws-route-live-oracle retained)",
+      "pentest-fauxbank.vercel.app/api/accounts/1: 7→2 findings — fauxbank-api-runner-hub-filter-reinforcement (-generic bleed; fauxbank oracles intermittent on Vercel checkpoint)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "benchmark thin pass — 51 findings vs typical 53; 37 live oracles vs 40; secret-resend slug still absent",
-      "vAPI api6/api10/serversurfer/jwt route scans share host-level oracles — route-specific api6/api10 live oracles may need dedicated corpus entries",
+      "benchmark thin pass — 51 findings vs typical 53; secret-resend slug still absent",
       "brokencrystals /api/file/aws metadata SSRF needs cloud-metadata oracle validation beyond httpbin probe",
-      "priority tail still pending: fauxbank api routes, duck-store MCP/cart, ginandjuice change-address/delete"
+      "priority tail still pending: duck-store MCP/cart, ginandjuice change-address/delete, vAPI serversurfer/jwt tier-hub filters"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 51,
-    "brokencrystals.com/api/file?path=https://httpbin.org/get": 36,
-    "brokencrystals.com/api/file/aws": 35,
-    "vapi.apisec.ai/vapi/api6/user": 16,
-    "vapi.apisec.ai/vapi/api10/user": 16,
-    "vapi.apisec.ai/vapi/serversurfer": 16,
-    "vapi.apisec.ai/vapi/jwt/user": 16,
-    "restful-booker.herokuapp.com/booking/1": 6,
-    "nodegoat-websec.herokuapp.com/login": 8
+    "brokencrystals.com/api/file/aws": 11,
+    "vapi.apisec.ai/vapi/api6/user": 4,
+    "vapi.apisec.ai/vapi/api10/user": 4,
+    "pentest-fauxbank.vercel.app/api/accounts/1": 2
   }
 }

@@ -1061,6 +1061,14 @@ function brokencrystalsRouteSlugPatterns(pathname: string): RegExp[] | null {
   return null;
 }
 
+/** vAPI dedicated route scans — keep only matching apiN/jwt/serversurfer oracle slugs. */
+function vapiRouteTierSlugPattern(pathname: string): RegExp | null {
+  const m = pathname.match(/\/vapi\/(api\d+|jwt|serversurfer)\b/i);
+  if (!m) return null;
+  const tier = m[1].toLowerCase();
+  return new RegExp(`^vapi-${tier}(?:-|$)`);
+}
+
 async function scanRule(pattern: Pattern, ctx: RuleContext, allowed: Set<string>): Promise<PatternFinding | null> {
   if (pattern.detectorKind !== "rule_ref") return null;
   const cfg = pattern.detectorConfig as { rule: string; options?: Record<string, unknown> };
@@ -10944,6 +10952,50 @@ function applyRouteOracleHubFilters(
         const marketplaceKeep =
           /^(?:brokencrystals-marketplace|client-side-brokencrystals|missing-security-headers|thugir-dir-discovery)/;
         const deduped = findings.filter((f: PatternFinding) => marketplaceKeep.test(f.patternSlug || ""));
+        findings.length = 0;
+        findings.push(...deduped);
+      }
+      if (/\/api\/file(?:\/|$)/.test(pathname)) {
+        const fileKeep =
+          /^(?:brokencrystals-(?:api-file|file-(?:raw-)?lfi|file-(?:aws|azure|digital-ocean|google))|missing-security-headers|insecure-cookies|thugir-dir-discovery|client-side-brokencrystals)/;
+        const deduped = findings.filter((f: PatternFinding) => fileKeep.test(f.patternSlug || ""));
+        findings.length = 0;
+        findings.push(...deduped);
+      }
+    } catch {
+      /* ignore */
+    }
+  }
+
+  if (/vapi\.apisec\.ai|vapi\.tools\.escape\.tech/i.test(origin)) {
+    try {
+      const pathname = new URL(targetInput).pathname.toLowerCase();
+      const tierSlugRe = vapiRouteTierSlugPattern(pathname);
+      if (tierSlugRe) {
+        const genericKeep =
+          /^(?:missing-security-headers|tech-stack-disclosure|thugir-dir-discovery)$/;
+        const deduped = findings.filter((f: PatternFinding) => {
+          const slug = f.patternSlug || "";
+          if (!slug.startsWith("vapi-")) return genericKeep.test(slug);
+          return tierSlugRe.test(slug);
+        });
+        findings.length = 0;
+        findings.push(...deduped);
+      }
+    } catch {
+      /* ignore */
+    }
+  }
+
+  if (/pentest-fauxbank\.vercel\.app/i.test(origin)) {
+    try {
+      const pathname = new URL(targetInput).pathname.toLowerCase();
+      if (/\/api\//.test(pathname)) {
+        const fauxbankApiKeep =
+          /^(?:fauxbank-|missing-security-headers|client-side-fauxbank|thugir-dir-discovery)$/;
+        const deduped = findings.filter((f: PatternFinding) =>
+          fauxbankApiKeep.test(f.patternSlug || "")
+        );
         findings.length = 0;
         findings.push(...deduped);
       }

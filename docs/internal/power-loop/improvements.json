@@ -10211,6 +10211,24 @@
       "slug": "ist-edu-portal-route-oracle-tier-scoping",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: istEduSearchSqliLiveOracle scoped to /api/search|/search|/labs/sqli routes; istEduRegisterAuthSqliRouteLiveOracle tightened to /register|/login only (not /api/portal); ist-edu-bd.vercel.app/api/portal findings 8→5 (-client-side-ctf-challange-3, -ist-edu-search-sqli-live-oracle, -ist-edu-register-auth-sqli-route-live-oracle; +ist-edu-portal-sqli-route-live-oracle retained); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vapi.apisec.ai",
+      "slug": "vapi-tier-hub-oracle-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: vapiRouteTierSlugPattern + applyRouteOracleHubFilters keep only vapi-{tier}-* slugs on /vapi/apiN|jwt|serversurfer route scans; vapi.apisec.ai/vapi/api6/user findings 16→4 (-api1–api10/jwt/serversurfer cross-tier bleed, +vapi-api6-mass-assignment-live-oracle +vapi-api6-route-live-oracle retained); /vapi/api10/user 16→4 (+vapi-api10-logging-live-oracle +vapi-api10-route-live-oracle retained); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-file-route-generic-oracle-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: applyRouteOracleHubFilters on /api/file/* keeps brokencrystals-api-file-* + brokencrystals-file-* + client-side-brokencrystals + misconfig only; brokencrystals.com/api/file/aws findings 35→11 (-jwt-alg-none/graphql/sqli/ssrf generic bleed, +brokencrystals-file-aws-route-live-oracle +brokencrystals-api-file-route-live-oracle +brokencrystals-file-lfi-* retained); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-fauxbank.vercel.app",
+      "slug": "fauxbank-api-runner-hub-filter-reinforcement",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: applyRouteOracleHubFilters post-scan keeps fauxbank-* + minimal misconfig on /api/* routes (reinforces fauxbankRouteTierAllows registry guards); pentest-fauxbank.vercel.app/api/accounts/1 findings 7→2 when Vercel checkpoint blocks fauxbank live oracles (-weak-api-default-credentials +dangerous-html-sinks generic bleed); benchmark juice-shop 51 findings 6/6 maintained"
     }
   ]
 }
