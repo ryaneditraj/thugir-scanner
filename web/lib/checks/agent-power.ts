@@ -404,6 +404,7 @@ export const reflexionEscalatedXss: PowerRule = async (ctx) => {
   if (pwnshopForgotPasswordReflexionSuppressed(ctx)) return NEGATIVE;
   if (pwnshopProfileReflexionSuppressed(ctx)) return NEGATIVE;
   if (pwnshopSellerReflexionSuppressed(ctx)) return NEGATIVE;
+  if (pwnshopApiV1ReflexionSuppressed(ctx)) return NEGATIVE;
   if (appsecCiLoginReflexionSuppressed(ctx)) return NEGATIVE;
   if (zeroHealthVercelDashboardReflexionSuppressed(ctx)) return NEGATIVE;
   if (hackminaazizReflexionSuppressed(ctx)) return NEGATIVE;
@@ -454,6 +455,7 @@ export const reflexionEscalatedSqli: PowerRule = async (ctx) => {
   if (pwnshopForgotPasswordReflexionSuppressed(ctx)) return NEGATIVE;
   if (pwnshopProfileReflexionSuppressed(ctx)) return NEGATIVE;
   if (pwnshopSellerReflexionSuppressed(ctx)) return NEGATIVE;
+  if (pwnshopApiV1ReflexionSuppressed(ctx)) return NEGATIVE;
   if (zeroHealthVercelDashboardReflexionSuppressed(ctx)) return NEGATIVE;
   const params = ["id", "user", "name", "q", "search"];
   const paths = ["/", "/api/users", "/search"];
@@ -509,6 +511,7 @@ export const reflexionEscalatedSsti: PowerRule = async (ctx) => {
   if (pwnshopForgotPasswordReflexionSuppressed(ctx)) return NEGATIVE;
   if (pwnshopProfileReflexionSuppressed(ctx)) return NEGATIVE;
   if (pwnshopSellerReflexionSuppressed(ctx)) return NEGATIVE;
+  if (pwnshopApiV1ReflexionSuppressed(ctx)) return NEGATIVE;
   if (oopssecGitHubPagesReflexionSuppressed(ctx)) return NEGATIVE;
   if (mcpgoatGitHubPagesReflexionSuppressed(ctx)) return NEGATIVE;
   if (aiThreatlabReflexionSuppressed(ctx)) return NEGATIVE;

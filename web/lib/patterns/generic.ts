@@ -27023,6 +27023,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "pwnshop-payments-wallet-route-live-oracle",
+    platform: "generic",
+    category: "Business logic",
+    severityDefault: "high",
+    title: "Pwnshop /api/v1/payments Vulnbank wallet funding route live oracle (PWN-042)",
+    description:
+      "When scanning /api/v1/payments on pwnshop.ctfsecurity.com, the native payments REST path is absent (404) but Vulnbank wallet funding via POST /wallet/topup/vulnbank with credited_amount override is the documented payment oracle (PWN-042).",
+    impactOneline:
+      "Payment-route scans should confirm Vulnbank wallet funding business-logic flaws rather than cross-bleeding unrelated Pwnshop module oracles.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopPaymentsWalletRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate wallet credits against settled Vulnbank charge amounts — Pwnshop PWN-042 is intentional lab software.",
+      steps: [
+        "Credit wallet only from verified Vulnbank settlement amounts.",
+        "Reject credited_amount overrides from POST bodies.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v1/payments route scan maps to Vulnbank wallet funding at /wallet/topup/vulnbank. Show credited_amount validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "fauxbank-loans-route-live-oracle",
     platform: "generic",
     category: "Broken access control",

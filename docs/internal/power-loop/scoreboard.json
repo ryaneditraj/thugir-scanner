@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-09T21:09:40.495Z",
+  "updated_at": "2026-09-09T21:40:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 3229,
-  "total_findings": 36138,
+  "total_sites_scanned": 3232,
+  "total_findings": 36121,
   "critical_findings": 61,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2219,
-  "discovery_findings": 27747,
-  "improvements_shipped": 1709,
-  "last_run": "2026-09-09T21:09:40.495Z",
+  "discovery_findings": 27730,
+  "improvements_shipped": 1712,
+  "last_run": "2026-09-09T21:40:00.000Z",
   "last_run_summary": {
     "hour_utc": "21",
     "benchmark": {
@@ -32,7 +32,7 @@
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 597,
+      "probes_run": 595,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,41 +48,33 @@
           ]
         }
       },
-      "note": "Primary Heroku stable 6/6 (52 findings, 38 live oracles incl secret-resend; gap=[])"
+      "note": "Primary Heroku stable 6/6 (52 findings) — no category gaps; teacher_delta skipped"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 72,
-      "focus": "brokencrystals JWT JKU/JWK login chains + products/latest limit bypass + vulnforge L20 SSTI + pwnshop avatar SSRF + vulnbank reset-password",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 33,
+      "focus": "pwnshop full-route hub filter + PWN-042 payments-wallet route oracle + ginandjuice catalog-subscribe tier scoping",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, gap=[])",
-      "brokencrystals.com/api/auth/jwt/jku/login: 6 findings — JWT JKU rogue-key live+route oracles",
-      "brokencrystals.com/api/auth/jwt/jwk/login: 5 findings — JWT JWK rogue-key login live+route oracles",
-      "brokencrystals.com/api/products/latest: 15 findings — products limit-bypass live+route oracles + exposed-env",
-      "vulnforge-academy.vercel.app/challenges/20: 8 findings — reflexion-escalated-ssti + SQLi/XSS bundle",
-      "pwnshop.ctfsecurity.com/profile/update-avatar: 18 findings — avatar SSRF/XSS route oracles (PWN-012/029/042)",
-      "pwnshop.ctfsecurity.com/login?next=https://evil.com: 9 findings — open-redirect oracle",
-      "vulnbank.org/api/v1/reset-password: 8 findings — password-reset route oracle"
+      "pwnshop.ctfsecurity.com/api/v1/payments: 49→8 findings after full pwnshopRouteTierSlugPattern hub filter",
+      "ginandjuice.shop/catalog?category=Accessories: 18→17 findings after catalog-subscribe tier scoping",
+      "brokencrystals JWT subroutes (weak/jku/none/rsa/x5c): 7-8 findings each — validated stable"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "brokencrystals.com/api/auth/jwt/kid-sql/login: thin pass (3 findings) — no dedicated KID SQL injection live oracle",
-      "vulnforge-academy/challenges/20 mis-tags vulnforge-academy-level-ssrf-live-oracle — needs level20 dedicated route corpus",
-      "brokencrystals JWT login chains (jku/jwk) fire validate-route oracles but login-route corpus may need POST body probe expansion"
+      "pwnshop /api/v1/payments is 404 — wallet funding oracle maps to /wallet/topup/vulnbank (PWN-042)",
+      "brokencrystals.com/api/auth/jwt/kid-sql/login: thin pass (3 findings) — no dedicated KID SQL injection live oracle"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 52,
-    "brokencrystals.com/api/auth/jwt/jku/login": 6,
-    "brokencrystals.com/api/auth/jwt/jwk/login": 5,
-    "brokencrystals.com/api/products/latest": 15,
-    "vulnforge-academy.vercel.app/challenges/20": 8,
-    "pwnshop.ctfsecurity.com/profile/update-avatar": 18,
-    "pwnshop.ctfsecurity.com/login?next=https://evil.com": 9,
-    "vulnbank.org/api/v1/reset-password": 8
+    "pwnshop.ctfsecurity.com/api/v1/payments": 8,
+    "ginandjuice.shop/catalog?category=Accessories": 17,
+    "ginandjuice.shop/blog?search=test": 10,
+    "brokencrystals.com/api/auth/jwt/x5c/validate": 8,
+    "juice-shop.herokuapp.com": 52
   }
 }

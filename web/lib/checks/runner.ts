@@ -1095,12 +1095,44 @@ function brokencrystalsJwtSubrouteSlugPattern(pathname: string): RegExp | null {
   return new RegExp(`^brokencrystals-jwt-${variant}`);
 }
 
-/** Pwnshop dedicated /api/v1/* route scans — keep only matching tier oracle slugs. */
+/** Pwnshop route scans — keep only matching tier oracle slugs. */
 function pwnshopRouteTierSlugPattern(pathname: string): RegExp | null {
   const p = pathname.toLowerCase();
-  if (/\/api\/v1\/events\b/.test(p)) return /^pwnshop-events/;
-  if (/\/api\/v1\/products\b/.test(p)) return /^pwnshop-(?:events-audit-route|product-api-idor)/;
-  if (/\/api\/v1\/payments\b/.test(p)) return /^pwnshop-api-v1-payments/;
+  if (/\/api\/v1\/events\b/.test(p)) return /^pwnshop-(?:events-audit|audit-log-plaintext-password)/;
+  if (/\/api\/v1\/products\b/.test(p)) return /^pwnshop-(?:product-api|events-audit)/;
+  if (/\/api\/v1\/payments\b/.test(p))
+    return /^pwnshop-(?:payments-wallet|api-v1-payments|wallet-topup|events-audit)/;
+  if (/\/wallet\b/.test(p)) return /^pwnshop-wallet-topup/;
+  if (/\/forgot-password\b/.test(p)) return /^pwnshop-(?:forgot-password|otp-not-invalidated)/;
+  if (/\/verify-otp\b/.test(p)) return /^pwnshop-(?:verify-otp|otp-not-invalidated)/;
+  if (/\/chat\/init\b/.test(p)) return /^pwnshop-chat-init/;
+  if (/\/chat\b/.test(p)) return /^pwnshop-(?:chat-prompt|chat-order)/;
+  if (/\/track\b/.test(p)) return /^pwnshop-track/;
+  if (/\/wishlist\b/.test(p)) return /^pwnshop-wishlist/;
+  if (/\/register-seller\b/.test(p)) return /^pwnshop-(?:register-seller|seller-preview)/;
+  if (/\/seller\b/.test(p)) return /^pwnshop-seller/;
+  if (/\/register\b/.test(p)) return /^pwnshop-open-redirect-register/;
+  if (/\/login\b/.test(p)) return /^pwnshop-(?:open-redirect-login|audit-log-plaintext)/;
+  if (/\/admin\b/.test(p)) return /^pwnshop-(?:admin-|export-orders|mass-assignment)/;
+  if (/\/vulnerabilities\b/.test(p)) return /^pwnshop-vulnerabilities/;
+  if (/\/debug\b/.test(p)) return /^pwnshop-(?:debug-info|events-audit)/;
+  if (/\/lab-stats\b/.test(p)) return /^pwnshop-lab-stats/;
+  if (/\/checkout\b/.test(p)) return /^pwnshop-(?:checkout|cart-checkout|coupon)/;
+  if (/\/profile\/(?:update-avatar|upload-avatar)\b/.test(p))
+    return /^pwnshop-(?:avatar|update-avatar)/;
+  if (/\/profile\b/.test(p)) return /^pwnshop-(?:wallet-topup|avatar)/;
+  if (/\/product\b/.test(p)) return /^pwnshop-(?:product-|review)/;
+  if (/\/search\/filters\b/.test(p)) return /^pwnshop-prototype-pollution-search/;
+  if (/\/search\b/.test(p)) return /^pwnshop-product-search/;
+  if (/\/mail\b/.test(p)) return /^pwnshop-mail/;
+  if (/\/download\b/.test(p)) return /^pwnshop-download/;
+  if (/\/export\b/.test(p)) return /^pwnshop-export/;
+  if (/\/apply-coupon\b/.test(p)) return /^pwnshop-(?:apply-coupon|coupon-category)/;
+  if (/\/account\/delete\b/.test(p)) return /^pwnshop-account-delete/;
+  if (/\/order\b/.test(p)) return /^pwnshop-order/;
+  if (/\/logs\b/.test(p)) return /^pwnshop-audit-log/;
+  if (/\/api\/settings\/less\/imports\b/.test(p)) return /^pwnshop-less-imports/;
+  if (/\/api\/settings\/css\b/.test(p)) return /^pwnshop-css-settings/;
   return null;
 }
 
@@ -1121,6 +1153,7 @@ function ginAndJuiceRouteTierSlugPattern(pathname: string): RegExp | null {
   if (/\/catalog\/subscribe\b/.test(p) || /\/api\/newsletter\/subscribe\b/.test(p))
     return /^ginandjuice-(?:catalog-subscribe|newsletter-subscribe)/;
   if (/\/catalog\/cart\b/.test(p) || /\/checkout\b/.test(p)) return /^ginandjuice-(?:cart|basket|checkout)/;
+  if (/\/catalog\/subscribe\b/.test(p)) return /^ginandjuice-catalog-subscribe/;
   if (/\/catalog\b/.test(p)) return /^ginandjuice-catalog/;
   if (/\/login\b/.test(p)) return /^ginandjuice-login/;
   if (/\/register\b/.test(p)) return /^ginandjuice-register/;
@@ -2668,6 +2701,7 @@ const DEEP_RULES = new Set<string>([
   "pwnshopCssSettingsSstiRouteLiveOracle",
   "pwnshopWalletTopupVulnbankLiveOracle",
   "pwnshopWalletTopupRouteLiveOracle",
+  "pwnshopPaymentsWalletRouteLiveOracle",
   "fauxbankLoansRouteLiveOracle",
   "fauxbankAuthLoginRouteLiveOracle",
   "fauxbankTransferRouteLiveOracle",
@@ -11181,6 +11215,26 @@ function applyRouteOracleHubFilters(
           const slug = f.patternSlug || "";
           if (!slug.startsWith("sekumart-")) return genericKeep.test(slug);
           return cartKeep.test(slug);
+        });
+        findings.length = 0;
+        findings.push(...deduped);
+      }
+    } catch {
+      /* ignore */
+    }
+  }
+
+  if (/pwnshop|ctfsecurity\.com/i.test(origin)) {
+    try {
+      const pathname = new URL(targetInput).pathname.toLowerCase();
+      const tierSlugRe = pwnshopRouteTierSlugPattern(pathname);
+      if (tierSlugRe) {
+        const genericKeep =
+          /^(?:missing-security-headers|insecure-cookies|thugir-dir-discovery|client-side-api-security-lab-evidence|client-side-pwnshop|tech-stack-disclosure)$/;
+        const deduped = findings.filter((f: PatternFinding) => {
+          const slug = f.patternSlug || "";
+          if (!slug.startsWith("pwnshop-")) return genericKeep.test(slug);
+          return tierSlugRe.test(slug);
         });
         findings.length = 0;
         findings.push(...deduped);

@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-api-v1-payments-tier-hub-oracle-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: pwnshopRouteTierSlugPattern + applyRouteOracleHubFilters + pwnshopScannedRoute payments/wallet/events tiers; pwnshopApiV1ReflexionSuppressed skips reflexion probes on /api/v1/*; pwnshop.ctfsecurity.com/api/v1/payments findings 49→8 (-41 cross-route pwnshop-*-live-oracle +reflexion-escalated-xss/sqli/ssti +vibe-unauthenticated-api-routes bleed, +pwnshop-payments-wallet-route-live-oracle +pwnshop-wallet-topup-vulnbank-live-oracle +pwnshop-events-audit retained); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-payments-wallet-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/v1/payments returns 404 HTML shell; pwnshopPaymentsWalletRouteLiveOracle maps route scan to POST /wallet/topup/vulnbank credited_amount override (PWN-042) via live probe or PWNSHOP_VULN_REGISTRY corpus; pwnshop.ctfsecurity.com/api/v1/payments findings 49→8 (+pwnshop-payments-wallet-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-catalog-subscribe-tier-scoping",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: ginAndJuiceScannedRoute adds catalog-subscribe tier; ginAndJuiceCatalogSubscribeLiveOracle restricted to /catalog/subscribe (not generic /catalog); ginAndJuiceRouteTierSlugPattern + applyRouteOracleHubFilters scope subscribe oracles; ginandjuice.shop/catalog?category=Accessories findings 18→17 (-ginandjuice-catalog-subscribe-live-oracle cross-tier bleed, +catalog-category-sqli/crlf/search-xss retained); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:brokencrystals.com",
       "slug": "brokencrystals-spawn-tier-hub-oracle-suppression",
       "status": "shipped",

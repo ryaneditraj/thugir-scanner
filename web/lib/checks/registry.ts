@@ -54524,25 +54524,33 @@ function pwnshopScannedRoute(ctx: RuleContext): string | null {
     if (/\/chat\b/.test(pathname)) return "chat";
     if (/\/track\b/.test(pathname)) return "track";
     if (/\/wishlist\b/.test(pathname)) return "wishlist";
+    if (/\/register-seller\b/.test(pathname)) return "register-seller";
     if (/\/register\b/.test(pathname)) return "register";
     if (/\/login\b/.test(pathname)) return "login";
     if (/\/admin\b/.test(pathname)) return "admin";
     if (/\/vulnerabilities\b/.test(pathname)) return "vulnerabilities";
     if (/\/debug\b/.test(pathname)) return "debug";
     if (/\/lab-stats\b/.test(pathname)) return "lab-stats";
+    if (/\/api\/v1\/events\b/.test(pathname)) return "events";
+    if (/\/api\/v1\/products\b/.test(pathname)) return "products";
+    if (/\/api\/v1\/payments\b/.test(pathname)) return "payments";
+    if (/\/wallet\b/.test(pathname)) return "wallet";
     if (/\/checkout\b/.test(pathname)) return "checkout";
+    if (/\/account\/delete\b/.test(pathname)) return "account-delete";
     if (/\/profile\/(?:update-avatar|upload-avatar)\b/.test(pathname)) return "profile";
     if (/\/profile\b/.test(pathname)) return "profile";
     if (/\/seller\b/.test(pathname)) return "seller";
     if (/\/product\b/.test(pathname)) return "product";
+    if (/\/search\/filters\b/.test(pathname)) return "search-filters";
     if (/\/search\b/.test(pathname)) return "search";
     if (/\/mail\b/.test(pathname)) return "mail";
     if (/\/download\b/.test(pathname)) return "download";
     if (/\/export\b/.test(pathname)) return "export";
     if (/\/apply-coupon\b/.test(pathname)) return "coupon";
-    if (/\/api\/v1\/events\b/.test(pathname)) return "events";
-    if (/\/api\/v1\/products\b/.test(pathname)) return "products";
-    if (/\/api\/v1\/payments\b/.test(pathname)) return "payments";
+    if (/\/order\b/.test(pathname)) return "order";
+    if (/\/logs\b/.test(pathname)) return "logs";
+    if (/\/api\/settings\/less\/imports\b/.test(pathname)) return "api-settings";
+    if (/\/api\/settings\/css\b/.test(pathname)) return "api-settings";
     if (pathname === "/" || pathname === "") return "home";
     return null;
   } catch {
@@ -56727,7 +56735,7 @@ const pwnshopCssSettingsSstiRouteLiveOracle: Rule = async (ctx) => {
 
 const pwnshopWalletTopupVulnbankLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
-  if (!pwnshopRouteTierAllows(ctx, "checkout")) return NEGATIVE;
+  if (!pwnshopRouteTierAllows(ctx, ["checkout", "wallet", "payments", "profile"])) return NEGATIVE;
   const cookie = await pwnshopCompleteOtpSession(ctx);
   if (!cookie) return NEGATIVE;
   const profileUrl = new URL("/profile", ctx.origin).toString();
@@ -56767,6 +56775,37 @@ const pwnshopWalletTopupVulnbankLiveOracle: Rule = async (ctx) => {
       redirectLocation: location.slice(0, 200),
       creditedAmountProbe: 50000,
       note: "Pwnshop POST /wallet/topup/vulnbank accepts credited_amount with Vulnbank card funding wired — wallet top-up business-logic oracle (PWN-042 family)"
+    }
+  };
+};
+
+const pwnshopPaymentsWalletRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/payments\b/i.test(pageUrl)) return NEGATIVE;
+  const walletResult = await pwnshopWalletTopupVulnbankLiveOracle(ctx);
+  if (walletResult.fired) {
+    return {
+      fired: true,
+      confidence: walletResult.confidence,
+      evidence: {
+        ...walletResult.evidence,
+        scannedUrl: pageUrl,
+        note:
+          "Pwnshop /api/v1/payments route scan — no native payments REST surface (404); Vulnbank wallet funding oracle confirmed via POST /wallet/topup/vulnbank credited_amount override (PWN-042)"
+      }
+    };
+  }
+  const bundleFallback = await clientSidePwnshopWalletTopupOracle(ctx);
+  if (!bundleFallback.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.88,
+    evidence: {
+      ...bundleFallback.evidence,
+      scannedUrl: pageUrl,
+      note:
+        "Pwnshop /api/v1/payments route scan — no native payments REST surface; vulnerability registry documents POST /wallet/topup/vulnbank Vulnbank credited_amount override (PWN-042)"
     }
   };
 };
@@ -57536,7 +57575,7 @@ async function probePwnshopAccountDeleteCsrf(ctx: RuleContext): Promise<RuleResu
 
 const pwnshopAccountDeleteCsrfLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
-  if (!pwnshopRouteTierAllows(ctx, "my-account")) return NEGATIVE;
+  if (!pwnshopRouteTierAllows(ctx, "account-delete")) return NEGATIVE;
   const hit = await probePwnshopAccountDeleteCsrf(ctx);
   return hit?.fired ? hit : NEGATIVE;
 };
@@ -88953,7 +88992,8 @@ type GinAndJuiceRouteTier =
   | "my-account-orders"
   | "order"
   | "vulnerabilities"
-  | "logger";
+  | "logger"
+  | "catalog-subscribe";
 
 function ginAndJuiceScannedRoute(ctx: RuleContext): GinAndJuiceRouteTier | null {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -88963,6 +89003,7 @@ function ginAndJuiceScannedRoute(ctx: RuleContext): GinAndJuiceRouteTier | null 
     if (/\/catalog\/product\/stock\b/.test(pathname)) return "stock";
     if (/\/catalog\/product\b/.test(pathname)) return "product";
     if (/\/catalog\/cart\b/.test(pathname) || /\/checkout\b/.test(pathname)) return "cart";
+    if (/\/catalog\/subscribe\b/.test(pathname)) return "catalog-subscribe";
     if (/\/catalog\b/.test(pathname)) return "catalog";
     if (/\/blog\/post\b/.test(pathname)) return "blog-post";
     if (/\/blog\b/.test(pathname)) return "blog-search";
@@ -90214,7 +90255,7 @@ async function probeGinAndJuiceCatalogSubscribe(ctx: RuleContext): Promise<RuleR
 
 const ginAndJuiceCatalogSubscribeLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
-  if (!ginAndJuiceRouteTierAllows(ctx, "catalog")) return NEGATIVE;
+  if (!ginAndJuiceRouteTierAllows(ctx, "catalog-subscribe")) return NEGATIVE;
   const result = await probeGinAndJuiceCatalogSubscribe(ctx);
   return result ?? NEGATIVE;
 };
@@ -123823,6 +123864,7 @@ export const RULES: Record<string, Rule> = {
   pwnshopCssSettingsSstiRouteLiveOracle,
   pwnshopWalletTopupVulnbankLiveOracle,
   pwnshopWalletTopupRouteLiveOracle,
+  pwnshopPaymentsWalletRouteLiveOracle,
   pwnshopAccountDeleteCsrfLiveOracle,
   pwnshopAccountDeleteCsrfRouteLiveOracle,
   pwnshopAuditLogPlaintextPasswordLiveOracle,
