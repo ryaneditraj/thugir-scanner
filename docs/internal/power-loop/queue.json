@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-09T14:05:01.588Z",
+  "updated_at": "2026-09-09T15:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://vapi.apisec.ai/vapi/api9/v1/user/login",
+      "source": "roottusk/vAPI public instance — API9 improper assets management v1 login without rate limit (SecLayers walkthrough; web search 15 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/auth/jwt/weak/validate",
+      "source": "NeuraLegion/brokencrystals — JWT weak secret key brute-force oracle POST /api/auth/jwt/weak/validate (README Swagger; web search 15 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/api/v1/payments",
+      "source": "ctfsec/pwnshop — Vulnbank wallet funding / payment oracle GET /api/v1/payments (GitHub README; web search 15 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/medium/level14.php",
+      "source": "webspoilt/vulnforge-academy — Level 14 command injection challenge route (GitHub README medium tier; web search 15 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/catalog?category=Accessories",
+      "source": "PortSwigger Gin & Juice Shop — catalog category SQLi oracle (ginandjuice.shop/vulnerabilities; web search 15 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://vapi.apisec.ai/vapi/api2/user/details",
       "source": "roottusk/vAPI public instance — broken auth BOLA oracle GET /api2/user/details returns all users (vapi.apisec.ai swagger; web search 14 UTC discovery)",
