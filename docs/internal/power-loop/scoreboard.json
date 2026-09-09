@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-09T04:12:00.000Z",
+  "updated_at": "2026-09-09T05:09:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 3050,
-  "total_findings": 33186,
+  "total_sites_scanned": 3059,
+  "total_findings": 33369,
   "critical_findings": 57,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2100,
-  "discovery_findings": 26123,
+  "discovery_urls_added": 2105,
+  "discovery_findings": 26253,
   "improvements_shipped": 1668,
-  "last_run": "2026-09-09T04:12:00.000Z",
+  "last_run": "2026-09-09T05:09:00.000Z",
   "last_run_summary": {
-    "hour_utc": "04",
+    "hour_utc": "05",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 53,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 591,
+      "probes_run": 595,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,37 +48,41 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (53 findings) — no category gaps"
+      "note": "Stable 6/6 first-pass recall (53 findings, 40 live oracles) — no category gaps"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 41,
-      "focus": "ginandjuice blog catalog probe bleed + vulnbank merchant API tier aliases + nodegoat route eval corpus suppression",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 130,
+      "focus": "Juice Shop BasketItems IDOR + crAPI community BOLA leak + preview saveLoginIp XSS + nodegoat members NoSQL + restful-booker summary; queue drain seclab/ssrf bypass403/admin duck-store account-delete",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings) — no category misses",
-      "ginandjuice.shop/blog/post?postId=2: 23→21 (-sql-error-disclosure -reflected-xss-query-param catalog probe bleed on blog route)",
-      "vulnbank.org/api/v1/merchants/login: 35→10 (tier-scoped merchant-login oracles only)",
-      "nodegoat-websec.herokuapp.com/benefits: 11→10 (-server-side-eval-evidence tutorial bundle bleed)"
+      "demo.owasp-juice.shop/api/BasketItems: 35 findings — juice-shop-resend-key-live-oracle on route scan (secret-resend gap closed on demo route)",
+      "preview.owasp-juice.shop/rest/saveLoginIp: 34 findings — login IP spoofing/XSS live oracles",
+      "crapi.apisec.ai/community/api/v2/community/posts/recent: 15 findings — community vehicle UUID leak oracle",
+      "nodegoat-websec.herokuapp.com/members: 12 findings — NoSQL injection surface on /members",
+      "restful-booker.herokuapp.com/booking/summary: 6 findings — unauthenticated booking summary oracle",
+      "bypass403.vercel.app/admin: 14 findings — 403 bypass lab admin route",
+      "duck-store.escape.tech/api/v1/account/delete: 7 findings — account deletion BOLA route"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)"
+      "secret-resend slug still absent on juice-shop.herokuapp.com primary benchmark (present on demo.owasp-juice.shop/api/BasketItems route scan)",
+      "crAPI community posts/recent: vehicle location BOLA chain needs authenticated session for full /identity/api/v2/vehicle/{id}/location proof"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 53,
-    "ginandjuice.shop/blog/post?postId=2": 21,
-    "vulnbank.org/api/v1/merchants/login": 10,
-    "nodegoat-websec.herokuapp.com/benefits": 10,
-    "preview.owasp-juice.shop/rest/chatbot/respond": 36,
-    "duck-store.escape.tech/api/v1/products/search?q=duck": 28,
-    "qabash.com/api/tools/sample-api/secure": 7,
-    "vulnbank.org/api/v1/payments/merchant_id/1": 9,
-    "zen-demo-java.fly.dev/pages/create": 6,
-    "nodegoat-websec.herokuapp.com/contributions": 9
+    "demo.owasp-juice.shop/api/BasketItems": 35,
+    "preview.owasp-juice.shop/rest/saveLoginIp": 34,
+    "crapi.apisec.ai/community/api/v2/community/posts/recent": 15,
+    "bypass403.vercel.app/admin": 14,
+    "nodegoat-websec.herokuapp.com/members": 12,
+    "seclab.vercel.app/labs/ssrf": 7,
+    "duck-store.escape.tech/api/v1/account/delete": 7,
+    "restful-booker.herokuapp.com/booking/summary": 6
   }
 }

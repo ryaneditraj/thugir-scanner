@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-09T04:07:31.021Z",
+  "updated_at": "2026-09-09T05:04:49.704Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://demo.owasp-juice.shop/api/BasketItems",
+      "source": "OWASP Juice Shop demo — cross-user basket write IDOR oracle POST /api/BasketItems (Pwning Juice Shop solutions; web search 05 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://crapi.apisec.ai/community/api/v2/community/posts/recent",
+      "source": "OWASP crAPI public instance — vehicle UUID leak via community posts GET /community/api/v2/community/posts/recent (crAPI BOLA walkthrough; web search 05 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://preview.owasp-juice.shop/rest/saveLoginIp",
+      "source": "OWASP Juice Shop preview — login IP spoofing/XSS oracle POST /rest/saveLoginIp (juice-shop live oracles; web search 05 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/members",
+      "source": "OWASP Node Goat — NoSQL injection on GET /members query (nodegoat-websec.herokuapp.com tutorial A1; web search 05 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://restful-booker.herokuapp.com/booking/summary",
+      "source": "Restful Booker — unauthenticated booking summary oracle GET /booking/summary (restful-booker Postman collection; web search 05 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://nodegoat-websec.herokuapp.com/research",
       "source": "OWASP Node Goat — SSRF via GET /research?url= needle proxy (nodegoat-websec.herokuapp.com tutorial A10; web search 04 UTC discovery)",
