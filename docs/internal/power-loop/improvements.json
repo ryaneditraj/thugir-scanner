@@ -10091,6 +10091,24 @@
       "slug": "nodegoat-route-server-side-eval-suppression",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: serverSideEvalEvidence skips corpus eval(req.body) markers when nodegoatScannedRoute is set — bundled tutorial SSJS source bleeds onto /benefits route scans covered by nodegoat-benefits-nosql-live-oracle; nodegoat-websec.herokuapp.com/benefits findings 11→10 (-server-side-eval-evidence, +nodegoat-benefits-bac/nosql live+route oracles retained); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:preview.owasp-juice.shop",
+      "slug": "juice-shop-chatbot-route-companion-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: juiceShopRestRouteCompanionMatch disabled on /rest/chatbot/* fast-path scans — only juice-shop-chatbot-* slugs run; preview.owasp-juice.shop/rest/chatbot/respond findings 35→3 (+chatbot-api/respond/route live oracles retained); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-products-search-tier-hub-oracle-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: duckStoreScannedRoute + isDuckStoreHost routeTier guards scope 71 live oracles to matching /api/v1/* tiers; duck-store.escape.tech/api/v1/products/search?q=duck findings 28→7 (+products-search-degraded/route live oracles + generic misconfig retained); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ai-security-platform-iota.vercel.app",
+      "slug": "ai-security-challenge-live-oracle-tier-guards",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: aiSecurityChallengeRouteAllows guards global prompt-injection/command-injection/hacked-npm/ai-phishing live oracles on challenge route scans; api-security routeRe tightened to /challenges/api-security only; ai-security-platform-iota.vercel.app/challenges/brute-force findings 14→9 (+rate-limiting-bruteforce/route live oracles retained); nodegoat-websec.herokuapp.com/research findings 7→6 (-client-side-nosql-evidence corpus bleed); benchmark juice-shop 53 findings 6/6 maintained"
     }
   ]
 }
