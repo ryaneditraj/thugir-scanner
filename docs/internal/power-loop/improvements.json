@@ -55,6 +55,25 @@
       "validation": "SOURCE: discovery:url EVIDENCE: sqlErrorDisclosure + reflectedXss skip when ginAndJuiceScannedRoute is logger (catalog crawl bleed); ginandjuice.shop/logger findings 11→8 (-sql-error-disclosure -reflexion-escalated-xss/reflected-xss, +ginandjuice-logger-oast-live-oracle +route retained); benchmark juice-shop 53 findings 6/6 maintained"
     },
     {
+      "source": "discovery:sqli.vulnlab.dev",
+      "slug": "sqli-vulnlab-blind-route-alias",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: sqliVulnlabScannedRoute maps legacy /blind/ queue URL to blind-bool tier; sqliVulnlabBlindBoolRouteLiveOracle accepts /blind/ alias; queue corrected to /blind-bool/; sqli.vulnlab.dev/blind-bool/ findings 4 (+sqli-vulnlab-blind-bool-live-oracle +sqli-vulnlab-blind-bool-route-live-oracle, -sqli-vulnlab-union-live-oracle hub bleed on 404 /blind/); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:juice-shop.herokuapp.com",
+      "slug": "juice-shop-dedicated-route-companion-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: juiceShopRestApiHubSuppressed skips juiceShopRestApiHubRouteLiveOracle on BasketItems/saveLoginIp/chatbot/Quantitys/memories/security-question dedicated route scans; juice-shop.herokuapp.com/api/BasketItems findings 16 (+juice-shop-basket-items-bola-live-oracle +route, -juice-shop-rest-api-hub-route-live-oracle companion bleed); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:sekumart.sekuripy.hr",
+      "slug": "sekumart-tier-hub-oracle-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: sekumartScannedRoute suppresses cross-tier live oracles on route scans; sekumart.sekuripy.hr/members.php findings 13 (+sekumart-members-nosql-live-oracle +route, -product/search/catalog/login/apiv1 live oracle cross-tier bleed); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    },
+    {
       "source": "discovery:qabash.com",
       "slug": "qabash-sample-api-users-live-oracle",
       "status": "shipped",

@@ -1,6 +1,21 @@
 {
-  "updated_at": "2026-09-09T07:07:00.000Z",
+  "updated_at": "2026-09-09T07:35:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://pentest-fauxbank.vercel.app/api/profile",
+      "source": "alfredang/pentest-fauxbank — GET /api/profile ssnFake PII oracle lesson #4 (scoreboard gap: api/* routes queued; 07 UTC drain)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-fauxbank.vercel.app/api/accounts/1",
+      "source": "alfredang/pentest-fauxbank — GET /api/accounts/{id} IDOR oracle lesson #1 (scoreboard gap: api/* routes queued; 07 UTC drain)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-fauxbank.vercel.app/api/transfer",
+      "source": "alfredang/pentest-fauxbank — POST /api/transfer CSRF oracle lesson #7 (scoreboard gap: api/* routes queued; 07 UTC drain)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://duck-store.escape.tech/mcp/info",
       "source": "Escape Duck Store — MCP unauthenticated access oracle GET /mcp/info (vulnerabilities page + devroxana write-up; web search 07 UTC discovery)",

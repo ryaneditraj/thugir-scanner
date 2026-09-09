@@ -2110,6 +2110,24 @@ function juiceShopApiOrRestRoute(pageUrl: string, pathSuffix: string): boolean {
   return false;
 }
 
+/** Route scans on dedicated Juice Shop endpoints should not also fire REST API hub companion aggregation. */
+function juiceShopRestApiHubSuppressed(pageUrl: string): boolean {
+  if (!pageUrl) return false;
+  return (
+    juiceShopApiOrRestRoute(pageUrl, "BasketItems\\b") ||
+    /\/rest\/saveLoginIp\b/i.test(pageUrl) ||
+    /\/(?:rest|api)\/chatbot\b/i.test(pageUrl) ||
+    juiceShopApiOrRestRoute(pageUrl, "Quantitys\\b") ||
+    juiceShopApiOrRestRoute(pageUrl, "Hints\\b") ||
+    juiceShopApiOrRestRoute(pageUrl, "Challenges\\b") ||
+    juiceShopApiOrRestRoute(pageUrl, "Deliverys\\b") ||
+    /\/rest\/memories\b/i.test(pageUrl) ||
+    /security-question/i.test(pageUrl) ||
+    /\/rest\/whoami\b/i.test(pageUrl) ||
+    /products-reviews/i.test(pageUrl)
+  );
+}
+
 const idorObjectAccess: Rule = async (ctx) => {
   // Juice Shop benchmark oracle: GET /rest/track-order/1 returns orderId JSON without auth.
   if (JUICE_SHOP_HOST_RE.test(ctx.origin)) {
@@ -18908,6 +18926,27 @@ function isSekumartHost(ctx: RuleContext): boolean {
   return /sekumart\.sekuripy\.hr/i.test(ctx.origin);
 }
 
+function sekumartScannedRoute(ctx: RuleContext): string | null {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!pageUrl) return null;
+  try {
+    const pathname = new URL(pageUrl).pathname.toLowerCase();
+    if (/openapi\.json/.test(pathname)) return "openapi";
+    if (/product\.php/.test(pathname)) return "product";
+    if (/search\.php/.test(pathname)) return "search";
+    if (/directory\.php/.test(pathname)) return "directory";
+    if (/track\.php/.test(pathname)) return "track";
+    if (/catalog\.php/.test(pathname)) return "catalog";
+    if (/members\.php/.test(pathname)) return "members";
+    if (/login\.php/.test(pathname)) return "login";
+    if (/apiv1\.php/.test(pathname)) return "apiv1";
+    if (/category\.php/.test(pathname)) return "category";
+    return null;
+  } catch {
+    return null;
+  }
+}
+
 async function probeSekumartMysqliSqli(
   ctx: RuleContext,
   path: string,
@@ -18934,6 +18973,8 @@ async function probeSekumartMysqliSqli(
 
 const sekumartProductSqliLiveOracle: Rule = async (ctx) => {
   if (!isSekumartHost(ctx)) return NEGATIVE;
+  const scannedRoute = sekumartScannedRoute(ctx);
+  if (scannedRoute && scannedRoute !== "product") return NEGATIVE;
   return (await probeSekumartMysqliSqli(ctx, "/product.php", "id", "1'")) ?? NEGATIVE;
 };
 
@@ -18956,6 +18997,8 @@ const sekumartProductSqliRouteLiveOracle: Rule = async (ctx) => {
 
 const sekumartSearchSqliLiveOracle: Rule = async (ctx) => {
   if (!isSekumartHost(ctx)) return NEGATIVE;
+  const scannedRoute = sekumartScannedRoute(ctx);
+  if (scannedRoute && scannedRoute !== "search") return NEGATIVE;
   return (await probeSekumartMysqliSqli(ctx, "/search.php", "q", "test'")) ?? NEGATIVE;
 };
 
@@ -19003,6 +19046,8 @@ async function probeSekumartSearchReflectedXss(
 
 const sekumartSearchXssLiveOracle: Rule = async (ctx) => {
   if (!isSekumartHost(ctx)) return NEGATIVE;
+  const scannedRoute = sekumartScannedRoute(ctx);
+  if (scannedRoute && scannedRoute !== "search") return NEGATIVE;
   return (await probeSekumartSearchReflectedXss(ctx)) ?? NEGATIVE;
 };
 
@@ -19047,6 +19092,8 @@ async function probeSekumartDirectoryXPath(
 
 const sekumartDirectoryXPathLiveOracle: Rule = async (ctx) => {
   if (!isSekumartHost(ctx)) return NEGATIVE;
+  const scannedRoute = sekumartScannedRoute(ctx);
+  if (scannedRoute && scannedRoute !== "directory") return NEGATIVE;
   return (await probeSekumartDirectoryXPath(ctx)) ?? NEGATIVE;
 };
 
@@ -19069,6 +19116,8 @@ const sekumartDirectoryXPathRouteLiveOracle: Rule = async (ctx) => {
 
 const sekumartOpenapiSqliLiveOracle: Rule = async (ctx) => {
   if (!isSekumartHost(ctx)) return NEGATIVE;
+  const scannedRoute = sekumartScannedRoute(ctx);
+  if (scannedRoute && scannedRoute !== "openapi") return NEGATIVE;
   const specUrl = new URL("/openapi.json", ctx.origin).toString();
   const doc = await ctx.probe.get(specUrl, { maxBytes: 16384, timeoutMs: 12000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -19144,6 +19193,8 @@ async function probeSekumartTrackBlindSqli(
 
 const sekumartTrackBlindSqliLiveOracle: Rule = async (ctx) => {
   if (!isSekumartHost(ctx)) return NEGATIVE;
+  const scannedRoute = sekumartScannedRoute(ctx);
+  if (scannedRoute && scannedRoute !== "track") return NEGATIVE;
   return (await probeSekumartTrackBlindSqli(ctx)) ?? NEGATIVE;
 };
 
@@ -19172,6 +19223,8 @@ async function probeSekumartCatalogOrderBySqli(
 
 const sekumartCatalogOrderBySqliLiveOracle: Rule = async (ctx) => {
   if (!isSekumartHost(ctx)) return NEGATIVE;
+  const scannedRoute = sekumartScannedRoute(ctx);
+  if (scannedRoute && scannedRoute !== "catalog") return NEGATIVE;
   return (await probeSekumartCatalogOrderBySqli(ctx)) ?? NEGATIVE;
 };
 
@@ -19219,6 +19272,8 @@ async function probeSekumartMembersNosql(
 
 const sekumartMembersNosqlLiveOracle: Rule = async (ctx) => {
   if (!isSekumartHost(ctx)) return NEGATIVE;
+  const scannedRoute = sekumartScannedRoute(ctx);
+  if (scannedRoute && scannedRoute !== "members") return NEGATIVE;
   return (await probeSekumartMembersNosql(ctx)) ?? NEGATIVE;
 };
 
@@ -19265,6 +19320,8 @@ async function probeSekumartLoginAuthBypass(ctx: RuleContext): Promise<RuleResul
 
 const sekumartLoginSqliLiveOracle: Rule = async (ctx) => {
   if (!isSekumartHost(ctx)) return NEGATIVE;
+  const scannedRoute = sekumartScannedRoute(ctx);
+  if (scannedRoute && scannedRoute !== "login") return NEGATIVE;
   return (await probeSekumartLoginAuthBypass(ctx)) ?? NEGATIVE;
 };
 
@@ -19314,6 +19371,8 @@ async function probeSekumartApiv1JsonSqli(ctx: RuleContext): Promise<RuleResult 
 
 const sekumartApiv1JsonSqliLiveOracle: Rule = async (ctx) => {
   if (!isSekumartHost(ctx)) return NEGATIVE;
+  const scannedRoute = sekumartScannedRoute(ctx);
+  if (scannedRoute && scannedRoute !== "apiv1") return NEGATIVE;
   return (await probeSekumartApiv1JsonSqli(ctx)) ?? NEGATIVE;
 };
 
@@ -19337,6 +19396,8 @@ const sekumartApiv1JsonSqliRouteLiveOracle: Rule = async (ctx) => {
 
 const sekumartCategorySqliLiveOracle: Rule = async (ctx) => {
   if (!isSekumartHost(ctx)) return NEGATIVE;
+  const scannedRoute = sekumartScannedRoute(ctx);
+  if (scannedRoute && scannedRoute !== "category") return NEGATIVE;
   return (await probeSekumartMysqliSqli(ctx, "/category.php", "cat", "1'")) ?? NEGATIVE;
 };
 
@@ -92279,8 +92340,8 @@ function sqliVulnlabScannedRoute(ctx: RuleContext): string | null {
     if (/\/error\b/.test(pathname)) return "error";
     if (/\/union\b/.test(pathname)) return "union";
     if (/\/second-order\b/.test(pathname)) return "second-order";
-    if (/\/blind-bool\b/.test(pathname)) return "blind-bool";
     if (/\/blind-time\b/.test(pathname)) return "blind-time";
+    if (/\/blind-bool\b/.test(pathname)) return "blind-bool";
     if (/\/blind\/?$/.test(pathname)) return "blind";
     return null;
   } catch {
@@ -93113,6 +93174,7 @@ const sqliVulnlabBlindBoolLiveOracle: Rule = async (ctx) => {
 const sqliVulnlabBlindBoolRouteLiveOracle: Rule = async (ctx) => {
   if (!isSqliVulnlabHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (/\/blind-time\b/i.test(pageUrl)) return NEGATIVE;
   if (!/\/blind(?:-bool)?\b/i.test(pageUrl)) return NEGATIVE;
   const result = await sqliVulnlabBlindBoolLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
@@ -94799,6 +94861,7 @@ const juiceShopRestApiHubRouteLiveOracle: Rule = async (ctx) => {
   const corpus = `${ctx.origin}\n${pageUrl}`;
   if (!JUICE_SHOP_HOST_RE.test(corpus)) return NEGATIVE;
   if (!/\/(?:rest|api)\//i.test(pageUrl)) return NEGATIVE;
+  if (juiceShopRestApiHubSuppressed(pageUrl)) return NEGATIVE;
   const companionProbes: Array<{ name: string; rule: Rule }> = [
     { name: "security-question-user", rule: juiceShopSecurityQuestionUserLiveOracle },
     { name: "security-questions-list", rule: juiceShopSecurityQuestionsListLiveOracle },
