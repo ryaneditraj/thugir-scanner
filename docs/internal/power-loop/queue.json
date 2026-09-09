@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-09T15:05:00.000Z",
+  "updated_at": "2026-09-09T16:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://brokencrystals.com/api/auth/jwt/jku/validate",
+      "source": "NeuraLegion/brokencrystals — JWT JKU rogue key oracle POST /api/auth/jwt/jku/validate (swagger-json; web search 16 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/auth/jwt/jwk/validate",
+      "source": "NeuraLegion/brokencrystals — JWT JWK rogue key oracle POST /api/auth/jwt/jwk/validate (swagger-json; web search 16 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/auth/jwt/kid-sql/validate",
+      "source": "NeuraLegion/brokencrystals — JWT KID SQLi oracle POST /api/auth/jwt/kid-sql/validate (swagger-json; web search 16 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/auth/jwt/x5u/validate",
+      "source": "NeuraLegion/brokencrystals — JWT X5U rogue certificate oracle POST /api/auth/jwt/x5u/validate (swagger-json; web search 16 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/auth/jwt/rsa/signature/validate",
+      "source": "NeuraLegion/brokencrystals — JWT invalid RSA signature oracle POST /api/auth/jwt/rsa/signature/validate (swagger-json; web search 16 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://vapi.apisec.ai/vapi/api9/v1/user/login",
       "source": "roottusk/vAPI public instance — API9 improper assets management v1 login without rate limit (SecLayers walkthrough; web search 15 UTC discovery)",
