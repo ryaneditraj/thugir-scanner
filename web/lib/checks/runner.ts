@@ -11007,6 +11007,10 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (!DEEP_RULES.has(ruleName)) return false;
       if (!routeResource) return true;
       const slug = p.slug.toLowerCase();
+      const chatbotRouteScan = /\/rest\/chatbot\//i.test(scanUrl);
+      if (chatbotRouteScan) {
+        return slug.startsWith("juice-shop-chatbot");
+      }
       return (
         slug.includes(routeResource) ||
         slug.includes(`${routeResource}s`) ||

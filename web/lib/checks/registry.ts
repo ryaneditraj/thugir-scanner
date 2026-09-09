@@ -50567,6 +50567,10 @@ const CLIENT_NOSQL_RES: { label: string; re: RegExp }[] = [
 ];
 
 const clientSideNosqlEvidence: Rule = async (ctx) => {
+  if (/nodegoat-websec\.herokuapp\.com/i.test(ctx.origin)) {
+    const route = nodegoatScannedRoute(ctx);
+    if (route && !["benefits", "allocations", "tutorial-a7"].includes(route)) return NEGATIVE;
+  }
   const hits: { label: string; sample: string }[] = [];
   for (const { label, re } of CLIENT_NOSQL_RES) {
     const m = ctx.combined.match(re);
@@ -73444,13 +73448,81 @@ const clientSideCybersecLabEvidence: Rule = async (ctx) => {
 };
 
 // --- Escape Duck Store BOLA lab (duck-store.escape.tech) ----------------------------
+type DuckStoreRouteTier =
+  | "products-search"
+  | "products-filter"
+  | "products"
+  | "users"
+  | "users-profile"
+  | "coupons"
+  | "ssrf-fetch-url"
+  | "ssrf-import-from-url"
+  | "mcp"
+  | "cart"
+  | "orders"
+  | "testimonials"
+  | "admin"
+  | "auth"
+  | "checkout"
+  | "account-delete"
+  | "referral"
+  | "wishlist"
+  | "reviews"
+  | "openapi"
+  | "vulnerabilities";
+
+function duckStoreScannedRoute(ctx: RuleContext): DuckStoreRouteTier | null {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!pageUrl || !/duck-store\.escape\.tech/i.test(pageUrl)) return null;
+  try {
+    const pathname = new URL(pageUrl).pathname.toLowerCase();
+    if (/\/api\/v1\/products\/search/i.test(pathname)) return "products-search";
+    if (/\/api\/v1\/products\/filter/i.test(pathname)) return "products-filter";
+    if (/\/api\/v1\/products/i.test(pathname)) return "products";
+    if (/\/api\/v1\/users\/me\/profile/i.test(pathname)) return "users-profile";
+    if (/\/api\/v1\/users/i.test(pathname)) return "users";
+    if (/\/api\/v1\/coupons/i.test(pathname)) return "coupons";
+    if (/\/api\/v1\/uploads\/fetch-url/i.test(pathname)) return "ssrf-fetch-url";
+    if (/\/api\/v1\/uploads\/import-from-url/i.test(pathname)) return "ssrf-import-from-url";
+    if (/\/api\/v1\/mcp/i.test(pathname)) return "mcp";
+    if (/\/api\/v1\/cart/i.test(pathname)) return "cart";
+    if (/\/api\/v1\/orders/i.test(pathname)) return "orders";
+    if (/\/api\/v1\/testimonials/i.test(pathname)) return "testimonials";
+    if (/\/api\/v1\/admin/i.test(pathname)) return "admin";
+    if (/\/api\/v1\/auth/i.test(pathname)) return "auth";
+    if (/\/api\/v1\/checkout/i.test(pathname)) return "checkout";
+    if (/\/api\/v1\/account\/delete/i.test(pathname)) return "account-delete";
+    if (/\/api\/v1\/referral/i.test(pathname)) return "referral";
+    if (/\/api\/v1\/wishlist/i.test(pathname)) return "wishlist";
+    if (/\/api\/v1\/reviews/i.test(pathname)) return "reviews";
+    if (/\/openapi\.json/i.test(pathname)) return "openapi";
+    if (/\/vulnerabilities/i.test(pathname)) return "vulnerabilities";
+    return null;
+  } catch {
+    return null;
+  }
+}
+
+function duckStoreRouteTierAllows(
+  ctx: RuleContext,
+  allowed: DuckStoreRouteTier | DuckStoreRouteTier[]
+): boolean {
+  const scanned = duckStoreScannedRoute(ctx);
+  if (!scanned) return true;
+  const tiers = Array.isArray(allowed) ? allowed : [allowed];
+  return tiers.includes(scanned);
+}
+
 function isDuckStoreHost(
   ctx: RuleContext,
-  opts?: { allowAccountDeleteRoute?: boolean }
+  opts?: { allowAccountDeleteRoute?: boolean; routeTier?: DuckStoreRouteTier | DuckStoreRouteTier[] }
 ): boolean {
   if (!/duck-store\.escape\.tech/i.test(ctx.origin)) return false;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (/\/api\/v1\/account\/delete\b/i.test(pageUrl) && opts?.allowAccountDeleteRoute !== true) {
+    return false;
+  }
+  if (opts?.routeTier !== undefined && !duckStoreRouteTierAllows(ctx, opts.routeTier)) {
     return false;
   }
   return true;
@@ -73481,7 +73553,7 @@ function isDuckStoreTestimonialsPageRoute(pageUrl: string): boolean {
 }
 
 const duckStoreUsersBolaLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "users" })) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (pageUrl && /\/api\/v1\/users\/?(?:\?.*)?$/i.test(pageUrl)) return NEGATIVE;
   const listUrl = new URL("/api/v1/users/", ctx.origin).toString();
@@ -73541,7 +73613,7 @@ const duckStoreUsersBolaLiveOracle: Rule = async (ctx) => {
 };
 
 const duckStoreUsersEnumerationLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "users" })) return NEGATIVE;
   const listUrl = new URL("/api/v1/users/", ctx.origin).toString();
   const listDoc = await ctx.probe.get(listUrl, { maxBytes: 8192, timeoutMs: 15000 });
   if (listDoc.status < 200 || listDoc.status >= 400) {
@@ -73589,7 +73661,7 @@ const duckStoreUsersEnumerationLiveOracle: Rule = async (ctx) => {
 };
 
 const duckStoreUsersEnumerationRouteLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "users" })) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/api\/v1\/users\/?(?:\?.*)?$/i.test(pageUrl)) return NEGATIVE;
   const result = await duckStoreUsersEnumerationLiveOracle(ctx);
@@ -73606,7 +73678,7 @@ const duckStoreUsersEnumerationRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const duckStoreUsersRouteLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "users" })) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (/\/api\/v1\/users\/?(?:\?.*)?$/i.test(pageUrl)) return NEGATIVE;
   if (!/\/api\/v1\/users/i.test(pageUrl)) return NEGATIVE;
@@ -73624,7 +73696,7 @@ const duckStoreUsersRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const duckStoreTestimonialsBolaLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "testimonials" })) return NEGATIVE;
   const url = new URL("/api/v1/testimonials", ctx.origin).toString();
   const doc = await ctx.probe.get(url, { maxBytes: 16384, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -73652,7 +73724,7 @@ const duckStoreTestimonialsBolaLiveOracle: Rule = async (ctx) => {
 };
 
 const duckStoreTestimonialsRouteLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "testimonials" })) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!isDuckStoreTestimonialsPageRoute(pageUrl)) return NEGATIVE;
   const result = await duckStoreTestimonialsBolaLiveOracle(ctx);
@@ -73669,7 +73741,7 @@ const duckStoreTestimonialsRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const duckStoreOrdersBolaLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "orders" })) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   const orderIdMatch = pageUrl.match(/\/api\/v1\/orders\/(\d+)/i);
   const orderPath = orderIdMatch ? `/api/v1/orders/${orderIdMatch[1]}` : "/api/v1/orders/1";
@@ -73699,7 +73771,7 @@ const duckStoreOrdersBolaLiveOracle: Rule = async (ctx) => {
 };
 
 const duckStoreOrdersRouteLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "orders" })) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/api\/v1\/orders(?:\/|$)/i.test(pageUrl)) return NEGATIVE;
   const result = await duckStoreOrdersBolaLiveOracle(ctx);
@@ -73716,7 +73788,7 @@ const duckStoreOrdersRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const duckStoreCouponsDisclosureLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "coupons" })) return NEGATIVE;
   const url = new URL("/api/v1/orders/coupons", ctx.origin).toString();
   const doc = await ctx.probe.get(url, { maxBytes: 16384, timeoutMs: 15000 });
   if (doc.status >= 200 && doc.status < 400) {
@@ -73770,7 +73842,7 @@ const duckStoreCouponsDisclosureLiveOracle: Rule = async (ctx) => {
 };
 
 const duckStoreCouponsRouteLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "coupons" })) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/api\/v1\/(?:orders\/)?coupons/i.test(pageUrl)) return NEGATIVE;
   const result = await duckStoreCouponsDisclosureLiveOracle(ctx);
@@ -73787,7 +73859,7 @@ const duckStoreCouponsRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const duckStoreCouponsValidateLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "coupons" })) return NEGATIVE;
   const validateUrl = new URL("/api/v1/orders/coupons/validate", ctx.origin);
   validateUrl.searchParams.set("code", "INTERNAL100");
   const url = validateUrl.toString();
@@ -73829,7 +73901,7 @@ const duckStoreCouponsValidateLiveOracle: Rule = async (ctx) => {
 };
 
 const duckStoreCouponsApplyRouteLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "coupons" })) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/api\/v1\/(?:orders\/)?coupons(?:\/apply|\/validate)?/i.test(pageUrl)) return NEGATIVE;
   const result = await duckStoreCouponsValidateLiveOracle(ctx);
@@ -73872,7 +73944,7 @@ function duckStoreSsrfResponseConfirmed(
 }
 
 const duckStoreSsrfFetchUrlLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "ssrf-fetch-url" })) return NEGATIVE;
   for (const probeTarget of DUCK_STORE_SSRF_PROBE_TARGETS) {
     const url = new URL(`/api/v1/uploads/fetch-url?url=${encodeURIComponent(probeTarget)}`, ctx.origin).toString();
     const doc = await ctx.probe.get(url, { maxBytes: 8192, timeoutMs: 20000 });
@@ -73900,7 +73972,7 @@ const duckStoreSsrfFetchUrlLiveOracle: Rule = async (ctx) => {
 };
 
 const duckStoreSsrfFetchUrlRouteLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "ssrf-fetch-url" })) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/api\/v1\/uploads\/fetch-url/i.test(pageUrl)) return NEGATIVE;
   const result = await duckStoreSsrfFetchUrlLiveOracle(ctx);
@@ -73977,7 +74049,7 @@ async function duckStoreSsrfImportFromUrlOpenApiCorpus(ctx: RuleContext): Promis
 }
 
 const duckStoreSsrfImportFromUrlLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "ssrf-import-from-url" })) return NEGATIVE;
   let token = await duckStoreRegisterAndLoginToken(ctx);
   if (!token) {
     const fresh = await duckStoreRegisterFreshLoginToken(ctx);
@@ -74023,7 +74095,7 @@ const duckStoreSsrfImportFromUrlLiveOracle: Rule = async (ctx) => {
 };
 
 const duckStoreSsrfImportFromUrlRouteLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "ssrf-import-from-url" })) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/api\/v1\/uploads\/import-from-url/i.test(pageUrl)) return NEGATIVE;
   const result = await duckStoreSsrfImportFromUrlLiveOracle(ctx);
@@ -74040,7 +74112,7 @@ const duckStoreSsrfImportFromUrlRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const duckStoreMcpCouponsDisclosureLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "mcp" })) return NEGATIVE;
   const url = new URL("/mcp/tools/list_coupons", ctx.origin).toString();
   const payload = JSON.stringify({
     jsonrpc: "2.0",
@@ -74119,7 +74191,7 @@ const duckStoreMcpCouponsDisclosureLiveOracle: Rule = async (ctx) => {
 };
 
 const duckStoreMcpCouponsRouteLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "mcp" })) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/mcp\/tools\/list_coupons/i.test(pageUrl)) return NEGATIVE;
   const result = await duckStoreMcpCouponsDisclosureLiveOracle(ctx);
@@ -74136,7 +74208,7 @@ const duckStoreMcpCouponsRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const duckStoreMcpToolsEnumerationLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "mcp" })) return NEGATIVE;
   const url = new URL("/mcp/tools", ctx.origin).toString();
   const payload = JSON.stringify({ jsonrpc: "2.0", id: 1, method: "tools/list" });
   const doc = await ctx.probe.get(url, {
@@ -74169,7 +74241,7 @@ const duckStoreMcpToolsEnumerationLiveOracle: Rule = async (ctx) => {
 };
 
 const duckStoreMcpToolsRouteLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "mcp" })) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/mcp\/tools(?:\/|$)/i.test(pageUrl) || /\/mcp\/tools\/list_coupons/i.test(pageUrl)) {
     return NEGATIVE;
@@ -74188,7 +74260,7 @@ const duckStoreMcpToolsRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const duckStoreMcpResourcesEnumerationLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "mcp" })) return NEGATIVE;
   const url = new URL("/mcp/resources", ctx.origin).toString();
   const payload = JSON.stringify({ jsonrpc: "2.0", id: 1, method: "resources/list" });
   const doc = await ctx.probe.get(url, {
@@ -74223,7 +74295,7 @@ const duckStoreMcpResourcesEnumerationLiveOracle: Rule = async (ctx) => {
 };
 
 const duckStoreMcpResourcesRouteLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "mcp" })) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/mcp\/resources(?:\/|$)/i.test(pageUrl)) return NEGATIVE;
   const result = await duckStoreMcpResourcesEnumerationLiveOracle(ctx);
@@ -74240,7 +74312,7 @@ const duckStoreMcpResourcesRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const duckStoreMcpInfoLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "mcp" })) return NEGATIVE;
   const url = new URL("/mcp/info", ctx.origin).toString();
   const payload = JSON.stringify({
     jsonrpc: "2.0",
@@ -74281,7 +74353,7 @@ const duckStoreMcpInfoLiveOracle: Rule = async (ctx) => {
 };
 
 const duckStoreMcpInfoRouteLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "mcp" })) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/mcp\/info(?:\/|$)/i.test(pageUrl)) return NEGATIVE;
   const result = await duckStoreMcpInfoLiveOracle(ctx);
@@ -74434,7 +74506,7 @@ function duckStoreAdminUsersRosterBflaConfirmed(body: string): boolean {
 }
 
 const duckStoreProductsFilterSqliLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "products-filter" })) return NEGATIVE;
   const baselineUrl = new URL("/api/v1/products/filter/by-color?color=Yellow&sort=name", ctx.origin).toString();
   const baselineDoc = await ctx.probe.get(baselineUrl, { maxBytes: 8192, timeoutMs: 15000 });
   if (baselineDoc.status < 200 || baselineDoc.status >= 400) {
@@ -74486,7 +74558,7 @@ const duckStoreProductsFilterSqliLiveOracle: Rule = async (ctx) => {
 };
 
 const duckStoreProductsFilterSqliRouteLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "products-filter" })) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/api\/v1\/products\/filter\/by-color/i.test(pageUrl)) return NEGATIVE;
   const result = await duckStoreProductsFilterSqliLiveOracle(ctx);
@@ -74524,7 +74596,7 @@ async function duckStoreProductsSearchOpenApiCorpus(ctx: RuleContext): Promise<s
 }
 
 const duckStoreProductsSearchDegradedLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "products-search" })) return NEGATIVE;
   const searchUrl = new URL("/api/v1/products/search/", ctx.origin);
   searchUrl.searchParams.set("q", "duck");
   const searchDoc = await ctx.probe.get(searchUrl.toString(), { maxBytes: 4096, timeoutMs: 15000 });
@@ -74562,7 +74634,7 @@ const duckStoreProductsSearchDegradedLiveOracle: Rule = async (ctx) => {
 };
 
 const duckStoreProductsSearchRouteLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "products-search" })) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/api\/v1\/products\/search/i.test(pageUrl)) return NEGATIVE;
   const result = await duckStoreProductsSearchDegradedLiveOracle(ctx);
@@ -74579,7 +74651,7 @@ const duckStoreProductsSearchRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const duckStoreCartNegativeQuantityLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "cart" })) return NEGATIVE;
   const addUrl = new URL("/api/v1/cart/add", ctx.origin).toString();
   const token = await duckStoreRegisterAndLoginToken(ctx);
   if (!token) {
@@ -74638,7 +74710,7 @@ const duckStoreCartNegativeQuantityLiveOracle: Rule = async (ctx) => {
 };
 
 const duckStoreCartNegativeQuantityRouteLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "cart" })) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/api\/v1\/cart(?:\/add|\/items)?\/?$/i.test(pageUrl)) return NEGATIVE;
   const result = await duckStoreCartNegativeQuantityLiveOracle(ctx);
@@ -74655,7 +74727,7 @@ const duckStoreCartNegativeQuantityRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const duckStoreAdminUsersBflaLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "admin" })) return NEGATIVE;
   const adminUrl = new URL("/api/v1/admin/users", ctx.origin).toString();
   const token = await duckStoreRegisterAndLoginToken(ctx);
   if (!token) {
@@ -74733,7 +74805,7 @@ const duckStoreAdminUsersBflaLiveOracle: Rule = async (ctx) => {
 };
 
 const duckStoreAdminUsersBflaRouteLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "admin" })) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/(?:api\/v1\/)?admin\/users\b/i.test(pageUrl)) return NEGATIVE;
   const result = await duckStoreAdminUsersBflaLiveOracle(ctx);
@@ -74759,7 +74831,7 @@ const DUCK_STORE_PROBE_SHIPPING = {
 };
 
 const duckStoreCheckoutPrivateCouponLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "checkout" })) return NEGATIVE;
   const token = await duckStoreRegisterAndLoginToken(ctx);
   if (!token) {
     const registerUrl = new URL("/api/v1/auth/register", ctx.origin).toString();
@@ -74843,7 +74915,7 @@ const duckStoreCheckoutPrivateCouponLiveOracle: Rule = async (ctx) => {
 };
 
 const duckStoreCheckoutPrivateCouponRouteLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "checkout" })) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/api\/v1\/orders\/checkout/i.test(pageUrl)) return NEGATIVE;
   const result = await duckStoreCheckoutPrivateCouponLiveOracle(ctx);
@@ -74860,7 +74932,7 @@ const duckStoreCheckoutPrivateCouponRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const duckStoreProfileMassAssignmentLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "users-profile" })) return NEGATIVE;
   const token = await duckStoreRegisterAndLoginToken(ctx);
   if (!token) return NEGATIVE;
   const authHeader = { Authorization: `Bearer ${token}` };
@@ -74903,7 +74975,7 @@ const duckStoreProfileMassAssignmentLiveOracle: Rule = async (ctx) => {
 };
 
 const duckStoreProfileMassAssignmentRouteLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "users-profile" })) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/api\/v1\/users\/me\/profile/i.test(pageUrl)) return NEGATIVE;
   const result = await duckStoreProfileMassAssignmentLiveOracle(ctx);
@@ -74978,7 +75050,7 @@ const duckStoreTestimonialsStoredXssLiveOracle: Rule = async (ctx) => {
 };
 
 const duckStoreTestimonialsStoredXssRouteLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "testimonials" })) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!isDuckStoreTestimonialsPageRoute(pageUrl)) return NEGATIVE;
   const result = await duckStoreTestimonialsStoredXssLiveProbe(ctx);
@@ -74998,7 +75070,7 @@ const DUCK_STORE_ACCOUNT_DELETE_XSS_CORPUS =
   "stored XSS vulnerabilities across multiple parts of the app, including the delete account and testimonials sections";
 
 async function duckStoreAccountDeleteStoredXssLiveProbe(ctx: RuleContext): Promise<RuleResult> {
-  if (!isDuckStoreHost(ctx, { allowAccountDeleteRoute: true })) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { allowAccountDeleteRoute: true, routeTier: "account-delete" })) return NEGATIVE;
   const deleteUrl = new URL("/api/v1/account/delete", ctx.origin).toString();
   const canary = `thugirDeleteXss${Date.now().toString(36)}`;
   const payload = `<img src=x onerror=${canary}>`;
@@ -75051,7 +75123,7 @@ const duckStoreAccountDeleteStoredXssLiveOracle: Rule = async (ctx) => {
 };
 
 const duckStoreAccountDeleteStoredXssRouteLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx, { allowAccountDeleteRoute: true })) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { allowAccountDeleteRoute: true, routeTier: "account-delete" })) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!isDuckStoreAccountDeleteRoute(pageUrl)) return NEGATIVE;
   const result = await duckStoreAccountDeleteStoredXssLiveProbe(ctx);
@@ -75068,7 +75140,7 @@ const duckStoreAccountDeleteStoredXssRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const duckStoreTestimonialsGuestRouteLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "testimonials" })) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/(?:api\/v1\/)?testimonials\/guest\b/i.test(pageUrl)) return NEGATIVE;
   const result = await duckStoreTestimonialsStoredXssLiveProbe(ctx);
@@ -75085,7 +75157,7 @@ const duckStoreTestimonialsGuestRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const duckStoreTestimonialsPageStoredXssRouteLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "testimonials" })) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/testimonials(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
   if (/\/api\/v1\/testimonials/i.test(pageUrl)) return NEGATIVE;
@@ -75168,7 +75240,7 @@ const duckStoreReviewsStoredXssLiveOracle: Rule = async (ctx) => {
 };
 
 const duckStoreReviewsStoredXssRouteLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "reviews" })) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!isDuckStoreReviewsPageRoute(pageUrl)) return NEGATIVE;
   const result = await duckStoreReviewsStoredXssLiveProbe(ctx);
@@ -75185,7 +75257,7 @@ const duckStoreReviewsStoredXssRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const duckStoreReviewsUnauthReadLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "reviews" })) return NEGATIVE;
   const listUrl = new URL("/api/v1/reviews/product/1", ctx.origin).toString();
   const listDoc = await ctx.probe.get(listUrl, { maxBytes: 32768, timeoutMs: 15000 });
   if (listDoc.status < 200 || listDoc.status >= 400) return NEGATIVE;
@@ -75212,7 +75284,7 @@ const duckStoreReviewsUnauthReadLiveOracle: Rule = async (ctx) => {
 };
 
 const duckStoreReviewsRouteLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "reviews" })) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!isDuckStoreReviewsPageRoute(pageUrl)) return NEGATIVE;
   const result = await duckStoreReviewsUnauthReadLiveOracle(ctx);
@@ -75229,7 +75301,7 @@ const duckStoreReviewsRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const duckStoreProductsReviewsMisrouteLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "products" })) return NEGATIVE;
   const misrouteUrl = new URL("/api/v1/products/reviews", ctx.origin).toString();
   const misrouteDoc = await ctx.probe.get(misrouteUrl, { maxBytes: 4096, timeoutMs: 15000 });
   if (misrouteDoc.status !== 422) return NEGATIVE;
@@ -75252,7 +75324,7 @@ const duckStoreProductsReviewsMisrouteLiveOracle: Rule = async (ctx) => {
 };
 
 const duckStoreProductsReviewsMisrouteRouteLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "products" })) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/products\/reviews\b/i.test(pageUrl)) return NEGATIVE;
   const result = await duckStoreProductsReviewsMisrouteLiveOracle(ctx);
@@ -75269,7 +75341,7 @@ const duckStoreProductsReviewsMisrouteRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const duckStoreWishlistPhantomApiLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "wishlist" })) return NEGATIVE;
   const apiUrl = new URL("/api/v1/wishlist", ctx.origin).toString();
   const apiDoc = await ctx.probe.get(apiUrl, { maxBytes: 4096, timeoutMs: 15000 });
   if (apiDoc.status !== 404 || !/"detail"\s*:\s*"Not Found"/i.test(apiDoc.body)) return NEGATIVE;
@@ -75298,7 +75370,7 @@ const duckStoreWishlistPhantomApiLiveOracle: Rule = async (ctx) => {
 };
 
 const duckStoreWishlistPhantomApiRouteLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "wishlist" })) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/(?:api\/v1\/)?wishlist\b/i.test(pageUrl)) return NEGATIVE;
   const result = await duckStoreWishlistPhantomApiLiveOracle(ctx);
@@ -75533,7 +75605,7 @@ async function duckStoreUsersOpenApiCorpus(ctx: RuleContext): Promise<string> {
 }
 
 const duckStoreAuthLoginWeakCredentialsLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "auth" })) return NEGATIVE;
   const loginUrl = new URL("/api/v1/auth/login", ctx.origin).toString();
   const loginDoc = await ctx.probe.get(loginUrl, {
     method: "POST",
@@ -75575,7 +75647,7 @@ const duckStoreAuthLoginWeakCredentialsLiveOracle: Rule = async (ctx) => {
 };
 
 const duckStoreAuthLoginWeakCredentialsRouteLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "auth" })) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/api\/v1\/auth\/login/i.test(pageUrl)) return NEGATIVE;
   const result = await duckStoreAuthLoginWeakCredentialsLiveOracle(ctx);
@@ -75592,7 +75664,7 @@ const duckStoreAuthLoginWeakCredentialsRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const duckStoreAuthRegisterOpenLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "auth" })) return NEGATIVE;
   const username = `thugir_reg_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
   const registerUrl = new URL("/api/v1/auth/register", ctx.origin).toString();
   const doc = await ctx.probe.get(registerUrl, {
@@ -75647,7 +75719,7 @@ const duckStoreAuthRegisterOpenLiveOracle: Rule = async (ctx) => {
 };
 
 const duckStoreAuthRegisterRouteLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "auth" })) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/api\/v1\/auth\/register/i.test(pageUrl)) return NEGATIVE;
   const result = await duckStoreAuthRegisterOpenLiveOracle(ctx);
@@ -75664,7 +75736,7 @@ const duckStoreAuthRegisterRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const duckStoreOpenRedirectLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "auth" })) return NEGATIVE;
   const bundle = await duckStoreSpaBundleBody(ctx);
   const hasRedirectParam =
     /(?:URLSearchParams|\.get)\(\s*["']redirect["']\s*\)/i.test(bundle) &&
@@ -75687,7 +75759,7 @@ const duckStoreOpenRedirectLiveOracle: Rule = async (ctx) => {
 };
 
 const duckStoreOpenRedirectRouteLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "auth" })) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (
     !/redirect=/i.test(pageUrl) &&
@@ -75746,7 +75818,7 @@ const duckStoreOpenRedirectRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const duckStoreVulnerabilitiesHubRouteLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "vulnerabilities" })) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   let pathname = "";
   try {
@@ -75787,7 +75859,7 @@ const duckStoreVulnerabilitiesHubRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const duckStoreOpenApiRouteLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "openapi" })) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/openapi\.json\b/i.test(pageUrl)) return NEGATIVE;
   const openapiUrl = new URL("/openapi.json", ctx.origin).toString();
@@ -75816,7 +75888,7 @@ const duckStoreOpenApiRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const duckStoreReferralCodeAbuseLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "referral" })) return NEGATIVE;
   const username = `thugir_ref_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
   const registerUrl = new URL("/api/v1/auth/register", ctx.origin).toString();
   const baselineDoc = await ctx.probe.get(registerUrl, {
@@ -75892,7 +75964,7 @@ const duckStoreReferralCodeAbuseLiveOracle: Rule = async (ctx) => {
 };
 
 const duckStoreReferralCodeAbuseRouteLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "referral" })) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/api\/v1\/auth\/register/i.test(pageUrl)) return NEGATIVE;
   const result = await duckStoreReferralCodeAbuseLiveOracle(ctx);
@@ -76026,7 +76098,7 @@ async function duckStoreAdminLoginToken(ctx: RuleContext): Promise<string | null
 }
 
 const duckStoreAdminProductsNegativePriceLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "admin" })) return NEGATIVE;
   const token = await duckStoreAdminLoginToken(ctx);
   if (!token) return NEGATIVE;
   const postUrl = new URL("/api/v1/admin/products", ctx.origin).toString();
@@ -76061,7 +76133,7 @@ const duckStoreAdminProductsNegativePriceLiveOracle: Rule = async (ctx) => {
 };
 
 const duckStoreAdminProductsNegativePriceRouteLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "admin" })) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/(?:api\/v1\/)?admin\/products\b/i.test(pageUrl)) return NEGATIVE;
   const result = await duckStoreAdminProductsNegativePriceLiveOracle(ctx);
@@ -76078,7 +76150,7 @@ const duckStoreAdminProductsNegativePriceRouteLiveOracle: Rule = async (ctx) => 
 };
 
 const duckStoreAdminOrdersExposureLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "admin" })) return NEGATIVE;
   const token = await duckStoreAdminLoginToken(ctx);
   if (!token) return NEGATIVE;
   const url = new URL("/api/v1/admin/orders", ctx.origin).toString();
@@ -76115,7 +76187,7 @@ const duckStoreAdminOrdersExposureLiveOracle: Rule = async (ctx) => {
 };
 
 const duckStoreAdminOrdersExposureRouteLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "admin" })) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/(?:api\/v1\/)?admin\/orders\b/i.test(pageUrl)) return NEGATIVE;
   const result = await duckStoreAdminOrdersExposureLiveOracle(ctx);
@@ -76132,7 +76204,7 @@ const duckStoreAdminOrdersExposureRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const duckStoreTestimonialsPutBolaLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "testimonials" })) return NEGATIVE;
   const tokenA = await duckStoreRegisterAndLoginToken(ctx);
   if (!tokenA) return NEGATIVE;
   const original = `User A testimonial ${Date.now().toString(36)}`;
@@ -76184,7 +76256,7 @@ const duckStoreTestimonialsPutBolaLiveOracle: Rule = async (ctx) => {
 };
 
 const duckStoreTestimonialsPutBolaRouteLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "testimonials" })) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!isDuckStoreTestimonialsPageRoute(pageUrl)) return NEGATIVE;
   const result = await duckStoreTestimonialsPutBolaLiveOracle(ctx);
@@ -76201,7 +76273,7 @@ const duckStoreTestimonialsPutBolaRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const duckStoreTestimonialsUnauthPutLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "testimonials" })) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   let testimonialId = 1;
   const idMatch = pageUrl.match(/\/api\/v1\/testimonials\/(\d+)/i);
@@ -76258,7 +76330,7 @@ const duckStoreTestimonialsUnauthPutLiveOracle: Rule = async (ctx) => {
 };
 
 const duckStoreTestimonialsUnauthPutRouteLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "testimonials" })) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!isDuckStoreTestimonialsPageRoute(pageUrl)) return NEGATIVE;
   const result = await duckStoreTestimonialsUnauthPutLiveOracle(ctx);
@@ -76275,7 +76347,7 @@ const duckStoreTestimonialsUnauthPutRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const duckStoreAuthTotpBypassLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "auth" })) return NEGATIVE;
   const fresh = await duckStoreRegisterFreshLoginToken(ctx);
   if (!fresh) {
     const registerUrl = new URL("/api/v1/auth/register", ctx.origin).toString();
@@ -76356,7 +76428,7 @@ const duckStoreAuthTotpBypassLiveOracle: Rule = async (ctx) => {
 };
 
 const duckStoreAuthTotpBypassRouteLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "auth" })) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/api\/v1\/auth\/login(?:\/totp)?/i.test(pageUrl)) return NEGATIVE;
   const result = await duckStoreAuthTotpBypassLiveOracle(ctx);
@@ -76441,12 +76513,12 @@ async function duckStoreProductsBolaProbe(
 }
 
 const duckStoreProductsBolaLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "products" })) return NEGATIVE;
   return duckStoreProductsBolaProbe(ctx, 1);
 };
 
 const duckStoreProductsBolaRouteLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "products" })) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/api\/v1\/products\/\d+\/?$/i.test(pageUrl)) return NEGATIVE;
   if (/\/filter\/|\/search\//i.test(pageUrl)) return NEGATIVE;
@@ -76466,7 +76538,7 @@ const duckStoreProductsBolaRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const duckStoreAdminStatsLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "admin" })) return NEGATIVE;
   const token = await duckStoreAdminLoginToken(ctx);
   if (!token) return NEGATIVE;
   const statsUrl = new URL("/api/v1/admin/stats", ctx.origin).toString();
@@ -76512,7 +76584,7 @@ const duckStoreAdminStatsLiveOracle: Rule = async (ctx) => {
 };
 
 const duckStoreAdminStatsRouteLiveOracle: Rule = async (ctx) => {
-  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  if (!isDuckStoreHost(ctx, { routeTier: "admin" })) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/(?:api\/v1\/)?admin\/stats\b/i.test(pageUrl)) return NEGATIVE;
   const result = await duckStoreAdminStatsLiveOracle(ctx);
@@ -103262,6 +103334,32 @@ function isAiSecurityPlatformHost(ctx: RuleContext): boolean {
   );
 }
 
+function aiSecurityScannedChallenge(ctx: RuleContext): string | null {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const m = pageUrl.match(/\/challenges\/([^/?#]+)/i);
+  return m ? m[1].toLowerCase() : null;
+}
+
+function aiSecurityChallengeRouteAllows(ctx: RuleContext, challengeKey: string): boolean {
+  const scanned = aiSecurityScannedChallenge(ctx);
+  if (!scanned) return true;
+  const aliases: Record<string, string[]> = {
+    "rate-limiting": ["rate-limiting", "brute-force"],
+    "api-security": ["api-security"],
+    "command-injection": ["command-injection"],
+    "prompt-injection": ["prompt-injection"],
+    "hacked-npm-packages": [
+      "hacked-npm-packages",
+      "hacked-npm",
+      "vulnerable-npm-packages",
+      "vulnerable-deps"
+    ],
+    "ai-phishing": ["ai-phishing"]
+  };
+  const allowed = aliases[challengeKey] ?? [challengeKey];
+  return allowed.includes(scanned);
+}
+
 async function aiSecurityPlatformFetchCatalog(ctx: RuleContext): Promise<string> {
   const origins = [
     AI_SECURITY_PLATFORM_HOME,
@@ -103305,7 +103403,7 @@ const AI_SECURITY_PLATFORM_CHALLENGE_META: Record<string, AiSecurityPlatformChal
     note: "AI Security Platform privacy-policy challenge — deceptive privacy policy buries harmful data-sale and plaintext-storage clauses"
   },
   "api-security": {
-    routeRe: /\/challenges\/(?:api-security|rate-limiting|brute-force)\b/i,
+    routeRe: /\/challenges\/api-security\b/i,
     markers: [
       { label: "Auth & API challenge category", re: /Auth\s*&\s*API/i },
       { label: "IDOR CWE-639 training module", re: /IDOR[\s\S]{0,48}CWE-639/i },
@@ -103564,6 +103662,7 @@ AI Security Platform Prompt Injection LLM01 OWASP Top 10 for LLM Applications
 
 const aiSecurityHackedNpmPackagesLiveOracle: Rule = async (ctx) => {
   if (!isAiSecurityPlatformHost(ctx)) return NEGATIVE;
+  if (!aiSecurityChallengeRouteAllows(ctx, "hacked-npm-packages")) return NEGATIVE;
   const learnUrl = new URL("/learn", AI_SECURITY_PLATFORM_HOME).toString();
   const doc = await ctx.probe.get(learnUrl, { maxBytes: 131072, timeoutMs: 15000 });
   let corpus = doc.status >= 200 && doc.status < 400 ? doc.body : "";
@@ -103597,6 +103696,7 @@ const aiSecurityHackedNpmPackagesLiveOracle: Rule = async (ctx) => {
 
 const aiSecurityPromptInjectionLiveOracle: Rule = async (ctx) => {
   if (!isAiSecurityPlatformHost(ctx)) return NEGATIVE;
+  if (!aiSecurityChallengeRouteAllows(ctx, "prompt-injection")) return NEGATIVE;
   const meta = AI_SECURITY_AUTH_GATED_CHALLENGE_META["prompt-injection"];
   const challengeUrl = new URL("/challenges/prompt-injection", AI_SECURITY_PLATFORM_HOME).toString();
   const challengeDoc = await ctx.probe.get(challengeUrl, {
@@ -103666,6 +103766,7 @@ async function aiSecurityAuthGatedChallengeLiveOracle(
 ): Promise<RuleResult> {
   const meta = AI_SECURITY_AUTH_GATED_CHALLENGE_META[challengeKey];
   if (!meta || !isAiSecurityPlatformHost(ctx)) return NEGATIVE;
+  if (!aiSecurityChallengeRouteAllows(ctx, challengeKey)) return NEGATIVE;
   const challengeUrl = new URL(`/challenges/${meta.routeSegment}`, AI_SECURITY_PLATFORM_HOME).toString();
   const challengeDoc = await ctx.probe.get(challengeUrl, {
     maxBytes: 4096,
@@ -103732,6 +103833,7 @@ const aiSecurityCommandInjectionLiveOracle: Rule = async (ctx) =>
 
 const aiSecurityAiPhishingLiveOracle: Rule = async (ctx) => {
   if (!isAiSecurityPlatformHost(ctx)) return NEGATIVE;
+  if (!aiSecurityChallengeRouteAllows(ctx, "ai-phishing")) return NEGATIVE;
   const meta = AI_SECURITY_PLATFORM_CHALLENGE_META["ai-phishing"];
   const learnUrl = new URL("/learn", AI_SECURITY_PLATFORM_HOME).toString();
   const doc = await ctx.probe.get(learnUrl, { maxBytes: 131072, timeoutMs: 15000 });
