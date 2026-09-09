@@ -10073,6 +10073,24 @@
       "slug": "zen-demo-java-tier-hub-oracle-suppression",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: zenDemoJavaRouteKind guards execute/create/request/read live oracles on /pages/* tier route scans; zen-demo-java.fly.dev/pages/create findings 9→6 (-zen-demo-java-execute-shell-injection-live-oracle -zen-demo-java-read-path-traversal-live-oracle -zen-demo-java-request-ssrf-live-oracle, +zen-demo-java-create-sqli-live-oracle +zen-demo-java-create-route-live-oracle retained); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-blog-catalog-probe-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /blog/post?postId=2 returns 400 Invalid blog post ID (no SQLi); sqlErrorDisclosure + reflectedXss skip when ginAndJuiceScannedRoute is blog (catalog category= probe bleed); ginandjuice.shop/blog/post?postId=2 findings 23→21 (-sql-error-disclosure -reflected-xss-query-param, +blog DOM-XSS/open-redirect/CSTI oracles retained); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-merchant-api-route-tier-aliases",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: vulnbankScannedRoute maps /api/v1/merchants/login|me|register to merchant-login|merchant-me|merchant-register tiers; POST /api/v1/merchants/login email admin' OR '1'='1 returns api_key + JWT; vulnbank.org/api/v1/merchants/login findings 35→10 (-25 cross-route vulnbank-*-live-oracle bleed, +vulnbank-merchant-sqli-login-live-oracle +route +vulnbank-merchant-me-debug-disclosure-route-live-oracle retained); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-route-server-side-eval-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: serverSideEvalEvidence skips corpus eval(req.body) markers when nodegoatScannedRoute is set — bundled tutorial SSJS source bleeds onto /benefits route scans covered by nodegoat-benefits-nosql-live-oracle; nodegoat-websec.herokuapp.com/benefits findings 11→10 (-server-side-eval-evidence, +nodegoat-benefits-bac/nosql live+route oracles retained); benchmark juice-shop 53 findings 6/6 maintained"
     }
   ]
 }

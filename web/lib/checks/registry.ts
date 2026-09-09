@@ -590,8 +590,10 @@ async function extractGruyereLiveInstancePaths(ctx: RuleContext): Promise<string
 }
 
 const reflectedXss: Rule = async (ctx) => {
-  if (/ginandjuice\.shop/i.test(ctx.origin) && ginAndJuiceScannedRoute(ctx) === "logger")
-    return NEGATIVE;
+  if (/ginandjuice\.shop/i.test(ctx.origin)) {
+    const ginRoute = ginAndJuiceScannedRoute(ctx);
+    if (ginRoute === "logger" || ginRoute === "blog") return NEGATIVE;
+  }
   const canary = `thugirXSS${Date.now().toString(36)}`;
   if (/brokencrystals\.com/i.test(ctx.origin)) {
     const subUrl = new URL("/api/subscriptions", ctx.origin);
@@ -2691,8 +2693,10 @@ async function probeDogViewerIdSql(ctx: RuleContext): Promise<RuleResult | null>
 }
 
 const sqlErrorDisclosure: Rule = async (ctx) => {
-  if (/ginandjuice\.shop/i.test(ctx.origin) && ginAndJuiceScannedRoute(ctx) === "logger")
-    return NEGATIVE;
+  if (/ginandjuice\.shop/i.test(ctx.origin)) {
+    const ginRoute = ginAndJuiceScannedRoute(ctx);
+    if (ginRoute === "logger" || ginRoute === "blog") return NEGATIVE;
+  }
   // Juice Shop benchmark oracle: /rest/products/search?q=')) returns SQLITE_ERROR.
   // Bootstrap may already contain the oracle body after primeJuiceShop — use it on cold pass1.
   if (/juice-shop|owasp-juice|\.juice\.shop$/i.test(ctx.origin)) {
@@ -21527,6 +21531,7 @@ const serverSideEvalEvidence: Rule = async (ctx) => {
   if (bcProcess?.fired) return bcProcess;
   const live = await probeOpenApiEvalEndpoint(ctx);
   if (live?.fired) return live;
+  if (/nodegoat-websec\.herokuapp\.com/i.test(ctx.origin) && nodegoatScannedRoute(ctx)) return NEGATIVE;
 
   const hits: { label: string; sample: string }[] = [];
   for (const { label, re } of SERVER_SIDE_EVAL_RES) {
@@ -33805,6 +33810,9 @@ function vulnbankScannedRoute(ctx: RuleContext): VulnbankRouteTier | null {
     if (/\/api\/ai\/system-info\b/.test(pathname)) return "ai-system-info";
     if (/\/api\/ai\/chat\b/.test(pathname)) return "ai-chat";
     if (/\/register\b/.test(pathname)) return "register";
+    if (/\/api\/v1\/merchants\/login\b/.test(pathname)) return "merchant-login";
+    if (/\/api\/v1\/merchants\/me\b/.test(pathname)) return "merchant-me";
+    if (/\/api\/v1\/merchants\/register\b/.test(pathname)) return "merchant-register";
     if (/\/merchant\/login\b/.test(pathname)) return "merchant-login";
     if (/\/merchant\/me\b/.test(pathname)) return "merchant-me";
     if (/\/merchant\/register\b/.test(pathname)) return "merchant-register";
