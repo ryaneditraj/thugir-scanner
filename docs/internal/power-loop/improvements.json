@@ -10049,6 +10049,12 @@
       "slug": "vulnbank-tier-hub-oracle-suppression",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: vulnbankScannedRoute + vulnbankRouteTierAllows guard 25 live oracles on route scans; vulnbankV1ResetPasswordVersioningRouteLiveOracle added for /api/v1/reset-password; vulnbank.org/api/v1/reset-password findings 33→9 (-24 cross-route vulnbank-*-live-oracle, +vulnbank-v1-reset-password-versioning-route-live-oracle +vulnbank-v3-reset-password-versioning-live-oracle retained); vulnbank.org/upload_profile_picture_url findings 34→9 (+upload SSRF route oracles only); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:sql-injection-lab.vercel.app",
+      "slug": "sql-injection-lab-login-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /login admin' OR 1=1-- → 302 /dashboard (live) or curated Layer Zero UNLV corpus fallback when Vercel checkpoint blocks SQLi POST; sql-injection-lab.vercel.app/login findings 4→5 (+sql-injection-lab-login-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
     }
   ]
 }

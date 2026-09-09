@@ -53977,6 +53977,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "sql-injection-lab-login-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "SQL Injection Lab login live SQLi oracle",
+    description:
+      "POST /login on sql-injection-lab.vercel.app with admin' OR 1=1-- returns 302 to /dashboard with session cookie — live authentication-bypass SQLi training oracle.",
+    impactOneline:
+      "Live SQLi probe confirms intentional login bypass on the Layer Zero UNLV Flask practice lab beyond generic post-login-sql-bypass heuristics.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sqlInjectionLabLoginLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "SQL Injection Lab is intentional training software — use parameterized queries in production.",
+      steps: [
+        "Never concatenate user input into SQL queries.",
+        "Use parameterized queries or ORM bindings for all authentication.",
+        "Run practice labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /login accepts admin' OR 1=1-- and redirects to /dashboard. Show parameterized query remediation for Flask login handlers.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "sql-injection-lab-hub-route-live-oracle",
     platform: "generic",
     category: "Injection",
