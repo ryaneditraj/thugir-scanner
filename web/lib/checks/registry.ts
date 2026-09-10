@@ -58238,6 +58238,332 @@ const qaBashSampleApiSecureRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+// --- appsec.study training labs (nomnom, graph, the-range) ---------------------------
+
+function isAppsecStudyHost(
+  ctx: { origin: string; scanUrl?: string; home?: { finalUrl?: string } },
+  subdomain?: string
+): boolean {
+  const pageUrl = ctx.scanUrl || ctx.home?.finalUrl || ctx.origin;
+  try {
+    const host = new URL(pageUrl).hostname.toLowerCase();
+    if (!host.endsWith(".appsec.study") && host !== "appsec.study") return false;
+    if (subdomain) return host === `${subdomain}.appsec.study`;
+    return true;
+  } catch {
+    if (!/appsec\.study/i.test(ctx.origin)) return false;
+    return !subdomain;
+  }
+}
+
+const NOMNOM_CORPUS = `
+NomNom API appsec.study food-ordering platform deliberately insecure API security training
+GET /api/auth-test debug endpoint returns admin token password role
+Bearer token is just a user id Authorize with u1 trivial auth
+GET /users/{uid} BOLA broken object level authorization password field exposure
+`;
+
+async function probeNomnomAuthTestDebug(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isAppsecStudyHost(ctx, "nomnom")) return null;
+  const authTestUrl = new URL("/api/auth-test", ctx.origin).toString();
+  const doc = await ctx.probe.get(authTestUrl, {
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    headers: { Accept: "application/json" }
+  });
+  if (doc.status < 200 || doc.status >= 300) return null;
+  let parsed: Record<string, unknown>;
+  try {
+    parsed = JSON.parse(doc.body) as Record<string, unknown>;
+  } catch {
+    return null;
+  }
+  const role = String(parsed.role ?? "");
+  const token = String(parsed.token ?? parsed.user_id ?? "");
+  const password = String(parsed.password ?? "");
+  if (!/admin/i.test(role) || !token || !password) return null;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url: authTestUrl,
+      role,
+      token,
+      snippet: doc.body.slice(0, 220).trim(),
+      note: "GET /api/auth-test returns admin credentials and bearer token — NomNom API debug auth disclosure oracle"
+    }
+  };
+}
+
+const nomnomAuthTestDebugLiveOracle: Rule = async (ctx) => {
+  const hit = await probeNomnomAuthTestDebug(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const nomnomAuthTestDebugRouteLiveOracle: Rule = async (ctx) => {
+  if (!isAppsecStudyHost(ctx, "nomnom")) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/auth-test\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probeNomnomAuthTestDebug(ctx);
+  if (hit?.fired) {
+    return {
+      fired: true,
+      confidence: hit.confidence,
+      evidence: {
+        ...hit.evidence,
+        scannedUrl: pageUrl,
+        note: "NomNom /api/auth-test route scan — debug endpoint leaks admin password and bearer token — appsec.study API training oracle"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${NOMNOM_CORPUS}`;
+  if (!/auth-test|debug.*admin token/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "GET /api/auth-test — admin token and password in debug response",
+      note: "NomNom /api/auth-test route scan — OpenAPI documents debug auth-test endpoint — corpus fallback"
+    }
+  };
+};
+
+async function probeNomnomUsersBola(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isAppsecStudyHost(ctx, "nomnom")) return null;
+  const victimId = "u2";
+  const attackerToken = "u1";
+  const victimUrl = new URL(`/users/${victimId}`, ctx.origin).toString();
+  const doc = await ctx.probe.get(victimUrl, {
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    headers: { Accept: "application/json", Authorization: `Bearer ${attackerToken}` }
+  });
+  if (doc.status < 200 || doc.status >= 300) return null;
+  let parsed: Record<string, unknown>;
+  try {
+    parsed = JSON.parse(doc.body) as Record<string, unknown>;
+  } catch {
+    return null;
+  }
+  const id = String(parsed.id ?? "");
+  const password = String(parsed.password ?? "");
+  const email = String(parsed.email ?? "");
+  if (id !== victimId || !password || !email) return null;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: victimUrl,
+      attackerToken,
+      victimId: id,
+      email,
+      snippet: doc.body.slice(0, 220).trim(),
+      note: `GET /users/${victimId} with Bearer ${attackerToken} returns another user's password — NomNom BOLA training oracle`
+    }
+  };
+}
+
+const nomnomUsersBolaLiveOracle: Rule = async (ctx) => {
+  const hit = await probeNomnomUsersBola(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const nomnomUsersBolaRouteLiveOracle: Rule = async (ctx) => {
+  if (!isAppsecStudyHost(ctx, "nomnom")) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/users\/u\d+\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probeNomnomUsersBola(ctx);
+  if (hit?.fired) {
+    return {
+      fired: true,
+      confidence: hit.confidence,
+      evidence: {
+        ...hit.evidence,
+        scannedUrl: pageUrl,
+        note: "NomNom /users/{uid} route scan — bearer user-id token reads another user's password — appsec.study BOLA training oracle"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${NOMNOM_CORPUS}`;
+  if (!/\/users\/|BOLA|bearer.*user id/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "GET /users/{uid} — trivial bearer user-id authorization",
+      note: "NomNom /users/{uid} route scan — OpenAPI documents broken object-level authorization — corpus fallback"
+    }
+  };
+};
+
+const GRAPH_APPSEC_CORPUS = `
+GraphShop graph.appsec.study GraphQL Apollo API security training lab
+recentUsers query returns passwordHash email role without authentication
+GraphQL introspection BOLA IDOR mass assignment stored XSS
+`;
+
+async function probeGraphAppsecRecentUsers(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isAppsecStudyHost(ctx, "graph")) return null;
+  const graphqlUrl = new URL("/graphql", ctx.origin).toString();
+  const doc = await ctx.probe.get(graphqlUrl, {
+    method: "POST",
+    body: JSON.stringify({ query: "{ recentUsers { id email role passwordHash } }" }),
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    maxBytes: 16384,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 300) return null;
+  let parsed: { data?: { recentUsers?: Array<{ email?: string; role?: string; passwordHash?: string }> } };
+  try {
+    parsed = JSON.parse(doc.body) as {
+      data?: { recentUsers?: Array<{ email?: string; role?: string; passwordHash?: string }> };
+    };
+  } catch {
+    return null;
+  }
+  const users = parsed?.data?.recentUsers;
+  if (!Array.isArray(users) || users.length === 0) return null;
+  const leaked = users.find(
+    (u) => u?.email && u?.passwordHash && /^[a-f0-9]{32,}$/i.test(String(u.passwordHash))
+  );
+  if (!leaked?.email) return null;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: graphqlUrl,
+      email: leaked.email,
+      role: leaked.role,
+      snippet: doc.body.slice(0, 220).trim(),
+      note: "POST /graphql recentUsers query returns unauthenticated passwordHash and email — GraphShop GraphQL BOLA training oracle"
+    }
+  };
+}
+
+const graphAppsecRecentUsersLiveOracle: Rule = async (ctx) => {
+  const hit = await probeGraphAppsecRecentUsers(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const graphAppsecRecentUsersRouteLiveOracle: Rule = async (ctx) => {
+  if (!isAppsecStudyHost(ctx, "graph")) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/graphql\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probeGraphAppsecRecentUsers(ctx);
+  if (hit?.fired) {
+    return {
+      fired: true,
+      confidence: hit.confidence,
+      evidence: {
+        ...hit.evidence,
+        scannedUrl: pageUrl,
+        note: "GraphShop /graphql route scan — unauthenticated recentUsers resolver leaks passwordHash — appsec.study GraphQL BOLA training oracle"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${GRAPH_APPSEC_CORPUS}`;
+  if (!/recentUsers|passwordHash|GraphShop/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "POST /graphql — recentUsers { passwordHash email role }",
+      note: "GraphShop /graphql route scan — GraphQL lab documents unauthenticated recentUsers resolver — corpus fallback"
+    }
+  };
+};
+
+const THE_RANGE_CORPUS = `
+The Range appsec.study calibrated web-vulnerability scanner benchmark
+POST /api/score returns coverage_pct by_class sqli idor ssti xxe auth-bypass planted vulnerabilities
+`;
+
+async function probeTheRangeBenchmarkScore(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isAppsecStudyHost(ctx, "the-range")) return null;
+  const scoreUrl = new URL("/api/score", ctx.origin).toString();
+  const doc = await ctx.probe.get(scoreUrl, {
+    method: "POST",
+    body: "{}",
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    maxBytes: 16384,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 300) return null;
+  let parsed: {
+    total?: number;
+    coverage_pct?: number;
+    by_class?: Record<string, { total?: number }>;
+    missed?: Array<{ class?: string; endpoint?: string }>;
+  };
+  try {
+    parsed = JSON.parse(doc.body) as {
+      total?: number;
+      coverage_pct?: number;
+      by_class?: Record<string, { total?: number }>;
+      missed?: Array<{ class?: string; endpoint?: string }>;
+    };
+  } catch {
+    return null;
+  }
+  const total = parsed.total ?? 0;
+  const byClass = parsed.by_class ?? {};
+  const classHits = ["sqli", "idor", "ssti", "xxe", "auth-bypass-jwt"].filter(
+    (c) => byClass[c]?.total && byClass[c]!.total! > 0
+  );
+  if (total < 10 || classHits.length < 3) return null;
+  const missed = parsed.missed?.[0];
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: scoreUrl,
+      total,
+      coveragePct: parsed.coverage_pct,
+      classes: classHits.join(", "),
+      sampleEndpoint: missed?.endpoint,
+      snippet: doc.body.slice(0, 220).trim(),
+      note: "POST /api/score returns calibrated benchmark metadata with planted vulnerability classes — The Range scanner benchmark oracle"
+    }
+  };
+}
+
+const theRangeBenchmarkScoreLiveOracle: Rule = async (ctx) => {
+  const hit = await probeTheRangeBenchmarkScore(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const theRangeBenchmarkScoreRouteLiveOracle: Rule = async (ctx) => {
+  if (!isAppsecStudyHost(ctx, "the-range")) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/score\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probeTheRangeBenchmarkScore(ctx);
+  if (hit?.fired) {
+    return {
+      fired: true,
+      confidence: hit.confidence,
+      evidence: {
+        ...hit.evidence,
+        scannedUrl: pageUrl,
+        note: "The Range /api/score route scan — coverage scoring API documents 14 planted vulnerability classes — appsec.study benchmark oracle"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${THE_RANGE_CORPUS}`;
+  if (!/api\/score|coverage_pct|scanner benchmark/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "POST /api/score — calibrated vulnerability benchmark coverage",
+      note: "The Range /api/score route scan — benchmark documents planted vulns per class — corpus fallback"
+    }
+  };
+};
+
 const pwnshopVerifyOtpBruteforceLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
   if (!pwnshopRouteTierAllows(ctx, "verify-otp")) return NEGATIVE;
@@ -124269,6 +124595,14 @@ export const RULES: Record<string, Rule> = {
   qaBashSampleApiGraphqlRouteLiveOracle,
   qaBashSampleApiSecureLiveOracle,
   qaBashSampleApiSecureRouteLiveOracle,
+  nomnomAuthTestDebugLiveOracle,
+  nomnomAuthTestDebugRouteLiveOracle,
+  nomnomUsersBolaLiveOracle,
+  nomnomUsersBolaRouteLiveOracle,
+  graphAppsecRecentUsersLiveOracle,
+  graphAppsecRecentUsersRouteLiveOracle,
+  theRangeBenchmarkScoreLiveOracle,
+  theRangeBenchmarkScoreRouteLiveOracle,
   brokencrystalsUserloginCssInjectionLiveOracle,
   brokencrystalsUserloginCssInjectionRouteLiveOracle,
   brokencrystalsHomeDomXssLiveOracle,

@@ -89494,5 +89494,209 @@ export const genericPatterns: Pattern[] = [
       "Our /api/tools/sample-api/secure route scan confirms demo-token-123 grants access. Show route-specific bearer auth hardening.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "nomnom-auth-test-debug-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "critical",
+    title: "NomNom API auth-test debug disclosure live oracle",
+    description:
+      "GET /api/auth-test on nomnom.appsec.study returns admin email, password, and bearer token in a debug response — the NomNom API security training lab auth disclosure oracle.",
+    impactOneline:
+      "Debug auth endpoints leaking admin credentials let attackers immediately impersonate privileged accounts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "nomnomAuthTestDebugLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove debug auth endpoints from production and training deployments exposed beyond labs.",
+      steps: [
+        "Disable /api/auth-test outside local isolated networks.",
+        "Never return plaintext passwords or bearer tokens in API responses.",
+        "Run NomNom only on isolated appsec.study training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/auth-test endpoint returns admin password and bearer token. Show debug endpoint removal and secret handling.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "nomnom-auth-test-debug-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "critical",
+    title: "NomNom API auth-test debug route live oracle",
+    description:
+      "When scanning /api/auth-test on nomnom.appsec.study, GET returns admin credentials and bearer token — route-specific debug auth disclosure oracle.",
+    impactOneline:
+      "Route-specific confirmation that NomNom debug auth-test leaks admin credentials for immediate account takeover.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "nomnomAuthTestDebugRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove debug auth endpoints from reachable training APIs.",
+      steps: [
+        "Disable /api/auth-test on any shared training host.",
+        "Redact passwords and tokens from all auth responses."
+      ]
+    },
+    fixPrompt:
+      "Our /api/auth-test route scan confirms admin credential leakage. Show route-specific debug endpoint remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "nomnom-users-bola-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "NomNom API users BOLA live oracle",
+    description:
+      "GET /users/{uid} on nomnom.appsec.study with a trivial bearer user-id token returns another user's password and email — the NomNom BOLA training oracle.",
+    impactOneline:
+      "Broken object-level authorization on user profiles exposes credentials for horizontal privilege escalation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "nomnomUsersBolaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce object-level authorization on user profile endpoints.",
+      steps: [
+        "Validate bearer tokens map to the requested user id.",
+        "Never return password fields in profile API responses.",
+        "Apply consistent authorization checks on all /users/{uid} routes."
+      ]
+    },
+    fixPrompt:
+      "Our /users/{uid} endpoint returns another user's password when bearer token is a different user id. Show BOLA remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "nomnom-users-bola-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "NomNom API users BOLA route live oracle",
+    description:
+      "When scanning /users/{uid} on nomnom.appsec.study, bearer user-id authorization allows reading another user's password — route-specific BOLA training oracle.",
+    impactOneline:
+      "Route-specific confirmation that NomNom user profiles lack object-level authorization.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "nomnomUsersBolaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce object-level authorization on user profile routes.",
+      steps: [
+        "Bind bearer tokens to authorized user ids.",
+        "Redact password fields from profile responses."
+      ]
+    },
+    fixPrompt:
+      "Our /users/{uid} route scan confirms cross-user password disclosure. Show route-specific BOLA remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "graph-appsec-recent-users-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "GraphShop recentUsers GraphQL BOLA live oracle",
+    description:
+      "POST /graphql recentUsers query on graph.appsec.study returns unauthenticated passwordHash and email fields — the GraphShop GraphQL BOLA training oracle.",
+    impactOneline:
+      "Unauthenticated GraphQL user resolvers leaking password hashes enable offline cracking and account mapping.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "graphAppsecRecentUsersLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication on GraphQL user resolvers and restrict sensitive fields.",
+      steps: [
+        "Gate recentUsers behind authenticated sessions.",
+        "Never expose passwordHash in GraphQL responses.",
+        "Disable introspection on production GraphQL endpoints."
+      ]
+    },
+    fixPrompt:
+      "Our GraphQL recentUsers query returns passwordHash without authentication. Show GraphQL authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "graph-appsec-recent-users-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "GraphShop recentUsers GraphQL route live oracle",
+    description:
+      "When scanning /graphql on graph.appsec.study, unauthenticated recentUsers query leaks passwordHash — route-specific GraphQL BOLA training oracle.",
+    impactOneline:
+      "Route-specific confirmation that GraphShop GraphQL exposes password hashes via recentUsers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "graphAppsecRecentUsersRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication on GraphQL user resolvers.",
+      steps: [
+        "Restrict recentUsers to authenticated admin roles only.",
+        "Remove passwordHash from GraphQL schema exposure."
+      ]
+    },
+    fixPrompt:
+      "Our /graphql route scan confirms recentUsers passwordHash leakage. Show route-specific GraphQL authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "the-range-benchmark-score-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "The Range benchmark score API live oracle",
+    description:
+      "POST /api/score on the-range.appsec.study returns calibrated scanner benchmark metadata listing planted vulnerability classes — The Range training benchmark oracle.",
+    impactOneline:
+      "Public benchmark scoring APIs documenting all planted vulnerability endpoints aid attackers mapping the attack surface.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theRangeBenchmarkScoreLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict benchmark scoring APIs to authenticated scanner runs in isolated environments.",
+      steps: [
+        "Require API keys for /api/score on shared benchmarks.",
+        "Avoid exposing full missed-vulnerability metadata publicly.",
+        "Run The Range only on isolated appsec.study infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/score endpoint publicly lists all planted vulnerability classes and endpoints. Show benchmark API access control.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "the-range-benchmark-score-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "The Range benchmark score route live oracle",
+    description:
+      "When scanning /api/score on the-range.appsec.study, POST returns coverage metadata for 14 planted vulnerability classes — route-specific scanner benchmark oracle.",
+    impactOneline:
+      "Route-specific confirmation that The Range benchmark exposes vulnerability coverage maps publicly.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theRangeBenchmarkScoreRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict benchmark scoring routes to authenticated scanner integrations.",
+      steps: [
+        "Gate /api/score behind scanner API keys.",
+        "Limit public metadata on shared benchmark hosts."
+      ]
+    },
+    fixPrompt:
+      "Our /api/score route scan confirms public vulnerability coverage metadata. Show route-specific benchmark API hardening.",
+    version: 1,
+    enabled: true
   }
 ];

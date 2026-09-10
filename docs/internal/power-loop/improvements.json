@@ -10475,6 +10475,24 @@
       "slug": "brokencrystals-oidc-route-hub-oracle-suppression",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: applyRouteOracleHubFilters on /api/auth/oidc-client + /api/users/oidc keeps brokencrystals-oidc-* + client-side-brokencrystals + misconfig only; brokencrystals.com/api/auth/oidc-client findings 31→8 (-sqli/ssti/ssrf/jwt generic bleed, +oidc live+route oracles retained); /api/users/oidc 33→7; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:nomnom.appsec.study",
+      "slug": "nomnom-auth-test-debug-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/auth-test returns {\"role\":\"admin\",\"token\":\"u3\",\"password\":\"S3cr3tAdm!n\"}; nomnom.appsec.study/api/auth-test findings 0→9 (+nomnom-auth-test-debug-live-oracle +nomnom-auth-test-debug-route-live-oracle +nomnom-users-bola-live-oracle); benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:nomnom.appsec.study",
+      "slug": "nomnom-users-bola-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /users/u2 with Authorization Bearer u1 returns bob@nomnom.test password bobpass; nomnom.appsec.study/users/u2 findings 0→8 (+nomnom-users-bola-live-oracle +nomnom-users-bola-route-live-oracle); benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:graph.appsec.study",
+      "slug": "graph-appsec-recent-users-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /graphql {\"query\":\"{ recentUsers { email role passwordHash } }\"} returns 10 users with passwordHash without auth; graph.appsec.study/graphql findings 0→7 (+graph-appsec-recent-users-live-oracle +graph-appsec-recent-users-route-live-oracle); benchmark juice-shop 50 findings 6/6 maintained"
     }
   ]
 }
