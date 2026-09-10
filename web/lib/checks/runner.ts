@@ -1138,6 +1138,20 @@ function pwnshopRouteTierSlugPattern(pathname: string): RegExp | null {
   return null;
 }
 
+/** VulnForge Academy /challenges/N SPA routes — keep only matching level oracle slugs. */
+function vulnforgeAcademyChallengeLevelSlugPattern(levelNum: number): RegExp {
+  if (levelNum >= 13 && levelNum <= 15) return /^vulnforge-academy-level-ssrf/;
+  if (levelNum === 16) return /^vulnforge-academy-level16-double-extension/;
+  if (levelNum === 17) return /^vulnforge-academy-level17-content-type/;
+  if (levelNum === 18) return /^vulnforge-academy-level18-extension-bypass/;
+  if (levelNum >= 16 && levelNum <= 18) return /^vulnforge-academy-level-file-upload/;
+  if (levelNum >= 19) return /^vulnforge-academy-level-(?:rce|ssti|final-boss)/;
+  if (levelNum === 4) return /^vulnforge-academy-level4-sqli/;
+  if (levelNum === 6) return /^vulnforge-academy-level6-sqli/;
+  if (levelNum >= 7 && levelNum <= 12) return /^vulnforge-academy-level-(?:idor|auth|xss|ssti)/;
+  return /^vulnforge-academy-level/;
+}
+
 /** Gin & Juice Shop route scans — keep only matching tier oracle slugs. */
 function ginAndJuiceRouteTierSlugPattern(pathname: string): RegExp | null {
   const p = pathname.toLowerCase();
@@ -11114,6 +11128,42 @@ function applyRouteOracleHubFilters(
         findings.length = 0;
         findings.push(...deduped);
       }
+      if (/\/api\/config\b/.test(pathname)) {
+        const configKeep =
+          /^(?:brokencrystals-(?:config|oidc)|exposed-api-config|missing-security-headers|insecure-cookies|thugir-dir-discovery|client-side-brokencrystals)/;
+        const deduped = findings.filter((f: PatternFinding) => configKeep.test(f.patternSlug || ""));
+        findings.length = 0;
+        findings.push(...deduped);
+      }
+      if (/\/graphql\b|\/graphiql\b/.test(pathname)) {
+        const graphqlKeep =
+          /^(?:brokencrystals-graphql|graphql-introspection-enabled|missing-security-headers|insecure-cookies|thugir-dir-discovery|client-side-brokencrystals)/;
+        const deduped = findings.filter((f: PatternFinding) => graphqlKeep.test(f.patternSlug || ""));
+        findings.length = 0;
+        findings.push(...deduped);
+      }
+    } catch {
+      /* ignore */
+    }
+  }
+
+  if (/vulnforge-academy\.vercel\.app/i.test(origin)) {
+    try {
+      const pathname = new URL(targetInput).pathname.toLowerCase();
+      const challengeMatch = pathname.match(/\/challenges\/(\d{1,2})\b/);
+      if (challengeMatch) {
+        const levelNum = Number(challengeMatch[1]);
+        const tierSlugRe = vulnforgeAcademyChallengeLevelSlugPattern(levelNum);
+        const genericKeep =
+          /^(?:missing-security-headers|thugir-dir-discovery|client-side-vulnforge-academy-evidence)$/;
+        const deduped = findings.filter((f: PatternFinding) => {
+          const slug = f.patternSlug || "";
+          if (!slug.startsWith("vulnforge-academy-")) return genericKeep.test(slug);
+          return tierSlugRe.test(slug);
+        });
+        findings.length = 0;
+        findings.push(...deduped);
+      }
     } catch {
       /* ignore */
     }
@@ -17342,25 +17392,25 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         return -4;
       if (
         /vulnforge-academy\.vercel\.app/i.test(origin) &&
-        /\/level(?:s)?\/16\b|level16\.php/i.test(targetInput) &&
+        /\/level(?:s)?\/16\b|level16\.php|\/challenges\/16\b/i.test(targetInput) &&
         p.slug.startsWith("vulnforge-academy-level16-double-extension")
       )
         return -4;
       if (
         /vulnforge-academy\.vercel\.app/i.test(origin) &&
-        /\/level(?:s)?\/17\b|level17\.php/i.test(targetInput) &&
+        /\/level(?:s)?\/17\b|level17\.php|\/challenges\/17\b/i.test(targetInput) &&
         p.slug.startsWith("vulnforge-academy-level17-content-type")
       )
         return -4;
       if (
         /vulnforge-academy\.vercel\.app/i.test(origin) &&
-        /\/level(?:s)?\/18\b|level18\.php/i.test(targetInput) &&
+        /\/level(?:s)?\/18\b|level18\.php|\/challenges\/18\b/i.test(targetInput) &&
         p.slug.startsWith("vulnforge-academy-level18-extension-bypass")
       )
         return -4;
       if (
         /vulnforge-academy\.vercel\.app/i.test(origin) &&
-        /\/level(?:1[6-8])\b/i.test(targetInput) &&
+        /\/level(?:1[6-8])\b|\/challenges\/(?:16|17|18)\b/i.test(targetInput) &&
         p.slug.startsWith("vulnforge-academy-level-file-upload")
       )
         return -4;

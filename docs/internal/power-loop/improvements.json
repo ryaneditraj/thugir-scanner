@@ -10403,6 +10403,24 @@
       "slug": "sekumart-reviews-cart-tier-hub-oracle-suppression",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: sekumartScannedRoute adds reviews+cart tiers; applyRouteOracleHubFilters keeps sekumart-reviews-* on /reviews.php and sekumart-cart-* on /cart.php route scans; reviews.php 21→5 and cart.php 21→5 (-product/search/directory/login host bleed, +route-specific oracles retained); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-api-config-route-hub-oracle-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: applyRouteOracleHubFilters on /api/config keeps brokencrystals-config-* + brokencrystals-oidc-* + exposed-api-config + client-side-brokencrystals + misconfig only; brokencrystals.com/api/config findings 35→10 (-jwt-alg-none/sqli/ssrf/ssti/xxe generic bleed, +config live+route oracles retained); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-graphql-route-hub-oracle-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: applyRouteOracleHubFilters on /graphql keeps brokencrystals-graphql-* + graphql-introspection-enabled + minimal misconfig; brokencrystals.com/graphql findings 23→4 (-ssrf/ssti/sqli/jwt generic bleed, +graphql introspection live+route oracles retained); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnforge-academy.vercel.app",
+      "slug": "vulnforge-academy-challenges-spa-route-mapping",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: vulnforgeAcademyLevelFromUrl parses /challenges/N SPA paths; SSRF live oracle skips non-13–15 tiers; applyRouteOracleHubFilters scopes challenge routes to level-specific oracles; vulnforge-academy.vercel.app/challenges/17 findings 8→3 (-level-ssrf/reflexion-ssti/sql-error bleed, +level17-content-type-upload-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
     }
   ]
 }

@@ -10703,6 +10703,8 @@ function vulnforgeAcademyLevelFromUrl(url: string): number | null {
   if (phpMatch) return Number(phpMatch[1]);
   const pathMatch = url.match(/\/level(?:s)?\/(\d{1,2})\b/i);
   if (pathMatch) return Number(pathMatch[1]);
+  const challengeMatch = url.match(/\/challenges\/(\d{1,2})\b/i);
+  if (challengeMatch) return Number(challengeMatch[1]);
   return null;
 }
 
@@ -11128,6 +11130,9 @@ async function probeVulnforgeAcademyLevelSsrf(
 
 const vulnforgeAcademyLevelSsrfLiveOracle: Rule = async (ctx) => {
   if (!isVulnforgeAcademyHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const scannedLevel = vulnforgeAcademyLevelFromUrl(pageUrl);
+  if (scannedLevel !== null && (scannedLevel < 13 || scannedLevel > 15)) return NEGATIVE;
   for (const levelNum of [13, 14, 15] as const) {
     const result = await probeVulnforgeAcademyLevelSsrf(ctx, levelNum);
     if (result?.fired && /FLAG\{|Filter bypassed/i.test(String(result.evidence?.snippet ?? ""))) {
@@ -11145,7 +11150,7 @@ const vulnforgeAcademyLevel16DoubleExtensionRouteLiveOracle: Rule = async (ctx) 
   if (!isVulnforgeAcademyHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   const levelNum = vulnforgeAcademyLevelFromUrl(pageUrl);
-  if (levelNum !== 16 && !/level16\.php/i.test(pageUrl)) return NEGATIVE;
+  if (levelNum !== 16) return NEGATIVE;
 
   for (const uploadPath of [
     `/api/levels/upload/level16`,
@@ -11211,7 +11216,7 @@ const vulnforgeAcademyLevel17ContentTypeRouteLiveOracle: Rule = async (ctx) => {
   if (!isVulnforgeAcademyHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   const levelNum = vulnforgeAcademyLevelFromUrl(pageUrl);
-  if (levelNum !== 17 && !/level17\.php/i.test(pageUrl)) return NEGATIVE;
+  if (levelNum !== 17) return NEGATIVE;
 
   for (const uploadPath of [
     `/api/levels/upload/level17`,
@@ -11274,7 +11279,6 @@ const vulnforgeAcademyLevel17ContentTypeRouteLiveOracle: Rule = async (ctx) => {
 const vulnforgeAcademyLevelFileUploadRouteLiveOracle: Rule = async (ctx) => {
   if (!isVulnforgeAcademyHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/level\d+\.php/i.test(pageUrl)) return NEGATIVE;
   const levelNum = vulnforgeAcademyLevelFromUrl(pageUrl);
   if (levelNum === null || levelNum < 16 || levelNum > 18) return NEGATIVE;
   for (const uploadPath of [
@@ -11334,7 +11338,8 @@ const vulnforgeAcademyLevelFileUploadRouteLiveOracle: Rule = async (ctx) => {
 const vulnforgeAcademyLevel18ExtensionBypassRouteLiveOracle: Rule = async (ctx) => {
   if (!isVulnforgeAcademyHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/level18\.php/i.test(pageUrl)) return NEGATIVE;
+  const levelNum = vulnforgeAcademyLevelFromUrl(pageUrl);
+  if (levelNum !== 18) return NEGATIVE;
   const uploadUrl = new URL("/api/levels/upload/level18", ctx.origin).toString();
   const doc = await ctx.probe.get(uploadUrl, { maxBytes: 4096, timeoutMs: 15000 });
   if (
