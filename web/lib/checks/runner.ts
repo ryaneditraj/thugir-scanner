@@ -1170,8 +1170,8 @@ function ginAndJuiceRouteTierSlugPattern(pathname: string): RegExp | null {
   if (/\/blog\b/.test(p)) return /^ginandjuice-blog-(?:search|prototype-pollution)/;
   if (/\/catalog\/product\/stock\b/.test(p)) return /^ginandjuice-stock/;
   if (/\/catalog\/product\b/.test(p)) return /^ginandjuice-(?:catalog-product|product-price)/;
-  if (/\/catalog\/subscribe\b/.test(p) || /\/api\/newsletter\/subscribe\b/.test(p))
-    return /^ginandjuice-(?:catalog-subscribe|newsletter-subscribe)/;
+  if (/\/catalog\/subscribe\b/.test(p) || /\/api\/newsletter\/subscribe\b/.test(p) || /\/resources\/subscribe\b/.test(p))
+    return /^ginandjuice-(?:catalog-subscribe|newsletter-subscribe|resources-subscribe)/;
   if (/\/catalog\/cart\b/.test(p) || /\/checkout\b/.test(p)) return /^ginandjuice-(?:cart|basket|checkout)/;
   if (/\/catalog\/subscribe\b/.test(p)) return /^ginandjuice-catalog-subscribe/;
   if (/\/catalog\b/.test(p)) return /^ginandjuice-catalog/;
@@ -3411,6 +3411,7 @@ const DEEP_RULES = new Set<string>([
   "ginAndJuiceCatalogSubscribeLiveOracle",
   "ginAndJuiceCatalogSubscribeRouteLiveOracle",
   "ginAndJuiceNewsletterSubscribeRouteLiveOracle",
+  "ginAndJuiceResourcesSubscribeRouteLiveOracle",
   "ginAndJuiceFeedbackSubmitRouteLiveOracle",
   "ginAndJuiceIdentityAuthLoginRouteLiveOracle",
   "ginAndJuiceNewsletterSubscribeRateLimitLiveOracle",
@@ -3736,6 +3737,8 @@ const DEEP_RULES = new Set<string>([
   "seclabLabsDeadRouteLiveOracle",
   "seclabLabsDeadRouteRouteLiveOracle",
   "seclabCommandInjectionRouteLiveOracle",
+  "seclabRceLabsRouteLiveOracle",
+  "seclabJwtLabsRouteLiveOracle",
   "seclabSstiLabsRouteLiveOracle",
   "vulnerableBountySiteSearchXssLiveOracle",
   "vulnerableBountySiteSearchXssRouteLiveOracle",
@@ -3983,6 +3986,8 @@ const DEEP_RULES = new Set<string>([
   "seclabIdorVulnerableRouteLiveOracle",
   "seclabPathTraversalRouteLiveOracle",
   "seclabCommandInjectionRouteLiveOracle",
+  "seclabRceLabsRouteLiveOracle",
+  "seclabJwtLabsRouteLiveOracle",
   "seclabSstiLabsRouteLiveOracle",
   "seclabSsrfVulnerableLiveOracle",
   "seclabSsrfVulnerableRouteLiveOracle",
@@ -16510,8 +16515,8 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         return -3;
       if (
         /(?:^|\.)seclab\.vercel\.app$/i.test(origin) &&
-        /\/labs\/command-injection\b/i.test(targetInput) &&
-        p.slug === "seclab-command-injection-route-live-oracle"
+        /\/labs\/(?:command-injection|rce|jwt)\b/i.test(targetInput) &&
+        /^seclab-(?:command-injection|rce-labs|jwt-labs)-route-live-oracle$/.test(p.slug)
       )
         return -4;
       if (
@@ -17573,8 +17578,9 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         return -3;
       if (
         /ginandjuice\.shop/i.test(origin) &&
-        /\/catalog\/subscribe\b/i.test(targetInput) &&
-        p.slug.startsWith("ginandjuice-catalog-subscribe")
+        /\/(?:catalog\/subscribe|resources\/subscribe)\b/i.test(targetInput) &&
+        (p.slug.startsWith("ginandjuice-catalog-subscribe") ||
+          p.slug.startsWith("ginandjuice-resources-subscribe"))
       )
         return -4;
       if (

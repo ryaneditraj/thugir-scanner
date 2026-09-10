@@ -75289,6 +75289,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "ginandjuice-resources-subscribe-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "medium",
+    title: "Gin & Juice Shop /resources/subscribe route live oracle",
+    description:
+      "When scanning /resources/subscribe, the newsletter form POSTs to /catalog/subscribe and echoes attacker email with coupon code — route-specific subscribe reflected-data oracle (resources alias path).",
+    impactOneline:
+      "Route-specific confirmation that Gin & Juice resources subscribe UI delegates to /catalog/subscribe with unsanitized email reflection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceResourcesSubscribeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode subscribe API responses and avoid rendering raw email in the DOM.",
+      steps: [
+        "Never reflect raw user input in JSON fields rendered via innerHTML or document.write.",
+        "Use textContent or strict output encoding for subscribe confirmation UIs.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /resources/subscribe route scan confirms email reflection via /catalog/subscribe. Show route-specific subscribe XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "ginandjuice-feedback-submit-route-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
@@ -84463,6 +84489,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our seclab.vercel.app /labs/command-injection route scan hits an Angular stub. Show route-specific deployment fixes for the command injection lab UI.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "seclab-rce-labs-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "SecLab RCE lab route live oracle",
+    description:
+      "When scanning /labs/rce on seclab.vercel.app, the Angular SPA stub documents the planned OS command injection / RCE lab — route-specific CWE-78 training oracle (alias of /labs/command-injection).",
+    impactOneline:
+      "Route scans on /labs/rce confirm advertised RCE lab is an Angular stub pointing scanners to /api/*-vulnerable live endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "seclabRceLabsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Deploy live RCE lab UI on /labs/rce or redirect to working /api/* training endpoints.",
+      steps: [
+        "Wire /labs/rce to documented OS command injection APIs in DaniSam-STU/security-lab README.",
+        "Remove /labs/rce from discovery queues until live UI deploys.",
+        "Run training labs only on isolated infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our seclab.vercel.app /labs/rce route scan hits an Angular stub. Show route-specific deployment fixes for the RCE lab UI.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "seclab-jwt-labs-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "SecLab JWT lab route live oracle",
+    description:
+      "When scanning /labs/jwt on seclab.vercel.app, the Angular SPA stub documents the planned JWT tampering lab — route-specific broken-auth training oracle (DaniSam-STU/security-lab README corpus).",
+    impactOneline:
+      "Route scans on /labs/jwt confirm advertised JWT lab is an Angular stub or live /api/jwt-vulnerable endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "seclabJwtLabsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Deploy live JWT lab UI on /labs/jwt or redirect to working /api/jwt-vulnerable training endpoints.",
+      steps: [
+        "Wire /labs/jwt to documented JWT verification APIs in DaniSam-STU/security-lab README.",
+        "Remove /labs/jwt from discovery queues until live UI deploys.",
+        "Run training labs only on isolated infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our seclab.vercel.app /labs/jwt route scan hits an Angular stub. Show route-specific deployment fixes for the JWT lab UI.",
     version: 1,
     enabled: true
   },

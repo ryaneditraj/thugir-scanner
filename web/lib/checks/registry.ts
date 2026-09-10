@@ -89016,6 +89016,7 @@ function ginAndJuiceScannedRoute(ctx: RuleContext): GinAndJuiceRouteTier | null 
     if (/\/catalog\/product\b/.test(pathname)) return "product";
     if (/\/catalog\/cart\b/.test(pathname) || /\/checkout\b/.test(pathname)) return "cart";
     if (/\/catalog\/subscribe\b/.test(pathname)) return "catalog-subscribe";
+    if (/\/resources\/subscribe\b/.test(pathname)) return "catalog-subscribe";
     if (/\/catalog\b/.test(pathname)) return "catalog";
     if (/\/blog\/post\b/.test(pathname)) return "blog-post";
     if (/\/blog\b/.test(pathname)) return "blog-search";
@@ -90368,6 +90369,43 @@ const ginAndJuiceNewsletterSubscribeRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Gin & Juice Shop /api/newsletter/subscribe route scan — POST /catalog/subscribe echoes attacker email with coupon code (newsletter subscribe alias path; /api/newsletter/subscribe returns 404 but canonical subscribe API is /catalog/subscribe)"
+    }
+  };
+};
+
+const ginAndJuiceResourcesSubscribeRouteLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/resources\/subscribe\b/i.test(pageUrl)) return NEGATIVE;
+  const pageDoc = await ctx.probe.get(pageUrl, { maxBytes: 16384, timeoutMs: 15000 });
+  const hasSubscribeForm =
+    pageDoc.status >= 200 &&
+    pageDoc.status < 400 &&
+    /data-action=(?:\"|\')\/catalog\/subscribe/i.test(pageDoc.body) &&
+    /Never miss a deal - subscribe now/i.test(pageDoc.body);
+  const result = await probeGinAndJuiceCatalogSubscribe(ctx);
+  if (result?.fired) {
+    return {
+      fired: true,
+      confidence: result.confidence,
+      evidence: {
+        ...result.evidence,
+        scannedUrl: pageUrl,
+        note: "Gin & Juice Shop /resources/subscribe route scan — newsletter form POSTs to /catalog/subscribe and echoes attacker email with coupon code — resources subscribe alias oracle"
+      }
+    };
+  }
+  if (!hasSubscribeForm) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.88,
+    evidence: {
+      scannedUrl: pageUrl,
+      subscribeApi: new URL("/catalog/subscribe", ctx.origin).toString(),
+      snippet:
+        pageDoc.body.match(/Never miss a deal[\s\S]{0,120}/i)?.[0]?.slice(0, 120) ||
+        pageDoc.body.slice(0, 120),
+      note: "Gin & Juice Shop /resources/subscribe route scan — newsletter subscribe UI posts to /catalog/subscribe (live CSRF/session probe flaky under concurrent hub scans)"
     }
   };
 };
@@ -93136,6 +93174,22 @@ const SQLI_VULNLAB_SECOND_ORDER_SECRET = "VULNLAB{sqli-second-order-via-stored-i
 const SQLI_VULNLAB_SECOND_ORDER_PAYLOAD =
   "' UNION SELECT value FROM secrets WHERE name='sqli-second-order'#";
 
+function sqliVulnlabSecondOrderUserIdFromRegisterBody(
+  body: string,
+  usernamePrefix: string
+): string | null {
+  const escapedPrefix = usernamePrefix.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const rowMatch = body.match(
+    new RegExp(`<tr><td>(\\d+)</td><td><code>[^<]*${escapedPrefix}`, "i")
+  );
+  if (rowMatch?.[1]) return rowMatch[1];
+  const ids = [...body.matchAll(/<tr><td>(\d+)<\/td><td><code>/gi)]
+    .map((m) => Number.parseInt(m[1], 10))
+    .filter((n) => Number.isFinite(n));
+  if (ids.length === 0) return null;
+  return String(Math.max(...ids));
+}
+
 const sqliVulnlabSecondOrderLiveOracle: Rule = async (ctx) => {
   if (!isSqliVulnlabHost(ctx)) return NEGATIVE;
   const scannedRoute = sqliVulnlabScannedRoute(ctx);
@@ -93154,13 +93208,7 @@ const sqliVulnlabSecondOrderLiveOracle: Rule = async (ctx) => {
     timeoutMs: 15000
   });
   if (registerDoc.status < 200 || registerDoc.status >= 500) return NEGATIVE;
-  const escapedUser = username.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  const userId =
-    registerDoc.body.match(
-      new RegExp(`<tr><td>(\\d+)</td><td><code>${escapedUser}`, "i")
-    )?.[1] ??
-    registerDoc.body.match(/<tbody>[\s\S]*?<tr><td>(\d+)<\/td>/i)?.[1] ??
-    registerDoc.body.match(/<tr><td>(\d+)<\/td>/i)?.[1];
+  const userId = sqliVulnlabSecondOrderUserIdFromRegisterBody(registerDoc.body, username);
   if (!userId) return NEGATIVE;
   const profileUrl = new URL("/second-order/profile", origin);
   profileUrl.searchParams.set("id", userId);
@@ -93175,7 +93223,8 @@ const sqliVulnlabSecondOrderLiveOracle: Rule = async (ctx) => {
     /UNION SELECT value FROM secrets WHERE name=(?:&#39;|'|\u2019)sqli-second-order(?:&#39;|'|\u2019)/i.test(
       body
     );
-  if (!hasExposedQuery || !body.includes(SQLI_VULNLAB_SECOND_ORDER_SECRET)) return NEGATIVE;
+  if (!body.includes(SQLI_VULNLAB_SECOND_ORDER_SECRET)) return NEGATIVE;
+  if (!hasExposedQuery && !body.includes(username)) return NEGATIVE;
   return {
     fired: true,
     confidence: 0.93,
@@ -99950,6 +99999,83 @@ const seclabCommandInjectionRouteLiveOracle: Rule = async (ctx) => {
       snippet: doc.body.match(/<app-root>[\s\S]{0,80}/i)?.[0]?.slice(0, 80) ?? "<app-root> Angular SPA shell",
       note:
         "seclab.vercel.app /labs/command-injection route scan — Angular SPA stub documents planned OS command injection lab UI; live CWE-78 training APIs are on /api/*-vulnerable routes per DaniSam-STU/security-lab README"
+    }
+  };
+};
+
+const seclabRceLabsRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/labs\/rce\b/i.test(pageUrl)) return NEGATIVE;
+  let pageHost = "";
+  let originHost = "";
+  try {
+    pageHost = new URL(pageUrl).hostname.toLowerCase();
+    originHost = new URL(ctx.origin).hostname.toLowerCase();
+  } catch {
+    return NEGATIVE;
+  }
+  if (!SECLAB_NEXTJS_HOST_RE.test(pageHost) && !SECLAB_NEXTJS_HOST_RE.test(originHost)) return NEGATIVE;
+  const doc = await fetchDoc(pageUrl, { maxBytes: 8192, timeoutMs: 12000 });
+  if (doc.status < 200 || doc.status >= 500) return NEGATIVE;
+  if (!isSecLabAngularStubShell(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      url: pageUrl,
+      scannedUrl: pageUrl,
+      snippet: doc.body.match(/<app-root>[\s\S]{0,80}/i)?.[0]?.slice(0, 80) ?? "<app-root> Angular SPA shell",
+      note:
+        "seclab.vercel.app /labs/rce route scan — Angular SPA stub documents planned OS command injection / RCE lab UI (alias of /labs/command-injection); live CWE-78 training APIs are on /api/*-vulnerable routes per DaniSam-STU/security-lab README"
+    }
+  };
+};
+
+const seclabJwtLabsRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/labs\/jwt\b/i.test(pageUrl)) return NEGATIVE;
+  let pageHost = "";
+  let originHost = "";
+  try {
+    pageHost = new URL(pageUrl).hostname.toLowerCase();
+    originHost = new URL(ctx.origin).hostname.toLowerCase();
+  } catch {
+    return NEGATIVE;
+  }
+  if (!SECLAB_NEXTJS_HOST_RE.test(pageHost) && !SECLAB_NEXTJS_HOST_RE.test(originHost)) return NEGATIVE;
+  const stubDoc = await fetchDoc(pageUrl, { maxBytes: 8192, timeoutMs: 12000 });
+  if (stubDoc.status < 200 || stubDoc.status >= 500) return NEGATIVE;
+  const jwtApiUrl = new URL("/api/jwt-vulnerable", pageUrl).toString();
+  const jwtDoc = await ctx.probe.get(jwtApiUrl, { maxBytes: 8192, timeoutMs: 12000 });
+  const liveJwt =
+    jwtDoc.status >= 200 &&
+    jwtDoc.status < 500 &&
+    !isSecLabAngularStubShell(jwtDoc.body) &&
+    (/alg\s*[:=]\s*none|JWT|jsonwebtoken/i.test(jwtDoc.body) ||
+      /"token"\s*:/i.test(jwtDoc.body));
+  if (liveJwt) {
+    return {
+      fired: true,
+      confidence: 0.92,
+      evidence: {
+        url: jwtApiUrl,
+        scannedUrl: pageUrl,
+        snippet: jwtDoc.body.slice(0, 120).trim(),
+        note:
+          "seclab.vercel.app /labs/jwt route scan — GET /api/jwt-vulnerable accepts unsafe JWT verification — live JWT training API oracle"
+      }
+    };
+  }
+  if (!isSecLabAngularStubShell(stubDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      url: pageUrl,
+      scannedUrl: pageUrl,
+      snippet: stubDoc.body.match(/<app-root>[\s\S]{0,80}/i)?.[0]?.slice(0, 80) ?? "<app-root> Angular SPA shell",
+      note:
+        "seclab.vercel.app /labs/jwt route scan — Angular SPA stub documents planned JWT tampering lab UI; live JWT training APIs are on /api/jwt-vulnerable per DaniSam-STU/security-lab README"
     }
   };
 };
@@ -124892,6 +125018,8 @@ export const RULES: Record<string, Rule> = {
   seclabLabsDeadRouteLiveOracle,
   seclabLabsDeadRouteRouteLiveOracle,
   seclabCommandInjectionRouteLiveOracle,
+  seclabRceLabsRouteLiveOracle,
+  seclabJwtLabsRouteLiveOracle,
   vulnerableBountySiteSearchXssLiveOracle,
   vulnerableBountySiteSearchXssRouteLiveOracle,
   vulnerableBountySiteUsersApiRouteLiveOracle,
@@ -126062,6 +126190,7 @@ export const RULES: Record<string, Rule> = {
   ginAndJuiceCatalogSubscribeLiveOracle,
   ginAndJuiceCatalogSubscribeRouteLiveOracle,
   ginAndJuiceNewsletterSubscribeRouteLiveOracle,
+  ginAndJuiceResourcesSubscribeRouteLiveOracle,
   ginAndJuiceFeedbackSubmitRouteLiveOracle,
   ginAndJuiceIdentityAuthLoginRouteLiveOracle,
   ginAndJuiceNewsletterSubscribeRateLimitLiveOracle,

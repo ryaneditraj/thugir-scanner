@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:sqli.vulnlab.dev",
+      "slug": "sqli-vulnlab-second-order-user-id-extraction-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: sqliVulnlabSecondOrderUserIdFromRegisterBody matches HTML-encoded username rows and max-id fallback; POST /second-order/register stores SQLi username then GET /second-order/profile?id= leaks VULNLAB{sqli-second-order-via-stored-input}; sqli.vulnlab.dev/second-order/ findings 2→3 (+sqli-vulnlab-second-order-live-oracle +route); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:seclab.vercel.app",
+      "slug": "seclab-rce-jwt-labs-route-oracles",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /labs/rce and /labs/jwt return Angular <app-root> SPA stubs; seclabRceLabsRouteLiveOracle + seclabJwtLabsRouteLiveOracle document planned CWE-78/RCE and JWT lab routes; seclab.vercel.app/labs/rce findings 5→6 (+seclab-rce-labs-route-live-oracle), /labs/jwt 5→6 (+seclab-jwt-labs-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-resources-subscribe-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /resources/subscribe newsletter form data-action=/catalog/subscribe; POST /catalog/subscribe echoes attacker email with coupon code; ginandjuice.shop/resources/subscribe findings 4→6 (+ginandjuice-resources-subscribe-route-live-oracle +ginandjuice-catalog-subscribe-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:preview.owasp-juice.shop",
       "slug": "juice-shop-rest-basket-route-companion-suppression",
       "status": "shipped",
