@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-10T18:15:00.000Z",
+  "updated_at": "2026-09-10T19:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://maze.appsec.study",
+      "source": "zzzteph/appsec.study maze — procedural self-mutating scanner maze; GET /api/manifest shows live routes, vuln chain changes every restart (appsec.study catalog; web search 19 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://latty6.appsec.study/auth/token",
+      "source": "zzzteph/appsec.study latty-6 — broken auth oracle POST /auth/token mints JWT for any userId (OpenAPI /docs; appsec.study API security catalog; web search 19 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://boxcutter.appsec.study/api/products",
+      "source": "zzzteph/appsec.study boxcutter-store — error-based SQLi oracle GET /api/products?q=' (kitchen-sink 109-vuln lab; appsec.study catalog; web search 19 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://tenanthub.appsec.study/api/orgs/1",
+      "source": "zzzteph/appsec.study TenantHub — cross-tenant BOLA oracle GET /api/orgs/:id multi-tenant SaaS isolation failures (appsec.study catalog; web search 19 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.testfire.net/",
+      "source": "IBM Altoro Mutual demo bank — classic public pen-test training target (SQLi, XSS, CSRF, auth bypass; VWAD/awesome-vulnerable; web search 19 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://latty5.appsec.study",
       "source": "zzzteph/appsec.study latty-5 — docs portal LFI (?file=../) → HS256 JWT secret → forge admin → unrestricted .js upload → webshell RCE chain (appsec.study lateral-movement catalog; web search 18 UTC discovery)",
