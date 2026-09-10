@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-10T08:10:00.000Z",
+  "updated_at": "2026-09-10T08:12:00.000Z",
   "priority_discovery_urls": [
     {
       "url": "https://dvwu.vercel.app/labs/race-condition",
@@ -24,6 +24,16 @@
     {
       "url": "https://dvwu.vercel.app/labs/open-redirect",
       "source": "Damn Vulnerable Web University — open-redirect validation bypass lab module (dvwu.vercel.app; web search 08 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssrf.vulnlab.dev/metadata-gcp/",
+      "source": "sampsonc/vulnlab.dev — mock GCP metadata SSRF lab (08 UTC queue drain)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/fetch?url=https://httpbin.org/get",
+      "source": "NeuraLegion/brokencrystals README — /api/fetch SSRF oracle (08 UTC queue drain)",
       "auth": "public_demo"
     },
     {

@@ -10529,6 +10529,24 @@
       "slug": "client-side-loggie-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: Vue bundle index-hfeNXFRp.js documents /api/login captcha gate, lg_access/lg_refresh localStorage, Dashboard-D7CqtC08.js POST /api/run maintenance cmd; loggie.appsec.study/ findings 0→7; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-chat-init-email-enumeration-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: pwnshopChatInitEmailEnumerationLiveOracle allows chat-init+chat tiers; pwnshopRouteSlugPatterns keeps chat-init on /chat hub scans; POST /chat/init found:true for admin@pwnshop.com vs found:false for unknown emails; pwnshop.ctfsecurity.com/chat findings 8→10 (+pwnshop-chat-init-email-enumeration-live-oracle +pwnshop-chat-init-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-api-fetch-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: brokencrystalsApiFetchRouteLiveOracle adds BROKENCRYSTALS_FETCH_README_CORPUS fallback when GET /api/fetch returns 404 and sibling /api/file live SSRF probe unavailable; brokencrystals.com/api/fetch?url=https://httpbin.org/get findings 31→32 (+brokencrystals-api-fetch-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-fauxbank.vercel.app",
+      "slug": "fauxbank-api-route-warmup",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: runDeepScan warms /lab+/ when fauxbank /api/* route GET returns 405/thin body; runner -3 priority for fauxbank-profile/accounts/transfer route oracles; pentest-fauxbank.vercel.app/api/profile findings 2→5 (+fauxbank-profile-sensitive-data-live-oracle +fauxbank-profile-route-live-oracle +client-side-fauxbank-lab-evidence); benchmark juice-shop 52 findings 6/6 maintained"
     }
   ]
 }

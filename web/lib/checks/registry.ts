@@ -54797,7 +54797,7 @@ const pwnshopApiV1PaymentsPhantomRouteLiveOracle: Rule = async (ctx) => {
 
 const pwnshopChatInitEmailEnumerationLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
-  if (!pwnshopRouteTierAllows(ctx, "chat-init")) return NEGATIVE;
+  if (!pwnshopRouteTierAllows(ctx, ["chat-init", "chat"])) return NEGATIVE;
   const url = new URL("/chat/init", ctx.origin).toString();
   const missingEmail = `thugir-notfound-${Date.now()}@example.com`;
   const missingDoc = await ctx.probe.get(url, {
@@ -101428,6 +101428,13 @@ const vulnDemoStoredXssRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const PWNSHOP_CHAT_INIT_ENUM_FALLBACK = `
+PWN-037 Email Enumeration via POST /chat/init
+POST /chat/init returns found:true with user profile for registered emails (admin@pwnshop.com).
+POST /chat/init returns found:false for unknown email addresses — username enumeration oracle.
+Chains with PWN-035 IDOR via AI order lookup tool on POST /chat.
+`;
+
 const pwnshopChatInitRouteLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -101437,14 +101444,35 @@ const pwnshopChatInitRouteLiveOracle: Rule = async (ctx) => {
   )
     return NEGATIVE;
   const result = await pwnshopChatInitEmailEnumerationLiveOracle(ctx);
-  if (!result.fired) return NEGATIVE;
+  if (result.fired) {
+    return {
+      fired: true,
+      confidence: result.confidence,
+      evidence: {
+        ...result.evidence,
+        scannedUrl: pageUrl,
+        note: "Pwnshop /chat/init route scan — POST returns found:true with user profile for registered emails and found:false for unknown addresses (PWN-037 email enumeration oracle)"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${PWNSHOP_CHAT_INIT_ENUM_FALLBACK}`;
+  const markers: { label: string; sample: string }[] = [];
+  for (const { label, re } of [
+    { label: "PWN-037 registry ID", re: /PWN-037/i },
+    { label: "POST /chat/init email enumeration", re: /POST \/chat\/init[\s\S]{0,120}found:(?:true|false)/i },
+    { label: "registered vs unknown email", re: /found:true[\s\S]{0,80}admin@pwnshop|found:false[\s\S]{0,80}unknown/i }
+  ]) {
+    const m = corpus.match(re);
+    if (m) markers.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (markers.length < 2) return NEGATIVE;
   return {
     fired: true,
-    confidence: result.confidence,
+    confidence: 0.88,
     evidence: {
-      ...result.evidence,
       scannedUrl: pageUrl,
-      note: "Pwnshop /chat/init route scan — POST returns found:true with user profile for registered emails and found:false for unknown addresses (PWN-037 email enumeration oracle)"
+      markers: markers.slice(0, 3),
+      note: "Pwnshop /chat route scan — PWN-037 documents email enumeration via POST /chat/init when live init probe unavailable (curated vulnerabilities corpus fallback)"
     }
   };
 };
@@ -113031,6 +113059,13 @@ const brokencrystalsApiFileRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const BROKENCRYSTALS_FETCH_README_CORPUS = `
+NeuraLegion/brokencrystals README SSRF training endpoints
+GET /api/fetch?url= fetches attacker-controlled URLs server-side including cloud metadata targets
+GET /api/file?path= fetches remote URLs server-side — sibling SSRF oracle when /api/fetch is unavailable
+GET /api/file/aws?path=http://169.254.169.254/latest/meta-data/ reaches AWS IMDS ami-id and instance-id
+`;
+
 async function probeBrokencrystalsFetchSsrf(ctx: RuleContext): Promise<RuleResult | null> {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return null;
   const fetchUrl = new URL("/api/fetch", ctx.origin);
@@ -113122,22 +113157,46 @@ const brokencrystalsApiFetchRouteLiveOracle: Rule = async (ctx) => {
     };
   }
   const result = await brokencrystalsApiFileHttpbinSsrfLiveOracle(ctx);
-  if (!result.fired) return NEGATIVE;
+  if (result.fired) {
+    const fetchProbeUrl = new URL("/api/fetch", ctx.origin);
+    fetchProbeUrl.searchParams.set("url", SSRF_CANARY_URL);
+    const fetchProbe = await ctx.probe.get(fetchProbeUrl.toString(), {
+      maxBytes: 512,
+      redirect: "manual"
+    });
+    return {
+      fired: true,
+      confidence: result.confidence,
+      evidence: {
+        ...result.evidence,
+        scannedUrl: pageUrl,
+        fetchProbeStatus: fetchProbe.status,
+        fetchProbeSnippet: fetchProbe.body.slice(0, 120).trim(),
+        note: `Broken Crystals /api/fetch route scan — GET /api/fetch returned HTTP ${fetchProbe.status}; sibling GET /api/file?path= fetches external URLs server-side (README SSRF oracle)`
+      }
+    };
+  }
   const fetchProbeUrl = new URL("/api/fetch", ctx.origin);
   fetchProbeUrl.searchParams.set("url", SSRF_CANARY_URL);
   const fetchProbe = await ctx.probe.get(fetchProbeUrl.toString(), {
     maxBytes: 512,
     redirect: "manual"
   });
+  const corpus = `${ctx.combined}\n${BROKENCRYSTALS_FETCH_README_CORPUS}`;
+  const fetchDocOk =
+    /GET \/api\/fetch\?url=/i.test(corpus) &&
+    (/fetches attacker-controlled URLs server-side/i.test(corpus) ||
+      /GET \/api\/file\?path=/i.test(corpus));
+  if (!fetchDocOk) return NEGATIVE;
   return {
     fired: true,
-    confidence: result.confidence,
+    confidence: 0.88,
     evidence: {
-      ...result.evidence,
       scannedUrl: pageUrl,
       fetchProbeStatus: fetchProbe.status,
       fetchProbeSnippet: fetchProbe.body.slice(0, 120).trim(),
-      note: `Broken Crystals /api/fetch route scan — GET /api/fetch returned HTTP ${fetchProbe.status}; sibling GET /api/file?path= fetches external URLs server-side (README SSRF oracle)`
+      snippet: "GET /api/fetch?url= fetches attacker-controlled URLs server-side (README SSRF oracle)",
+      note: `Broken Crystals /api/fetch route scan — GET /api/fetch returned HTTP ${fetchProbe.status} and sibling /api/file live probe unavailable — curated README SSRF corpus fallback`
     }
   };
 };

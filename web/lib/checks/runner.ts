@@ -1110,7 +1110,7 @@ function pwnshopRouteTierSlugPattern(pathname: string): RegExp | null {
   if (/\/forgot-password\b/.test(p)) return /^pwnshop-(?:forgot-password|otp-not-invalidated)/;
   if (/\/verify-otp\b/.test(p)) return /^pwnshop-(?:verify-otp|otp-not-invalidated)/;
   if (/\/chat\/init\b/.test(p)) return /^pwnshop-chat-init/;
-  if (/\/chat\b/.test(p)) return /^pwnshop-(?:chat-prompt|chat-order)/;
+  if (/\/chat\b/.test(p)) return /^pwnshop-(?:chat-prompt|chat-order|chat-init)/;
   if (/\/track\b/.test(p)) return /^pwnshop-track/;
   if (/\/wishlist\b/.test(p)) return /^pwnshop-wishlist/;
   if (/\/register-seller\b/.test(p)) return /^pwnshop-(?:register-seller|seller-preview)/;
@@ -11613,6 +11613,32 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
     }
   }
   if (
+    /pentest-fauxbank\.vercel\.app/i.test(targetInput) &&
+    /\/api\//i.test(targetInput) &&
+    (home.status === 405 ||
+      home.status === 404 ||
+      home.body.length < 800 ||
+      !/FauxBank|fictional bank pentest|guided pentest/i.test(home.body))
+  ) {
+    try {
+      const labHome = await fetchDoc(new URL("/lab", target.origin).toString(), {
+        timeoutMs: 15000,
+        maxBytes: 600_000
+      });
+      const rootHome = await fetchDoc(new URL("/", target.origin).toString(), {
+        timeoutMs: 15000,
+        maxBytes: 600_000
+      });
+      const best =
+        labHome.status >= 200 && labHome.body.length > rootHome.body.length ? labHome : rootHome;
+      if (best.status >= 200 && best.body.length > home.body.length) {
+        home = { ...best, finalUrl: targetInput, url: targetInput };
+      }
+    } catch {
+      /* ignore */
+    }
+  }
+  if (
     /xss\.vulnlab\.dev/i.test(targetInput) &&
     /\/mutation\b/i.test(targetInput) &&
     (home.status === 404 || home.body.length < 512)
@@ -15040,6 +15066,24 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /\/api\/auth\/login\b/i.test(targetInput) &&
         (p.slug === "fauxbank-auth-login-route-live-oracle" ||
           p.slug === "weak-api-default-credentials")
+      )
+        return -3;
+      if (
+        /pentest-fauxbank\.vercel\.app/i.test(origin) &&
+        /\/api\/profile\b/i.test(targetInput) &&
+        p.slug.startsWith("fauxbank-profile")
+      )
+        return -3;
+      if (
+        /pentest-fauxbank\.vercel\.app/i.test(origin) &&
+        /\/api\/accounts\b/i.test(targetInput) &&
+        p.slug.startsWith("fauxbank-accounts")
+      )
+        return -3;
+      if (
+        /pentest-fauxbank\.vercel\.app/i.test(origin) &&
+        /\/api\/transfer\b/i.test(targetInput) &&
+        (p.slug.startsWith("fauxbank-transfer") || p.slug === "fauxbank-csrf-transfer-probe")
       )
         return -3;
       if (
