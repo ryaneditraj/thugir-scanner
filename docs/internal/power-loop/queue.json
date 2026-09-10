@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-10T04:20:00.000Z",
+  "updated_at": "2026-09-10T05:22:00.000Z",
   "priority_discovery_urls": [
     {
       "url": "https://owasp.andreabrioschi.it/",
@@ -12615,6 +12615,31 @@
     {
       "url": "https://dvga.tools.escape.tech/import_paste",
       "source": "Damn Vulnerable GraphQL \u2014 SSRF via import_paste GraphQL mutation (dvga.tools.escape.tech; web search 04 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://boxcutter.appsec.study",
+      "source": "zzzteph/appsec.study \u2014 Boxcutter Store kitchen-sink web app (mixed injection, XSS, BOLA, GraphQL, business logic; appsec.study catalog; web search 05 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wordpress.appsec.study",
+      "source": "zzzteph/appsec.study \u2014 real WordPress + vulnerable plugin (unauth SQLi admin-ajax, file upload RCE, LFI, BFLA export; appsec.study catalog; web search 05 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://loggie.appsec.study",
+      "source": "zzzteph/appsec.study \u2014 multi-step login lab (captcha bypass, JWT refresh, code-split RCE surface; appsec.study catalog; web search 05 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://stalker.appsec.study",
+      "source": "zzzteph/appsec.study \u2014 Stalker social-tracking lab (IDOR, info disclosure; appsec.study catalog; web search 05 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvga2.tools.escape.tech/import_paste",
+      "source": "Damn Vulnerable GraphQL v2 \u2014 SSRF via import_paste GraphQL mutation (dvga2.tools.escape.tech; web search 05 UTC discovery)",
       "auth": "public_demo"
     }
   ]
