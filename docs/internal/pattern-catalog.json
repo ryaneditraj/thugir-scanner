@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-09T23:09:01.835Z",
-  "total": 3495,
-  "uniqueSlugs": 3487,
+  "generatedAt": "2026-09-10T00:04:41.118Z",
+  "total": 3496,
+  "uniqueSlugs": 3488,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3477,
+    "generic": 3478,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3410,
+    "deep": 3411,
     "continuous": 0
   },
   "byCategory": {
@@ -24,7 +24,7 @@
     "Source exposure": 7,
     "Misconfiguration": 2,
     "Information exposure": 1,
-    "Information disclosure": 160,
+    "Information disclosure": 161,
     "Security misconfiguration": 290,
     "Broken authentication": 232,
     "Injection": 585,
@@ -1960,6 +1960,7 @@
     "ginandjuice-angular-csti-route-live-oracle",
     "ginandjuice-angular-vulnerable-dependency-live-oracle",
     "ginandjuice-angular-vulnerable-dependency-route-live-oracle",
+    "ginandjuice-api-docs-route-live-oracle",
     "ginandjuice-basket-route-live-oracle",
     "ginandjuice-blog-post-7-atob-redirect-live-oracle",
     "ginandjuice-blog-post-7-atob-redirect-route-live-oracle",

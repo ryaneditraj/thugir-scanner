@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:preview.owasp-juice.shop",
+      "slug": "juice-shop-rest-basket-route-companion-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: juiceShopRestRouteCompanionMatch disabled on /rest/basket/* fast-path scans — only juice-shop-basket-* slugs run; juiceShopRestApiHubSuppressed adds /rest/basket; preview.owasp-juice.shop/rest/basket/1 findings 36→3 (+basket-idor live+route +basket-items-bola live oracles retained); benchmark juice-shop 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:preview.owasp-juice.shop",
+      "slug": "juice-shop-products-search-route-companion-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: juiceShopRestRouteCompanionMatch disabled on /rest/products/search fast-path scans — only juice-shop-products-search-* slugs run; juiceShopRestApiHubSuppressed adds /rest/products/search; preview.owasp-juice.shop/rest/products/search?q=test findings 35→1 (+products-search-sqli-route-live-oracle retained); benchmark juice-shop 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-api-docs-tier-hub-oracle-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: ginAndJuiceRouteTierSlugPattern + ginAndJuiceScannedRoute add api-docs tier; ginAndJuiceApiDocsRouteLiveOracle confirms /api-docs scanner lab surface; applyRouteOracleHubFilters onApiDocs keeps ginandjuice-api-docs-* only; ginandjuice.shop/api-docs findings 35→4 (+ginandjuice-api-docs-route-live-oracle +minimal misconfig retained); benchmark juice-shop 49 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-actuator-auditevents-oracles",
       "status": "shipped",

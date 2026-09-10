@@ -2124,6 +2124,8 @@ function juiceShopRestApiHubSuppressed(pageUrl: string): boolean {
   if (!pageUrl) return false;
   return (
     juiceShopApiOrRestRoute(pageUrl, "BasketItems\\b") ||
+    /\/rest\/basket\b/i.test(pageUrl) ||
+    /\/rest\/products\/search\b/i.test(pageUrl) ||
     /\/rest\/saveLoginIp\b/i.test(pageUrl) ||
     /\/(?:rest|api)\/chatbot\b/i.test(pageUrl) ||
     juiceShopApiOrRestRoute(pageUrl, "Quantitys\\b") ||
@@ -88993,7 +88995,8 @@ type GinAndJuiceRouteTier =
   | "order"
   | "vulnerabilities"
   | "logger"
-  | "catalog-subscribe";
+  | "catalog-subscribe"
+  | "api-docs";
 
 function ginAndJuiceScannedRoute(ctx: RuleContext): GinAndJuiceRouteTier | null {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -89018,6 +89021,7 @@ function ginAndJuiceScannedRoute(ctx: RuleContext): GinAndJuiceRouteTier | null 
     if (/\/login\b/.test(pathname)) return "login";
     if (/\/register\b/.test(pathname)) return "register";
     if (/\/vulnerabilities\b/.test(pathname)) return "vulnerabilities";
+    if (/\/api-docs\b/.test(pathname)) return "api-docs";
     if (/\/order\b/.test(pathname)) return "order";
     if (/\/logger\b/.test(pathname)) return "logger";
     if (pathname === "/" || pathname === "") return "home";
@@ -90104,6 +90108,54 @@ const ginAndJuiceVulnerabilitiesCredentialsRouteLiveOracle: Rule = async (ctx) =
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Gin & Juice Shop home/?url= route scan — X-Original-URL /vulnerabilities exposes working login credentials in ACCOUNT LOGIN DETAILS table"
+    }
+  };
+};
+
+const ginAndJuiceApiDocsRouteLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api-docs\b/i.test(pageUrl)) return NEGATIVE;
+  const probeUrl = new URL("/api-docs", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 32768, timeoutMs: 15000 });
+  const corpus = `${doc.body}\n${ctx.home.body || ""}`;
+  const openApiHit = await openApiDocs(ctx);
+  const labMarkers: { label: string; re: RegExp }[] = [
+    {
+      label: "Gin & Juice Shop scanner lab",
+      re: /deliberately vulnerable web application designed for testing web[\s&nbsp;]*vulnerability[\s&nbsp;]*scanners/i
+    },
+    { label: "PortSwigger Gin & Juice branding", re: /Gin\s*&\s*Juice Shop|scanMeHeader/i },
+    { label: "OpenAPI/Swagger documentation surface", re: /openapi|swagger|api-docs/i }
+  ];
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of labMarkers) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (openApiHit.fired) {
+    return {
+      fired: true,
+      confidence: 0.94,
+      evidence: {
+        scannedUrl: pageUrl,
+        ...openApiHit.evidence,
+        markers: hits.slice(0, 3),
+        note: "Gin & Juice Shop /api-docs route scan — OpenAPI/Swagger API documentation reachable without authentication (ZAP ginandjuice testapp / FINDING-API-docs disclosure oracle)"
+      }
+    };
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.92 : 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      url: probeUrl,
+      status: doc.status,
+      markers: hits.slice(0, 3),
+      snippet: hits[0]?.sample,
+      note: "Gin & Juice Shop /api-docs route scan — public API documentation endpoint on scanner evaluation lab (OpenAPI/Swagger disclosure training surface)"
     }
   };
 };
@@ -125977,6 +126029,7 @@ export const RULES: Record<string, Rule> = {
   ginAndJuiceAdminDeleteRouteLiveOracle,
   ginAndJuiceVulnerabilitiesCredentialsLiveOracle,
   ginAndJuiceVulnerabilitiesCredentialsRouteLiveOracle,
+  ginAndJuiceApiDocsRouteLiveOracle,
   ginAndJuiceVulnerabilitiesDisclosureRouteLiveOracle,
   ginAndJuiceLogoutSessionRegenerationLiveOracle,
   ginAndJuiceLogoutRouteLiveOracle,

@@ -1158,6 +1158,7 @@ function ginAndJuiceRouteTierSlugPattern(pathname: string): RegExp | null {
   if (/\/catalog\/subscribe\b/.test(p)) return /^ginandjuice-catalog-subscribe/;
   if (/\/catalog\b/.test(p)) return /^ginandjuice-catalog/;
   if (/\/rest\/wallet\/balance\b/.test(p)) return /^ginandjuice-rest-wallet-balance/;
+  if (/\/api-docs\b/.test(p)) return /^ginandjuice-api-docs/;
   if (/\/login\b/.test(p)) return /^ginandjuice-login/;
   if (/\/register\b/.test(p)) return /^ginandjuice-register/;
   if (/\/admin\b/.test(p)) return /^ginandjuice-admin/;
@@ -3385,6 +3386,7 @@ const DEEP_RULES = new Set<string>([
   "ginAndJuiceAdminDeleteRouteLiveOracle",
   "ginAndJuiceVulnerabilitiesCredentialsLiveOracle",
   "ginAndJuiceVulnerabilitiesCredentialsRouteLiveOracle",
+  "ginAndJuiceApiDocsRouteLiveOracle",
   "ginAndJuiceVulnerabilitiesDisclosureRouteLiveOracle",
   "ginAndJuiceLogoutSessionRegenerationLiveOracle",
   "ginAndJuiceLogoutRouteLiveOracle",
@@ -11146,15 +11148,18 @@ function applyRouteOracleHubFilters(
         const onCatalog =
           /\/catalog\b/.test(pathname) && !/\/catalog\/(?:product|cart)\b/.test(pathname);
         const onWalletBalance = /\/rest\/wallet\/balance\b/.test(pathname);
-        const genericKeep = onWalletBalance
-          ? /^(?:missing-security-headers|insecure-cookies|thugir-dir-discovery|client-side-gin-and-juice|client-side-open-redirect-evidence|sql-error-disclosure|reflected-xss-query-param)$/
-          : onCatalog
-            ? /^(?:missing-security-headers|insecure-cookies|thugir-dir-discovery|client-side-gin-and-juice)$/
-            : /^(?:missing-security-headers|insecure-cookies|thugir-dir-discovery|client-side-gin-and-juice|client-side-open-redirect-evidence)$/;
+        const onApiDocs = /\/api-docs\b/.test(pathname);
+        const genericKeep = onApiDocs
+          ? /^(?:missing-security-headers|insecure-cookies|thugir-dir-discovery|client-side-gin-and-juice|vibe-openapi-docs-exposed|open-api-docs)$/
+          : onWalletBalance
+            ? /^(?:missing-security-headers|insecure-cookies|thugir-dir-discovery|client-side-gin-and-juice|client-side-open-redirect-evidence|sql-error-disclosure|reflected-xss-query-param)$/
+            : onCatalog
+              ? /^(?:missing-security-headers|insecure-cookies|thugir-dir-discovery|client-side-gin-and-juice)$/
+              : /^(?:missing-security-headers|insecure-cookies|thugir-dir-discovery|client-side-gin-and-juice|client-side-open-redirect-evidence)$/;
         const deduped = findings.filter((f: PatternFinding) => {
           const slug = f.patternSlug || "";
           if (!slug.startsWith("ginandjuice-")) return genericKeep.test(slug);
-          if (onWalletBalance) return tierSlugRe.test(slug);
+          if (onWalletBalance || onApiDocs) return tierSlugRe.test(slug);
           return (
             tierSlugRe.test(slug) ||
             /^ginandjuice-angular-(?:vulnerable-dependency|csti)/.test(slug)
@@ -11182,7 +11187,7 @@ function applyRouteOracleHubFilters(
       }
       if (/\/mcp\b/.test(pathname)) {
         const mcpKeep =
-          /^(?:wrongsecrets-mcp|wrongsecrets-challenge-60-mcp|spring-boot-actuator-exposed|missing-security-headers|thugir-dir-discovery|client-side-wrongsecrets)/;
+          /^(?:wrongsecrets-mcp|wrongsecrets-challenge-60-mcp|spring-boot-actuator-exposed|missing-security-headers|thugir-dir-discovery|client-side-wrongsecrets|vibe-weak-csp)/;
         const deduped = findings.filter((f: PatternFinding) => mcpKeep.test(f.patternSlug || ""));
         findings.length = 0;
         findings.push(...deduped);
@@ -11359,6 +11364,14 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       const saveLoginIpRouteScan = /\/rest\/saveLoginIp\b/i.test(scanUrl);
       if (saveLoginIpRouteScan) {
         return slug.startsWith("juice-shop-save-login-ip");
+      }
+      const basketRouteScan = /\/rest\/basket\b/i.test(scanUrl);
+      if (basketRouteScan) {
+        return slug.startsWith("juice-shop-basket");
+      }
+      const productsSearchRouteScan = /\/rest\/products\/search\b/i.test(scanUrl);
+      if (productsSearchRouteScan) {
+        return slug.startsWith("juice-shop-products-search");
       }
       return (
         slug.includes(routeResource) ||
@@ -17544,6 +17557,18 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /wrongsecrets/i.test(origin) &&
         /\/actuator\/auditevents\b/i.test(targetInput) &&
         p.slug.startsWith("wrongsecrets-actuator-auditevents")
+      )
+        return -4;
+      if (
+        /wrongsecrets/i.test(origin) &&
+        /\/mcp\b/i.test(targetInput) &&
+        /^wrongsecrets-mcp/.test(p.slug)
+      )
+        return -4;
+      if (
+        /ginandjuice\.shop/i.test(origin) &&
+        /\/api-docs\b/i.test(targetInput) &&
+        p.slug.startsWith("ginandjuice-api-docs")
       )
         return -4;
       if (

@@ -74431,6 +74431,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "ginandjuice-api-docs-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Gin & Juice Shop /api-docs OpenAPI route live oracle",
+    description:
+      "When scanning /api-docs, the Gin & Juice Shop scanner evaluation lab exposes OpenAPI/Swagger API documentation without authentication — route-specific API docs disclosure oracle.",
+    impactOneline:
+      "Public /api-docs on internet-facing apps reveals API paths, parameters, and attack surface to unauthenticated users.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceApiDocsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict OpenAPI/Swagger documentation to authenticated developers or internal networks.",
+      steps: [
+        "Disable /api-docs and /swagger.json on production deployments.",
+        "Gate API documentation behind authentication.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api-docs route scan confirms public OpenAPI documentation. Show route-specific API docs exposure remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "ginandjuice-login-next-open-redirect-route-live-oracle",
     platform: "generic",
     category: "Open redirect",
