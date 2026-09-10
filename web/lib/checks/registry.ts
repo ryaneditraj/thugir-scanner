@@ -89046,6 +89046,17 @@ function ginAndJuiceRouteTierAllows(
   return tiers.includes(scanned);
 }
 
+/** /catalog?searchTerm= route scans should not run category-parameter oracles. */
+function ginAndJuiceScannedCatalogSearchOnly(ctx: RuleContext): boolean {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/catalog\b/i.test(pageUrl)) return false;
+  try {
+    const u = new URL(pageUrl);
+    return u.searchParams.has("searchTerm") && !u.searchParams.has("category");
+  } catch {
+    return false;
+  }
+}
 
 const GIN_AND_JUICE_ANGULAR_CSTI_PROBE = "wzwxl{{a=(7*7.0)}}h0niw";
 
@@ -89329,6 +89340,7 @@ const ginAndJuiceBlogPostBackJavascriptDomXssRouteLiveOracle: Rule = async (ctx)
 const ginAndJuiceCatalogCategorySqliLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
   if (!ginAndJuiceRouteTierAllows(ctx, "catalog")) return NEGATIVE;
+  if (ginAndJuiceScannedCatalogSearchOnly(ctx)) return NEGATIVE;
   const baselineUrl = new URL("/catalog", ctx.origin);
   baselineUrl.searchParams.set("category", "1");
   const baselineDoc = await ctx.probe.get(baselineUrl.toString(), { maxBytes: 8192, timeoutMs: 15000 });
@@ -89355,6 +89367,7 @@ const ginAndJuiceCatalogCategorySqliRouteLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/catalog\b/i.test(pageUrl)) return NEGATIVE;
+  if (ginAndJuiceScannedCatalogSearchOnly(ctx)) return NEGATIVE;
   const result = await ginAndJuiceCatalogCategorySqliLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -89371,6 +89384,7 @@ const ginAndJuiceCatalogCategorySqliRouteLiveOracle: Rule = async (ctx) => {
 const ginAndJuiceCatalogCategoryCrlfLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
   if (!ginAndJuiceRouteTierAllows(ctx, "catalog")) return NEGATIVE;
+  if (ginAndJuiceScannedCatalogSearchOnly(ctx)) return NEGATIVE;
   const canary = `thugirCrlf${Date.now().toString(36)}`;
   const probeUrl = new URL("/catalog", ctx.origin);
   probeUrl.searchParams.set("category", `thugir\r\nSet-Cookie: ${canary}=1`);
@@ -89398,6 +89412,7 @@ const ginAndJuiceCatalogCategoryCrlfRouteLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/catalog\b/i.test(pageUrl)) return NEGATIVE;
+  if (ginAndJuiceScannedCatalogSearchOnly(ctx)) return NEGATIVE;
   const result = await ginAndJuiceCatalogCategoryCrlfLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -89888,6 +89903,7 @@ const ginAndJuiceBlogSearchDomXssRouteLiveOracle: Rule = async (ctx) => {
 const ginAndJuiceCatalogBase64CategoryLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
   if (!ginAndJuiceRouteTierAllows(ctx, "catalog")) return NEGATIVE;
+  if (ginAndJuiceScannedCatalogSearchOnly(ctx)) return NEGATIVE;
   const encodedCategory = Buffer.from("Gin", "utf8").toString("base64");
   const probeUrl = new URL("/catalog", ctx.origin);
   probeUrl.searchParams.set("category", encodedCategory);
@@ -89917,6 +89933,7 @@ const ginAndJuiceCatalogBase64CategoryRouteLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/catalog\b/i.test(pageUrl)) return NEGATIVE;
+  if (ginAndJuiceScannedCatalogSearchOnly(ctx)) return NEGATIVE;
   const result = await ginAndJuiceCatalogBase64CategoryLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {

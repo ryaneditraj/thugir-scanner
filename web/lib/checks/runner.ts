@@ -1145,6 +1145,8 @@ function vulnforgeAcademyChallengeLevelSlugPattern(levelNum: number): RegExp {
   if (levelNum === 17) return /^vulnforge-academy-level17-content-type/;
   if (levelNum === 18) return /^vulnforge-academy-level18-extension-bypass/;
   if (levelNum >= 16 && levelNum <= 18) return /^vulnforge-academy-level-file-upload/;
+  if (levelNum === 20) return /^vulnforge-academy-level20-final-boss/;
+  if (levelNum === 19) return /^vulnforge-academy-level(?:19-)?rce/;
   if (levelNum >= 19) return /^vulnforge-academy-level-(?:rce|ssti|final-boss)/;
   if (levelNum === 4) return /^vulnforge-academy-level4-sqli/;
   if (levelNum === 6) return /^vulnforge-academy-level6-sqli/;
@@ -11202,7 +11204,7 @@ function applyRouteOracleHubFilters(
         const genericKeep = onApiDocs
           ? /^(?:missing-security-headers|insecure-cookies|thugir-dir-discovery|client-side-gin-and-juice|vibe-openapi-docs-exposed|open-api-docs)$/
           : onWalletBalance
-            ? /^(?:missing-security-headers|insecure-cookies|thugir-dir-discovery|client-side-gin-and-juice|client-side-open-redirect-evidence|sql-error-disclosure|reflected-xss-query-param)$/
+            ? /^(?:missing-security-headers|insecure-cookies|thugir-dir-discovery|client-side-gin-and-juice)$/
             : onCatalog
               ? /^(?:missing-security-headers|insecure-cookies|thugir-dir-discovery|client-side-gin-and-juice)$/
               : /^(?:missing-security-headers|insecure-cookies|thugir-dir-discovery|client-side-gin-and-juice|client-side-open-redirect-evidence)$/;

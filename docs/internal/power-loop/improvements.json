@@ -10421,6 +10421,24 @@
       "slug": "vulnforge-academy-challenges-spa-route-mapping",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: vulnforgeAcademyLevelFromUrl parses /challenges/N SPA paths; SSRF live oracle skips non-13–15 tiers; applyRouteOracleHubFilters scopes challenge routes to level-specific oracles; vulnforge-academy.vercel.app/challenges/17 findings 8→3 (-level-ssrf/reflexion-ssti/sql-error bleed, +level17-content-type-upload-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnforge-academy.vercel.app",
+      "slug": "vulnforge-academy-level20-challenge-slug-pattern-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: vulnforgeAcademyChallengeLevelSlugPattern level 20 now matches vulnforge-academy-level20-final-boss-* (prior /^level-(?:rce|ssti|final-boss)/ missed level20- prefix); vulnforge-academy.vercel.app/challenges/20 findings 3→4 (+vulnforge-academy-level20-final-boss-route-live-oracle README corpus fallback); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-catalog-search-term-route-tier-scoping",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: ginAndJuiceScannedCatalogSearchOnly skips category-sqli/crlf/base64 live+route oracles on /catalog?searchTerm= route scans; ginandjuice.shop/catalog?searchTerm=test findings 18→12 (-catalog-category-sqli/crlf/base64 bleed, +search-xss/link-manipulation/angular oracles retained); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-wallet-balance-route-bleed-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: applyRouteOracleHubFilters onWalletBalance genericKeep drops sql-error-disclosure + reflected-xss-query-param bleed on 404 GET /rest/wallet/balance; ginandjuice.shop/rest/wallet/balance findings 6→3 (-generic probe bleed, endpoint 404 — no wallet BOLA oracle on ginandjuice.shop); benchmark juice-shop 52 findings 6/6 maintained"
     }
   ]
 }
