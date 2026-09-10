@@ -58485,6 +58485,9 @@ POST /api/c/5 tpl nunjucks SSTI template injection
 POST /api/c/6 host command injection diagnostics shells out uid root
 GET /api/c/8 JWT alg none admin bypass Authorization Bearer
 POST /api/c/7 XML external entity file read XXE
+GET /api/c/9 url open redirect 302 Location external URL
+PATCH /api/c/11 role mass assignment admin privilege escalation
+POST /api/c/12 password NoSQL operator injection $ne authenticated true
 `;
 
 async function probeTheRangeBenchmarkScore(ctx: RuleContext): Promise<RuleResult | null> {
@@ -59093,6 +59096,203 @@ const theRangeCmdInjC6RouteLiveOracle: Rule = async (ctx) => {
       scannedUrl: pageUrl,
       snippet: "POST /api/c/6 — diagnostics shells out on host parameter",
       note: "The Range /api/c/6 route scan — benchmark documents planted command injection on host parameter — corpus fallback"
+    }
+  };
+};
+
+const THE_RANGE_REDIRECT_PROBE_URL = "https://thugir-open-redirect-oracle.example";
+
+async function probeTheRangeRedirectC9(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isAppsecStudyHost(ctx, "the-range")) return null;
+  const redirectUrl = new URL("/api/c/9", ctx.origin);
+  redirectUrl.searchParams.set("url", THE_RANGE_REDIRECT_PROBE_URL);
+  const doc = await ctx.probe.get(redirectUrl.toString(), {
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  const location = doc.headers["location"] || "";
+  const bodyFlag = /FLAG\{range-redirect/i.test(doc.body);
+  if (
+    doc.status >= 300 &&
+    doc.status < 400 &&
+    (location.includes(THE_RANGE_REDIRECT_PROBE_URL) || bodyFlag)
+  ) {
+    return {
+      fired: true,
+      confidence: 0.93,
+      evidence: {
+        url: redirectUrl.toString(),
+        status: doc.status,
+        location: String(location).slice(0, 200),
+        snippet: doc.body.slice(0, 220).trim(),
+        note: "GET /api/c/9?url=https://... issues 302 redirect to attacker-controlled URL — The Range planted open-redirect training oracle"
+      }
+    };
+  }
+  return null;
+}
+
+const theRangeRedirectC9LiveOracle: Rule = async (ctx) => {
+  const hit = await probeTheRangeRedirectC9(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const theRangeRedirectC9RouteLiveOracle: Rule = async (ctx) => {
+  if (!isAppsecStudyHost(ctx, "the-range")) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/c\/9\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probeTheRangeRedirectC9(ctx);
+  if (hit?.fired) {
+    return {
+      fired: true,
+      confidence: hit.confidence,
+      evidence: {
+        ...hit.evidence,
+        scannedUrl: pageUrl,
+        note: "The Range /api/c/9 route scan — url parameter open redirect confirmed via 302 Location — appsec.study open-redirect training oracle"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${THE_RANGE_CORPUS}`;
+  if (!/\/api\/c\/9|open redirect|redirecting_to/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "GET /api/c/9?url=https://... — open redirect via url parameter",
+      note: "The Range /api/c/9 route scan — benchmark documents planted open redirect on url parameter — corpus fallback"
+    }
+  };
+};
+
+async function probeTheRangeMassAssignC11(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isAppsecStudyHost(ctx, "the-range")) return null;
+  const massUrl = new URL("/api/c/11", ctx.origin).toString();
+  const doc = await ctx.probe.get(massUrl, {
+    method: "PATCH",
+    body: JSON.stringify({ role: "admin" }),
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 300) return null;
+  let parsed: { ok?: boolean; role?: string; flag?: string };
+  try {
+    parsed = JSON.parse(doc.body) as { ok?: boolean; role?: string; flag?: string };
+  } catch {
+    return null;
+  }
+  if (parsed.ok !== true || parsed.role !== "admin") return null;
+  return {
+    fired: true,
+    confidence: parsed.flag ? 0.94 : 0.91,
+    evidence: {
+      url: massUrl,
+      role: parsed.role,
+      flag: parsed.flag,
+      snippet: doc.body.slice(0, 220).trim(),
+      note: "PATCH /api/c/11 with role=admin grants admin privileges via mass assignment — The Range planted privilege-escalation training oracle"
+    }
+  };
+}
+
+const theRangeMassAssignC11LiveOracle: Rule = async (ctx) => {
+  const hit = await probeTheRangeMassAssignC11(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const theRangeMassAssignC11RouteLiveOracle: Rule = async (ctx) => {
+  if (!isAppsecStudyHost(ctx, "the-range")) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/c\/11\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probeTheRangeMassAssignC11(ctx);
+  if (hit?.fired) {
+    return {
+      fired: true,
+      confidence: hit.confidence,
+      evidence: {
+        ...hit.evidence,
+        scannedUrl: pageUrl,
+        note: "The Range /api/c/11 route scan — PATCH role=admin confirms mass-assignment privilege escalation — appsec.study training oracle"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${THE_RANGE_CORPUS}`;
+  if (!/\/api\/c\/11|mass assignment|role.*admin/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "PATCH /api/c/11 — role=admin mass assignment privilege escalation",
+      note: "The Range /api/c/11 route scan — benchmark documents planted mass assignment on role field — corpus fallback"
+    }
+  };
+};
+
+async function probeTheRangeNosqlC12(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isAppsecStudyHost(ctx, "the-range")) return null;
+  const nosqlUrl = new URL("/api/c/12", ctx.origin).toString();
+  const doc = await ctx.probe.get(nosqlUrl, {
+    method: "POST",
+    body: JSON.stringify({ password: { $ne: null } }),
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 300) return null;
+  let parsed: { authenticated?: boolean; flag?: string };
+  try {
+    parsed = JSON.parse(doc.body) as { authenticated?: boolean; flag?: string };
+  } catch {
+    return null;
+  }
+  if (parsed.authenticated !== true) return null;
+  return {
+    fired: true,
+    confidence: parsed.flag ? 0.94 : 0.92,
+    evidence: {
+      url: nosqlUrl,
+      authenticated: parsed.authenticated,
+      flag: parsed.flag,
+      snippet: doc.body.slice(0, 220).trim(),
+      note: 'POST /api/c/12 with password {"$ne":null} bypasses auth via NoSQL operator injection — The Range planted NoSQLi training oracle'
+    }
+  };
+}
+
+const theRangeNosqlC12LiveOracle: Rule = async (ctx) => {
+  const hit = await probeTheRangeNosqlC12(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const theRangeNosqlC12RouteLiveOracle: Rule = async (ctx) => {
+  if (!isAppsecStudyHost(ctx, "the-range")) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/c\/12\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probeTheRangeNosqlC12(ctx);
+  if (hit?.fired) {
+    return {
+      fired: true,
+      confidence: hit.confidence,
+      evidence: {
+        ...hit.evidence,
+        scannedUrl: pageUrl,
+        note: "The Range /api/c/12 route scan — NoSQL operator injection on password confirms authentication bypass — appsec.study NoSQLi training oracle"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${THE_RANGE_CORPUS}`;
+  if (!/\/api\/c\/12|nosql|operator injection|\$ne/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: 'POST /api/c/12 — NoSQL operator injection {"$ne":null} on password',
+      note: "The Range /api/c/12 route scan — benchmark documents planted NoSQL operator injection — corpus fallback"
     }
   };
 };
@@ -125588,6 +125788,12 @@ export const RULES: Record<string, Rule> = {
   theRangeLfiC4RouteLiveOracle,
   theRangeCmdInjC6LiveOracle,
   theRangeCmdInjC6RouteLiveOracle,
+  theRangeRedirectC9LiveOracle,
+  theRangeRedirectC9RouteLiveOracle,
+  theRangeMassAssignC11LiveOracle,
+  theRangeMassAssignC11RouteLiveOracle,
+  theRangeNosqlC12LiveOracle,
+  theRangeNosqlC12RouteLiveOracle,
   clientSideNetrunnerAcademyEvidence,
   stalkerSqliIdParamLiveOracle,
   stalkerSqliIdParamRouteLiveOracle,

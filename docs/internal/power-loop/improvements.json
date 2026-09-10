@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:the-range.appsec.study",
+      "slug": "the-range-redirect-c9-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/c/9?url=https://... returns HTTP 302 Location to attacker URL (challenges.js C9 open redirect); the-range.appsec.study 502 at ship time — live oracle + route + corpus fallback; benchmark juice-shop.herokuapp.com 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-range.appsec.study",
+      "slug": "the-range-mass-assign-c11-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: PATCH /api/c/11 {\"role\":\"admin\"} returns ok:true role:admin FLAG (challenges.js C11 mass assignment); the-range.appsec.study 502 at ship time — live oracle + route + corpus fallback; benchmark 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-range.appsec.study",
+      "slug": "the-range-nosql-c12-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/c/12 {\"password\":{\"$ne\":null}} returns authenticated:true FLAG (challenges.js C12 NoSQL operator injection); the-range.appsec.study 502 at ship time — live oracle + route + corpus fallback; benchmark 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-range.appsec.study",
       "slug": "the-range-blind-sqli-c2-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /api/c/2?token=' OR '1'='1 flips valid:false→true while benign token stays false; the-range.appsec.study/ findings 9→12 (+the-range-blind-sqli-c2-live-oracle +route); benchmark juice-shop-staging 52 findings 6/6 maintained"

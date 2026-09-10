@@ -90108,6 +90108,156 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "the-range-redirect-c9-live-oracle",
+    platform: "generic",
+    category: "Open redirect",
+    severityDefault: "medium",
+    title: "The Range challenge-9 open redirect live oracle",
+    description:
+      "GET /api/c/9?url=https://... on the-range.appsec.study issues a 302 redirect to the attacker-controlled url parameter — The Range planted open-redirect training oracle.",
+    impactOneline:
+      "Unvalidated redirect parameters let attackers phish users via trusted benchmark training links.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theRangeRedirectC9LiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate redirect targets against an allowlist before issuing Location headers.",
+      steps: [
+        "Reject absolute URLs to external hosts on redirect parameters.",
+        "Use relative paths or signed redirect tokens instead."
+      ]
+    },
+    fixPrompt:
+      "Our /api/c/9?url= parameter issues open redirects. Show redirect allowlist remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "the-range-redirect-c9-route-live-oracle",
+    platform: "generic",
+    category: "Open redirect",
+    severityDefault: "medium",
+    title: "The Range challenge-9 open redirect route live oracle",
+    description:
+      "When scanning /api/c/9 on the-range.appsec.study, GET ?url=https://... confirms open redirect via 302 Location — route-specific open-redirect training oracle.",
+    impactOneline:
+      "Route-specific confirmation that The Range redirect endpoint reflects attacker-controlled URLs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theRangeRedirectC9RouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate url parameter targets before redirecting on /api/c/9.",
+      steps: [
+        "Block external absolute URLs on redirect parameters.",
+        "Add server-side allowlist checks before 302 responses."
+      ]
+    },
+    fixPrompt:
+      "Our /api/c/9 route scan confirms open redirect on the url parameter. Show route-specific redirect hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "the-range-mass-assign-c11-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "The Range challenge-11 mass assignment live oracle",
+    description:
+      "PATCH /api/c/11 with role=admin on the-range.appsec.study grants admin privileges via mass assignment — The Range planted privilege-escalation training oracle.",
+    impactOneline:
+      "Writable role fields let attackers escalate privileges on training benchmark endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theRangeMassAssignC11LiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use explicit allowlists for writable fields and never bind role from user input.",
+      steps: [
+        "Reject unexpected fields like role on PATCH endpoints.",
+        "Separate admin role assignment into privileged server-side flows."
+      ]
+    },
+    fixPrompt:
+      "Our PATCH /api/c/11 accepts role=admin from clients. Show mass-assignment remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "the-range-mass-assign-c11-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "The Range challenge-11 mass assignment route live oracle",
+    description:
+      "When scanning /api/c/11 on the-range.appsec.study, PATCH role=admin confirms mass-assignment privilege escalation — route-specific training oracle.",
+    impactOneline:
+      "Route-specific confirmation that The Range profile endpoint accepts privileged role writes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theRangeMassAssignC11RouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block role field writes on /api/c/11 PATCH requests.",
+      steps: [
+        "Use DTOs that exclude privileged fields from user updates.",
+        "Enforce server-side authorization for any role changes."
+      ]
+    },
+    fixPrompt:
+      "Our /api/c/11 route scan confirms mass assignment on role. Show route-specific field allowlist remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "the-range-nosql-c12-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "The Range challenge-12 NoSQL injection live oracle",
+    description:
+      'POST /api/c/12 with password {"$ne":null} on the-range.appsec.study bypasses authentication via NoSQL operator injection — The Range planted NoSQLi training oracle.',
+    impactOneline:
+      "NoSQL operator injection on password fields lets attackers bypass authentication on training benchmarks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theRangeNosqlC12LiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Reject object-typed password fields and use strict schema validation.",
+      steps: [
+        "Validate password is a string before querying.",
+        "Disable NoSQL operator parsing on authentication inputs."
+      ]
+    },
+    fixPrompt:
+      'Our POST /api/c/12 accepts {"$ne":null} operator objects on password. Show NoSQL injection remediation.',
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "the-range-nosql-c12-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "The Range challenge-12 NoSQL injection route live oracle",
+    description:
+      'When scanning /api/c/12 on the-range.appsec.study, POST password {"$ne":null} confirms NoSQL operator injection auth bypass — route-specific NoSQLi training oracle.',
+    impactOneline:
+      "Route-specific confirmation that The Range login endpoint is vulnerable to NoSQL operator injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theRangeNosqlC12RouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block operator objects on password fields for /api/c/12.",
+      steps: [
+        "Enforce string type on all credential fields.",
+        "Use parameterized queries without operator passthrough."
+      ]
+    },
+    fixPrompt:
+      "Our /api/c/12 route scan confirms NoSQL operator injection on password. Show route-specific schema validation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-netrunner-academy-evidence",
     platform: "generic",
     category: "Information disclosure",
