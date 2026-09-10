@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-10T00:05:02.000Z",
+  "updated_at": "2026-09-10T01:08:00.000Z",
   "priority_discovery_urls": [
     {
       "url": "https://ginandjuice.shop/order/details?orderId=0254809",
@@ -12515,6 +12515,31 @@
     {
       "url": "https://demo.owasp-juice.shop/rest/captcha",
       "source": "OWASP Juice Shop demo \u2014 captcha bypass oracle GET /rest/captcha + POST /api/Feedbacks reuse (Pwning Juice Shop solutions; web search 00 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://labs.hunter2.com/demo",
+      "source": "Hunter2 appsec lab \u2014 Codecademy-style browser demo for developer security training (HN OverTheWire thread; web search 01 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://seclab.vercel.app/labs/rce",
+      "source": "SecLab Vercel playground \u2014 command injection / RCE lab route (seclab.vercel.app labs index; web search 01 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://seclab.vercel.app/labs/jwt",
+      "source": "SecLab Vercel playground \u2014 JWT tampering / alg-none lab route (seclab.vercel.app labs index; web search 01 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/blog",
+      "source": "PortSwigger Gin & Juice Shop \u2014 DOM XSS via prototype pollution on /blog transport_url (pentest-2026-ginandjuice FINDING-003; web search 01 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/resources/subscribe",
+      "source": "PortSwigger Gin & Juice Shop \u2014 newsletter subscribe XSS/SSTI oracle GET /resources/subscribe (ginandjuice.shop/vulnerabilities path table; web search 01 UTC discovery)",
       "auth": "public_demo"
     }
   ]
