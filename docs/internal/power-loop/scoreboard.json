@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-10T04:10:00.000Z",
+  "updated_at": "2026-09-10T04:26:28.981Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 3293,
-  "total_findings": 37150,
+  "total_sites_scanned": 3302,
+  "total_findings": 37241,
   "critical_findings": 63,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2241,
-  "discovery_findings": 28246,
+  "discovery_urls_added": 2246,
+  "discovery_findings": 28286,
   "improvements_shipped": 1732,
-  "last_run": "2026-09-10T04:10:00.000Z",
+  "last_run": "2026-09-10T04:26:28.981Z",
   "last_run_summary": {
     "hour_utc": "04",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 52,
+      "oracle_findings": 51,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 595,
+      "probes_run": 597,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,39 +48,42 @@
           ]
         }
       },
-      "note": "Primary Heroku stable 6/6 (52 findings, secret-resend present) — no category gaps"
+      "note": "Primary Heroku stable 6/6 (51 findings, secret-resend present) — no category gaps"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 4,
-      "findings": 21,
-      "focus": "sqli.vulnlab second-order live oracle reliability + seclab /labs/rce+jwt route oracles + ginandjuice /resources/subscribe alias",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 40,
+      "focus": "vulnlab union/stored/dom/filtered + qabash sample-api users/graphql + ginandjuice change-email + vulnbank register",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, gap=[], secret-resend present)",
-      "sqli.vulnlab.dev/second-order/: 2→3 findings — second-order live oracle userId extraction fix shipped",
-      "seclab.vercel.app/labs/rce: 5→6 findings — seclab-rce-labs-route-live-oracle shipped",
-      "seclab.vercel.app/labs/jwt: 5→6 findings — seclab-jwt-labs-route-live-oracle shipped",
-      "ginandjuice.shop/resources/subscribe: 4→6 findings — ginandjuice-resources-subscribe-route-live-oracle shipped"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, gap=[], secret-resend present)",
+      "sqli.vulnlab.dev/union/: 3 findings — union-based SQLi route oracle",
+      "xss.vulnlab.dev/stored/: 3 findings — stored XSS route oracle",
+      "xss.vulnlab.dev/dom/: 4 findings — DOM XSS route oracle",
+      "ssti.vulnlab.dev/filtered/: 3 findings — filtered SSTI route oracle",
+      "www.qabash.com/api/tools/sample-api/users: 6 findings — BOLA/users API oracle",
+      "www.qabash.com/api/tools/sample-api/graphql: 6 findings — GraphQL introspection oracle",
+      "ginandjuice.shop/my-account/change-email: 6 findings — account takeover email change oracle",
+      "vulnbank.org/register: 9 findings — registration weak-validation oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "appsec.study labs (nomnom, the-range, latty6, graph) queued but not yet scanned — behind priority queue",
-      "queue pending: labs.hunter2.com/demo, ginandjuice /blog, netrunner-academy.vercel.app"
+      "newly queued dvga2/prompt-injection-demo-bice/Exploit-Lab/import_paste not yet scanned — behind priority queue",
+      "appsec.study labs (nomnom, the-range, latty6, graph) + netrunner-academy still pending"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 52,
-    "sqli.vulnlab.dev/second-order": 3,
-    "seclab.vercel.app/labs/rce": 6,
-    "seclab.vercel.app/labs/jwt": 6,
-    "ginandjuice.shop/resources/subscribe": 6,
-    "vulnbank.org/transfer": 8,
-    "pwnshop.ctfsecurity.com/seller/preview": 5,
-    "wrongsecrets.herokuapp.com/challenge/challenge-44": 13,
-    "sqli.vulnlab.dev/blind-bool": 3,
-    "xss.vulnlab.dev/csp-bypass": 4
+    "juice-shop.herokuapp.com": 51,
+    "vulnbank.org/register": 9,
+    "ginandjuice.shop/my-account/change-email": 6,
+    "www.qabash.com/api/tools/sample-api/users": 6,
+    "www.qabash.com/api/tools/sample-api/graphql": 6,
+    "xss.vulnlab.dev/dom": 4,
+    "sqli.vulnlab.dev/union": 3,
+    "xss.vulnlab.dev/stored": 3,
+    "ssti.vulnlab.dev/filtered": 3
   }
 }

@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-10T03:12:00.000Z",
+  "updated_at": "2026-09-10T04:20:00.000Z",
   "priority_discovery_urls": [
     {
       "url": "https://owasp.andreabrioschi.it/",
@@ -12591,6 +12591,31 @@
       "url": "https://netrunner-academy.vercel.app",
       "source": "yehan-s/netrunner-academy \u2014 interactive web security simulator with 30+ CTF levels (SQLi, XSS, IDOR, JWT, GraphQL; GitHub README; web search 03 UTC discovery)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://dvga2.tools.escape.tech/graphql",
+      "source": "Damn Vulnerable GraphQL v2 \u2014 GraphQL SSRF/XSS/IDOR/DoS oracle POST /graphql (dvga2.tools.escape.tech; web search 04 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvga2.tools.escape.tech/",
+      "source": "Damn Vulnerable GraphQL v2 \u2014 Expert/Beginner mode hub + X-DVGA-MODE header docs (dvga2.tools.escape.tech; web search 04 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://prompt-injection-demo-bice.vercel.app/",
+      "source": "hanif-rasyidi/prompt-injection-demo \u2014 Acme SaaS LLM01-04 attack/defense surfaces (AIBC 2026 talk; web search 04 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://nn0z.github.io/Exploit-Lab/",
+      "source": "nn0z/Exploit-Lab \u2014 browser sandbox with 8 vuln challenges (SQLi, XSS, IDOR, CmdI, LFI, SSRF, SSTI, XXE; GitHub README; web search 04 UTC discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://dvga.tools.escape.tech/import_paste",
+      "source": "Damn Vulnerable GraphQL \u2014 SSRF via import_paste GraphQL mutation (dvga.tools.escape.tech; web search 04 UTC discovery)",
+      "auth": "public_demo"
     }
   ]
 }
