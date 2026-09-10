@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-10T20:05:00.000Z",
+  "updated_at": "2026-09-10T21:03:32.815Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://nimbus.appsec.study/api/files/1",
+      "source": "zzzteph/appsec.study Nimbus — cloud file-share file IDOR oracle GET /api/files/:id (share-password bypass + path traversal; appsec.study catalog; web search 21 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://blindspot.appsec.study/api/search",
+      "source": "zzzteph/appsec.study Blindspot — boolean/time blind SQLi oracle GET /api/search (errors suppressed; appsec.study edge-case catalog; web search 21 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://helpdeskai.appsec.study/api/agent/run",
+      "source": "zzzteph/appsec.study HelpDeskAI — excessive agency RCE oracle POST /api/agent/run run_diagnostic shell tool (OWASP LLM Top 10; appsec.study catalog; web search 21 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://edgecam.appsec.study/api/firmware/upload",
+      "source": "zzzteph/appsec.study EdgeCam NVR-2000 — unauth firmware upload → RCE oracle POST /api/firmware/upload (IoT embedded admin; appsec.study catalog; web search 21 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://shellshock.appsec.study/cgi-bin/status.cgi",
+      "source": "zzzteph/appsec.study Shellshock — CVE-2014-6271 bash CGI RCE oracle User-Agent/Referer injection (appsec.study known-CVE catalog; web search 21 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://meridian.appsec.study/oauth/authorize",
       "source": "zzzteph/appsec.study Meridian ID — OAuth2 redirect_uri bypass oracle GET /oauth/authorize (appsec.study SSO catalog; web search 20 UTC discovery)",
