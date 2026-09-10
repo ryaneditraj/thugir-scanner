@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-10T20:05:47.643Z",
-  "total": 3588,
-  "uniqueSlugs": 3580,
+  "generatedAt": "2026-09-10T21:07:23.528Z",
+  "total": 3594,
+  "uniqueSlugs": 3586,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3570,
+    "generic": 3576,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3503,
+    "deep": 3509,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 714,
+    "Broken access control": 720,
     "Exposed secret": 122,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -1133,6 +1133,8 @@
     "code-breaking-medium-route-live-oracle",
     "code-breaking-puzzle-language-route-live-oracle",
     "code-breaking-puzzle-route-live-oracle",
+    "cogwork-workflows-idor-live-oracle",
+    "cogwork-workflows-idor-route-live-oracle",
     "command-injection-form-probe",
     "compass-demo-angularjs-route-live-oracle",
     "compass-demo-angularjs-xss-live-oracle",
@@ -1955,6 +1957,8 @@
     "firing-range-urldom-sink-route-live-oracle",
     "firing-range-vulnerablelibraries-live-oracle",
     "firing-range-vulnerablelibraries-route-live-oracle",
+    "frontdesk-reservations-idor-live-oracle",
+    "frontdesk-reservations-idor-route-live-oracle",
     "frontend-xss-demo-insecure-dom-xss-live-oracle",
     "frontend-xss-demo-insecure-dom-xss-route-live-oracle",
     "ghost-orders-bola-live-oracle",
@@ -2661,6 +2665,8 @@
     "riglabs-cyber-lab-dead-route-live-oracle",
     "riglabs-cyber-lab-dead-route-route-live-oracle",
     "robots-sensitive-paths",
+    "rollhouse-promo-redeem-abuse-live-oracle",
+    "rollhouse-promo-redeem-abuse-route-live-oracle",
     "sanitize-web-relaxed-bypass-live-oracle",
     "sanitize-web-relaxed-bypass-route-live-oracle",
     "sec-research-lab-command-injection-route-live-oracle",

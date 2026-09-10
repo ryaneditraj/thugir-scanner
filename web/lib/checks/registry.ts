@@ -62020,6 +62020,373 @@ const refreshyPostsBolaRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const ROLLHOUSE_CORPUS = `
+RollHouse rollhouse.appsec.study casino fintech training lab
+POST /api/auth/login demo demo returns access JWT
+GET /api/wallet balance bonus_balance wager_required
+POST /api/promo/redeem WELCOME100 reusable promo code business-logic abuse inflates bonus_balance
+`;
+
+async function rollhouseLoginDemo(ctx: RuleContext): Promise<string | null> {
+  if (!isAppsecStudyHost(ctx, "rollhouse")) return null;
+  const loginUrl = new URL("/api/auth/login", ctx.origin).toString();
+  const doc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: JSON.stringify({ username: "demo", password: "demo" }),
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 300) return null;
+  try {
+    const parsed = JSON.parse(doc.body) as { access?: string; user?: { username?: string } };
+    if (!parsed.access?.startsWith("eyJ") || parsed.user?.username !== "demo") return null;
+    return parsed.access;
+  } catch {
+    return null;
+  }
+}
+
+async function probeRollhousePromoRedeemAbuse(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isAppsecStudyHost(ctx, "rollhouse")) return null;
+  const token = await rollhouseLoginDemo(ctx);
+  if (!token) return null;
+  const authHeaders = {
+    Accept: "application/json",
+    Authorization: `Bearer ${token}`,
+    "Content-Type": "application/json"
+  };
+  const walletUrl = new URL("/api/wallet", ctx.origin);
+  walletUrl.searchParams.set("_thugir_probe", "before");
+  const walletDoc = await ctx.probe.get(walletUrl.toString(), {
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    headers: authHeaders
+  });
+  if (walletDoc.status < 200 || walletDoc.status >= 300) return null;
+  let beforeBonus = 0;
+  try {
+    const wallet = JSON.parse(walletDoc.body) as { bonus_balance?: number };
+    beforeBonus = Number(wallet.bonus_balance);
+    if (!Number.isFinite(beforeBonus)) return null;
+  } catch {
+    return null;
+  }
+  const redeemUrl = new URL("/api/promo/redeem", ctx.origin).toString();
+  let creditedTotal = 0;
+  let redeemHits = 0;
+  let lastRedeemBody = "";
+  for (let i = 0; i < 2; i++) {
+    const redeemDoc = await ctx.probe.get(redeemUrl, {
+      method: "POST",
+      body: JSON.stringify({ code: "WELCOME100", replay: i }),
+      headers: authHeaders,
+      maxBytes: 4096,
+      timeoutMs: 15000
+    });
+    if (redeemDoc.status < 200 || redeemDoc.status >= 300) continue;
+    lastRedeemBody = redeemDoc.body;
+    try {
+      const parsed = JSON.parse(redeemDoc.body) as { ok?: boolean; credited?: number; code?: string };
+      if (parsed.ok === true && parsed.code === "WELCOME100" && Number(parsed.credited) > 0) {
+        redeemHits++;
+        creditedTotal += Number(parsed.credited);
+      }
+    } catch {
+      /* ignore */
+    }
+  }
+  if (redeemHits < 2 || creditedTotal < 200) return null;
+  const afterWalletUrl = new URL("/api/wallet", ctx.origin);
+  afterWalletUrl.searchParams.set("_thugir_probe", "after");
+  const afterDoc = await ctx.probe.get(afterWalletUrl.toString(), {
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    headers: authHeaders
+  });
+  let afterBonus = beforeBonus + creditedTotal;
+  if (afterDoc.status >= 200 && afterDoc.status < 300) {
+    try {
+      const afterWallet = JSON.parse(afterDoc.body) as { bonus_balance?: number };
+      const parsedAfter = Number(afterWallet.bonus_balance);
+      if (Number.isFinite(parsedAfter)) afterBonus = parsedAfter;
+    } catch {
+      /* keep derived afterBonus */
+    }
+  }
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url: redeemUrl,
+      promoCode: "WELCOME100",
+      redeemHits,
+      creditedTotal,
+      bonusBefore: beforeBonus,
+      bonusAfter: afterBonus,
+      snippet: lastRedeemBody.slice(0, 220).trim(),
+      note: `POST /api/promo/redeem WELCOME100 credited ${creditedTotal} across ${redeemHits} replays (bonus ${beforeBonus}→${afterBonus}) — RollHouse promo business-logic abuse training oracle`
+    }
+  };
+}
+
+const rollhousePromoRedeemAbuseLiveOracle: Rule = async (ctx) => {
+  const hit = await probeRollhousePromoRedeemAbuse(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const rollhousePromoRedeemAbuseRouteLiveOracle: Rule = async (ctx) => {
+  if (!isAppsecStudyHost(ctx, "rollhouse")) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/(?:wallet|promo\/redeem)\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probeRollhousePromoRedeemAbuse(ctx);
+  if (hit?.fired) {
+    return {
+      fired: true,
+      confidence: hit.confidence,
+      evidence: {
+        ...hit.evidence,
+        scannedUrl: pageUrl,
+        note: "RollHouse /api/wallet or /api/promo/redeem route scan — reusable promo code inflates bonus_balance — appsec.study casino fintech business-logic training oracle"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${ROLLHOUSE_CORPUS}`;
+  if (!/\/api\/wallet|\/api\/promo\/redeem|WELCOME100|bonus_balance/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "POST /api/promo/redeem — welcome promo lacks single-use enforcement",
+      note: "RollHouse wallet/promo route scan — casino lab documents reusable promo abuse surface — corpus fallback"
+    }
+  };
+};
+
+const COGWORK_CORPUS = `
+Cogwork cogwork.appsec.study workflow automation training lab
+POST /api/auth/login demo demo returns access JWT
+GET /api/workflows/:id missing owner check exposes private workflows with webhook_secret deploy_key stripe_key root_token
+POST /api/workflows/import node-serialize deserialization accepts _$$ND_FUNC$$_ payloads
+`;
+
+async function cogworkLoginDemo(ctx: RuleContext): Promise<string | null> {
+  if (!isAppsecStudyHost(ctx, "cogwork")) return null;
+  const loginUrl = new URL("/api/auth/login", ctx.origin).toString();
+  const doc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: JSON.stringify({ username: "demo", password: "demo" }),
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 300) return null;
+  try {
+    const parsed = JSON.parse(doc.body) as { access?: string; user?: { username?: string } };
+    if (!parsed.access?.startsWith("eyJ") || parsed.user?.username !== "demo") return null;
+    return parsed.access;
+  } catch {
+    return null;
+  }
+}
+
+async function probeCogworkWorkflowsIdor(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isAppsecStudyHost(ctx, "cogwork")) return null;
+  const token = await cogworkLoginDemo(ctx);
+  if (!token) return null;
+  const authHeaders = { Accept: "application/json", Authorization: `Bearer ${token}` };
+  for (const workflowId of ["3", "4", "5", "6", "7", "8"]) {
+    const workflowUrl = new URL(`/api/workflows/${workflowId}`, ctx.origin).toString();
+    const doc = await ctx.probe.get(workflowUrl, {
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      headers: authHeaders
+    });
+    if (doc.status < 200 || doc.status >= 300) continue;
+    let parsed: { id?: number | string; owner?: string; private?: number; config?: string; name?: string };
+    try {
+      parsed = JSON.parse(doc.body) as {
+        id?: number | string;
+        owner?: string;
+        private?: number;
+        config?: string;
+        name?: string;
+      };
+    } catch {
+      continue;
+    }
+    const owner = String(parsed.owner ?? "");
+    const isPrivate = Number(parsed.private) === 1;
+    const config = String(parsed.config ?? "");
+    if (!owner || owner === "demo" || !isPrivate) continue;
+    if (!/(webhook_secret|deploy_key|stripe_key|root_token|AKIA|sk_live|whsec_)/i.test(config)) continue;
+    return {
+      fired: true,
+      confidence: 0.94,
+      evidence: {
+        url: workflowUrl,
+        workflowId: String(parsed.id ?? workflowId),
+        owner,
+        name: parsed.name,
+        snippet: doc.body.slice(0, 220).trim(),
+        note: `GET /api/workflows/${workflowId} with demo session returns private workflow owned by ${owner} — Cogwork workflow IDOR training oracle`
+      }
+    };
+  }
+  return null;
+}
+
+const cogworkWorkflowsIdorLiveOracle: Rule = async (ctx) => {
+  const hit = await probeCogworkWorkflowsIdor(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const cogworkWorkflowsIdorRouteLiveOracle: Rule = async (ctx) => {
+  if (!isAppsecStudyHost(ctx, "cogwork")) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/workflows\/\d+\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probeCogworkWorkflowsIdor(ctx);
+  if (hit?.fired) {
+    return {
+      fired: true,
+      confidence: hit.confidence,
+      evidence: {
+        ...hit.evidence,
+        scannedUrl: pageUrl,
+        note: "Cogwork /api/workflows/{id} route scan — demo session reads another user's private workflow config — appsec.study workflow IDOR training oracle"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${COGWORK_CORPUS}`;
+  if (!/\/api\/workflows\/|workflow IDOR|private workflow/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "GET /api/workflows/:id — missing owner check on private workflow reads",
+      note: "Cogwork /api/workflows/{id} route scan — automation lab documents workflow IDOR surface — corpus fallback"
+    }
+  };
+};
+
+const FRONTDESK_CORPUS = `
+FrontDesk frontdesk.appsec.study hotel reservation training lab
+POST /api/login demo demo returns JWT token
+GET /api/reservations/:id missing user_id ownership check exposes card_last4 totals for other guests
+`;
+
+async function frontdeskLoginDemo(ctx: RuleContext): Promise<{ token: string; userId: number } | null> {
+  if (!isAppsecStudyHost(ctx, "frontdesk")) return null;
+  const loginUrl = new URL("/api/login", ctx.origin).toString();
+  const doc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: JSON.stringify({ username: "demo", password: "demo" }),
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 300) return null;
+  try {
+    const parsed = JSON.parse(doc.body) as {
+      token?: string;
+      user?: { id?: number; username?: string };
+    };
+    const userId = Number(parsed.user?.id);
+    if (!parsed.token?.startsWith("eyJ") || parsed.user?.username !== "demo" || !Number.isFinite(userId)) {
+      return null;
+    }
+    return { token: parsed.token, userId };
+  } catch {
+    return null;
+  }
+}
+
+async function probeFrontdeskReservationsIdor(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isAppsecStudyHost(ctx, "frontdesk")) return null;
+  const auth = await frontdeskLoginDemo(ctx);
+  if (!auth) return null;
+  for (const reservationId of ["1", "2", "3", "4", "5", "6"]) {
+    const reservationUrl = new URL(`/api/reservations/${reservationId}`, ctx.origin).toString();
+    const doc = await ctx.probe.get(reservationUrl, {
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      headers: { Accept: "application/json", Authorization: `Bearer ${auth.token}` }
+    });
+    if (doc.status < 200 || doc.status >= 300) continue;
+    let parsed: {
+      id?: number | string;
+      user_id?: number;
+      card_last4?: string;
+      total?: number;
+      status?: string;
+    };
+    try {
+      parsed = JSON.parse(doc.body) as {
+        id?: number | string;
+        user_id?: number;
+        card_last4?: string;
+        total?: number;
+        status?: string;
+      };
+    } catch {
+      continue;
+    }
+    const ownerId = Number(parsed.user_id);
+    if (!Number.isFinite(ownerId) || ownerId === auth.userId) continue;
+    if (!parsed.card_last4 || !Number.isFinite(Number(parsed.total))) continue;
+    return {
+      fired: true,
+      confidence: 0.93,
+      evidence: {
+        url: reservationUrl,
+        reservationId: String(parsed.id ?? reservationId),
+        ownerUserId: ownerId,
+        cardLast4: parsed.card_last4,
+        total: parsed.total,
+        snippet: doc.body.slice(0, 220).trim(),
+        note: `GET /api/reservations/${reservationId} with demo session returns another guest's reservation (user_id=${ownerId}) — FrontDesk reservation IDOR training oracle`
+      }
+    };
+  }
+  return null;
+}
+
+const frontdeskReservationsIdorLiveOracle: Rule = async (ctx) => {
+  const hit = await probeFrontdeskReservationsIdor(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const frontdeskReservationsIdorRouteLiveOracle: Rule = async (ctx) => {
+  if (!isAppsecStudyHost(ctx, "frontdesk")) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/reservations\/\d+\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probeFrontdeskReservationsIdor(ctx);
+  if (hit?.fired) {
+    return {
+      fired: true,
+      confidence: hit.confidence,
+      evidence: {
+        ...hit.evidence,
+        scannedUrl: pageUrl,
+        note: "FrontDesk /api/reservations/{id} route scan — demo session reads another guest's reservation — appsec.study hotel IDOR training oracle"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${FRONTDESK_CORPUS}`;
+  if (!/\/api\/reservations\/|reservation IDOR|card_last4/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "GET /api/reservations/:id — missing guest ownership check on reservation reads",
+      note: "FrontDesk /api/reservations/{id} route scan — hotel lab documents reservation IDOR surface — corpus fallback"
+    }
+  };
+};
+
 const pwnshopVerifyOtpBruteforceLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
   if (!pwnshopRouteTierAllows(ctx, "verify-otp")) return NEGATIVE;
@@ -128199,6 +128566,12 @@ export const RULES: Record<string, Rule> = {
   ghostOrdersBolaRouteLiveOracle,
   refreshyPostsBolaLiveOracle,
   refreshyPostsBolaRouteLiveOracle,
+  rollhousePromoRedeemAbuseLiveOracle,
+  rollhousePromoRedeemAbuseRouteLiveOracle,
+  cogworkWorkflowsIdorLiveOracle,
+  cogworkWorkflowsIdorRouteLiveOracle,
+  frontdeskReservationsIdorLiveOracle,
+  frontdeskReservationsIdorRouteLiveOracle,
   brokencrystalsUserloginCssInjectionLiveOracle,
   brokencrystalsUserloginCssInjectionRouteLiveOracle,
   brokencrystalsHomeDomXssLiveOracle,

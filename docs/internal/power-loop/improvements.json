@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:rollhouse.appsec.study",
+      "slug": "rollhouse-promo-redeem-abuse-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/auth/login demo/demo then POST /api/promo/redeem WELCOME100 twice returns ok:true credited:100 each replay; rollhouse.appsec.study/api/wallet findings 3→5 (+rollhouse-promo-redeem-abuse-live-oracle +route); benchmark juice-shop.herokuapp.com 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:cogwork.appsec.study",
+      "slug": "cogwork-workflows-idor-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/auth/login demo/demo then GET /api/workflows/3 returns private workflow owner=mia with webhook_secret whsec_mia_9f2a; cogwork.appsec.study/api/workflows/1 findings 3→5 (+cogwork-workflows-idor-live-oracle +route); benchmark 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:frontdesk.appsec.study",
+      "slug": "frontdesk-reservations-idor-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/login demo/demo then GET /api/reservations/1 returns user_id=2 card_last4=4471 while demo user id=1; frontdesk.appsec.study/api/reservations/1 findings 4→5 (+frontdesk-reservations-idor-live-oracle +route); benchmark 51 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:shoppy.appsec.study",
       "slug": "shoppy-orders-bola-live-oracle",
       "status": "shipped",

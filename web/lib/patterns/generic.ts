@@ -91760,5 +91760,158 @@ export const genericPatterns: Pattern[] = [
       "Our refreshy /api/posts/:id route scan confirms cross-author post edits. Show route-specific ownership checks.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "rollhouse-promo-redeem-abuse-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "RollHouse promo redeem abuse live oracle",
+    description:
+      "POST /api/promo/redeem on rollhouse.appsec.study lets demo replay WELCOME100 to inflate bonus_balance without single-use enforcement — the RollHouse casino fintech business-logic training oracle.",
+    impactOneline:
+      "Reusable welcome promos let players mint unlimited bonus credits and bypass wagering controls.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "rollhousePromoRedeemAbuseLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce one-time promo redemption per account.",
+      steps: [
+        "Track redeemed promo codes per user_id and reject duplicates.",
+        "Cap bonus credits from marketing campaigns with server-side limits.",
+        "Run rollhouse only on isolated appsec.study training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our POST /api/promo/redeem allows replaying WELCOME100 to inflate bonus_balance. Show single-use promo enforcement.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "rollhouse-promo-redeem-abuse-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "RollHouse promo redeem abuse route live oracle",
+    description:
+      "When scanning /api/wallet or /api/promo/redeem on rollhouse.appsec.study, reusable promo codes inflate bonus_balance — route-specific casino business-logic training oracle.",
+    impactOneline:
+      "Route-specific confirmation that RollHouse wallet/promo endpoints lack single-use promo enforcement.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "rollhousePromoRedeemAbuseRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bind promo redemption to a single account use.",
+      steps: [
+        "Reject duplicate WELCOME100 redemptions with 409 responses.",
+        "Audit wallet bonus mutations for replayable marketing endpoints."
+      ]
+    },
+    fixPrompt:
+      "Our rollhouse wallet/promo route scan confirms reusable promo abuse. Show route-specific business-logic fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "cogwork-workflows-idor-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Cogwork workflow IDOR live oracle",
+    description:
+      "GET /api/workflows/:id on cogwork.appsec.study with a demo session returns another user's private workflow config including webhook_secret and deploy keys — the Cogwork automation workflow IDOR training oracle.",
+    impactOneline:
+      "Missing workflow ownership checks leak private automation configs and embedded cloud credentials.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "cogworkWorkflowsIdorLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce workflow owner checks on by-id reads.",
+      steps: [
+        "Compare workflow.owner to the authenticated subject before returning config JSON.",
+        "Return 404 for cross-user private workflow access.",
+        "Run cogwork only on isolated appsec.study training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our GET /api/workflows/:id leaks other users' private workflow configs. Show owner-scoped authorization.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "cogwork-workflows-idor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Cogwork workflow IDOR route live oracle",
+    description:
+      "When scanning /api/workflows/:id on cogwork.appsec.study, demo session reads another user's private workflow — route-specific automation IDOR training oracle.",
+    impactOneline:
+      "Route-specific confirmation that Cogwork workflow routes expose cross-user private configs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "cogworkWorkflowsIdorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Scope workflow routes to the authenticated owner.",
+      steps: [
+        "Reject cross-user workflow fetches with consistent 404 responses.",
+        "Redact webhook_secret and deploy_key fields from unauthorized reads."
+      ]
+    },
+    fixPrompt:
+      "Our cogwork /api/workflows/:id route scan confirms workflow IDOR. Show route-specific ownership checks.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "frontdesk-reservations-idor-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "FrontDesk reservation IDOR live oracle",
+    description:
+      "GET /api/reservations/:id on frontdesk.appsec.study with a demo session returns another guest's reservation including card_last4 and totals — the FrontDesk hotel reservation IDOR training oracle.",
+    impactOneline:
+      "Missing guest ownership checks on reservation reads expose payment card fragments and stay details.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "frontdeskReservationsIdorLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce reservation ownership on by-id reads.",
+      steps: [
+        "Compare reservation.user_id to the authenticated guest before returning PII.",
+        "Return 404 for cross-guest reservation access instead of leaking existence.",
+        "Run frontdesk only on isolated appsec.study training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our GET /api/reservations/:id leaks other guests' reservations. Show guest-scoped authorization.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "frontdesk-reservations-idor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "FrontDesk reservation IDOR route live oracle",
+    description:
+      "When scanning /api/reservations/:id on frontdesk.appsec.study, demo session reads another guest's reservation — route-specific hotel IDOR training oracle.",
+    impactOneline:
+      "Route-specific confirmation that FrontDesk reservation routes expose cross-guest PII.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "frontdeskReservationsIdorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Scope reservation routes to the authenticated guest.",
+      steps: [
+        "Reject cross-guest reservation fetches with consistent 404 responses.",
+        "Audit card_last4 exposure on reservation detail endpoints."
+      ]
+    },
+    fixPrompt:
+      "Our frontdesk /api/reservations/:id route scan confirms reservation IDOR. Show route-specific guest authorization.",
+    version: 1,
+    enabled: true
   }
 ];
