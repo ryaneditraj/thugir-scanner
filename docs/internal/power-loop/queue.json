@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-10T11:28:31.094Z",
+  "updated_at": "2026-09-10T12:16:04.231Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://boxcutter.appsec.study/api/auth/token",
+      "source": "zzzteph/appsec.study boxcutter-store — JWT auth token oracle + leaked signing key in /static/js/config.js (appsec.study README; web search 12 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://nomnom.appsec.study/api/auth-test",
+      "source": "zzzteph/appsec.study nomnom — debug auth-test endpoint leaks admin creds GET /api/auth-test (appsec.study; web search 12 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://graph.appsec.study/graphql",
+      "source": "zzzteph/appsec.study graph — GraphQL recentUsers excessive data exposure POST /graphql (appsec.study; web search 12 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://stalker.appsec.study/.git/config",
+      "source": "zzzteph/appsec.study stalker — leaked VCS artifacts oracle /.git/config + hidden admin panel chain (appsec.study; web search 12 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://the-range.appsec.study/api/c/10",
+      "source": "zzzteph/appsec.study the-range — reflected XSS challenge c10 oracle GET /api/c/10 (challenges.js; web search 12 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://avishayil.github.io/dvah/",
       "source": "avishayil/dvah — Damn Vulnerable Agent Harness 14-lab agent runtime exploit/patch/prove platform (GitHub homepage; web search 11 UTC discovery)",
@@ -12825,6 +12850,31 @@
     {
       "url": "https://frontdesk.appsec.study",
       "source": "zzzteph/appsec.study — FrontDesk hotel booking edge/proxy lab (appsec.study catalog; web search 10 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://boxcutter.appsec.study/api/auth/token",
+      "source": "zzzteph/appsec.study boxcutter-store — JWT auth token oracle + leaked signing key in /static/js/config.js (appsec.study README; web search 12 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://nomnom.appsec.study/api/auth-test",
+      "source": "zzzteph/appsec.study nomnom — debug auth-test endpoint leaks admin creds GET /api/auth-test (appsec.study; web search 12 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://graph.appsec.study/graphql",
+      "source": "zzzteph/appsec.study graph — GraphQL recentUsers excessive data exposure POST /graphql (appsec.study; web search 12 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://stalker.appsec.study/.git/config",
+      "source": "zzzteph/appsec.study stalker — leaked VCS artifacts oracle /.git/config + hidden admin panel chain (appsec.study; web search 12 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://the-range.appsec.study/api/c/10",
+      "source": "zzzteph/appsec.study the-range — reflected XSS challenge c10 oracle GET /api/c/10 (challenges.js; web search 12 UTC discovery)",
       "auth": "public_demo"
     }
   ]
