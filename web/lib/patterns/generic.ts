@@ -89802,6 +89802,159 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "the-range-ssti-c5-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "The Range challenge-5 SSTI live oracle",
+    description:
+      "POST /api/c/5 with tpl={{7*7}} on the-range.appsec.study evaluates nunjucks server-side template injection — The Range planted SSTI training oracle.",
+    impactOneline:
+      "Unsandboxed template engines let attackers execute server-side code via user-controlled tpl parameters on training benchmarks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theRangeSstiC5LiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never render user-controlled strings with a full template engine.",
+      steps: [
+        "Use logic-less templating or strict allowlists for dynamic content.",
+        "Sandbox template engines and disable dangerous filters.",
+        "Run The Range only on isolated appsec.study training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/c/5 tpl parameter evaluates nunjucks expressions like {{7*7}}. Show SSTI-safe templating remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "the-range-ssti-c5-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "The Range challenge-5 SSTI route live oracle",
+    description:
+      "When scanning /api/c/5 on the-range.appsec.study, POST tpl={{7*7}} confirms server-side template injection — route-specific SSTI training oracle.",
+    impactOneline:
+      "Route-specific confirmation that The Range template endpoint is vulnerable to SSTI.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theRangeSstiC5RouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sandbox or eliminate server-side template evaluation on user input.",
+      steps: [
+        "Reject template syntax in tpl parameters.",
+        "Use static templates with bound variables only."
+      ]
+    },
+    fixPrompt:
+      "Our /api/c/5 route scan confirms SSTI on the tpl parameter. Show route-specific template sandbox remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "the-range-jwt-none-c8-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "The Range challenge-8 JWT alg:none live oracle",
+    description:
+      "GET /api/c/8 on the-range.appsec.study accepts unsigned alg:none JWT with admin:true — The Range planted JWT bypass training oracle.",
+    impactOneline:
+      "Accepting alg:none JWTs lets attackers forge admin tokens without a valid signature on training benchmark endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theRangeJwtNoneC8LiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Reject JWTs with alg:none and always verify signatures with an allowlisted algorithm.",
+      steps: [
+        "Disallow the none algorithm in JWT verification libraries.",
+        "Require HMAC or asymmetric signature validation for all tokens.",
+        "Run The Range only on isolated appsec.study training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/c/8 endpoint accepts alg:none JWTs with admin:true. Show JWT verification hardening remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "the-range-jwt-none-c8-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "The Range challenge-8 JWT route live oracle",
+    description:
+      "When scanning /api/c/8 on the-range.appsec.study, forged alg:none admin JWT returns FLAG — route-specific JWT bypass training oracle.",
+    impactOneline:
+      "Route-specific confirmation that The Range admin gate accepts unsigned JWT tokens.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theRangeJwtNoneC8RouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce strict JWT algorithm allowlists on protected routes.",
+      steps: [
+        "Reject unsigned tokens at the route middleware layer.",
+        "Use asymmetric keys with explicit alg validation."
+      ]
+    },
+    fixPrompt:
+      "Our /api/c/8 route scan confirms JWT alg:none bypass. Show route-specific JWT verification remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "the-range-xxe-c7-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "The Range challenge-7 XXE live oracle",
+    description:
+      "POST /api/c/7 on the-range.appsec.study expands external XML entities from file:// URIs — The Range planted XXE training oracle.",
+    impactOneline:
+      "XML external entity expansion lets attackers read local files via training benchmark import endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theRangeXxeC7LiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable external entity resolution in XML parsers.",
+      steps: [
+        "Use parsers with DTD and external entity processing disabled.",
+        "Validate XML content types and reject DOCTYPE declarations.",
+        "Run The Range only on isolated appsec.study training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/c/7 XML import expands file:// external entities. Show XXE-safe XML parsing remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "the-range-xxe-c7-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "The Range challenge-7 XXE route live oracle",
+    description:
+      "When scanning /api/c/7 on the-range.appsec.study, POST XML with SYSTEM entities confirms XXE — route-specific XXE training oracle.",
+    impactOneline:
+      "Route-specific confirmation that The Range XML import endpoint resolves external entities.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theRangeXxeC7RouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block DTD and external entities on XML import routes.",
+      steps: [
+        "Reject DOCTYPE in request bodies.",
+        "Use streaming parsers with entity expansion limits."
+      ]
+    },
+    fixPrompt:
+      "Our /api/c/7 route scan confirms XXE via external entities. Show route-specific XML parser hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-netrunner-academy-evidence",
     platform: "generic",
     category: "Information disclosure",
