@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-10T12:16:04.231Z",
+  "updated_at": "2026-09-10T13:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://dvwa.appsec.study/vulnerabilities/sqli/",
+      "source": "zzzteph/appsec.study DVWA fork — classic SQLi module at low security (appsec.study catalog; web search 13 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://northwind.appsec.study/api/accounts/1",
+      "source": "zzzteph/appsec.study Northwind Bank — neobank IDOR on accounts/transfers (appsec.study catalog; web search 13 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://mongoleak.appsec.study/api/auth/login",
+      "source": "zzzteph/appsec.study MongoLeak — NoSQL operator-injection auth bypass POST /api/auth/login (appsec.study catalog; web search 13 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://xmlgov.appsec.study/service",
+      "source": "zzzteph/appsec.study XmlGov — legacy SOAP XXE/WSDL enumeration POST /service (appsec.study catalog; web search 13 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://edgecam.appsec.study",
+      "source": "zzzteph/appsec.study EdgeCam NVR-2000 — IoT default creds + header auth-bypass + cmd-injection (appsec.study catalog; web search 13 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://boxcutter.appsec.study/api/auth/token",
       "source": "zzzteph/appsec.study boxcutter-store — JWT auth token oracle + leaked signing key in /static/js/config.js (appsec.study README; web search 12 UTC discovery)",
