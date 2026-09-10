@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:captcha.appsec.study",
+      "slug": "captcha-run-rce-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/captcha → FNV-1a PoW nonce → POST /api/captcha/verify → POST /api/login demo/demo → POST /api/run cmd=id returns {\"output\":\"uid=0(root) gid=0(root) groups=0(root)\\n\"}; captcha.appsec.study/ findings 5→7 (+captcha-run-rce-live-oracle +captcha-pow-login-jwt-live-oracle); benchmark juice-shop.herokuapp.com 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:captcha.appsec.study",
+      "slug": "captcha-pow-login-jwt-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/captcha/verify with PoW nonce returns captchaToken; POST /api/login returns access+refresh JWT pair; captcha.appsec.study/ findings 5→7; benchmark 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:helpdeskai.appsec.study/api/chat",
+      "slug": "helpdeskai-chat-rag-exfil-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/login demo/demo then POST /api/chat prompt injection leaks MASTER_API_KEY=hd_live_9f3c17ab55e24d80 via search_kb internal:true agent trace; helpdeskai.appsec.study/api/chat findings 3→5 (+helpdeskai-chat-rag-exfil-live-oracle +route); benchmark 50 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:reggie.appsec.study",
       "slug": "reggie-run-rce-live-oracle",
       "status": "shipped",

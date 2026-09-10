@@ -91479,5 +91479,133 @@ export const genericPatterns: Pattern[] = [
       "Our /admin/panel route scan confirms eval RCE. Show route-specific code execution remediation.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "captcha-run-rce-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Captcha /api/run command execution live oracle",
+    description:
+      "POST /api/run on captcha.appsec.study after FNV-1a proof-of-work captcha verify and demo login executes arbitrary shell commands via the cmd parameter — the captcha post-login RCE training oracle.",
+    impactOneline:
+      "Real captcha gates that still expose authenticated command execution let attackers run arbitrary OS commands after solving PoW or OCR.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "captchaRunRceLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never expose shell execution behind captcha-authenticated sessions.",
+      steps: [
+        "Remove /api/run or replace with fixed allowlist maintenance actions.",
+        "Treat captcha as bot friction, not authorization for privileged APIs.",
+        "Run captcha only on isolated appsec.study training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/run endpoint executes shell commands after captcha verify + login. Show command execution removal and safe diagnostics design.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "captcha-run-rce-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Captcha /api/run route command execution live oracle",
+    description:
+      "When scanning /api/run on captcha.appsec.study, PoW verify then login then POST cmd=id returns uid=0(root) — route-specific post-login RCE training oracle.",
+    impactOneline:
+      "Route-specific confirmation that captcha maintenance API runs arbitrary shell commands after JWT login.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "captchaRunRceRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove shell execution from authenticated maintenance routes.",
+      steps: [
+        "Disable /api/run on any shared training host.",
+        "Use fixed diagnostic actions instead of passing raw cmd strings."
+      ]
+    },
+    fixPrompt:
+      "Our /api/run route scan confirms root command execution after captcha login. Show route-specific shell invocation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "captcha-pow-login-jwt-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "medium",
+    title: "Captcha PoW verify login JWT live oracle",
+    description:
+      "POST /api/captcha/verify with a valid FNV-1a PoW nonce then /api/login on captcha.appsec.study with the captchaToken returns short-lived JWT access and refresh tokens — the captcha multi-step auth training oracle.",
+    impactOneline:
+      "Headless scanners that solve proof-of-work can bypass image captcha and obtain JWT sessions intended for human browsers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "captchaPowLoginJwtLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use server-side CAPTCHA providers and bind tokens to browser sessions.",
+      steps: [
+        "Do not treat client-computed PoW as equivalent to image captcha for high-risk actions.",
+        "Require provider-verified captcha responses with one-time server validation.",
+        "Rotate refresh tokens and enforce short JWT expiry."
+      ]
+    },
+    fixPrompt:
+      "Our /api/captcha/verify PoW path returns a captchaToken that unlocks /api/login JWTs. Show captcha hardening against automated PoW solvers.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "helpdeskai-chat-rag-exfil-live-oracle",
+    platform: "generic",
+    category: "Prompt injection",
+    severityDefault: "critical",
+    title: "HelpDeskAI chat RAG exfiltration live oracle",
+    description:
+      "POST /api/chat on helpdeskai.appsec.study with prompt injection coerces the agent to call search_kb with internal:true and leak MASTER_API_KEY from internal knowledge-base articles — the HelpDeskAI RAG exfiltration training oracle.",
+    impactOneline:
+      "LLM agents without document-level ACL on retrieval can leak internal KB secrets to any authenticated chat user.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "helpdeskaiChatRagExfilLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Filter retrieved documents by caller authorization before they enter the LLM context.",
+      steps: [
+        "Never pass internal KB rows to retrieval for customer-facing sessions.",
+        "Validate tool arguments server-side; ignore client-supplied internal flags.",
+        "Redact secrets from agent traces returned to browsers."
+      ]
+    },
+    fixPrompt:
+      "Our /api/chat agent leaks MASTER_API_KEY via search_kb after prompt injection. Show RAG ACL filtering and tool argument validation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "helpdeskai-chat-rag-exfil-route-live-oracle",
+    platform: "generic",
+    category: "Prompt injection",
+    severityDefault: "critical",
+    title: "HelpDeskAI /api/chat RAG exfiltration route live oracle",
+    description:
+      "When scanning /api/chat on helpdeskai.appsec.study, authenticated prompt injection leaks internal Support tooling credentials via agent trace — route-specific LLM security training oracle.",
+    impactOneline:
+      "Route-specific confirmation that HelpDeskAI chat exposes agent tool traces leaking internal KB secrets.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "helpdeskaiChatRagExfilRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Harden /api/chat against indirect retrieval of internal documents.",
+      steps: [
+        "Strip internal KB from retrieval indexes exposed to customer agents.",
+        "Do not return raw agent traces containing tool results to clients."
+      ]
+    },
+    fixPrompt:
+      "Our /api/chat route scan confirms RAG exfiltration via agent tools. Show route-specific retrieval ACL and trace redaction.",
+    version: 1,
+    enabled: true
   }
 ];

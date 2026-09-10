@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-10T19:06:46.978Z",
+  "updated_at": "2026-09-10T19:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 3452,
-  "total_findings": 39228,
-  "critical_findings": 79,
+  "total_sites_scanned": 3454,
+  "total_findings": 39240,
+  "critical_findings": 81,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2321,
-  "discovery_findings": 29068,
-  "improvements_shipped": 1774,
-  "last_run": "2026-09-10T19:06:46.978Z",
+  "discovery_findings": 29080,
+  "improvements_shipped": 1777,
+  "last_run": "2026-09-10T19:15:00.000Z",
   "last_run_summary": {
     "hour_utc": "19",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 51,
+      "oracle_findings": 50,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 590,
+      "probes_run": 596,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,41 +48,42 @@
           ]
         }
       },
-      "note": "Primary Heroku stable 6/6 (51 findings, secret-resend present, 37 juice-shop live oracles)"
+      "note": "Stable 6/6 recall (50 findings); no category gaps"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 40,
-      "focus": "maze procedural lab + boxcutter SQLi/secrets hub + TenantHub cross-tenant BOLA + IBM Altoro Mutual testfire + latty6 auth/token (unreachable)",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 2,
+      "findings": 12,
+      "focus": "captcha PoW→login→RCE chain + HelpDeskAI chat RAG exfiltration via prompt injection",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, gap=[], secret-resend present)",
-      "boxcutter.appsec.study/api/products: 16 findings — boxcutter-config-secrets live+route oracles + reflected XSS + GraphQL introspection",
-      "demo.testfire.net/: 12 findings — testfire login/transfer SQLi + search/feedback reflected XSS live oracles",
-      "maze.appsec.study: 8 findings — exposed .env/.git + OpenAPI docs (procedural vuln chain not fingerprinted)",
-      "tenanthub.appsec.study/api/orgs/1: 4 findings — tenanthub-cross-tenant-ticket IDOR live oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (50 findings, gap=[])",
+      "captcha.appsec.study/: 7 findings — PoW verify + JWT login + /api/run uid=0(root) (+captcha-run-rce +captcha-pow-login-jwt live oracles)",
+      "helpdeskai.appsec.study/api/chat: 5 findings — prompt injection leaks MASTER_API_KEY via search_kb internal:true (+helpdeskai-chat-rag-exfil live+route)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "latty6.appsec.study/auth/token + latty5/latty2/latty3: DNS unreachable from cloud agent (even-hour appsec.study restart cycle)",
-      "boxcutter /api/products: misses error-based SQLi oracle GET ?q=' — route scan only hit config-secrets + generic XSS",
-      "maze.appsec.study: misses procedural RCE chain — needs /api/manifest fingerprint + seed-specific route oracles",
-      "tenanthub /api/orgs/1: cross-tenant org BOLA not confirmed — only ticket IDOR oracle fired on route scan"
+      "streamline/ws: CSWSH probe blocked — Cloudflare returns HTML 200 instead of WebSocket 101 on /ws",
+      "shoppy.appsec.study: API routes return SPA shell — product IDOR oracle needs live backend routing",
+      "latty5/latty2-4/latty6: DNS unreachable from cloud agent (even-hour restart cycle)"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 51,
+    "juice-shop.herokuapp.com": 50,
+    "juice-shop-staging.herokuapp.com": 52,
+    "captcha.appsec.study": 7,
+    "helpdeskai.appsec.study/api/chat": 5,
     "boxcutter.appsec.study/api/products": 16,
     "demo.testfire.net": 12,
-    "maze.appsec.study": 8,
-    "tenanthub.appsec.study/api/orgs/1": 4,
-    "juice-shop-staging.herokuapp.com": 52,
     "shoppy.appsec.study/api/products/1": 7,
+    "lstalker.appsec.study/admin/panel/": 11,
     "lstalker.appsec.study": 9,
+    "reggie.appsec.study/api/run": 7,
     "reggie.appsec.study": 6,
-    "maze.appsec.study/api/manifest": 12
+    "streamline.appsec.study/ws": 4,
+    "maze.appsec.study/api/manifest": 12,
+    "tenanthub.appsec.study/api/orgs/1": 4
   }
 }
