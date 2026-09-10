@@ -10439,6 +10439,24 @@
       "slug": "ginandjuice-wallet-balance-route-bleed-suppression",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: applyRouteOracleHubFilters onWalletBalance genericKeep drops sql-error-disclosure + reflected-xss-query-param bleed on 404 GET /rest/wallet/balance; ginandjuice.shop/rest/wallet/balance findings 6→3 (-generic probe bleed, endpoint 404 — no wallet BOLA oracle on ginandjuice.shop); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-fauxbank.vercel.app",
+      "slug": "fauxbank-api-hub-filter-regex-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: fauxbankApiKeep regex trailing $ required exact slug fauxbank- — stripped all fauxbank-* route oracles on /api/* scans; fixed to prefix match; fauxbankAuthLoginRouteLiveOracle corpus fallback always allowed on /api/auth/login when live POST blocked; pentest-fauxbank.vercel.app/api/auth/login findings 2→4 (+fauxbank-auth-login-route-live-oracle +client-side-fauxbank-lab-evidence); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-oidc-route-slug-patterns",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: brokencrystalsRouteSlugPatterns adds /api/auth/oidc-client + /api/users/oidc → brokencrystals-oidc slug tier; GET /api/auth/oidc-client returns clientSecret JSON; brokencrystals.com/api/auth/oidc-client findings 31→8 (+brokencrystals-oidc-client-secret live+route oracles); /api/users/oidc 33→7; benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-oidc-route-hub-oracle-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: applyRouteOracleHubFilters on /api/auth/oidc-client + /api/users/oidc keeps brokencrystals-oidc-* + client-side-brokencrystals + misconfig only; brokencrystals.com/api/auth/oidc-client findings 31→8 (-sqli/ssti/ssrf/jwt generic bleed, +oidc live+route oracles retained); /api/users/oidc 33→7; benchmark 6/6 maintained"
     }
   ]
 }

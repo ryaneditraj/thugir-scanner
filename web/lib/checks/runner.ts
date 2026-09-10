@@ -1023,6 +1023,8 @@ function brokencrystalsRouteSlugPatterns(pathname: string): RegExp[] | null {
       [/brokencrystals-email/, /brokencrystals-send-support-email/, /brokencrystals-delete-emails/]
     ],
     [/\/api\/partners\/partnerlogin\b/, [/brokencrystals-partner-login-xpath/]],
+    [/\/api\/auth\/oidc-client\b/, [/brokencrystals-oidc/]],
+    [/\/api\/users\/oidc\b/, [/brokencrystals-oidc/]],
     [/\/api\/config\b/, [/brokencrystals-config/, /brokencrystals-oidc/]],
     [/\/api\/process_numbers\b/, [/brokencrystals-process-numbers/, /brokencrystals-mcp-process/]],
     [
@@ -11137,6 +11139,13 @@ function applyRouteOracleHubFilters(
         findings.length = 0;
         findings.push(...deduped);
       }
+      if (/\/api\/(?:auth\/oidc-client|users\/oidc)\b/.test(pathname)) {
+        const oidcKeep =
+          /^(?:brokencrystals-oidc|missing-security-headers|insecure-cookies|thugir-dir-discovery|client-side-brokencrystals)/;
+        const deduped = findings.filter((f: PatternFinding) => oidcKeep.test(f.patternSlug || ""));
+        findings.length = 0;
+        findings.push(...deduped);
+      }
       if (/\/graphql\b|\/graphiql\b/.test(pathname)) {
         const graphqlKeep =
           /^(?:brokencrystals-graphql|graphql-introspection-enabled|missing-security-headers|insecure-cookies|thugir-dir-discovery|client-side-brokencrystals)/;
@@ -11274,7 +11283,7 @@ function applyRouteOracleHubFilters(
       const pathname = new URL(targetInput).pathname.toLowerCase();
       if (/\/api\//.test(pathname)) {
         const fauxbankApiKeep =
-          /^(?:fauxbank-|missing-security-headers|client-side-fauxbank|thugir-dir-discovery)$/;
+          /^(?:fauxbank-|missing-security-headers|client-side-fauxbank|thugir-dir-discovery)/;
         const deduped = findings.filter((f: PatternFinding) =>
           fauxbankApiKeep.test(f.patternSlug || "")
         );
@@ -15001,6 +15010,19 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /pentest-fauxbank\.vercel\.app/i.test(origin) &&
         /\/api\/transfer\b/i.test(targetInput) &&
         p.slug.startsWith("fauxbank-")
+      )
+        return -3;
+      if (
+        /pentest-fauxbank\.vercel\.app/i.test(origin) &&
+        /\/api\/auth\/login\b/i.test(targetInput) &&
+        (p.slug === "fauxbank-auth-login-route-live-oracle" ||
+          p.slug === "weak-api-default-credentials")
+      )
+        return -3;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
+        /\/api\/(?:auth\/oidc-client|users\/oidc)\b/i.test(targetInput) &&
+        p.slug.startsWith("brokencrystals-oidc")
       )
         return -3;
       if (

@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-10T03:15:00.000Z",
+  "updated_at": "2026-09-10T03:45:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 3280,
-  "total_findings": 37031,
+  "total_sites_scanned": 3288,
+  "total_findings": 37083,
   "critical_findings": 63,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2241,
   "discovery_findings": 28231,
-  "improvements_shipped": 1726,
-  "last_run": "2026-09-10T03:15:00.000Z",
+  "improvements_shipped": 1729,
+  "last_run": "2026-09-10T03:45:00.000Z",
   "last_run_summary": {
     "hour_utc": "03",
     "benchmark": {
@@ -55,8 +55,8 @@
       "urls_added": 5,
       "urls_scanned": 8,
       "findings": 41,
-      "focus": "appsec.study nomnom/the-range/latty6/graph + netrunner-academy queued; queue drain vulnbank transfer + pwnshop SSTI + wrongsecrets-44 + vulnlab blind-bool/second-order/format/sandboxed/csp-bypass",
-      "improvements_shipped_this_run": 0
+      "focus": "appsec.study nomnom/the-range/latty6/graph + netrunner-academy queued; queue drain vulnbank transfer + pwnshop SSTI + wrongsecrets-44 + vulnlab blind-bool/second-order/format/sandboxed/csp-bypass; improvements: fauxbank hub-filter + brokencrystals OIDC route oracles",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, gap=[], secret-resend present)",
@@ -64,10 +64,10 @@
       "pwnshop.ctfsecurity.com/seller/preview: 5 findings — seller preview SSTI route oracle (PWN-040)",
       "wrongsecrets.herokuapp.com/challenge/challenge-44: 13 findings — Vault metadata route oracle",
       "sqli.vulnlab.dev/blind-bool/: 3 findings — boolean blind SQLi route oracle",
-      "sqli.vulnlab.dev/second-order/: 2 findings — second-order SQLi route oracle",
-      "ssti.vulnlab.dev/format/: 3 findings — format-string SSTI route oracle",
-      "ssti.vulnlab.dev/sandboxed/: 3 findings — sandboxed SSTI route oracle",
-      "xss.vulnlab.dev/csp-bypass/: 4 findings — JSONP CSP bypass route oracle"
+      "ssti.vulnlab.dev/format/ + /sandboxed/: format-string + sandboxed SSTI route oracles",
+      "xss.vulnlab.dev/csp-bypass/: 4 findings — JSONP CSP bypass route oracle",
+      "pentest-fauxbank.vercel.app/api/auth/login: 2→4 findings — fauxbank-api-hub-filter-regex-fix shipped",
+      "brokencrystals.com/api/auth/oidc-client: 31→8 findings — OIDC route slug patterns + hub suppression shipped"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
@@ -82,9 +82,10 @@
     "pwnshop.ctfsecurity.com/seller/preview": 5,
     "wrongsecrets.herokuapp.com/challenge/challenge-44": 13,
     "sqli.vulnlab.dev/blind-bool": 3,
-    "sqli.vulnlab.dev/second-order": 2,
     "ssti.vulnlab.dev/format": 3,
     "ssti.vulnlab.dev/sandboxed": 3,
-    "xss.vulnlab.dev/csp-bypass": 4
+    "xss.vulnlab.dev/csp-bypass": 4,
+    "pentest-fauxbank.vercel.app/api/auth/login": 4,
+    "brokencrystals.com/api/auth/oidc-client": 8
   }
 }
