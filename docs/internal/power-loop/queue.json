@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-10T16:05:00.000Z",
+  "updated_at": "2026-09-10T17:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://reggie.appsec.study",
+      "source": "zzzteph/appsec.study reggie — register→login captcha chain then code-split post-login RCE (appsec.study lateral-movement catalog; web search 17 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://latty2.appsec.study",
+      "source": "zzzteph/appsec.study latty-2 — SSRF→internal svc→run-task cmd-exec RCE chain (appsec.study lateral-movement catalog; web search 17 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://latty3.appsec.study",
+      "source": "zzzteph/appsec.study latty-3 — XXE→service creds→password reuse→backup cmd-inj RCE chain (appsec.study lateral-movement catalog; web search 17 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://latty4.appsec.study",
+      "source": "zzzteph/appsec.study latty-4 — project IDOR→scoped API key leak→report builder EJS SSTI→RCE chain (appsec.study lateral-movement catalog; web search 17 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://lstalker.appsec.study",
+      "source": "zzzteph/appsec.study lstalker — SQLi→cleartext creds→hidden admin eval RCE (Stalker variant without .git; appsec.study lateral-movement catalog; web search 17 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://wordpress.appsec.study",
       "source": "zzzteph/appsec.study WordPress — unauth SQLi admin-ajax, file upload RCE, LFI, BFLA export + ticket IDOR (appsec.study catalog; web search 16 UTC discovery)",
