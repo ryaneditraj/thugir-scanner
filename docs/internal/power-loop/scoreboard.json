@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-10T17:07:53.078Z",
+  "updated_at": "2026-09-10T17:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -16,14 +16,14 @@
     }
   },
   "total_sites_scanned": 3435,
-  "total_findings": 38942,
+  "total_findings": 38960,
   "critical_findings": 75,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2311,
-  "discovery_findings": 28976,
-  "improvements_shipped": 1768,
-  "last_run": "2026-09-10T17:07:53.078Z",
+  "discovery_findings": 28994,
+  "improvements_shipped": 1771,
+  "last_run": "2026-09-10T17:10:00.000Z",
   "last_run_summary": {
     "hour_utc": "17",
     "benchmark": {
@@ -52,31 +52,33 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
+      "urls_added": 0,
       "urls_scanned": 3,
-      "findings": 16,
-      "focus": "lateral-movement chain labs (reggie register→RCE, lstalker SQLi→admin eval) + latty2-4 reachability probe",
-      "improvements_shipped_this_run": 0
+      "findings": 18,
+      "focus": "polyglot translation-preview SSTI + private project IDOR + maze manifest fetch SSRF live oracles",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, gap=[])",
-      "lstalker.appsec.study: 7 findings — SQL error disclosure + reflexion-escalated-sqli + reflected XSS on search",
-      "reggie.appsec.study: 4 findings — thin unauth pass; code-split post-login RCE needs register→login+captcha chain",
-      "latty2/3/4.appsec.study: DNS unreachable from scanner (latty7/latty1 same pattern)"
+      "polyglot.appsec.study/: 6 findings — POST /api/preview {{7*7}}→49 (+polyglot-preview-ssti live+route)",
+      "polyglot.appsec.study/api/projects/2: 6 findings — demo bearer reads private owner_id=2 project (+polyglot-projects-idor live+route)",
+      "maze.appsec.study/api/manifest: 12 findings — manifest fetch endpoint SSRF via httpbin canary (+maze-fetch-ssrf live+route)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "reggie.appsec.study: misses post-login /api/run RCE — needs captcha-gated register→login JWT chain oracle",
-      "latty2-4/latty7/latty1: intermittent DNS/reachability from cloud agent — retry on even-hour restarts",
-      "streamline/frontdesk: queued but not reached within 8-URL limit — WebSocket smuggling + edge-cache oracles pending"
+      "wordpress/freact/fvue/fangular: thin passes — need framework-specific route oracles",
+      "latty2-4/latty7/latty1: intermittent DNS/reachability from cloud agent"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 52,
+    "maze.appsec.study/api/manifest": 12,
+    "polyglot.appsec.study/": 6,
+    "polyglot.appsec.study/api/projects/2": 6,
     "lstalker.appsec.study": 7,
-    "reggie.appsec.study": 4,
-    "nimbus.appsec.study/": 5,
-    "maze.appsec.study/api/manifest": 10,
+    "prism.appsec.study/api/query/run": 6,
+    "paystream.appsec.study/api/payslips/2": 5,
     "wordpress.appsec.study": 6,
     "the-range.appsec.study/": 18
   }

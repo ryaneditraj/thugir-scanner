@@ -91147,5 +91147,158 @@ export const genericPatterns: Pattern[] = [
       "Our /api/payslips/{id} route scan confirms payslip IDOR. Show route-specific authorization fix.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "polyglot-preview-ssti-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Polyglot translation-preview SSTI live oracle",
+    description:
+      "POST /api/preview on polyglot.appsec.study evaluates {{7*7}} template placeholders server-side — the Polyglot localization SSTI training oracle.",
+    impactOneline:
+      "Unsanitized translation templates allow server-side template injection in preview rendering.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "polyglotPreviewSstiLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sandbox or disable template evaluation on user-supplied translation strings.",
+      steps: [
+        "Use a logic-less template engine or strict allowlist for placeholders.",
+        "Never evaluate handlebars/nunjucks on contributor-supplied values.",
+        "Run Polyglot only on isolated appsec.study training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/preview endpoint evaluates {{7*7}} to 49. Show safe translation preview without SSTI.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "polyglot-preview-ssti-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Polyglot translation-preview SSTI route live oracle",
+    description:
+      "When scanning /api/preview on polyglot.appsec.study, template placeholders evaluate server-side — route-specific SSTI training oracle.",
+    impactOneline:
+      "Route-specific confirmation that Polyglot preview rendering is vulnerable to template injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "polyglotPreviewSstiRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block template evaluation on /api/preview contributor input.",
+      steps: [
+        "Escape or strip template delimiters from translation values.",
+        "Add regression tests with {{7*7}} and expression probes."
+      ]
+    },
+    fixPrompt:
+      "Our /api/preview route scan confirms SSTI. Show route-specific sandboxing fix.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "polyglot-projects-idor-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Polyglot private project IDOR live oracle",
+    description:
+      "GET /api/projects/2 on polyglot.appsec.study with a demo bearer token returns another owner's private project — the Polyglot localization IDOR training oracle.",
+    impactOneline:
+      "Missing project ownership checks expose private localization projects and confidential strings.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "polyglotProjectsIdorLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce owner_id and visibility before returning project metadata.",
+      steps: [
+        "Verify the authenticated user owns the project or has an explicit share grant.",
+        "Return 404 for private projects outside the caller's scope.",
+        "Run Polyglot only on isolated appsec.study training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/projects/{id} endpoint returns private projects for other owners. Show ownership enforcement.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "polyglot-projects-idor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Polyglot private project IDOR route live oracle",
+    description:
+      "When scanning /api/projects/{id} on polyglot.appsec.study, demo session reads another owner's private project — route-specific IDOR training oracle.",
+    impactOneline:
+      "Route-specific confirmation that Polyglot project endpoints lack object-level authorization.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "polyglotProjectsIdorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block cross-owner reads on /api/projects/{id}.",
+      steps: [
+        "Bind project queries to the authenticated user id.",
+        "Audit /api/projects/{id}/strings for the same IDOR gap."
+      ]
+    },
+    fixPrompt:
+      "Our /api/projects/{id} route scan confirms project IDOR. Show route-specific authorization fix.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "maze-fetch-ssrf-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "Maze manifest fetch SSRF live oracle",
+    description:
+      "POST /api/{slug}/fetch on maze.appsec.study issues server-side HTTP requests to attacker-controlled URLs discovered via /api/manifest — the Maze procedural SSRF training oracle.",
+    impactOneline:
+      "Manifest-driven fetch endpoints allow SSRF to internal services and cloud metadata.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "mazeFetchSsrfLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block outbound fetches to non-allowlisted hosts from manifest fetch endpoints.",
+      steps: [
+        "Validate url against an allowlist before server-side fetch.",
+        "Disable fetch endpoints in production or require authenticated admin scope.",
+        "Run Maze only on isolated appsec.study training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our manifest fetch endpoint returns httpbin echo for attacker url. Show SSRF egress controls.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "maze-fetch-ssrf-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "Maze manifest fetch SSRF route live oracle",
+    description:
+      "When scanning /api/manifest on maze.appsec.study, manifest fetch endpoints confirm server-side URL retrieval — route-specific SSRF training oracle.",
+    impactOneline:
+      "Route-specific confirmation that Maze procedural fetch webhooks are SSRF-capable.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "mazeFetchSsrfRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Harden manifest fetch routes against arbitrary url parameters.",
+      steps: [
+        "Resolve and block private/link-local IP ranges.",
+        "Add regression tests probing fetch endpoints with external canary URLs."
+      ]
+    },
+    fixPrompt:
+      "Our /api/manifest route scan confirms fetch SSRF. Show route-specific egress filtering.",
+    version: 1,
+    enabled: true
   }
 ];

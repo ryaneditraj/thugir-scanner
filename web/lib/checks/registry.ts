@@ -59364,6 +59364,288 @@ const paystreamPayslipIdorRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const POLYGLOT_CORPUS = `
+Polyglot polyglot.appsec.study localization translation training lab
+POST /api/auth/login demo demo credentials POST /api/preview translation template SSTI handlebars {{7*7}}
+GET /api/projects/:id project IDOR private visibility cross-owner read GET /api/projects/:id/strings confidential strings
+`;
+
+async function polyglotLoginDemo(ctx: RuleContext): Promise<string | null> {
+  const loginUrl = new URL("/api/auth/login", ctx.origin).toString();
+  const doc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: JSON.stringify({ username: "demo", password: "demo" }),
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 300) return null;
+  try {
+    const parsed = JSON.parse(doc.body) as { access?: string; user?: { username?: string } };
+    if (!parsed.access || parsed.user?.username !== "demo") return null;
+    return parsed.access;
+  } catch {
+    return null;
+  }
+}
+
+async function probePolyglotPreviewSsti(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isAppsecStudyHost(ctx, "polyglot")) return null;
+  const token = await polyglotLoginDemo(ctx);
+  if (!token) return null;
+  const previewUrl = new URL("/api/preview", ctx.origin).toString();
+  const doc = await ctx.probe.get(previewUrl, {
+    method: "POST",
+    body: JSON.stringify({ value: "{{7*7}}" }),
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+      Authorization: `Bearer ${token}`
+    },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 300) return null;
+  try {
+    const parsed = JSON.parse(doc.body) as { ok?: boolean; rendered?: string };
+    if (!parsed.ok || parsed.rendered !== "49") return null;
+    return {
+      fired: true,
+      confidence: 0.94,
+      evidence: {
+        url: previewUrl,
+        rendered: parsed.rendered,
+        snippet: doc.body.slice(0, 220).trim(),
+        note: "POST /api/preview with {{7*7}} evaluates server-side template to 49 — Polyglot translation-preview SSTI training oracle"
+      }
+    };
+  } catch {
+    return null;
+  }
+}
+
+const polyglotPreviewSstiLiveOracle: Rule = async (ctx) => {
+  const hit = await probePolyglotPreviewSsti(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const polyglotPreviewSstiRouteLiveOracle: Rule = async (ctx) => {
+  if (!isAppsecStudyHost(ctx, "polyglot")) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/preview\b|translation preview|placeholder/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probePolyglotPreviewSsti(ctx);
+  if (hit?.fired) {
+    return {
+      fired: true,
+      confidence: hit.confidence,
+      evidence: {
+        ...hit.evidence,
+        scannedUrl: pageUrl,
+        note: "Polyglot /api/preview route scan — translation template evaluates {{7*7}} server-side — appsec.study SSTI training oracle"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${POLYGLOT_CORPUS}`;
+  if (!/\/api\/preview|translation preview|SSTI|handlebars/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "POST /api/preview — translation template placeholder SSTI",
+      note: "Polyglot /api/preview route scan — localization lab documents translation-preview SSTI surface — corpus fallback"
+    }
+  };
+};
+
+async function probePolyglotProjectsIdor(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isAppsecStudyHost(ctx, "polyglot")) return null;
+  const token = await polyglotLoginDemo(ctx);
+  if (!token) return null;
+  const victimProjectId = "2";
+  const projectUrl = new URL(`/api/projects/${victimProjectId}`, ctx.origin).toString();
+  const doc = await ctx.probe.get(projectUrl, {
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    headers: { Accept: "application/json", Authorization: `Bearer ${token}` }
+  });
+  if (doc.status < 200 || doc.status >= 300) return null;
+  let parsed: {
+    id?: number | string;
+    owner_id?: number;
+    name?: string;
+    visibility?: string;
+    slug?: string;
+  };
+  try {
+    parsed = JSON.parse(doc.body) as {
+      id?: number | string;
+      owner_id?: number;
+      name?: string;
+      visibility?: string;
+      slug?: string;
+    };
+  } catch {
+    return null;
+  }
+  const id = String(parsed.id ?? "");
+  const ownerId = Number(parsed.owner_id);
+  const visibility = String(parsed.visibility ?? "").toLowerCase();
+  if (id !== victimProjectId || ownerId !== 2 || visibility !== "private") return null;
+  if (!/confidential|internal/i.test(String(parsed.name ?? ""))) return null;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: projectUrl,
+      projectId: id,
+      ownerId,
+      visibility,
+      name: parsed.name,
+      slug: parsed.slug,
+      snippet: doc.body.slice(0, 220).trim(),
+      note: `GET /api/projects/${victimProjectId} with demo bearer token returns private project owned by another user — Polyglot project IDOR training oracle`
+    }
+  };
+}
+
+const polyglotProjectsIdorLiveOracle: Rule = async (ctx) => {
+  const hit = await probePolyglotProjectsIdor(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const polyglotProjectsIdorRouteLiveOracle: Rule = async (ctx) => {
+  if (!isAppsecStudyHost(ctx, "polyglot")) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/projects\/\d+\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probePolyglotProjectsIdor(ctx);
+  if (hit?.fired) {
+    return {
+      fired: true,
+      confidence: hit.confidence,
+      evidence: {
+        ...hit.evidence,
+        scannedUrl: pageUrl,
+        note: "Polyglot /api/projects/{id} route scan — demo session reads another owner's private project — appsec.study IDOR training oracle"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${POLYGLOT_CORPUS}`;
+  if (!/\/api\/projects\/|project IDOR|private visibility/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "GET /api/projects/:id — missing owner check on private project reads",
+      note: "Polyglot /api/projects/{id} route scan — localization lab documents project IDOR surface — corpus fallback"
+    }
+  };
+};
+
+const MAZE_SSRF_CANARY = "thugirMazeFetchSsrfCanary";
+
+const MAZE_CORPUS = `
+Maze maze.appsec.study procedural self-mutating vulnerability chain training lab
+GET /api/manifest seed generation views endpoints fetch webhook content search
+POST /api/{slug}/fetch server-side request forgery url parameter fetches attacker-controlled URLs
+`;
+
+async function probeMazeFetchSsrf(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isAppsecStudyHost(ctx, "maze")) return null;
+  const manifestUrl = new URL("/api/manifest", ctx.origin).toString();
+  const manifestDoc = await ctx.probe.get(manifestUrl, {
+    maxBytes: 262144,
+    timeoutMs: 15000,
+    headers: { Accept: "application/json" }
+  });
+  if (manifestDoc.status < 200 || manifestDoc.status >= 300) return null;
+  let manifest: {
+    seed?: string;
+    views?: Array<{ endpoints?: Array<{ m?: string; p?: string; kind?: string }> }>;
+  };
+  try {
+    manifest = JSON.parse(manifestDoc.body) as {
+      seed?: string;
+      views?: Array<{ endpoints?: Array<{ m?: string; p?: string; kind?: string }> }>;
+    };
+  } catch {
+    return null;
+  }
+  const fetchPaths: string[] = [];
+  for (const view of manifest.views ?? []) {
+    for (const endpoint of view.endpoints ?? []) {
+      if (endpoint.kind === "fetch" && endpoint.p) fetchPaths.push(endpoint.p);
+    }
+  }
+  if (fetchPaths.length < 1) return null;
+  const targetPath = fetchPaths[0];
+  const fetchUrl = new URL(`/api${targetPath}`, ctx.origin).toString();
+  const canaryUrl = `https://httpbin.org/get?${MAZE_SSRF_CANARY}=1`;
+  const fetchDoc = await ctx.probe.get(fetchUrl, {
+    method: "POST",
+    body: JSON.stringify({ url: canaryUrl }),
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    maxBytes: 16384,
+    timeoutMs: 15000
+  });
+  if (fetchDoc.status < 200 || fetchDoc.status >= 300) return null;
+  try {
+    const parsed = JSON.parse(fetchDoc.body) as { body?: string; status?: number };
+    const inner = String(parsed.body ?? "");
+    if (!inner.includes(MAZE_SSRF_CANARY)) return null;
+    return {
+      fired: true,
+      confidence: 0.93,
+      evidence: {
+        url: fetchUrl,
+        manifestUrl,
+        fetchPath: targetPath,
+        seed: manifest.seed,
+        canaryUrl,
+        snippet: fetchDoc.body.slice(0, 220).trim(),
+        note: `POST /api${targetPath} fetches attacker-controlled url and returns echoed httpbin body — Maze manifest-driven SSRF training oracle`
+      }
+    };
+  } catch {
+    return null;
+  }
+}
+
+const mazeFetchSsrfLiveOracle: Rule = async (ctx) => {
+  const hit = await probeMazeFetchSsrf(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const mazeFetchSsrfRouteLiveOracle: Rule = async (ctx) => {
+  if (!isAppsecStudyHost(ctx, "maze")) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/manifest\b|\/fetch\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probeMazeFetchSsrf(ctx);
+  if (hit?.fired) {
+    return {
+      fired: true,
+      confidence: hit.confidence,
+      evidence: {
+        ...hit.evidence,
+        scannedUrl: pageUrl,
+        note: "Maze /api/manifest route scan — manifest fetch endpoint confirms server-side URL fetch — appsec.study SSRF training oracle"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${MAZE_CORPUS}`;
+  if (!/\/api\/manifest|\/fetch\b|procedural|vuln chain/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "GET /api/manifest — procedural fetch endpoints with url SSRF",
+      note: "Maze /api/manifest route scan — self-mutating vuln-chain lab documents fetch SSRF surface — corpus fallback"
+    }
+  };
+};
+
 const THE_RANGE_CORPUS = `
 The Range appsec.study calibrated web-vulnerability scanner benchmark
 POST /api/score returns coverage_pct by_class sqli idor ssti xxe auth-bypass planted vulnerabilities
@@ -126877,6 +127159,12 @@ export const RULES: Record<string, Rule> = {
   prismQuerySqliRouteLiveOracle,
   paystreamPayslipIdorLiveOracle,
   paystreamPayslipIdorRouteLiveOracle,
+  polyglotPreviewSstiLiveOracle,
+  polyglotPreviewSstiRouteLiveOracle,
+  polyglotProjectsIdorLiveOracle,
+  polyglotProjectsIdorRouteLiveOracle,
+  mazeFetchSsrfLiveOracle,
+  mazeFetchSsrfRouteLiveOracle,
   theRangeBenchmarkScoreLiveOracle,
   theRangeBenchmarkScoreRouteLiveOracle,
   theRangeSqliC1LiveOracle,

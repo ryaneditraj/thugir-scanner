@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:polyglot.appsec.study",
+      "slug": "polyglot-preview-ssti-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/preview {\"value\":\"{{7*7}}\"} returns {\"ok\":true,\"rendered\":\"49\"}; polyglot.appsec.study/ findings 4→6 (+polyglot-preview-ssti-live-oracle +route); benchmark juice-shop.herokuapp.com 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:polyglot.appsec.study",
+      "slug": "polyglot-projects-idor-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/projects/2 with demo bearer returns owner_id=2 visibility=private name Internal App — CONFIDENTIAL; polyglot.appsec.study/api/projects/2 findings 4→6 (+polyglot-projects-idor-live-oracle +route); benchmark 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:maze.appsec.study",
+      "slug": "maze-fetch-ssrf-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/manifest lists fetch endpoints; POST /api/partners-*/fetch {\"url\":\"https://httpbin.org/get?thugirMazeFetchSsrfCanary=1\"} echoes canary in body; maze.appsec.study/api/manifest findings 10→12 (+maze-fetch-ssrf-live-oracle +route); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:mobicare.appsec.study",
       "slug": "mobicare-otp-bypass-live-oracle",
       "status": "shipped",
