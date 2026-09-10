@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-10T09:08:50.006Z",
-  "total": 3522,
-  "uniqueSlugs": 3514,
+  "generatedAt": "2026-09-10T10:05:57.453Z",
+  "total": 3528,
+  "uniqueSlugs": 3520,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3504,
+    "generic": 3510,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3437,
+    "deep": 3443,
     "continuous": 0
   },
   "byCategory": {
@@ -26,8 +26,8 @@
     "Information exposure": 1,
     "Information disclosure": 168,
     "Security misconfiguration": 290,
-    "Broken authentication": 234,
-    "Injection": 591,
+    "Broken authentication": 236,
+    "Injection": 595,
     "Cross-site scripting": 817,
     "Open redirect": 29,
     "general": 20,
@@ -2895,8 +2895,14 @@
     "the-range-benchmark-score-route-live-oracle",
     "the-range-idor-c3-live-oracle",
     "the-range-idor-c3-route-live-oracle",
+    "the-range-jwt-none-c8-live-oracle",
+    "the-range-jwt-none-c8-route-live-oracle",
     "the-range-sqli-c1-live-oracle",
     "the-range-sqli-c1-route-live-oracle",
+    "the-range-ssti-c5-live-oracle",
+    "the-range-ssti-c5-route-live-oracle",
+    "the-range-xxe-c7-live-oracle",
+    "the-range-xxe-c7-route-live-oracle",
     "the0x-pwn-xss-document-write-route-live-oracle",
     "the0x-pwn-xss-dom-hash-route-live-oracle",
     "the0x-pwn-xss-filter-bypass-tags-route-live-oracle",

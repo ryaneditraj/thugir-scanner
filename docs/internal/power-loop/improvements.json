@@ -10565,6 +10565,24 @@
       "slug": "client-side-netrunner-academy-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: Next.js bundle documents NetRunner Academy + Reqable simulator + SQL injection/IDOR/JWT training levels (client-side networkEngine, no real backend); netrunner-academy.vercel.app/ findings 9→10 (+client-side-netrunner-academy-evidence); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-range.appsec.study",
+      "slug": "the-range-ssti-c5-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/c/5 {\"tpl\":\"{{7*7}}\"} returns {\"rendered\":\"49\"} (nunjucks SSTI); the-range.appsec.study/ findings 6→9 (+the-range-ssti-c5-live-oracle +the-range-jwt-none-c8-live-oracle +the-range-xxe-c7-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-range.appsec.study",
+      "slug": "the-range-jwt-none-c8-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/c/8 with alg:none JWT admin:true returns {\"flag\":\"FLAG{range-jwtnone-...}\"}; the-range.appsec.study/ findings 6→9; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-range.appsec.study",
+      "slug": "the-range-xxe-c7-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/c/7 XML <!ENTITY xxe SYSTEM \"file:///etc/hostname\"> expands hostname in parsed field; the-range.appsec.study/ findings 6→9; benchmark juice-shop 51 findings 6/6 maintained"
     }
   ]
 }

