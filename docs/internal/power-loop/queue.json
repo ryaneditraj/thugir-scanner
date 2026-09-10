@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-10T07:10:00.000Z",
+  "updated_at": "2026-09-10T08:10:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://dvwu.vercel.app/labs/race-condition",
+      "source": "Damn Vulnerable Web University — race-condition TOCTOU lab module (dvwu.vercel.app; web search 08 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvwu.vercel.app/labs/csrf",
+      "source": "Damn Vulnerable Web University — CSRF token-bypass lab module (dvwu.vercel.app; web search 08 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvwu.vercel.app/labs/idor",
+      "source": "Damn Vulnerable Web University — IDOR object-reference lab module (dvwu.vercel.app; web search 08 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvwu.vercel.app/labs/nosql-injection",
+      "source": "Damn Vulnerable Web University — NoSQL injection lab module (dvwu.vercel.app; web search 08 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvwu.vercel.app/labs/open-redirect",
+      "source": "Damn Vulnerable Web University — open-redirect validation bypass lab module (dvwu.vercel.app; web search 08 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://bypass403.vercel.app/debug",
       "source": "Karthikdude/bypass403 — protected /debug 403-bypass oracle (60+ endpoint lab; web search 07 UTC discovery)",

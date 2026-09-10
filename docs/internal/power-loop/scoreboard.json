@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-10T07:26:00.000Z",
+  "updated_at": "2026-09-10T08:11:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 3338,
-  "total_findings": 37657,
+  "total_sites_scanned": 3347,
+  "total_findings": 37774,
   "critical_findings": 66,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2261,
-  "discovery_findings": 28528,
+  "discovery_urls_added": 2266,
+  "discovery_findings": 28594,
   "improvements_shipped": 1741,
-  "last_run": "2026-09-10T07:26:00.000Z",
+  "last_run": "2026-09-10T08:11:00.000Z",
   "last_run_summary": {
-    "hour_utc": "07",
+    "hour_utc": "08",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 52,
+      "oracle_findings": 51,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 596,
+      "probes_run": 598,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,42 +48,42 @@
           ]
         }
       },
-      "note": "Primary Heroku stable 6/6 (52 findings, 37 juice-shop live oracles) — secret-resend present, no category gaps"
+      "note": "Primary Heroku stable 6/6 (51 findings, 39 juice-shop live oracles) — secret-resend present, no category gaps"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
       "findings": 66,
-      "focus": "bypass403 /debug+/secure+/waf 403-bypass oracles + wrongsecrets-52 K8s secrets + dvwu deserialization + pwnshop-chat/gin-change-password/sql-injection-lab queue drain",
+      "focus": "DVWU race-condition/csrf/idor/nosql-injection/open-redirect lab modules + queue drain pentest-fauxbank profile/accounts/transfer API oracles",
       "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, 37 live oracles, secret-resend present)",
-      "bypass403.vercel.app/debug: 9 findings — bypass403 debug-verb-tunneling route oracles",
-      "bypass403.vercel.app/secure: 9 findings — bypass403 secure bearer-token bypass route oracles",
-      "bypass403.vercel.app/waf: 8 findings — bypass403 WAF verb-tunneling route oracles",
-      "wrongsecrets.herokuapp.com/challenge/challenge-52: 13 findings — wrongsecrets K8s secrets challenge oracle",
-      "dvwu.vercel.app/labs/deserialization: 9 findings — DVWU insecure deserialization lab module",
-      "pwnshop.ctfsecurity.com/chat: 8 findings — pwnshop LLM chat entry point (thinner pass vs prior 50+)",
-      "ginandjuice.shop/my-account/change-password: 6 findings — Gin & Juice change-password ATO oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, 39 live oracles, secret-resend present)",
+      "dvwu.vercel.app/labs/race-condition: 9 findings — dvwu-race-condition-lab-route-live-oracle",
+      "dvwu.vercel.app/labs/csrf: 11 findings — dvwu-csrf-route-live-oracle + newsletter CRLF oracle",
+      "dvwu.vercel.app/labs/idor: 11 findings — dvwu-idor-route-live-oracle + dashboard IDOR oracle",
+      "dvwu.vercel.app/labs/nosql-injection: 11 findings — dvwu-portal-sqli-live-oracle + search SQLi oracle",
+      "dvwu.vercel.app/labs/open-redirect: 9 findings — dvwu-open-redirect-route-live-oracle + SSRF redirect oracle",
+      "pentest-fauxbank.vercel.app/api/profile: 5 findings — PII disclosure oracle",
+      "pentest-fauxbank.vercel.app/api/accounts/1: 5 findings — IDOR account oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "pwnshop.ctfsecurity.com/chat: thinner 8-finding pass — LLM backend may be cold/unavailable",
-      "vwad.owasp.org listings (damn-vulnerable-restaurant/goof): directory pages only — live apps require local Docker",
-      "damn-vulnerable-startup.fly.dev: 500 — DVS DeployBro Fly.io deployment offline"
+      "pentest-fauxbank.vercel.app/api/transfer: 5 findings — CSRF oracle may need authenticated session for full exploitation proof",
+      "DVWU lab modules share SPA shell — notices LFI oracle fires across multiple lab routes (cross-module noise)",
+      "appsec.study backlog (nomnom/the-range/graph/loggie/stalker) still queued behind priority drain"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 52,
-    "bypass403.vercel.app/debug": 9,
-    "bypass403.vercel.app/secure": 9,
-    "bypass403.vercel.app/waf": 8,
-    "wrongsecrets.herokuapp.com/challenge/challenge-52": 13,
-    "dvwu.vercel.app/labs/deserialization": 9,
-    "pwnshop.ctfsecurity.com/chat": 8,
-    "ginandjuice.shop/my-account/change-password": 6,
-    "sql-injection-lab.vercel.app": 4
+    "juice-shop.herokuapp.com": 51,
+    "dvwu.vercel.app/labs/race-condition": 9,
+    "dvwu.vercel.app/labs/csrf": 11,
+    "dvwu.vercel.app/labs/idor": 11,
+    "dvwu.vercel.app/labs/nosql-injection": 11,
+    "dvwu.vercel.app/labs/open-redirect": 9,
+    "pentest-fauxbank.vercel.app/api/profile": 5,
+    "pentest-fauxbank.vercel.app/api/accounts/1": 5,
+    "pentest-fauxbank.vercel.app/api/transfer": 5
   }
 }
