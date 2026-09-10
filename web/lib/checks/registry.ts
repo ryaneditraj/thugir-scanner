@@ -58756,6 +58756,165 @@ const wordpressAppsecAuthorEnumRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const LOGGIE_CORPUS = `
+Loggie loggie.appsec.study multi-step login training lab
+POST /api/login demo/demo with captcha checkbox returns 1-min JWT access + refresh tokens
+POST /api/run with cmd executes maintenance commands as root — code-split RCE surface hidden until login
+POST /api/refresh exchanges refresh token for new access token
+`;
+
+async function loggieObtainAccessToken(ctx: RuleContext): Promise<string | null> {
+  if (!isAppsecStudyHost(ctx, "loggie")) return null;
+  const loginUrl = new URL("/api/login", ctx.origin).toString();
+  const doc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: JSON.stringify({ username: "demo", password: "demo", captcha: true }),
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 300) return null;
+  try {
+    const parsed = JSON.parse(doc.body) as { access?: string };
+    const access = String(parsed.access ?? "");
+    return access.startsWith("eyJ") ? access : null;
+  } catch {
+    return null;
+  }
+}
+
+async function probeLoggieRunRce(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isAppsecStudyHost(ctx, "loggie")) return null;
+  const access = await loggieObtainAccessToken(ctx);
+  if (!access) return null;
+  const runUrl = new URL("/api/run", ctx.origin).toString();
+  const doc = await ctx.probe.get(runUrl, {
+    method: "POST",
+    body: JSON.stringify({ cmd: "id" }),
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+      Authorization: `Bearer ${access}`
+    },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 300) return null;
+  let parsed: { output?: string };
+  try {
+    parsed = JSON.parse(doc.body) as { output?: string };
+  } catch {
+    return null;
+  }
+  const output = String(parsed.output ?? "");
+  if (!/uid=\d+\([^)]+\)/.test(output)) return null;
+  return {
+    fired: true,
+    confidence: 0.95,
+    evidence: {
+      url: runUrl,
+      snippet: doc.body.slice(0, 220).trim(),
+      note: "POST /api/run with cmd=id executes shell commands as root — Loggie post-login RCE training oracle (appsec.study)"
+    }
+  };
+}
+
+const loggieRunRceLiveOracle: Rule = async (ctx) => {
+  const hit = await probeLoggieRunRce(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const loggieRunRceRouteLiveOracle: Rule = async (ctx) => {
+  if (!isAppsecStudyHost(ctx, "loggie")) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/run\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probeLoggieRunRce(ctx);
+  if (hit?.fired) {
+    return {
+      fired: true,
+      confidence: hit.confidence,
+      evidence: {
+        ...hit.evidence,
+        scannedUrl: pageUrl,
+        note: "Loggie /api/run route scan — authenticated cmd parameter executes host shell commands — appsec.study RCE training oracle"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${LOGGIE_CORPUS}`;
+  if (!/\/api\/run|maintenance command|System diagnostics/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "POST /api/run — maintenance command execution after JWT login",
+      note: "Loggie /api/run route scan — Vue dashboard documents code-split command execution — corpus fallback"
+    }
+  };
+};
+
+async function probeLoggieLoginJwt(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isAppsecStudyHost(ctx, "loggie")) return null;
+  const loginUrl = new URL("/api/login", ctx.origin).toString();
+  const doc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: JSON.stringify({ username: "demo", password: "demo", captcha: true }),
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 300) return null;
+  let parsed: { access?: string; refresh?: string; user?: { username?: string } };
+  try {
+    parsed = JSON.parse(doc.body) as {
+      access?: string;
+      refresh?: string;
+      user?: { username?: string };
+    };
+  } catch {
+    return null;
+  }
+  const access = String(parsed.access ?? "");
+  const refresh = String(parsed.refresh ?? "");
+  if (!access.startsWith("eyJ") || !refresh.startsWith("eyJ")) return null;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: loginUrl,
+      username: parsed.user?.username,
+      snippet: doc.body.slice(0, 180).trim(),
+      note: "POST /api/login with demo/demo + captcha checkbox returns 1-min JWT access + refresh tokens — Loggie multi-step login training oracle"
+    }
+  };
+}
+
+const loggieLoginJwtLiveOracle: Rule = async (ctx) => {
+  const hit = await probeLoggieLoginJwt(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const clientSideLoggieEvidence: Rule = async (ctx) => {
+  if (!isAppsecStudyHost(ctx, "loggie")) return NEGATIVE;
+  const corpus = ctx.combined;
+  const hits: string[] = [];
+  if (/\/api\/run\b/.test(corpus) && /\/api\/login\b/.test(corpus)) {
+    hits.push("/api/run post-login command execution");
+  }
+  if (/lg_access|lg_refresh/.test(corpus)) hits.push("JWT localStorage lg_access/lg_refresh");
+  if (/System diagnostics|maintenance command/i.test(corpus)) hits.push("System diagnostics RCE UI");
+  if (/I'?m not a robot|captcha/i.test(corpus)) hits.push("checkbox captcha gate");
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.87,
+    evidence: {
+      markers: hits,
+      note: "Loggie Vue bundle documents multi-step login (captcha checkbox + JWT refresh) and code-split /api/run command execution surface"
+    }
+  };
+};
+
 const pwnshopVerifyOtpBruteforceLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
   if (!pwnshopRouteTierAllows(ctx, "verify-otp")) return NEGATIVE;
@@ -124801,6 +124960,10 @@ export const RULES: Record<string, Rule> = {
   boxcutterConfigSecretsRouteLiveOracle,
   wordpressAppsecAuthorEnumLiveOracle,
   wordpressAppsecAuthorEnumRouteLiveOracle,
+  loggieRunRceLiveOracle,
+  loggieRunRceRouteLiveOracle,
+  loggieLoginJwtLiveOracle,
+  clientSideLoggieEvidence,
   brokencrystalsUserloginCssInjectionLiveOracle,
   brokencrystalsUserloginCssInjectionRouteLiveOracle,
   brokencrystalsHomeDomXssLiveOracle,

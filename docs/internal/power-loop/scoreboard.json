@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-10T06:28:25.323Z",
+  "updated_at": "2026-09-10T07:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 3327,
-  "total_findings": 37513,
-  "critical_findings": 65,
+  "total_sites_scanned": 3328,
+  "total_findings": 37520,
+  "critical_findings": 66,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2256,
-  "discovery_findings": 28455,
-  "improvements_shipped": 1738,
-  "last_run": "2026-09-10T06:28:25.323Z",
+  "discovery_findings": 28462,
+  "improvements_shipped": 1741,
+  "last_run": "2026-09-10T07:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "06",
+    "hour_utc": "07",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 52,
+      "oracle_findings": 51,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,38 +48,36 @@
           ]
         }
       },
-      "note": "Primary Heroku stable 6/6 (52 findings, secret-resend present) — no category gaps"
+      "note": "Primary Heroku stable 6/6 (51 findings) — no category gaps"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 49,
-      "focus": "VWAD DVR-restaurant + Goof listings, qa.brokencrystals SSRF metadata, Chimera ecommerce XSS + banking transfer oracles; queue drain seclab path-traversal/open-redirect + nosql-injection-lab",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 1,
+      "findings": 7,
+      "focus": "loggie.appsec.study multi-step login + post-login /api/run RCE oracles (queued appsec.study backlog)",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, gap=[]; secret-resend present)",
-      "qa.brokencrystals.com/api/file/aws: 11 findings — brokencrystals-file-aws-route-live-oracle SSRF metadata chain",
-      "chimera.atlascrew.dev/api/v1/ecommerce/products/search: 7 findings — chimera-ecommerce-products-search-xss-route-live-oracle",
-      "chimera.atlascrew.dev/api/v1/banking/transfer: 7 findings — chimera-banking-transfer-business-logic-route-live-oracle",
-      "vwad.owasp.org/app/goof/: 6 findings — vwad-goof-route-live-oracle (Snyk Goof NoSQLi/XSS corpus)",
-      "nosql-injection-lab.vercel.app: 5 findings — nosql-injection-lab-route-live-oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, gap=[])",
+      "loggie.appsec.study/: 7 findings — loggie-run-rce-live-oracle + loggie-login-jwt-live-oracle + client-side-loggie-evidence",
+      "loggie.appsec.study/api/run: 8 findings — loggie-run-rce-route-live-oracle confirms POST cmd=id uid=0(root)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "vwad.owasp.org/app/damn-vulnerable-restaurant/: listing-only oracle (5 findings) — live FastAPI Swagger at localhost:8091 not reachable from cloud",
-      "loggie.appsec.study / nomnom.appsec.study / graph.appsec.study queued — appsec.study backlog behind priority queue",
+      "nomnom.appsec.study / graph.appsec.study queued — oracles exist but not yet scanned in power-loop",
+      "vwad.owasp.org/app/damn-vulnerable-restaurant/: listing-only oracle — live FastAPI Swagger at localhost:8091 not reachable from cloud",
       "latty6.appsec.study DNS unreachable; prompt-injection-demo-bice.vercel.app deployment not found"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 52,
+    "juice-shop.herokuapp.com": 51,
+    "loggie.appsec.study": 7,
+    "loggie.appsec.study/api/run": 8,
     "qa.brokencrystals.com/api/file/aws": 11,
     "chimera.atlascrew.dev/api/v1/ecommerce/products/search": 7,
     "chimera.atlascrew.dev/api/v1/banking/transfer": 7,
     "vwad.owasp.org/app/goof": 6,
-    "nosql-injection-lab.vercel.app": 5,
-    "vwad.owasp.org/app/damn-vulnerable-restaurant": 5
+    "nosql-injection-lab.vercel.app": 5
   }
 }

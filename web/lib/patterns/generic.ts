@@ -89851,5 +89851,108 @@ export const genericPatterns: Pattern[] = [
       "Our WordPress route scan confirms username enumeration via ?author=. Show route-specific author archive hardening.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "loggie-run-rce-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Loggie /api/run command execution live oracle",
+    description:
+      "POST /api/run on loggie.appsec.study with a JWT access token executes arbitrary shell commands via the cmd parameter — the Loggie post-login RCE training oracle.",
+    impactOneline:
+      "Authenticated command execution endpoints let attackers run arbitrary OS commands as the service user.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "loggieRunRceLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never expose shell execution to web-authenticated users.",
+      steps: [
+        "Remove /api/run or replace with a fixed allowlist of maintenance actions.",
+        "Run diagnostic commands only from an isolated admin shell, not HTTP APIs.",
+        "Run Loggie only on isolated appsec.study training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/run endpoint executes shell commands when passed a JWT. Show command execution removal and safe diagnostics design.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "loggie-run-rce-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Loggie /api/run route command execution live oracle",
+    description:
+      "When scanning /api/run on loggie.appsec.study, authenticated POST with cmd=id returns uid=0(root) — route-specific post-login RCE training oracle.",
+    impactOneline:
+      "Route-specific confirmation that Loggie maintenance API runs arbitrary shell commands after JWT login.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "loggieRunRceRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove shell execution from authenticated maintenance routes.",
+      steps: [
+        "Disable /api/run on any shared training host.",
+        "Use fixed diagnostic actions instead of passing raw cmd strings."
+      ]
+    },
+    fixPrompt:
+      "Our /api/run route scan confirms root command execution. Show route-specific shell invocation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "loggie-login-jwt-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "medium",
+    title: "Loggie captcha-gated JWT login live oracle",
+    description:
+      "POST /api/login on loggie.appsec.study with demo/demo and a captcha checkbox returns short-lived JWT access and refresh tokens — the Loggie multi-step login training oracle.",
+    impactOneline:
+      "Weak captcha gates and short-lived JWT pairs are common auth bypass targets in multi-step login flows.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "loggieLoginJwtLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use server-validated CAPTCHA and secure JWT refresh handling.",
+      steps: [
+        "Validate captcha server-side with single-use tokens, not client checkbox booleans.",
+        "Bind refresh tokens to device/session and rotate on each use.",
+        "Set appropriate JWT expiry and revoke refresh tokens on logout."
+      ]
+    },
+    fixPrompt:
+      "Our /api/login accepts a client-side captcha checkbox and returns JWT access+refresh. Show captcha validation and refresh-token hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-loggie-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Loggie client bundle documents code-split RCE surface",
+    description:
+      "The Loggie Vue SPA stores lg_access/lg_refresh JWTs in localStorage and lazy-loads a dashboard chunk that POSTs to /api/run for maintenance command execution after captcha-gated login.",
+    impactOneline:
+      "Client bundles that document post-login command execution help attackers map hidden RCE surfaces before authentication.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideLoggieEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove command-execution API references from client bundles.",
+      steps: [
+        "Do not ship /api/run maintenance endpoints to browser-accessible routes.",
+        "Split privileged diagnostics into server-only tooling not referenced in SPA chunks.",
+        "Avoid storing long-lived refresh tokens in localStorage on production apps."
+      ]
+    },
+    fixPrompt:
+      "Our Loggie client bundle documents /api/run command execution behind JWT login. Show code-splitting and secret handling remediation.",
+    version: 1,
+    enabled: true
   }
 ];

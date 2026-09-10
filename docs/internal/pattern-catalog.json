@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-10T06:15:03.450Z",
-  "total": 3513,
-  "uniqueSlugs": 3505,
+  "generatedAt": "2026-09-10T07:04:11.150Z",
+  "total": 3517,
+  "uniqueSlugs": 3509,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3495,
+    "generic": 3499,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3428,
+    "deep": 3432,
     "continuous": 0
   },
   "byCategory": {
@@ -26,8 +26,8 @@
     "Information exposure": 1,
     "Information disclosure": 167,
     "Security misconfiguration": 290,
-    "Broken authentication": 233,
-    "Injection": 586,
+    "Broken authentication": 234,
+    "Injection": 589,
     "Cross-site scripting": 817,
     "Open redirect": 29,
     "general": 20,
@@ -800,6 +800,7 @@
     "client-side-knoxss-test-page-evidence",
     "client-side-kontra-application-security-evidence",
     "client-side-llm-sec-evidence",
+    "client-side-loggie-evidence",
     "client-side-maestro-agentic-ai-evidence",
     "client-side-maestro-rag-sqli-evidence",
     "client-side-mcp-sherpa-workshop-evidence",
@@ -2216,6 +2217,9 @@
     "jwt-alg-none-accepted",
     "kontra-session-fixation-route-live-oracle",
     "leaky-jar-recipe-review-stored-xss",
+    "loggie-login-jwt-live-oracle",
+    "loggie-run-rce-live-oracle",
+    "loggie-run-rce-route-live-oracle",
     "lovable-client-only-auth",
     "lovable-supabase-storage-public",
     "mcpgoat-route-live-oracle",

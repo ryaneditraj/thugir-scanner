@@ -10511,6 +10511,24 @@
       "slug": "wordpress-appsec-author-enum-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /?author=1 returns <title>admin – Acme Corp — Member Portal</title> (HTML entity &#8211; decoded); wordpress.appsec.study/ findings 4→6 (+wordpress-appsec-author-enum-live-oracle +wordpress-appsec-author-enum-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:loggie.appsec.study",
+      "slug": "loggie-run-rce-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/login demo/demo+captcha:true then POST /api/run cmd=id returns {\"output\":\"uid=0(root) gid=0(root) groups=0(root)\\n\"}; loggie.appsec.study/ findings 0→7 (+loggie-run-rce-live-oracle +loggie-login-jwt-live-oracle +client-side-loggie-evidence); /api/run route 8 findings (+loggie-run-rce-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:loggie.appsec.study",
+      "slug": "loggie-login-jwt-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/login {\"username\":\"demo\",\"password\":\"demo\",\"captcha\":true} returns access+refresh JWT pair (eyJ...); loggie.appsec.study/ findings 0→7; benchmark 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:loggie.appsec.study",
+      "slug": "client-side-loggie-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Vue bundle index-hfeNXFRp.js documents /api/login captcha gate, lg_access/lg_refresh localStorage, Dashboard-D7CqtC08.js POST /api/run maintenance cmd; loggie.appsec.study/ findings 0→7; benchmark 6/6 maintained"
     }
   ]
 }
