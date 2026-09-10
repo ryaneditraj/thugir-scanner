@@ -90561,6 +90561,159 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "mobicare-otp-bypass-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "MobiCare OTP verification bypass live oracle",
+    description:
+      "POST /api/auth/otp/verify on mobicare.appsec.study accepts any six-digit code after OTP request — the MobiCare broken OTP authentication training oracle.",
+    impactOneline:
+      "Broken OTP verification lets attackers sign in with any code after triggering an OTP request.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "mobicareOtpBypassLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate OTP codes server-side with expiry, attempt limits, and constant-time comparison.",
+      steps: [
+        "Store hashed OTP codes with short TTL and single-use semantics.",
+        "Reject arbitrary codes and rate-limit /api/auth/otp/verify.",
+        "Run MobiCare only on isolated appsec.study training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/auth/otp/verify endpoint accepts any six-digit code. Show OTP validation hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "mobicare-otp-bypass-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "MobiCare OTP verification bypass route live oracle",
+    description:
+      "When scanning /api/auth/otp/verify on mobicare.appsec.study, arbitrary OTP codes authenticate the subscriber — route-specific auth-bypass training oracle.",
+    impactOneline:
+      "Route-specific confirmation that MobiCare OTP verification lacks code validation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "mobicareOtpBypassRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block OTP bypass on /api/auth/otp/verify.",
+      steps: [
+        "Bind verified codes to the issued OTP record for the msisdn.",
+        "Audit telecom login flows for similar missing verification checks."
+      ]
+    },
+    fixPrompt:
+      "Our OTP route scan confirms broken verification. Show route-specific OTP hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "nimbus-files-idor-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Nimbus cloud file IDOR live oracle",
+    description:
+      "GET /api/files/{id} on nimbus.appsec.study with a demo bearer token returns another user's confidential file content — the Nimbus file IDOR training oracle.",
+    impactOneline:
+      "Missing file ownership checks expose confidential documents and secrets from other cloud storage accounts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "nimbusFilesIdorLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce owner_id checks before returning file content.",
+      steps: [
+        "Verify the authenticated user owns the requested file id.",
+        "Return 404 for files outside the caller's namespace.",
+        "Run Nimbus only on isolated appsec.study training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/files/{id} endpoint returns other users' confidential files. Show ownership enforcement.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "nimbus-files-idor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Nimbus cloud file IDOR route live oracle",
+    description:
+      "When scanning /api/files/{id} on nimbus.appsec.study, demo session reads another owner's confidential file — route-specific IDOR training oracle.",
+    impactOneline:
+      "Route-specific confirmation that Nimbus file downloads lack object-level authorization.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "nimbusFilesIdorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block cross-account file reads on /api/files/{id}.",
+      steps: [
+        "Bind file queries to the authenticated owner id.",
+        "Audit share links and admin routes for similar missing checks."
+      ]
+    },
+    fixPrompt:
+      "Our /api/files/{id} route scan confirms file IDOR. Show route-specific authorization fix.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "tenanthub-cross-tenant-ticket-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "TenantHub cross-tenant ticket IDOR live oracle",
+    description:
+      "GET /api/tickets/{id} on tenanthub.appsec.study with a demo bearer token returns another organization's ticket — the TenantHub cross-tenant IDOR training oracle.",
+    impactOneline:
+      "Missing tenant isolation lets workspace members read tickets from organizations they do not belong to.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "tenanthubCrossTenantTicketLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce org membership before returning ticket records.",
+      steps: [
+        "Verify ticket.org_id is in the caller's authorized org list.",
+        "Return 404 for cross-tenant ticket ids.",
+        "Run TenantHub only on isolated appsec.study training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/tickets/{id} endpoint leaks another tenant's ticket. Show tenant isolation enforcement.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "tenanthub-cross-tenant-ticket-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "TenantHub cross-tenant ticket IDOR route live oracle",
+    description:
+      "When scanning /api/tickets/{id} on tenanthub.appsec.study, demo session reads another org's ticket — route-specific cross-tenant IDOR training oracle.",
+    impactOneline:
+      "Route-specific confirmation that TenantHub ticket endpoints lack tenant isolation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "tenanthubCrossTenantTicketRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block cross-tenant ticket reads on /api/tickets/{id}.",
+      steps: [
+        "Join ticket queries with org membership tables.",
+        "Audit project and member routes for similar tenant leaks."
+      ]
+    },
+    fixPrompt:
+      "Our /api/tickets/{id} route scan confirms cross-tenant IDOR. Show route-specific tenant isolation fix.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-netrunner-academy-evidence",
     platform: "generic",
     category: "Information disclosure",

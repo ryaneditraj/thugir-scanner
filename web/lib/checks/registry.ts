@@ -58726,6 +58726,310 @@ const xmlgovXxeImportDocumentRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const MOBICARE_CORPUS = `
+MobiCare mobicare.appsec.study mobile self-care telecom training lab
+POST /api/auth/otp/request msisdn one-time code SMS OTP login
+POST /api/auth/otp/verify accepts any six-digit code without validating OTP
+POST /api/auth/login demo demo password fallback
+`;
+
+async function probeMobicareOtpBypass(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isAppsecStudyHost(ctx, "mobicare")) return null;
+  const msisdn = "+1-555-0100";
+  const requestUrl = new URL("/api/auth/otp/request", ctx.origin).toString();
+  const requestDoc = await ctx.probe.get(requestUrl, {
+    method: "POST",
+    body: JSON.stringify({ msisdn }),
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (requestDoc.status < 200 || requestDoc.status >= 300) return null;
+  const verifyUrl = new URL("/api/auth/otp/verify", ctx.origin).toString();
+  const verifyDoc = await ctx.probe.get(verifyUrl, {
+    method: "POST",
+    body: JSON.stringify({ msisdn, code: "847291" }),
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (verifyDoc.status < 200 || verifyDoc.status >= 300) return null;
+  let parsed: { access?: string; user?: { msisdn?: string; username?: string } };
+  try {
+    parsed = JSON.parse(verifyDoc.body) as {
+      access?: string;
+      user?: { msisdn?: string; username?: string };
+    };
+  } catch {
+    return null;
+  }
+  if (!parsed.access || parsed.user?.msisdn !== msisdn) return null;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url: verifyUrl,
+      msisdn,
+      username: parsed.user?.username,
+      snippet: verifyDoc.body.slice(0, 220).trim(),
+      note: "POST /api/auth/otp/verify accepts arbitrary OTP code after request — MobiCare broken OTP verification training oracle"
+    }
+  };
+}
+
+const mobicareOtpBypassLiveOracle: Rule = async (ctx) => {
+  const hit = await probeMobicareOtpBypass(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const mobicareOtpBypassRouteLiveOracle: Rule = async (ctx) => {
+  if (!isAppsecStudyHost(ctx, "mobicare")) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/auth\/otp\/(?:request|verify)\b|\/login\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probeMobicareOtpBypass(ctx);
+  if (hit?.fired) {
+    return {
+      fired: true,
+      confidence: hit.confidence,
+      evidence: {
+        ...hit.evidence,
+        scannedUrl: pageUrl,
+        note: "MobiCare OTP route scan — arbitrary six-digit code bypasses OTP verification — appsec.study auth-bypass training oracle"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${MOBICARE_CORPUS}`;
+  if (!/\/api\/auth\/otp|OTP|one-time code/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "POST /api/auth/otp/verify — accepts any six-digit OTP code",
+      note: "MobiCare OTP route scan — telecom lab documents broken OTP verification surface — corpus fallback"
+    }
+  };
+};
+
+const NIMBUS_CORPUS = `
+Nimbus nimbus.appsec.study cloud storage file sharing training lab
+POST /api/auth/login demo demo credentials
+GET /api/files/:id broken object authorization reads other owners confidential files
+`;
+
+async function nimbusLoginDemo(ctx: RuleContext): Promise<string | null> {
+  const loginUrl = new URL("/api/auth/login", ctx.origin).toString();
+  const doc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: JSON.stringify({ username: "demo", password: "demo" }),
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 300) return null;
+  try {
+    const parsed = JSON.parse(doc.body) as { access?: string; user?: { username?: string } };
+    if (!parsed.access || parsed.user?.username !== "demo") return null;
+    return parsed.access;
+  } catch {
+    return null;
+  }
+}
+
+async function probeNimbusFilesIdor(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isAppsecStudyHost(ctx, "nimbus")) return null;
+  const token = await nimbusLoginDemo(ctx);
+  if (!token) return null;
+  const victimFileId = "4";
+  const fileUrl = new URL(`/api/files/${victimFileId}`, ctx.origin).toString();
+  const doc = await ctx.probe.get(fileUrl, {
+    maxBytes: 8192,
+    timeoutMs: 15000,
+    headers: { Accept: "application/json", Authorization: `Bearer ${token}` }
+  });
+  if (doc.status < 200 || doc.status >= 300) return null;
+  let parsed: { id?: number | string; owner_id?: number; name?: string; content?: string };
+  try {
+    parsed = JSON.parse(doc.body) as {
+      id?: number | string;
+      owner_id?: number;
+      name?: string;
+      content?: string;
+    };
+  } catch {
+    return null;
+  }
+  const id = String(parsed.id ?? "");
+  const ownerId = Number(parsed.owner_id);
+  const content = String(parsed.content ?? "");
+  if (id !== victimFileId || ownerId === 1) return null;
+  if (!/CONFIDENTIAL|PRIVATE|RESTRICTED|SECRET|sk_live_/i.test(content)) return null;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: fileUrl,
+      fileId: id,
+      ownerId,
+      fileName: parsed.name,
+      snippet: doc.body.slice(0, 220).trim(),
+      note: `GET /api/files/${victimFileId} with demo bearer token returns another user's confidential file — Nimbus file IDOR training oracle`
+    }
+  };
+}
+
+const nimbusFilesIdorLiveOracle: Rule = async (ctx) => {
+  const hit = await probeNimbusFilesIdor(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const nimbusFilesIdorRouteLiveOracle: Rule = async (ctx) => {
+  if (!isAppsecStudyHost(ctx, "nimbus")) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/files\/\d+\b|\/file\/\d+\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probeNimbusFilesIdor(ctx);
+  if (hit?.fired) {
+    return {
+      fired: true,
+      confidence: hit.confidence,
+      evidence: {
+        ...hit.evidence,
+        scannedUrl: pageUrl,
+        note: "Nimbus /api/files/{id} route scan — demo session reads another owner's confidential file — appsec.study IDOR training oracle"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${NIMBUS_CORPUS}`;
+  if (!/\/api\/files|\/file\/|IDOR|cloud storage/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "GET /api/files/:id — missing owner check on file download",
+      note: "Nimbus /api/files/{id} route scan — cloud storage lab documents file IDOR surface — corpus fallback"
+    }
+  };
+};
+
+const TENANTHUB_CORPUS = `
+TenantHub tenanthub.appsec.study multi-tenant workspace training lab
+POST /api/auth/login demo demo credentials GET /api/orgs tenant membership
+GET /api/tickets/:id cross-tenant broken object authorization reads other org tickets
+`;
+
+async function tenanthubLoginDemo(ctx: RuleContext): Promise<string | null> {
+  const loginUrl = new URL("/api/auth/login", ctx.origin).toString();
+  const doc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: JSON.stringify({ username: "demo", password: "demo" }),
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 300) return null;
+  try {
+    const parsed = JSON.parse(doc.body) as { access?: string; user?: { username?: string } };
+    if (!parsed.access || parsed.user?.username !== "demo") return null;
+    return parsed.access;
+  } catch {
+    return null;
+  }
+}
+
+async function probeTenanthubCrossTenantTicket(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isAppsecStudyHost(ctx, "tenanthub")) return null;
+  const token = await tenanthubLoginDemo(ctx);
+  if (!token) return null;
+  const orgsUrl = new URL("/api/orgs", ctx.origin).toString();
+  const orgsDoc = await ctx.probe.get(orgsUrl, {
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    headers: { Accept: "application/json", Authorization: `Bearer ${token}` }
+  });
+  if (orgsDoc.status < 200 || orgsDoc.status >= 300) return null;
+  let orgs: Array<{ id?: number }>;
+  try {
+    orgs = JSON.parse(orgsDoc.body) as Array<{ id?: number }>;
+  } catch {
+    return null;
+  }
+  const memberOrgIds = new Set(
+    orgs.map((o) => Number(o.id)).filter((id) => Number.isFinite(id) && id > 0)
+  );
+  if (memberOrgIds.size === 0) return null;
+  const victimTicketId = "5";
+  const ticketUrl = new URL(`/api/tickets/${victimTicketId}`, ctx.origin).toString();
+  const ticketDoc = await ctx.probe.get(ticketUrl, {
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    headers: { Accept: "application/json", Authorization: `Bearer ${token}` }
+  });
+  if (ticketDoc.status < 200 || ticketDoc.status >= 300) return null;
+  let parsed: { id?: number | string; org_id?: number; title?: string; project_id?: number };
+  try {
+    parsed = JSON.parse(ticketDoc.body) as {
+      id?: number | string;
+      org_id?: number;
+      title?: string;
+      project_id?: number;
+    };
+  } catch {
+    return null;
+  }
+  const id = String(parsed.id ?? "");
+  const ticketOrgId = Number(parsed.org_id);
+  if (id !== victimTicketId || !Number.isFinite(ticketOrgId)) return null;
+  if (memberOrgIds.has(ticketOrgId)) return null;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: ticketUrl,
+      ticketId: id,
+      ticketOrgId,
+      memberOrgIds: [...memberOrgIds].join(", "),
+      title: parsed.title,
+      snippet: ticketDoc.body.slice(0, 220).trim(),
+      note: `GET /api/tickets/${victimTicketId} with demo bearer token returns another tenant's ticket — TenantHub cross-tenant IDOR training oracle`
+    }
+  };
+}
+
+const tenanthubCrossTenantTicketLiveOracle: Rule = async (ctx) => {
+  const hit = await probeTenanthubCrossTenantTicket(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const tenanthubCrossTenantTicketRouteLiveOracle: Rule = async (ctx) => {
+  if (!isAppsecStudyHost(ctx, "tenanthub")) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/tickets\/\d+\b|\/ticket\/\d+\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probeTenanthubCrossTenantTicket(ctx);
+  if (hit?.fired) {
+    return {
+      fired: true,
+      confidence: hit.confidence,
+      evidence: {
+        ...hit.evidence,
+        scannedUrl: pageUrl,
+        note: "TenantHub /api/tickets/{id} route scan — demo session reads another org's ticket — appsec.study cross-tenant IDOR training oracle"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${TENANTHUB_CORPUS}`;
+  if (!/\/api\/tickets|\/ticket\/|cross-tenant|TenantHub/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "GET /api/tickets/:id — missing tenant isolation on ticket reads",
+      note: "TenantHub /api/tickets/{id} route scan — workspace lab documents cross-tenant IDOR surface — corpus fallback"
+    }
+  };
+};
+
 const THE_RANGE_CORPUS = `
 The Range appsec.study calibrated web-vulnerability scanner benchmark
 POST /api/score returns coverage_pct by_class sqli idor ssti xxe auth-bypass planted vulnerabilities
@@ -126227,6 +126531,12 @@ export const RULES: Record<string, Rule> = {
   mongoleakNosqlAuthBypassRouteLiveOracle,
   xmlgovXxeImportDocumentLiveOracle,
   xmlgovXxeImportDocumentRouteLiveOracle,
+  mobicareOtpBypassLiveOracle,
+  mobicareOtpBypassRouteLiveOracle,
+  nimbusFilesIdorLiveOracle,
+  nimbusFilesIdorRouteLiveOracle,
+  tenanthubCrossTenantTicketLiveOracle,
+  tenanthubCrossTenantTicketRouteLiveOracle,
   theRangeBenchmarkScoreLiveOracle,
   theRangeBenchmarkScoreRouteLiveOracle,
   theRangeSqliC1LiveOracle,

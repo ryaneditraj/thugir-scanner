@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:mobicare.appsec.study",
+      "slug": "mobicare-otp-bypass-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/auth/otp/request + /api/auth/otp/verify with code 847291 returns access JWT for +1-555-0100; mobicare.appsec.study/ findings 3→4 (+mobicare-otp-bypass-live-oracle); route /api/auth/otp/verify findings 5 (+route); benchmark juice-shop.herokuapp.com 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:nimbus.appsec.study",
+      "slug": "nimbus-files-idor-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/auth/login demo/demo then GET /api/files/4 returns owner_id=2 CONFIDENTIAL Q3 Roadmap content; nimbus.appsec.study/ findings 4→5 (+nimbus-files-idor-live-oracle); route /api/files/4 findings 5 (+route); benchmark 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:tenanthub.appsec.study",
+      "slug": "tenanthub-cross-tenant-ticket-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/auth/login demo/demo then GET /api/tickets/5 returns org_id=3 ticket while demo member org is 1; tenanthub.appsec.study/ findings 4→5 (+tenanthub-cross-tenant-ticket-live-oracle); route /api/tickets/5 findings 5 (+route); benchmark 52 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:northwind.appsec.study",
       "slug": "northwind-accounts-idor-live-oracle",
       "status": "shipped",
