@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-10T09:12:00.000Z",
+  "updated_at": "2026-09-10T10:15:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://rollhouse.appsec.study",
+      "source": "zzzteph/appsec.study — RollHouse casino business-logic lab: wallet/promo abuse, BOLA, SQLi, SSTI→RCE (appsec.study catalog; web search 10 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://meridian.appsec.study",
+      "source": "zzzteph/appsec.study — Meridian ID OAuth2/OIDC SSO lab: redirect_uri bypass, alg:none JWT, SSTI→RCE (appsec.study catalog; web search 10 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://cogwork.appsec.study",
+      "source": "zzzteph/appsec.study — Cogwork workflow SaaS lab: Node deserialization RCE, prototype pollution auth bypass (appsec.study catalog; web search 10 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://streamline.appsec.study",
+      "source": "zzzteph/appsec.study — Streamline WebSocket chat lab: CSWSH, WS auth bypass, sender spoofing, REST SSTI→RCE (appsec.study catalog; web search 10 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://frontdesk.appsec.study",
+      "source": "zzzteph/appsec.study — FrontDesk hotel booking edge/proxy lab: HTTP smuggling, cache poisoning, X-Original-URL ACL bypass (appsec.study catalog; web search 10 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://refreshy.appsec.study",
       "source": "zzzteph/appsec.study — JWT refresh auth lab: stored XSS, SQLi search, BOLA on posts (appsec.study edge-cases catalog; web search 09 UTC discovery)",
@@ -12750,6 +12775,31 @@
     {
       "url": "https://dvga2.tools.escape.tech/import_paste",
       "source": "Damn Vulnerable GraphQL v2 \u2014 SSRF via import_paste GraphQL mutation (dvga2.tools.escape.tech; web search 05 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://rollhouse.appsec.study",
+      "source": "zzzteph/appsec.study \u2014 RollHouse casino business-logic lab (appsec.study catalog; web search 10 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://meridian.appsec.study",
+      "source": "zzzteph/appsec.study \u2014 Meridian ID OAuth2/OIDC SSO lab (appsec.study catalog; web search 10 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://cogwork.appsec.study",
+      "source": "zzzteph/appsec.study \u2014 Cogwork workflow SaaS deserialization lab (appsec.study catalog; web search 10 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://streamline.appsec.study",
+      "source": "zzzteph/appsec.study \u2014 Streamline WebSocket chat lab (appsec.study catalog; web search 10 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://frontdesk.appsec.study",
+      "source": "zzzteph/appsec.study \u2014 FrontDesk hotel booking edge/proxy lab (appsec.study catalog; web search 10 UTC discovery)",
       "auth": "public_demo"
     }
   ]
