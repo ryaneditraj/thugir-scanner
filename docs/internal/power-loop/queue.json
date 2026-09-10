@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-10T08:12:00.000Z",
+  "updated_at": "2026-09-10T09:12:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://refreshy.appsec.study",
+      "source": "zzzteph/appsec.study — JWT refresh auth lab: stored XSS, SQLi search, BOLA on posts (appsec.study edge-cases catalog; web search 09 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ghost.appsec.study",
+      "source": "zzzteph/appsec.study — code-split post-login BOLA on orders/invoices/inventory (demo/demo; appsec.study edge-cases catalog; web search 09 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://shoppy.appsec.study",
+      "source": "zzzteph/appsec.study — REST shop twin of graph: BOLA, SQLi, SSRF, mass assignment, stored XSS (~full REST API; appsec.study catalog; web search 09 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://blindspot.appsec.study",
+      "source": "zzzteph/appsec.study — blind/second-order injection lab: boolean/time SQLi, blind cmd-inj, second-order XSS (appsec.study edge-cases catalog; web search 09 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://helpdeskai.appsec.study",
+      "source": "zzzteph/appsec.study — LLM security lab: prompt injection, RAG exfil, excessive agency RCE, agent BOLA (OWASP LLM Top 10; appsec.study catalog; web search 09 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://dvwu.vercel.app/labs/race-condition",
       "source": "Damn Vulnerable Web University — race-condition TOCTOU lab module (dvwu.vercel.app; web search 08 UTC discovery)",
