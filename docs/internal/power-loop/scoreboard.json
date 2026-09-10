@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-10T08:12:00.000Z",
+  "updated_at": "2026-09-10T09:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 3347,
-  "total_findings": 37774,
-  "critical_findings": 66,
+  "total_sites_scanned": 2738,
+  "total_findings": 26690,
+  "critical_findings": 55,
   "teacher_delta_count": 0,
-  "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2266,
-  "discovery_findings": 28594,
-  "improvements_shipped": 1744,
-  "last_run": "2026-09-10T08:12:00.000Z",
+  "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+  "discovery_urls_added": 1956,
+  "discovery_findings": 22669,
+  "improvements_shipped": 1747,
+  "last_run": "2026-09-10T09:15:00.000Z",
   "last_run_summary": {
-    "hour_utc": "08",
+    "hour_utc": "09",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 52,
@@ -48,39 +48,36 @@
           ]
         }
       },
-      "note": "Primary Heroku stable 6/6 (52 findings, 37 juice-shop live oracles) — no category gaps"
+      "note": "Stable 6/6 first-pass recall (52 findings, secret-resend present)"
     },
-    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 66,
-      "focus": "DVWU race-condition/csrf/idor/nosql/open-redirect + pwnshop /chat PWN-037 + brokencrystals /api/fetch corpus + fauxbank API warmup",
+      "urls_added": 0,
+      "urls_scanned": 2,
+      "findings": 16,
+      "focus": "the-range planted SQLi/IDOR challenge oracles + netrunner-academy client-side training simulator evidence",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, 37 live oracles)",
-      "pwnshop.ctfsecurity.com/chat: 10 findings — chat-init email enumeration oracles on /chat hub scans (8→10)",
-      "brokencrystals.com/api/fetch: 32 findings — README SSRF corpus fallback",
-      "pentest-fauxbank.vercel.app/api/profile: 5 findings — fauxbank API route warmup + profile oracles",
-      "dvwu.vercel.app/labs/race-condition: 9 findings — dvwu-race-condition-lab-route-live-oracle",
-      "dvwu.vercel.app/labs/csrf: 11 findings — dvwu-csrf-route-live-oracle",
-      "pentest-fauxbank.vercel.app/api/accounts/1: 5 findings — IDOR account oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, secret-resend present)",
+      "the-range.appsec.study: 4→6 findings — the-range-sqli-c1-live-oracle + the-range-idor-c3-live-oracle",
+      "netrunner-academy.vercel.app: 9→10 findings — client-side-netrunner-academy-evidence"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "DVWU lab modules share SPA shell — notices LFI oracle fires across multiple lab routes (cross-module noise)",
-      "vwad.owasp.org listings (damn-vulnerable-restaurant/goof): directory pages only — live apps require local Docker",
-      "damn-vulnerable-startup.fly.dev: 500 — DVS DeployBro Fly.io deployment offline"
+      "latty6.appsec.study DNS unreachable — queued but not scannable",
+      "the-range remaining 12 planted challenges (SSTI, XXE, JWT, XSS, etc.) still uncovered by per-challenge oracles"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 52,
-    "pwnshop.ctfsecurity.com/chat": 10,
-    "brokencrystals.com/api/fetch": 32,
-    "pentest-fauxbank.vercel.app/api/profile": 5,
-    "dvwu.vercel.app/labs/csrf": 11,
-    "dvwu.vercel.app/labs/idor": 11,
-    "pentest-fauxbank.vercel.app/api/accounts/1": 5
+    "the-range.appsec.study": 6,
+    "netrunner-academy.vercel.app": 10,
+    "wrongsecrets.herokuapp.com/challenge/challenge-52": 13,
+    "duck-store.escape.tech/api/v1/users/me/profile": 33,
+    "demo.owasp-juice.shop/rest/memories": 27,
+    "pwnshop.ctfsecurity.com/verify-otp": 27,
+    "vulnbank.org/sup3r_s3cr3t_admin": 20,
+    "brokencrystals.com/userlogin?logobgcolor=red": 52
   }
 }
