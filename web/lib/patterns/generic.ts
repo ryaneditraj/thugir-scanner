@@ -89955,6 +89955,159 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "the-range-blind-sqli-c2-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "The Range challenge-2 blind SQLi live oracle",
+    description:
+      "GET /api/c/2?token=' OR '1'='1 on the-range.appsec.study flips valid:false to valid:true while benign tokens stay false — The Range planted boolean blind SQLi training oracle.",
+    impactOneline:
+      "Boolean blind SQL injection lets attackers extract secrets char-by-char when only true/false responses are returned on training benchmarks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theRangeBlindSqliC2LiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries and avoid boolean oracle responses on authentication tokens.",
+      steps: [
+        "Bind token parameters with prepared statements.",
+        "Return generic errors instead of valid:true/false differentials.",
+        "Run The Range only on isolated appsec.study training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/c/2 token parameter is vulnerable to boolean blind SQLi. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "the-range-blind-sqli-c2-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "The Range challenge-2 blind SQLi route live oracle",
+    description:
+      "When scanning /api/c/2 on the-range.appsec.study, boolean token injection confirms blind SQLi via valid:true differential — route-specific blind SQLi training oracle.",
+    impactOneline:
+      "Route-specific confirmation that The Range token validator is vulnerable to boolean blind SQL injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theRangeBlindSqliC2RouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Eliminate boolean oracle responses on token validation endpoints.",
+      steps: [
+        "Use constant-time token comparisons.",
+        "Log and rate-limit suspicious token patterns."
+      ]
+    },
+    fixPrompt:
+      "Our /api/c/2 route scan confirms blind SQLi on the token parameter. Show route-specific parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "the-range-lfi-c4-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "The Range challenge-4 LFI live oracle",
+    description:
+      "GET /api/c/4?file=../../../etc/passwd on the-range.appsec.study reads /etc/passwd via path traversal — The Range planted LFI training oracle.",
+    impactOneline:
+      "Local file inclusion via unsanitized file parameters lets attackers read sensitive files on training benchmark endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theRangeLfiC4LiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate file paths against an allowlist and reject traversal sequences.",
+      steps: [
+        "Resolve paths under a chrooted public_docs directory.",
+        "Reject .. segments and absolute paths in file parameters.",
+        "Run The Range only on isolated appsec.study training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/c/4 file parameter allows ../../../etc/passwd traversal. Show path canonicalization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "the-range-lfi-c4-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "The Range challenge-4 LFI route live oracle",
+    description:
+      "When scanning /api/c/4 on the-range.appsec.study, path traversal on file= reads system files — route-specific LFI training oracle.",
+    impactOneline:
+      "Route-specific confirmation that The Range file download endpoint lacks path traversal protections.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theRangeLfiC4RouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Canonicalize and jail file lookups to an approved directory.",
+      steps: [
+        "Map file IDs instead of accepting raw paths.",
+        "Return 404 for paths outside public_docs."
+      ]
+    },
+    fixPrompt:
+      "Our /api/c/4 route scan confirms LFI via the file parameter. Show route-specific path validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "the-range-cmd-inj-c6-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "The Range challenge-6 command injection live oracle",
+    description:
+      "POST /api/c/6 with host=127.0.0.1;id on the-range.appsec.study appends shell command output to ping diagnostics — The Range planted command injection training oracle.",
+    impactOneline:
+      "Unsanitized host parameters passed to shell diagnostics let attackers execute arbitrary commands on training benchmark endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theRangeCmdInjC6LiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass user input to shell commands — use safe APIs or strict allowlists.",
+      steps: [
+        "Replace shell ping with a library that accepts only IP literals.",
+        "Reject shell metacharacters in host parameters.",
+        "Run The Range only on isolated appsec.study training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/c/6 host parameter allows ;id command injection in ping diagnostics. Show safe subprocess remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "the-range-cmd-inj-c6-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "The Range challenge-6 command injection route live oracle",
+    description:
+      "When scanning /api/c/6 on the-range.appsec.study, host=127.0.0.1;id confirms OS command injection via uid= in output — route-specific command injection training oracle.",
+    impactOneline:
+      "Route-specific confirmation that The Range diagnostics endpoint shells out on user-controlled host values.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theRangeCmdInjC6RouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block shell metacharacters and use argument arrays for subprocess calls.",
+      steps: [
+        "Validate host against an IP address regex.",
+        "Run diagnostics without invoking /bin/sh -c."
+      ]
+    },
+    fixPrompt:
+      "Our /api/c/6 route scan confirms command injection on the host parameter. Show route-specific subprocess hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-netrunner-academy-evidence",
     platform: "generic",
     category: "Information disclosure",

@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-10T10:18:41.638Z",
+  "updated_at": "2026-09-10T11:20:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 3368,
-  "total_findings": 38043,
-  "critical_findings": 67,
+  "total_sites_scanned": 3370,
+  "total_findings": 38098,
+  "critical_findings": 68,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2276,
-  "discovery_findings": 28724,
-  "improvements_shipped": 1750,
-  "last_run": "2026-09-10T10:18:41.638Z",
+  "discovery_findings": 28727,
+  "improvements_shipped": 1753,
+  "last_run": "2026-09-10T11:20:00.000Z",
   "last_run_summary": {
-    "hour_utc": "10",
+    "hour_utc": "11",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": 52,
@@ -52,43 +52,36 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 52,
-      "focus": "appsec.study rollhouse/meridian/cogwork/streamline/frontdesk + DVWU csrf/idor/nosql queue drain",
+      "urls_added": 0,
+      "urls_scanned": 4,
+      "findings": 12,
+      "focus": "the-range.appsec.study c2 blind SQLi + c4 LFI + c6 command injection live oracles",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (52 findings) — primary Heroku cold-start timeout, staging fallback rich pass",
-      "the-range.appsec.study: 6→9 findings — the-range-ssti-c5 + jwt-none-c8 + xxe-c7 live oracles (concurrent run)",
-      "frontdesk.appsec.study: 4 findings — sql-error-disclosure + http-403-bypass-probe (edge/proxy lab shell)",
-      "meridian.appsec.study: 4 findings — thugir-sensitive-js-endpoints on OAuth2/OIDC SSO lab",
-      "cogwork.appsec.study: 4 findings — thugir-sensitive-js-endpoints; deserialization/proto-pollution oracles missing",
-      "streamline.appsec.study: 4 findings — thin pass; WebSocket CSWSH/sender-spoofing oracles need WS transport",
-      "rollhouse.appsec.study: 3 findings — thin pass (misconfig only); casino wallet/BOLA/SSTI oracles need post-login",
-      "dvwu.vercel.app/labs/csrf: 11 findings — dvwu-csrf-route-live-oracle (queue re-scan)",
-      "dvwu.vercel.app/labs/idor: 11 findings — dvwu-idor-route-live-oracle (queue re-scan)",
-      "dvwu.vercel.app/labs/nosql-injection: 11 findings — dvwu-nosql-injection-route-live-oracle (queue re-scan)"
+      "the-range.appsec.study: 9→12 findings — the-range-blind-sqli-c2 + lfi-c4 + cmd-inj-c6 live oracles shipped",
+      "the-range.appsec.study/api/c/2: 13 findings — blind SQLi boolean differential valid:true oracle",
+      "the-range.appsec.study/api/c/4: 13 findings — path traversal reads /etc/passwd via file= parameter",
+      "the-range.appsec.study/api/c/6: 13 findings — host=127.0.0.1;id command injection in ping diagnostics"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "juice-shop.herokuapp.com primary oracle 600s timeout — staging fallback required for rich benchmark pass",
-      "appsec.study enterprise labs (rollhouse/meridian/cogwork/streamline): thin unauthenticated passes — need post-login session + WS/deserialization/OAuth oracles",
-      "frontdesk.appsec.study: generic SQLi + 403-bypass hits but HTTP smuggling/cache-poisoning oracles absent",
-      "streamline.appsec.study: REST surface thin; WebSocket /ws transport not probed by current crawler",
-      "the-range remaining challenges (c2 blind SQLi, c4 LFI, c6 cmd-inj, c9 redirect, c10 XSS, c11 mass-assign, c12 NoSQLi, c13 header-bypass, c14 info-disclosure) still need per-challenge oracles"
+      "the-range remaining challenges (c9 open-redirect, c10 XSS, c11 mass-assign, c12 NoSQLi, c13 header-bypass, c14 info-disclosure) still need per-challenge oracles",
+      "appsec.study enterprise labs (rollhouse/meridian/cogwork/streamline): thin unauthenticated passes — need post-login session + WS/deserialization/OAuth oracles"
     ]
   },
   "discovery_highlights": {
     "juice-shop-staging.herokuapp.com": 52,
-    "the-range.appsec.study": 9,
+    "the-range.appsec.study": 12,
+    "the-range.appsec.study/api/c/2": 13,
+    "the-range.appsec.study/api/c/4": 13,
+    "the-range.appsec.study/api/c/6": 13,
     "frontdesk.appsec.study": 4,
     "meridian.appsec.study": 4,
     "cogwork.appsec.study": 4,
     "streamline.appsec.study": 4,
-    "rollhouse.appsec.study": 3,
-    "dvwu.vercel.app/labs/csrf": 11,
-    "dvwu.vercel.app/labs/idor": 11,
-    "dvwu.vercel.app/labs/nosql-injection": 11
+    "rollhouse.appsec.study": 3
   }
 }

