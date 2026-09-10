@@ -90408,6 +90408,159 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "northwind-accounts-idor-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Northwind Bank account IDOR live oracle",
+    description:
+      "GET /api/accounts/{id} on northwind.appsec.study with a demo bearer token returns another customer's account balance — the Northwind neobank IDOR training oracle.",
+    impactOneline:
+      "Broken account authorization lets authenticated users read other customers' balances and account numbers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "northwindAccountsIdorLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce ownership checks on account lookups before returning balance data.",
+      steps: [
+        "Verify account.customer_id matches the authenticated session user id.",
+        "Return 404 for accounts the caller does not own.",
+        "Run Northwind only on isolated appsec.study training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/accounts/{id} endpoint returns other customers' balances. Show ownership enforcement on account reads.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "northwind-accounts-idor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Northwind Bank account IDOR route live oracle",
+    description:
+      "When scanning /api/accounts/{id} on northwind.appsec.study, demo session reads another customer's account — route-specific IDOR training oracle.",
+    impactOneline:
+      "Route-specific confirmation that Northwind account endpoints lack object-level authorization.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "northwindAccountsIdorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block cross-customer account reads on /api/accounts/{id}.",
+      steps: [
+        "Bind account queries to the authenticated customer id.",
+        "Audit all banking routes for similar missing ownership checks."
+      ]
+    },
+    fixPrompt:
+      "Our /api/accounts/{id} route scan confirms IDOR. Show route-specific authorization fix.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "mongoleak-nosql-auth-bypass-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "MongoLeak NoSQL operator-injection auth bypass live oracle",
+    description:
+      'POST /api/auth/login on mongoleak.appsec.study accepts password {"$ne":null} operator injection for authentication bypass — the MongoLeak NoSQL training oracle.',
+    impactOneline:
+      "NoSQL operator injection on login bypasses password verification and grants valid session tokens.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "mongoleakNosqlAuthBypassLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Reject object-typed credentials on login and use typed query builders.",
+      steps: [
+        "Validate username and password are strings before querying MongoDB.",
+        "Use parameterized queries instead of passing raw request JSON into findOne().",
+        "Run MongoLeak only on isolated appsec.study training infrastructure."
+      ]
+    },
+    fixPrompt:
+      'Our /api/auth/login accepts password {"$ne":null} objects. Show NoSQL injection hardening.',
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "mongoleak-nosql-auth-bypass-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "MongoLeak NoSQL auth bypass route live oracle",
+    description:
+      "When scanning /api/auth/login on mongoleak.appsec.study, Mongo operator injection bypasses authentication — route-specific NoSQL training oracle.",
+    impactOneline:
+      "Route-specific confirmation that MongoLeak login passes request objects directly into Mongo queries.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "mongoleakNosqlAuthBypassRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Harden /api/auth/login against operator-injection payloads.",
+      steps: [
+        "Cast credentials to strings and reject nested objects.",
+        "Add integration tests for $ne/$gt operator injection attempts."
+      ]
+    },
+    fixPrompt:
+      "Our /api/auth/login route scan confirms NoSQL auth bypass. Show login query sanitization.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "xmlgov-xxe-import-document-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "XmlGov ImportDocument XXE live oracle",
+    description:
+      "POST /service ImportDocument on xmlgov.appsec.study expands external XML entities from file:// URIs — the XmlGov SOAP XXE training oracle.",
+    impactOneline:
+      "XXE in SOAP ImportDocument lets attackers read local files from the XmlGov service host.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "xmlgovXxeImportDocumentLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable external entity expansion in SOAP/XML parsers.",
+      steps: [
+        "Use a parser with external entities disabled for ImportDocument content.",
+        "Reject DOCTYPE declarations in untrusted XML payloads.",
+        "Run XmlGov only on isolated appsec.study training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /service ImportDocument endpoint expands XXE file entities. Show XML parser hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "xmlgov-xxe-import-document-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "XmlGov ImportDocument XXE route live oracle",
+    description:
+      "When scanning /service on xmlgov.appsec.study, SOAP ImportDocument confirms XXE file read — route-specific XML training oracle.",
+    impactOneline:
+      "Route-specific confirmation that XmlGov SOAP ImportDocument parses external entities.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "xmlgovXxeImportDocumentRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block XXE on the /service ImportDocument operation.",
+      steps: [
+        "Disable external DTD/entity resolution in the SOAP XML pipeline.",
+        "Add regression tests with file:// entity probes."
+      ]
+    },
+    fixPrompt:
+      "Our /service route scan confirms ImportDocument XXE. Show route-specific XML parser fix.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-netrunner-academy-evidence",
     platform: "generic",
     category: "Information disclosure",
