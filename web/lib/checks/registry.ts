@@ -58564,6 +58564,161 @@ const theRangeBenchmarkScoreRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+async function probeTheRangeSqliC1(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isAppsecStudyHost(ctx, "the-range")) return null;
+  const sqliUrl = new URL("/api/c/1", ctx.origin);
+  sqliUrl.searchParams.set("q", "'");
+  const doc = await ctx.probe.get(sqliUrl.toString(), {
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    headers: { Accept: "application/json" }
+  });
+  if (doc.status < 200 || doc.status >= 600) return null;
+  let parsed: { error?: string; sql?: string; detail?: string };
+  try {
+    parsed = JSON.parse(doc.body) as { error?: string; sql?: string; detail?: string };
+  } catch {
+    return null;
+  }
+  const sql = String(parsed.sql ?? "");
+  if (!/query failed/i.test(String(parsed.error ?? "")) || !/SELECT.+LIKE/i.test(sql)) return null;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url: sqliUrl.toString(),
+      snippet: doc.body.slice(0, 220).trim(),
+      note: "GET /api/c/1?q=' leaks concatenated SQL query — The Range challenge-1 SQL injection training oracle"
+    }
+  };
+}
+
+const theRangeSqliC1LiveOracle: Rule = async (ctx) => {
+  const hit = await probeTheRangeSqliC1(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const theRangeSqliC1RouteLiveOracle: Rule = async (ctx) => {
+  if (!isAppsecStudyHost(ctx, "the-range")) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/c\/1\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probeTheRangeSqliC1(ctx);
+  if (hit?.fired) {
+    return {
+      fired: true,
+      confidence: hit.confidence,
+      evidence: {
+        ...hit.evidence,
+        scannedUrl: pageUrl,
+        note: "The Range /api/c/1 route scan — q parameter SQL injection confirmed via leaked query string — appsec.study SQLi training oracle"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${THE_RANGE_CORPUS}`;
+  if (!/\/api\/c\/1|challenge.*sqli|string concatenation/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "GET /api/c/1?q= — search built with string concatenation",
+      note: "The Range /api/c/1 route scan — benchmark documents planted SQLi on search parameter — corpus fallback"
+    }
+  };
+};
+
+async function probeTheRangeIdorC3(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isAppsecStudyHost(ctx, "the-range")) return null;
+  const idorUrl = new URL("/api/c/3", ctx.origin);
+  idorUrl.searchParams.set("doc", "2");
+  const doc = await ctx.probe.get(idorUrl.toString(), {
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    headers: { Accept: "application/json" }
+  });
+  if (doc.status < 200 || doc.status >= 300) return null;
+  let parsed: { doc?: string; content?: string };
+  try {
+    parsed = JSON.parse(doc.body) as { doc?: string; content?: string };
+  } catch {
+    return null;
+  }
+  const docId = String(parsed.doc ?? "");
+  const content = String(parsed.content ?? "");
+  if (docId !== "2" || !content || content.length < 4) return null;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: idorUrl.toString(),
+      docId,
+      content: content.slice(0, 80),
+      snippet: doc.body.slice(0, 220).trim(),
+      note: "GET /api/c/3?doc=2 returns another user's document without authorization — The Range challenge-3 IDOR training oracle"
+    }
+  };
+}
+
+const theRangeIdorC3LiveOracle: Rule = async (ctx) => {
+  const hit = await probeTheRangeIdorC3(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const theRangeIdorC3RouteLiveOracle: Rule = async (ctx) => {
+  if (!isAppsecStudyHost(ctx, "the-range")) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/c\/3\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probeTheRangeIdorC3(ctx);
+  if (hit?.fired) {
+    return {
+      fired: true,
+      confidence: hit.confidence,
+      evidence: {
+        ...hit.evidence,
+        scannedUrl: pageUrl,
+        note: "The Range /api/c/3 route scan — enumerable doc parameter returns unauthorized documents — appsec.study IDOR training oracle"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${THE_RANGE_CORPUS}`;
+  if (!/\/api\/c\/3|challenge.*idor|enumerable.*doc/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "GET /api/c/3?doc= — document ids enumerable without auth",
+      note: "The Range /api/c/3 route scan — benchmark documents planted IDOR on doc parameter — corpus fallback"
+    }
+  };
+};
+
+const clientSideNetrunnerAcademyEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const isKnownHost = /netrunner-academy\.vercel\.app/i.test(pageUrl);
+  if (!isKnownHost && !/NetRunner Academy/i.test(corpus)) return NEGATIVE;
+  const hits: string[] = [];
+  if (/NetRunner Academy|netrunner-academy/i.test(corpus)) hits.push("NetRunner Academy interactive security simulator");
+  if (/Reqable/i.test(corpus)) hits.push("Reqable packet-capture training UI");
+  if (/SQL injection|SQLi/i.test(corpus)) hits.push("SQL injection training level");
+  if (/\bIDOR\b|越权访问/i.test(corpus)) hits.push("IDOR training level");
+  if (/JWT|json web token/i.test(corpus)) hits.push("JWT vulnerability training level");
+  if (/networkEngine|buildBackendResponse|VirtualBrowser/i.test(corpus)) {
+    hits.push("client-side networkEngine request simulation");
+  }
+  const minHits = isKnownHost ? 3 : 4;
+  if (hits.length < minHits) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 5 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits,
+      note: "NetRunner Academy Next.js bundle documents Reqable/VirtualBrowser packet-capture simulator with SQLi, IDOR, and JWT training levels (client-side networkEngine — no real backend APIs)"
+    }
+  };
+};
+
 const STALKER_CORPUS = `
 Stalker Cats stalker.appsec.study PHP SQLite training lab
 GET /?id= parameter injectable PDOException SQL error in index.php
@@ -125013,6 +125168,11 @@ export const RULES: Record<string, Rule> = {
   graphAppsecRecentUsersRouteLiveOracle,
   theRangeBenchmarkScoreLiveOracle,
   theRangeBenchmarkScoreRouteLiveOracle,
+  theRangeSqliC1LiveOracle,
+  theRangeSqliC1RouteLiveOracle,
+  theRangeIdorC3LiveOracle,
+  theRangeIdorC3RouteLiveOracle,
+  clientSideNetrunnerAcademyEvidence,
   stalkerSqliIdParamLiveOracle,
   stalkerSqliIdParamRouteLiveOracle,
   boxcutterConfigSecretsLiveOracle,

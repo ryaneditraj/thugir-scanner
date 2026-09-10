@@ -89700,6 +89700,134 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "the-range-sqli-c1-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "The Range challenge-1 SQL injection live oracle",
+    description:
+      "GET /api/c/1?q=' on the-range.appsec.study leaks a concatenated SQL query in the error response — The Range planted SQLi training oracle.",
+    impactOneline:
+      "String-concatenated search queries let attackers read or modify database rows on training benchmark endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theRangeSqliC1LiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries and never concatenate user input into SQL.",
+      steps: [
+        "Replace string-concatenated search with prepared statements.",
+        "Suppress verbose SQL errors in API responses.",
+        "Run The Range only on isolated appsec.study training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/c/1?q= parameter leaks concatenated SQL on syntax errors. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "the-range-sqli-c1-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "The Range challenge-1 SQLi route live oracle",
+    description:
+      "When scanning /api/c/1 on the-range.appsec.study, GET ?q=' confirms injectable search parameter via leaked SQL — route-specific SQLi training oracle.",
+    impactOneline:
+      "Route-specific confirmation that The Range search endpoint is vulnerable to SQL injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theRangeSqliC1RouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries on all search endpoints.",
+      steps: [
+        "Bind q parameters in prepared statements.",
+        "Disable SQL error disclosure in production APIs."
+      ]
+    },
+    fixPrompt:
+      "Our /api/c/1 route scan confirms SQL injection on the q parameter. Show route-specific parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "the-range-idor-c3-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "The Range challenge-3 IDOR live oracle",
+    description:
+      "GET /api/c/3?doc=2 on the-range.appsec.study returns another user's document without authorization — The Range planted IDOR training oracle.",
+    impactOneline:
+      "Enumerable document IDs let attackers read unauthorized records on training benchmark endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theRangeIdorC3LiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Authorize every document lookup against the authenticated user.",
+      steps: [
+        "Use non-enumerable document identifiers.",
+        "Verify ownership before returning document content.",
+        "Run The Range only on isolated appsec.study training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/c/3?doc= parameter returns documents without ownership checks. Show authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "the-range-idor-c3-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "The Range challenge-3 IDOR route live oracle",
+    description:
+      "When scanning /api/c/3 on the-range.appsec.study, enumerable doc parameter returns unauthorized documents — route-specific IDOR training oracle.",
+    impactOneline:
+      "Route-specific confirmation that The Range document endpoint lacks object-level authorization.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theRangeIdorC3RouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce per-user authorization on document lookups.",
+      steps: [
+        "Map doc IDs to authenticated user sessions.",
+        "Reject cross-user document access with 403 responses."
+      ]
+    },
+    fixPrompt:
+      "Our /api/c/3 route scan confirms IDOR on the doc parameter. Show route-specific object authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-netrunner-academy-evidence",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "NetRunner Academy security training simulator disclosed",
+    description:
+      "NetRunner Academy is a client-side interactive web security simulator teaching packet capture, SQLi, IDOR, XSS, and JWT exploitation via Reqable/VirtualBrowser UI.",
+    impactOneline:
+      "Public security training simulators document realistic attack surfaces and vulnerable request patterns in client bundles.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideNetrunnerAcademyEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Host interactive security training simulators on isolated lab infrastructure.",
+      steps: [
+        "Deploy CTF-style training apps on VPN-only or lab-only subdomains.",
+        "Avoid mirroring training vulnerability patterns on production apps.",
+        "Gate instructor content behind authentication when possible."
+      ]
+    },
+    fixPrompt:
+      "We deploy NetRunner Academy-style security training simulators. Show how to isolate lab instances from production traffic.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "stalker-sqli-id-param-live-oracle",
     platform: "generic",
     category: "SQL injection",

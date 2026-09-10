@@ -10547,6 +10547,24 @@
       "slug": "fauxbank-api-route-warmup",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: runDeepScan warms /lab+/ when fauxbank /api/* route GET returns 405/thin body; runner -3 priority for fauxbank-profile/accounts/transfer route oracles; pentest-fauxbank.vercel.app/api/profile findings 2→5 (+fauxbank-profile-sensitive-data-live-oracle +fauxbank-profile-route-live-oracle +client-side-fauxbank-lab-evidence); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-range.appsec.study",
+      "slug": "the-range-sqli-c1-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/c/1?q=' returns {\"error\":\"query failed\",\"sql\":\"SELECT id, title, body FROM articles WHERE title LIKE '%'%\"}; the-range.appsec.study/ findings 4→6 (+the-range-sqli-c1-live-oracle +the-range-idor-c3-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-range.appsec.study",
+      "slug": "the-range-idor-c3-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/c/3?doc=2 returns {\"doc\":\"2\",\"content\":\"Team offsite notes\"} without authorization; the-range.appsec.study/ findings 4→6; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:netrunner-academy.vercel.app",
+      "slug": "client-side-netrunner-academy-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Next.js bundle documents NetRunner Academy + Reqable simulator + SQL injection/IDOR/JWT training levels (client-side networkEngine, no real backend); netrunner-academy.vercel.app/ findings 9→10 (+client-side-netrunner-academy-evidence); benchmark juice-shop 52 findings 6/6 maintained"
     }
   ]
 }
