@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-10T16:11:30.000Z",
+  "updated_at": "2026-09-10T16:20:30.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 3430,
-  "total_findings": 38844,
-  "critical_findings": 74,
+  "total_sites_scanned": 3431,
+  "total_findings": 38874,
+  "critical_findings": 75,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2306,
   "discovery_findings": 28960,
-  "improvements_shipped": 1765,
-  "last_run": "2026-09-10T16:11:30.000Z",
+  "improvements_shipped": 1768,
+  "last_run": "2026-09-10T16:20:30.000Z",
   "last_run_summary": {
     "hour_utc": "16",
     "benchmark": {
@@ -48,40 +48,37 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall on primary Heroku (52 findings, secret-resend present)"
+      "note": "Stable 6/6 first-pass recall on primary Heroku (52 findings)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 24,
-      "focus": "wordpress WP-plugin lab + framework-specific XSS sink labs (freact/fvue/fangular) + maze manifest rescan",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 6,
+      "findings": 30,
+      "focus": "shellshock CGI corpus fallback + prism query-builder SQLi + paystream payslip IDOR live oracles",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, gap=[])",
-      "wordpress.appsec.study: 6 findings — author enumeration live+route oracles; misses planted SQLi/upload RCE/LFI",
-      "freact.appsec.study: 2 findings — dangerous-html-sinks + missing headers (React-specific CSTI sinks not triggered)",
-      "maze.appsec.study/api/manifest: 10 findings — .env/.git/openapi exposure on manifest oracle",
-      "mobicare.appsec.study/: 4 findings — OTP verify accepts arbitrary code (mobicare-otp-bypass live oracle)"
+      "shellshock.appsec.study/cgi-bin/status.cgi: 4 findings — Cloudflare 1012 blocks Shellshock UA; corpus fallback oracle (+shellshock-cgi-rce live+route)",
+      "prism.appsec.study/api/query/run: 6 findings — POST where=' leaks concatenated SQL (+prism-query-sqli live+route)",
+      "paystream.appsec.study/api/payslips/2: 5 findings — demo bearer reads employee_id=2 payslip (+paystream-payslip-idor live+route)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "latty7.appsec.study + latty1.appsec.study: scanner reachability error despite HTTP 200 from curl — retry with route-specific oracles",
-      "wordpress.appsec.study: thin pass — author enum only; need admin-ajax SQLi + plugin upload RCE + wp-config LFI oracles",
-      "freact/fvue/fangular: generic sink/header checks only — need framework-specific DOM-XSS/CSTI route oracles with hidden params",
-      "maze.appsec.study: manifest scan gets openapi/.git/.env but misses procedural vuln-chain fingerprinting"
+      "polyglot.appsec.study: thin unauth pass — need translation-preview SSTI + project IDOR authenticated oracles",
+      "maze.appsec.study: manifest-only scan misses procedural vuln-chain fingerprinting",
+      "wordpress/freact/fvue/fangular: thin passes — need framework-specific route oracles"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 52,
-    "wordpress.appsec.study": 6,
+    "shellshock.appsec.study/cgi-bin/status.cgi": 4,
+    "prism.appsec.study/api/query/run": 6,
+    "paystream.appsec.study/api/payslips/2": 5,
     "maze.appsec.study/api/manifest": 10,
+    "wordpress.appsec.study": 6,
     "mobicare.appsec.study/": 4,
-    "freact.appsec.study": 2,
-    "fvue.appsec.study": 1,
-    "fangular.appsec.study": 1,
-    "brokencrystals.com/api/fetch?url=https://httpbin.org/get": 31,
     "the-range.appsec.study/": 18
   }
 }

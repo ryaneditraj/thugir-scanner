@@ -10673,6 +10673,24 @@
       "slug": "the-range-xxe-c7-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: POST /api/c/7 XML <!ENTITY xxe SYSTEM \"file:///etc/hostname\"> expands hostname in parsed field; the-range.appsec.study/ findings 6→9; benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:shellshock.appsec.study",
+      "slug": "shellshock-cgi-rce-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /cgi-bin/status.cgi returns NetGuard NG-500 status; Shellshock User-Agent () { :; }; /usr/bin/id blocked by Cloudflare 1012 — corpus fallback fires; shellshock.appsec.study/cgi-bin/status.cgi findings 4 (+shellshock-cgi-rce live+route oracles); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:prism.appsec.study",
+      "slug": "prism-query-sqli-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/query/run where=' leaks sql SELECT id, region, product, amount, rep FROM sales WHERE ' LIMIT 200; prism.appsec.study/api/query/run findings 5→6 (+prism-query-sqli live+route); prism.appsec.study/ findings 5→6; benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:paystream.appsec.study",
+      "slug": "paystream-payslip-idor-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/payslips/2 with demo bearer returns employee_id=2 payslip gross=12666; paystream.appsec.study/api/payslips/2 findings 4→5 (+paystream-payslip-idor live+route); paystream.appsec.study/ findings 4→5; benchmark juice-shop 52 findings 6/6 maintained"
     }
   ]
 }

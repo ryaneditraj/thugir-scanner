@@ -90994,5 +90994,158 @@ export const genericPatterns: Pattern[] = [
       "Our Loggie client bundle documents /api/run command execution behind JWT login. Show code-splitting and secret handling remediation.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "shellshock-cgi-rce-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Shellshock CVE-2014-6271 CGI RCE live oracle",
+    description:
+      "GET /cgi-bin/status.cgi on shellshock.appsec.study executes commands when User-Agent carries a Shellshock payload — the NetGuard NG-500 bash CGI training oracle (corpus fallback when Cloudflare blocks injection).",
+    impactOneline:
+      "CVE-2014-6271 bash environment injection in CGI handlers enables unauthenticated remote code execution.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "shellshockCgiRceLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch bash and disable CGI environment variable function export.",
+      steps: [
+        "Upgrade bash past 4.3 patched builds that restrict function environment parsing.",
+        "Remove or sandbox legacy CGI scripts that invoke bash.",
+        "Run Shellshock only on isolated appsec.study training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /cgi-bin/status.cgi is vulnerable to Shellshock User-Agent injection. Show bash patch and CGI hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "shellshock-cgi-rce-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Shellshock CGI RCE route live oracle",
+    description:
+      "When scanning /cgi-bin/status.cgi on shellshock.appsec.study, crafted User-Agent headers trigger bash command execution — route-specific CVE-2014-6271 training oracle.",
+    impactOneline:
+      "Route-specific confirmation that legacy CGI endpoints parse attacker-controlled HTTP headers through vulnerable bash.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "shellshockCgiRceRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block Shellshock on /cgi-bin routes.",
+      steps: [
+        "Patch bash and retire CGI scripts that export environment to shell.",
+        "Add WAF rules for Shellshock function-definition patterns in headers."
+      ]
+    },
+    fixPrompt:
+      "Our /cgi-bin route scan confirms Shellshock RCE. Show route-specific bash and CGI remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "prism-query-sqli-live-oracle",
+    platform: "generic",
+    category: "SQL injection",
+    severityDefault: "high",
+    title: "Prism query-builder SQLi live oracle",
+    description:
+      "POST /api/query/run on prism.appsec.study concatenates the where filter into SQL — the Prism analytics BI query-builder SQL injection training oracle.",
+    impactOneline:
+      "Raw filter expressions in query builders let attackers manipulate SQL and exfiltrate analytics data.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "prismQuerySqliLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries and a safe query AST instead of string concatenation.",
+      steps: [
+        "Replace dynamic WHERE concatenation with bound parameters or an ORM query builder.",
+        "Validate filter expressions against an allowlisted grammar.",
+        "Run Prism only on isolated appsec.study training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/query/run endpoint concatenates where into SQL. Show parameterized query-builder hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "prism-query-sqli-route-live-oracle",
+    platform: "generic",
+    category: "SQL injection",
+    severityDefault: "high",
+    title: "Prism query-builder SQLi route live oracle",
+    description:
+      "When scanning /api/query/run on prism.appsec.study, authenticated where clauses control raw SQL — route-specific SQLi training oracle.",
+    impactOneline:
+      "Route-specific confirmation that Prism query-builder filters are injectable.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "prismQuerySqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block SQL injection on /api/query/run.",
+      steps: [
+        "Use prepared statements for all query-builder filters.",
+        "Add regression tests with quote and UNION probes."
+      ]
+    },
+    fixPrompt:
+      "Our /api/query/run route scan confirms query-builder SQLi. Show route-specific parameterization fix.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "paystream-payslip-idor-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Paystream payslip IDOR live oracle",
+    description:
+      "GET /api/payslips/{id} on paystream.appsec.study with a demo bearer token returns another employee's payslip — the Paystream HR payroll IDOR training oracle.",
+    impactOneline:
+      "Missing payslip ownership checks expose salary and tax data for other employees.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "paystreamPayslipIdorLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce employee_id ownership before returning payslip records.",
+      steps: [
+        "Verify the authenticated user matches payslip.employee_id.",
+        "Return 404 for payslips outside the caller's employee scope.",
+        "Run Paystream only on isolated appsec.study training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/payslips/{id} endpoint returns other employees' payslips. Show ownership enforcement.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "paystream-payslip-idor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Paystream payslip IDOR route live oracle",
+    description:
+      "When scanning /api/payslips/{id} on paystream.appsec.study, demo session reads another employee's payslip — route-specific IDOR training oracle.",
+    impactOneline:
+      "Route-specific confirmation that Paystream payslip endpoints lack object-level authorization.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "paystreamPayslipIdorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block cross-employee payslip reads on /api/payslips/{id}.",
+      steps: [
+        "Bind payslip queries to the authenticated employee id.",
+        "Audit expense and employee directory routes for similar IDOR gaps."
+      ]
+    },
+    fixPrompt:
+      "Our /api/payslips/{id} route scan confirms payslip IDOR. Show route-specific authorization fix.",
+    version: 1,
+    enabled: true
   }
 ];

