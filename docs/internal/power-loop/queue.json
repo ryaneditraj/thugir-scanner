@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-10T14:15:00.000Z",
+  "updated_at": "2026-09-10T15:06:24.832Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://prism.appsec.study",
+      "source": "zzzteph/appsec.study Prism — analytics BI report-builder SQLi/SSTI/IDOR lab (appsec.study catalog; web search 15 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://paystream.appsec.study",
+      "source": "zzzteph/appsec.study Paystream — HR payroll PII IDOR + expense workflow bypass lab (appsec.study catalog; web search 15 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://polyglot.appsec.study",
+      "source": "zzzteph/appsec.study Polyglot — translation-preview SSTI + project IDOR lab (appsec.study catalog; web search 15 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://latty1.appsec.study",
+      "source": "zzzteph/appsec.study latty-1 — lateral chain SQLi→admin→SSTI→RCE blog lab (appsec.study catalog; web search 15 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juicy.appsec.study",
+      "source": "zzzteph/appsec.study juicy — JS bundle secret/endpoint/sink analysis + DOM-XSS lab (appsec.study catalog; web search 15 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://maze.appsec.study/api/manifest",
       "source": "zzzteph/appsec.study maze — procedural self-mutating vuln chain manifest oracle GET /api/manifest (appsec.study catalog; web search 14 UTC discovery)",
