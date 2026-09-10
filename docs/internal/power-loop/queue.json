@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-10T06:27:00.000Z",
+  "updated_at": "2026-09-10T07:10:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://bypass403.vercel.app/debug",
+      "source": "Karthikdude/bypass403 — protected /debug 403-bypass oracle (60+ endpoint lab; web search 07 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://bypass403.vercel.app/secure",
+      "source": "Karthikdude/bypass403 — bearer-token /secure 403-bypass oracle (web search 07 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://bypass403.vercel.app/waf",
+      "source": "Karthikdude/bypass403 — WAF verb-tunneling /waf 403-bypass oracle (web search 07 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-52",
+      "source": "OWASP WrongSecrets challenge-52 — K8s secrets oracle (Heroku public demo; web search 07 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvwu.vercel.app/labs/deserialization",
+      "source": "Damn Vulnerable Web University — insecure deserialization lab module (dvwu.vercel.app; web search 07 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://vwad.owasp.org/app/damn-vulnerable-restaurant/",
       "source": "OWASP VWAD \u2014 Damn Vulnerable RESTaurant API Game FastAPI/PostgreSQL Docker CTF (theowni/Damn-Vulnerable-RESTaurant-API-Game; web search 06 UTC discovery)",
