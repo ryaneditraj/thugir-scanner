@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-10T20:15:00.000Z",
+  "updated_at": "2026-09-10T20:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 3458,
-  "total_findings": 39257,
+  "total_sites_scanned": 3463,
+  "total_findings": 39276,
   "critical_findings": 81,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2321,
-  "discovery_findings": 29097,
+  "discovery_urls_added": 2326,
+  "discovery_findings": 29116,
   "improvements_shipped": 1780,
-  "last_run": "2026-09-10T20:15:00.000Z",
+  "last_run": "2026-09-10T20:10:00.000Z",
   "last_run_summary": {
     "hour_utc": "20",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 52,
+      "oracle_findings": 51,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 590,
+      "probes_run": 598,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,41 +48,48 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (52 findings); no category gaps"
+      "note": "Stable 6/6 recall (51 findings, secret-resend present); no category gaps"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 5,
-      "focus": "shoppy REST order BOLA + ghost code-split order BOLA + refreshy JWT refresh post BOLA",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 5,
+      "findings": 19,
+      "focus": "appsec.study oracle endpoints — Meridian OAuth, RollHouse wallet, Cogwork workflows, FrontDesk reservations, Prism reports",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, gap=[])",
-      "shoppy.appsec.study/: 8 findings — alice session reads another user's order (+shoppy-orders-bola-live-oracle)",
-      "shoppy.appsec.study/api/products/1: 9 findings — route oracle confirms order BOLA (+shoppy-orders-bola-route-live-oracle)",
-      "ghost.appsec.study/: 5 findings — demo session reads another shop's order (+ghost-orders-bola-live-oracle)",
-      "refreshy.appsec.study/: 5 findings — bob PATCH edits alice post (+refreshy-posts-bola-live-oracle)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, gap=[], secret-resend present)",
+      "prism.appsec.study/api/reports/1: 5 findings — query-builder SQLi live oracle (+prism-query-sqli-live-oracle)",
+      "frontdesk.appsec.study/api/reservations/1: 4 findings — SQL error disclosure + HTTP 403 bypass probe",
+      "meridian.appsec.study/oauth/authorize: 4 findings — thin unauth pass (OAuth redirect_uri bypass needs auth flow oracle)",
+      "rollhouse.appsec.study/api/wallet: 3 findings — thin unauth pass (wallet logic abuse needs session oracle)",
+      "cogwork.appsec.study/api/workflows/1: 3 findings — thin unauth pass (deserialization chain needs authenticated import oracle)",
+      "shoppy.appsec.study/: 8 findings — alice session reads another user's order (+shoppy-orders-bola-live-oracle, parallel 20 UTC run)",
+      "ghost.appsec.study/: 5 findings — demo session reads another shop's order (+ghost-orders-bola-live-oracle, parallel 20 UTC run)",
+      "refreshy.appsec.study/: 5 findings — bob PATCH edits alice post (+refreshy-posts-bola-live-oracle, parallel 20 UTC run)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "streamline/ws: CSWSH probe blocked — Cloudflare returns HTML 200 instead of WebSocket 101 on /ws",
-      "latty5/latty2-4/latty6: DNS unreachable from cloud agent (even-hour restart cycle)",
-      "juicy.appsec.study: client-side DOM-XSS/secret oracles still generic-only"
+      "meridian/rollhouse/cogwork oracle endpoints: thin unauth passes — need OAuth token mint, wallet session, and workflow import oracles",
+      "prism /api/reports/1: SQLi oracle fires but report-template SSTI oracle still absent",
+      "frontdesk reservations: SQLi + 403-bypass probes fire but cache-poisoning/smuggling oracles need edge-specific probes",
+      "latty6/latty5/latty2: DNS unreachable from cloud agent (even-hour restart cycle)"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 52,
-    "shoppy.appsec.study/api/products/1": 9,
+    "juice-shop.herokuapp.com": 51,
+    "prism.appsec.study/api/reports/1": 5,
+    "frontdesk.appsec.study/api/reservations/1": 4,
+    "meridian.appsec.study/oauth/authorize": 4,
     "shoppy.appsec.study": 8,
+    "shoppy.appsec.study/api/products/1": 9,
     "ghost.appsec.study": 5,
     "refreshy.appsec.study": 5,
+    "rollhouse.appsec.study/api/wallet": 3,
+    "cogwork.appsec.study/api/workflows/1": 3,
     "captcha.appsec.study": 7,
     "helpdeskai.appsec.study/api/chat": 5,
-    "boxcutter.appsec.study/api/products": 16,
-    "demo.testfire.net": 12,
-    "lstalker.appsec.study/admin/panel/": 11,
-    "reggie.appsec.study/api/run": 7
+    "boxcutter.appsec.study/api/products": 16
   }
 }

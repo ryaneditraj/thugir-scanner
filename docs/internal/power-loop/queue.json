@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-10T19:05:00.000Z",
+  "updated_at": "2026-09-10T20:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://meridian.appsec.study/oauth/authorize",
+      "source": "zzzteph/appsec.study Meridian ID — OAuth2 redirect_uri bypass oracle GET /oauth/authorize (appsec.study SSO catalog; web search 20 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://rollhouse.appsec.study/api/wallet",
+      "source": "zzzteph/appsec.study RollHouse — wallet/deposit business-logic abuse oracle GET /api/wallet (casino fintech lab; appsec.study catalog; web search 20 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://cogwork.appsec.study/api/workflows/1",
+      "source": "zzzteph/appsec.study Cogwork — workflow IDOR + node-serialize deserialization oracle GET /api/workflows/:id (appsec.study catalog; web search 20 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://frontdesk.appsec.study/api/reservations/1",
+      "source": "zzzteph/appsec.study FrontDesk — reservation IDOR + edge/proxy seam oracle GET /api/reservations/:id (cache poisoning + smuggling lab; appsec.study catalog; web search 20 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://prism.appsec.study/api/reports/1",
+      "source": "zzzteph/appsec.study Prism — report-template SSTI + dashboard IDOR oracle GET /api/reports/:id (BI analytics lab; appsec.study catalog; web search 20 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://maze.appsec.study",
       "source": "zzzteph/appsec.study maze — procedural self-mutating scanner maze; GET /api/manifest shows live routes, vuln chain changes every restart (appsec.study catalog; web search 19 UTC discovery)",
