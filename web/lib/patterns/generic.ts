@@ -91607,5 +91607,158 @@ export const genericPatterns: Pattern[] = [
       "Our /api/chat route scan confirms RAG exfiltration via agent tools. Show route-specific retrieval ACL and trace redaction.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "shoppy-orders-bola-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Shoppy order BOLA live oracle",
+    description:
+      "GET /api/orders/:id on shoppy.appsec.study with an alice session returns another user's order including cardLast4 — the Shoppy REST shop order BOLA training oracle.",
+    impactOneline:
+      "Missing object-level authorization on order reads lets any authenticated shopper view other customers' payment and fulfillment data.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "shoppyOrdersBolaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce order ownership on every by-id order endpoint.",
+      steps: [
+        "Compare order.userId to the authenticated subject before returning order payloads.",
+        "Return 404 for cross-tenant order access instead of leaking existence.",
+        "Run shoppy only on isolated appsec.study training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our GET /api/orders/:id endpoint returns other users' orders. Show owner-scoped authorization checks.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "shoppy-orders-bola-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Shoppy order BOLA route live oracle",
+    description:
+      "When scanning /api/orders/:id or /api/products/:id on shoppy.appsec.study, authenticated sessions read another user's order — route-specific REST BOLA training oracle.",
+    impactOneline:
+      "Route-specific confirmation that Shoppy REST twin exposes cross-user order reads on by-id endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "shoppyOrdersBolaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Scope order routes to the authenticated owner.",
+      steps: [
+        "Reject cross-user order fetches with consistent 404 responses.",
+        "Audit all /api/orders/:id handlers for missing ownership checks."
+      ]
+    },
+    fixPrompt:
+      "Our shoppy order route scan confirms BOLA on GET /api/orders/:id. Show route-specific authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ghost-orders-bola-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Ghost order BOLA live oracle",
+    description:
+      "GET /api/orders/:id on ghost.appsec.study after demo login returns another shop's order with customer and totals — the Ghost code-split post-login BOLA training oracle.",
+    impactOneline:
+      "Post-login API chunks that skip shopId checks let any merchant read and pivot across competitors' orders.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ghostOrdersBolaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bind order-by-id reads to the authenticated shop.",
+      steps: [
+        "Verify order.shopId matches the JWT subject on every by-id order route.",
+        "Do not expose cross-shop order payloads even to authenticated users.",
+        "Run ghost only on isolated appsec.study training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our GET /api/orders/:id leaks other shops' orders after login. Show shop-scoped authorization.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ghost-orders-bola-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Ghost order BOLA route live oracle",
+    description:
+      "When scanning /api/orders/:id on ghost.appsec.study, demo session reads another shop's order — route-specific code-split BOLA training oracle.",
+    impactOneline:
+      "Route-specific confirmation that Ghost post-login chunk exposes cross-shop order reads.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ghostOrdersBolaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce shop ownership on Ghost order routes.",
+      steps: [
+        "Compare order.shopId to req.user.id before serializing order JSON.",
+        "Treat code-split discovery as requiring the same server-side checks as list endpoints."
+      ]
+    },
+    fixPrompt:
+      "Our ghost /api/orders/:id route scan confirms cross-shop BOLA. Show route-specific shop authorization.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "refreshy-posts-bola-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Refreshy post BOLA live oracle",
+    description:
+      "PATCH /api/posts/:id on refreshy.appsec.study with a bob session edits alice's post — the Refreshy JWT refresh feed BOLA training oracle.",
+    impactOneline:
+      "Short-lived access tokens do not excuse missing author checks — any session can mutate another user's content.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "refreshyPostsBolaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Verify post author_id matches the caller on write routes.",
+      steps: [
+        "Reject PATCH/DELETE on posts unless req.user.id equals post.author_id.",
+        "Keep refresh-token rotation separate from object-level authorization.",
+        "Run refreshy only on isolated appsec.study training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our PATCH /api/posts/:id allows bob to edit alice's posts. Show author ownership enforcement.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "refreshy-posts-bola-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Refreshy post BOLA route live oracle",
+    description:
+      "When scanning /api/posts/:id on refreshy.appsec.study, authenticated bob session edits another author's post — route-specific JWT refresh BOLA training oracle.",
+    impactOneline:
+      "Route-specific confirmation that Refreshy post writes lack author ownership checks across token refresh cycles.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "refreshyPostsBolaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Scope post mutation routes to the original author.",
+      steps: [
+        "Enforce author_id equality on PATCH and DELETE handlers.",
+        "Do not rely on UI hiding edit buttons as an authorization control."
+      ]
+    },
+    fixPrompt:
+      "Our refreshy /api/posts/:id route scan confirms cross-author post edits. Show route-specific ownership checks.",
+    version: 1,
+    enabled: true
   }
 ];

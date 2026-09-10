@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-10T19:14:55.559Z",
-  "total": 3582,
-  "uniqueSlugs": 3574,
+  "generatedAt": "2026-09-10T20:05:47.643Z",
+  "total": 3588,
+  "uniqueSlugs": 3580,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3564,
+    "generic": 3570,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3497,
+    "deep": 3503,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 708,
+    "Broken access control": 714,
     "Exposed secret": 122,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -1957,6 +1957,8 @@
     "firing-range-vulnerablelibraries-route-live-oracle",
     "frontend-xss-demo-insecure-dom-xss-live-oracle",
     "frontend-xss-demo-insecure-dom-xss-route-live-oracle",
+    "ghost-orders-bola-live-oracle",
+    "ghost-orders-bola-route-live-oracle",
     "ghostbank-hub-route-live-oracle",
     "ghostbank-transfer-bola-live-oracle",
     "ghostbank-transfer-bola-route-live-oracle",
@@ -2637,6 +2639,8 @@
     "reflexion-escalated-sqli",
     "reflexion-escalated-ssti",
     "reflexion-escalated-xss",
+    "refreshy-posts-bola-live-oracle",
+    "refreshy-posts-bola-route-live-oracle",
     "reggie-register-login-jwt-live-oracle",
     "reggie-run-rce-live-oracle",
     "reggie-run-rce-route-live-oracle",
@@ -2770,6 +2774,8 @@
     "server-side-eval-evidence",
     "shellshock-cgi-rce-live-oracle",
     "shellshock-cgi-rce-route-live-oracle",
+    "shoppy-orders-bola-live-oracle",
+    "shoppy-orders-bola-route-live-oracle",
     "sitemap-listed-sensitive-file-exposed",
     "sixhack-ctf-labs-route-live-oracle",
     "sixhack-platform-route-live-oracle",

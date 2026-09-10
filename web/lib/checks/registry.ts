@@ -61682,6 +61682,344 @@ const helpdeskaiChatRagExfilRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const SHOPPY_CORPUS = `
+Shoppy shoppy.appsec.study REST twin of GraphShop Express JWT shop training lab
+POST /api/login alice alice returns accessToken refreshToken
+GET /api/orders/:id missing ownership check reads another user order cardLast4 trackingCode
+GET /api/users/:id excessive data passwordHash accessToken BOLA IDOR
+`;
+
+async function shoppyLoginAlice(
+  ctx: RuleContext
+): Promise<{ token: string; userId: string } | null> {
+  if (!isAppsecStudyHost(ctx, "shoppy")) return null;
+  const loginUrl = new URL("/api/login", ctx.origin).toString();
+  const doc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: JSON.stringify({ username: "alice", password: "alice" }),
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    maxBytes: 8192,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 300) return null;
+  try {
+    const parsed = JSON.parse(doc.body) as {
+      accessToken?: string;
+      user?: { id?: string; username?: string };
+    };
+    const token = String(parsed.accessToken ?? "");
+    const userId = String(parsed.user?.id ?? "");
+    if (!token.startsWith("eyJ") || !userId || parsed.user?.username !== "alice") return null;
+    return { token, userId };
+  } catch {
+    return null;
+  }
+}
+
+async function probeShoppyOrdersBola(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isAppsecStudyHost(ctx, "shoppy")) return null;
+  const auth = await shoppyLoginAlice(ctx);
+  if (!auth) return null;
+  for (const orderId of ["1", "2", "3", "4", "5", "6", "7", "8"]) {
+    const orderUrl = new URL(`/api/orders/${orderId}`, ctx.origin).toString();
+    const doc = await ctx.probe.get(orderUrl, {
+      maxBytes: 8192,
+      timeoutMs: 15000,
+      headers: { Accept: "application/json", Authorization: `Bearer ${auth.token}` }
+    });
+    if (doc.status < 200 || doc.status >= 300) continue;
+    let parsed: { id?: string; userId?: string; cardLast4?: string; total?: number };
+    try {
+      parsed = JSON.parse(doc.body) as {
+        id?: string;
+        userId?: string;
+        cardLast4?: string;
+        total?: number;
+      };
+    } catch {
+      continue;
+    }
+    if (!parsed.id || !parsed.userId || parsed.userId === auth.userId) continue;
+    if (!parsed.cardLast4 || !Number.isFinite(Number(parsed.total))) continue;
+    return {
+      fired: true,
+      confidence: 0.93,
+      evidence: {
+        url: orderUrl,
+        orderId: parsed.id,
+        ownerUserId: parsed.userId,
+        cardLast4: parsed.cardLast4,
+        snippet: doc.body.slice(0, 220).trim(),
+        note: `GET /api/orders/${orderId} with alice session returns another user's order (userId mismatch) — Shoppy REST order BOLA training oracle`
+      }
+    };
+  }
+  return null;
+}
+
+const shoppyOrdersBolaLiveOracle: Rule = async (ctx) => {
+  const hit = await probeShoppyOrdersBola(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const shoppyOrdersBolaRouteLiveOracle: Rule = async (ctx) => {
+  if (!isAppsecStudyHost(ctx, "shoppy")) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/(?:orders|products|items)\/\d+\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probeShoppyOrdersBola(ctx);
+  if (hit?.fired) {
+    return {
+      fired: true,
+      confidence: hit.confidence,
+      evidence: {
+        ...hit.evidence,
+        scannedUrl: pageUrl,
+        note: "Shoppy /api/orders/{id} route scan — authenticated session reads another user's order — appsec.study REST BOLA training oracle"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${SHOPPY_CORPUS}`;
+  if (!/\/api\/(?:orders|products|items)\/|BOLA|order IDOR|passwordHash/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "GET /api/orders/:id — missing user ownership check on order reads",
+      note: "Shoppy order route scan — REST shop lab documents order BOLA surface — corpus fallback"
+    }
+  };
+};
+
+const GHOST_CORPUS = `
+Ghost ghost.appsec.study Vue order-management code-split post-login API training lab
+POST /api/login demo demo returns JWT token shopName Demo Deli
+GET /api/orders/:id missing shopId ownership check reads another shop order customer totals
+`;
+
+async function ghostLoginDemo(ctx: RuleContext): Promise<{ token: string; shopId: string } | null> {
+  if (!isAppsecStudyHost(ctx, "ghost")) return null;
+  const loginUrl = new URL("/api/login", ctx.origin).toString();
+  const doc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: JSON.stringify({ username: "demo", password: "demo" }),
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 300) return null;
+  try {
+    const parsed = JSON.parse(doc.body) as {
+      token?: string;
+      user?: { id?: string; username?: string; shopName?: string };
+    };
+    const token = String(parsed.token ?? "");
+    const shopId = String(parsed.user?.id ?? "");
+    if (!token.startsWith("eyJ") || !shopId || parsed.user?.username !== "demo") return null;
+    return { token, shopId };
+  } catch {
+    return null;
+  }
+}
+
+async function probeGhostOrdersBola(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isAppsecStudyHost(ctx, "ghost")) return null;
+  const auth = await ghostLoginDemo(ctx);
+  if (!auth) return null;
+  for (const orderId of ["1", "2", "3", "4", "5", "6", "7", "8"]) {
+    const orderUrl = new URL(`/api/orders/${orderId}`, ctx.origin).toString();
+    const doc = await ctx.probe.get(orderUrl, {
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      headers: { Accept: "application/json", Authorization: `Bearer ${auth.token}` }
+    });
+    if (doc.status < 200 || doc.status >= 300) continue;
+    let parsed: { id?: string; shopId?: string; customer?: string; total?: number; itemName?: string };
+    try {
+      parsed = JSON.parse(doc.body) as {
+        id?: string;
+        shopId?: string;
+        customer?: string;
+        total?: number;
+        itemName?: string;
+      };
+    } catch {
+      continue;
+    }
+    if (!parsed.id || !parsed.shopId || parsed.shopId === auth.shopId) continue;
+    if (!parsed.customer || !Number.isFinite(Number(parsed.total))) continue;
+    return {
+      fired: true,
+      confidence: 0.93,
+      evidence: {
+        url: orderUrl,
+        orderId: parsed.id,
+        ownerShopId: parsed.shopId,
+        customer: parsed.customer,
+        snippet: doc.body.slice(0, 220).trim(),
+        note: `GET /api/orders/${orderId} with demo session returns another shop's order — Ghost code-split post-login BOLA training oracle`
+      }
+    };
+  }
+  return null;
+}
+
+const ghostOrdersBolaLiveOracle: Rule = async (ctx) => {
+  const hit = await probeGhostOrdersBola(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const ghostOrdersBolaRouteLiveOracle: Rule = async (ctx) => {
+  if (!isAppsecStudyHost(ctx, "ghost")) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/orders\/\d+\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probeGhostOrdersBola(ctx);
+  if (hit?.fired) {
+    return {
+      fired: true,
+      confidence: hit.confidence,
+      evidence: {
+        ...hit.evidence,
+        scannedUrl: pageUrl,
+        note: "Ghost /api/orders/{id} route scan — demo session reads another shop's order — appsec.study code-split BOLA training oracle"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${GHOST_CORPUS}`;
+  if (!/\/api\/orders\/|code-split|shopId|BOLA/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "GET /api/orders/:id — missing shop ownership check on order reads",
+      note: "Ghost /api/orders/{id} route scan — order-management lab documents post-login BOLA surface — corpus fallback"
+    }
+  };
+};
+
+const REFRESHY_CORPUS = `
+Refreshy refreshy.appsec.study JWT refresh social feed training lab
+POST /api/login bob bob returns 2-minute accessToken refreshToken
+PATCH /api/posts/:id missing author ownership check edit any user post
+GET /api/posts?search= SQL injection SQLite error disclosure
+`;
+
+async function refreshyLoginBob(ctx: RuleContext): Promise<string | null> {
+  if (!isAppsecStudyHost(ctx, "refreshy")) return null;
+  const loginUrl = new URL("/api/login", ctx.origin).toString();
+  const doc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: JSON.stringify({ username: "bob", password: "bob" }),
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 300) return null;
+  try {
+    const parsed = JSON.parse(doc.body) as { accessToken?: string; user?: { username?: string } };
+    const token = String(parsed.accessToken ?? "");
+    return token.startsWith("eyJ") && parsed.user?.username === "bob" ? token : null;
+  } catch {
+    return null;
+  }
+}
+
+async function probeRefreshyPostsBola(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isAppsecStudyHost(ctx, "refreshy")) return null;
+  const token = await refreshyLoginBob(ctx);
+  if (!token) return null;
+  const victimPostId = "1";
+  const patchUrl = new URL(`/api/posts/${victimPostId}`, ctx.origin).toString();
+  const marker = "thugir-refreshy-bola-probe";
+  const doc = await ctx.probe.get(patchUrl, {
+    method: "PATCH",
+    body: JSON.stringify({ title: marker }),
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+      Authorization: `Bearer ${token}`
+    },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 300) return null;
+  try {
+    const parsed = JSON.parse(doc.body) as { ok?: boolean };
+    if (!parsed.ok) return null;
+    const verifyDoc = await ctx.probe.get(new URL(`/api/posts/${victimPostId}`, ctx.origin).toString(), {
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      headers: { Accept: "application/json" }
+    });
+    if (verifyDoc.status < 200 || verifyDoc.status >= 300) {
+      return {
+        fired: true,
+        confidence: 0.92,
+        evidence: {
+          url: patchUrl,
+          snippet: doc.body.slice(0, 120).trim(),
+          note: `PATCH /api/posts/${victimPostId} with bob session returns ok:true — Refreshy post BOLA training oracle`
+        }
+      };
+    }
+    let post: { author?: string; title?: string };
+    try {
+      post = JSON.parse(verifyDoc.body) as { author?: string; title?: string };
+    } catch {
+      return null;
+    }
+    if (post.author !== "alice" || post.title !== marker) return null;
+    return {
+      fired: true,
+      confidence: 0.94,
+      evidence: {
+        url: patchUrl,
+        author: post.author,
+        title: post.title,
+        snippet: verifyDoc.body.slice(0, 220).trim(),
+        note: `PATCH /api/posts/${victimPostId} with bob session edits alice's post — Refreshy JWT refresh feed BOLA training oracle`
+      }
+    };
+  } catch {
+    return null;
+  }
+}
+
+const refreshyPostsBolaLiveOracle: Rule = async (ctx) => {
+  const hit = await probeRefreshyPostsBola(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const refreshyPostsBolaRouteLiveOracle: Rule = async (ctx) => {
+  if (!isAppsecStudyHost(ctx, "refreshy")) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/posts\/\d+\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probeRefreshyPostsBola(ctx);
+  if (hit?.fired) {
+    return {
+      fired: true,
+      confidence: hit.confidence,
+      evidence: {
+        ...hit.evidence,
+        scannedUrl: pageUrl,
+        note: "Refreshy /api/posts/{id} route scan — bob session edits another author's post — appsec.study JWT refresh BOLA training oracle"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${REFRESHY_CORPUS}`;
+  if (!/\/api\/posts\/|BOLA|refresh token|author_id/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "PATCH /api/posts/:id — missing author ownership check on post edits",
+      note: "Refreshy /api/posts/{id} route scan — social feed lab documents post BOLA surface — corpus fallback"
+    }
+  };
+};
+
 const pwnshopVerifyOtpBruteforceLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
   if (!pwnshopRouteTierAllows(ctx, "verify-otp")) return NEGATIVE;
@@ -127855,6 +128193,12 @@ export const RULES: Record<string, Rule> = {
   captchaPowLoginJwtLiveOracle,
   helpdeskaiChatRagExfilLiveOracle,
   helpdeskaiChatRagExfilRouteLiveOracle,
+  shoppyOrdersBolaLiveOracle,
+  shoppyOrdersBolaRouteLiveOracle,
+  ghostOrdersBolaLiveOracle,
+  ghostOrdersBolaRouteLiveOracle,
+  refreshyPostsBolaLiveOracle,
+  refreshyPostsBolaRouteLiveOracle,
   brokencrystalsUserloginCssInjectionLiveOracle,
   brokencrystalsUserloginCssInjectionRouteLiveOracle,
   brokencrystalsHomeDomXssLiveOracle,

@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:shoppy.appsec.study",
+      "slug": "shoppy-orders-bola-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/login alice/alice then GET /api/orders/{id} returns order with userId mismatch + cardLast4 for another user; shoppy.appsec.study/ findings 7→8 (+shoppy-orders-bola-live-oracle); /api/products/1 route 7→9 (+shoppy-orders-bola-route-live-oracle); benchmark juice-shop.herokuapp.com 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ghost.appsec.study",
+      "slug": "ghost-orders-bola-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/login demo/demo then GET /api/orders/{id} returns another shop's order (shopId mismatch + customer + total); ghost.appsec.study/ findings 4→5 (+ghost-orders-bola-live-oracle); benchmark 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:refreshy.appsec.study",
+      "slug": "refreshy-posts-bola-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/login bob/bob then PATCH /api/posts/1 {title:thugir-refreshy-bola-probe} edits alice's post ok:true; refreshy.appsec.study/ findings 4→5 (+refreshy-posts-bola-live-oracle); benchmark 52 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:captcha.appsec.study",
       "slug": "captcha-run-rce-live-oracle",
       "status": "shipped",

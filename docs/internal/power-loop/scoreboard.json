@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-10T19:15:00.000Z",
+  "updated_at": "2026-09-10T20:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 3454,
-  "total_findings": 39240,
+  "total_sites_scanned": 3458,
+  "total_findings": 39257,
   "critical_findings": 81,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2321,
-  "discovery_findings": 29080,
-  "improvements_shipped": 1777,
-  "last_run": "2026-09-10T19:15:00.000Z",
+  "discovery_findings": 29097,
+  "improvements_shipped": 1780,
+  "last_run": "2026-09-10T20:15:00.000Z",
   "last_run_summary": {
-    "hour_utc": "19",
+    "hour_utc": "20",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 50,
+      "oracle_findings": 52,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 596,
+      "probes_run": 590,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,42 +48,41 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (50 findings); no category gaps"
+      "note": "Stable 6/6 recall (52 findings); no category gaps"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 0,
-      "urls_scanned": 2,
-      "findings": 12,
-      "focus": "captcha PoW→login→RCE chain + HelpDeskAI chat RAG exfiltration via prompt injection",
+      "urls_scanned": 3,
+      "findings": 5,
+      "focus": "shoppy REST order BOLA + ghost code-split order BOLA + refreshy JWT refresh post BOLA",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (50 findings, gap=[])",
-      "captcha.appsec.study/: 7 findings — PoW verify + JWT login + /api/run uid=0(root) (+captcha-run-rce +captcha-pow-login-jwt live oracles)",
-      "helpdeskai.appsec.study/api/chat: 5 findings — prompt injection leaks MASTER_API_KEY via search_kb internal:true (+helpdeskai-chat-rag-exfil live+route)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, gap=[])",
+      "shoppy.appsec.study/: 8 findings — alice session reads another user's order (+shoppy-orders-bola-live-oracle)",
+      "shoppy.appsec.study/api/products/1: 9 findings — route oracle confirms order BOLA (+shoppy-orders-bola-route-live-oracle)",
+      "ghost.appsec.study/: 5 findings — demo session reads another shop's order (+ghost-orders-bola-live-oracle)",
+      "refreshy.appsec.study/: 5 findings — bob PATCH edits alice post (+refreshy-posts-bola-live-oracle)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "streamline/ws: CSWSH probe blocked — Cloudflare returns HTML 200 instead of WebSocket 101 on /ws",
-      "shoppy.appsec.study: API routes return SPA shell — product IDOR oracle needs live backend routing",
-      "latty5/latty2-4/latty6: DNS unreachable from cloud agent (even-hour restart cycle)"
+      "latty5/latty2-4/latty6: DNS unreachable from cloud agent (even-hour restart cycle)",
+      "juicy.appsec.study: client-side DOM-XSS/secret oracles still generic-only"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 50,
-    "juice-shop-staging.herokuapp.com": 52,
+    "juice-shop.herokuapp.com": 52,
+    "shoppy.appsec.study/api/products/1": 9,
+    "shoppy.appsec.study": 8,
+    "ghost.appsec.study": 5,
+    "refreshy.appsec.study": 5,
     "captcha.appsec.study": 7,
     "helpdeskai.appsec.study/api/chat": 5,
     "boxcutter.appsec.study/api/products": 16,
     "demo.testfire.net": 12,
-    "shoppy.appsec.study/api/products/1": 7,
     "lstalker.appsec.study/admin/panel/": 11,
-    "lstalker.appsec.study": 9,
-    "reggie.appsec.study/api/run": 7,
-    "reggie.appsec.study": 6,
-    "streamline.appsec.study/ws": 4,
-    "maze.appsec.study/api/manifest": 12,
-    "tenanthub.appsec.study/api/orgs/1": 4
+    "reggie.appsec.study/api/run": 7
   }
 }
