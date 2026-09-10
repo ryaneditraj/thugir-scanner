@@ -90258,6 +90258,156 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "the-range-xss-c10-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "The Range challenge-10 reflected XSS live oracle",
+    description:
+      "GET /api/c/10?q= on the-range.appsec.study reflects HTML input unescaped in the response body — The Range planted reflected XSS training oracle.",
+    impactOneline:
+      "Unescaped HTML reflection lets attackers execute scripts in victim browsers on training benchmark endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theRangeXssC10LiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode all user input before embedding in HTML responses.",
+      steps: [
+        "Use contextual output encoding for HTML, attribute, and script contexts.",
+        "Add Content-Security-Policy headers to limit inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our GET /api/c/10?q= parameter reflects HTML unescaped. Show reflected XSS output encoding remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "the-range-xss-c10-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "The Range challenge-10 reflected XSS route live oracle",
+    description:
+      "When scanning /api/c/10 on the-range.appsec.study, GET ?q= confirms reflected XSS via unescaped HTML marker — route-specific XSS training oracle.",
+    impactOneline:
+      "Route-specific confirmation that The Range search endpoint reflects attacker-controlled HTML.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theRangeXssC10RouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode q parameter output on /api/c/10 before HTML embedding.",
+      steps: [
+        "HTML-encode all dynamic content in response templates.",
+        "Validate and sanitize q parameter before reflection."
+      ]
+    },
+    fixPrompt:
+      "Our /api/c/10 route scan confirms reflected XSS on q. Show route-specific output encoding remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "the-range-hdr-bypass-c13-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "The Range challenge-13 header auth bypass live oracle",
+    description:
+      "GET /api/c/13 with X-Forwarded-For:127.0.0.1 on the-range.appsec.study grants admin access via trusted local-request header — The Range planted auth-bypass training oracle.",
+    impactOneline:
+      "Spoofable forwarded headers let attackers bypass admin-only access controls on training benchmarks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theRangeHdrBypassC13LiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never trust client-supplied forwarding headers for authorization decisions.",
+      steps: [
+        "Strip or ignore X-Forwarded-For from untrusted client requests.",
+        "Use server-side session authentication instead of IP-based local trust."
+      ]
+    },
+    fixPrompt:
+      "Our GET /api/c/13 trusts X-Forwarded-For for local admin access. Show header auth bypass remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "the-range-hdr-bypass-c13-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "The Range challenge-13 header auth bypass route live oracle",
+    description:
+      "When scanning /api/c/13 on the-range.appsec.study, X-Forwarded-For:127.0.0.1 confirms header-based admin bypass — route-specific auth-bypass training oracle.",
+    impactOneline:
+      "Route-specific confirmation that The Range admin panel trusts spoofable forwarding headers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theRangeHdrBypassC13RouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove forwarded-header trust from /api/c/13 authorization checks.",
+      steps: [
+        "Require authenticated sessions for admin endpoints.",
+        "Configure reverse proxies to overwrite forwarding headers at the edge."
+      ]
+    },
+    fixPrompt:
+      "Our /api/c/13 route scan confirms header auth bypass. Show route-specific forwarding header hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "the-range-info-disc-c14-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "The Range challenge-14 info disclosure live oracle",
+    description:
+      "GET /api/c/14/debug on the-range.appsec.study returns internal config including internal_flag — The Range planted info-disclosure training oracle.",
+    impactOneline:
+      "Debug endpoints leak internal configuration and secrets on training benchmark infrastructure.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theRangeInfoDiscC14LiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable debug endpoints in production and restrict internal config exposure.",
+      steps: [
+        "Remove /debug routes from production deployments.",
+        "Gate diagnostic endpoints behind authentication and environment checks."
+      ]
+    },
+    fixPrompt:
+      "Our GET /api/c/14/debug leaks internal_flag config. Show debug endpoint removal remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "the-range-info-disc-c14-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "The Range challenge-14 info disclosure route live oracle",
+    description:
+      "When scanning /api/c/14/debug on the-range.appsec.study, debug JSON confirms internal_flag leak — route-specific info-disclosure training oracle.",
+    impactOneline:
+      "Route-specific confirmation that The Range debug endpoint exposes internal configuration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theRangeInfoDiscC14RouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block unauthenticated access to /api/c/14/debug in production.",
+      steps: [
+        "Return 404 for debug routes outside development environments.",
+        "Redact secrets from any diagnostic responses that must remain."
+      ]
+    },
+    fixPrompt:
+      "Our /api/c/14/debug route scan confirms internal config leak. Show route-specific debug endpoint hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-netrunner-academy-evidence",
     platform: "generic",
     category: "Information disclosure",

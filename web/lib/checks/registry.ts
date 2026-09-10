@@ -58488,6 +58488,9 @@ POST /api/c/7 XML external entity file read XXE
 GET /api/c/9 url open redirect 302 Location external URL
 PATCH /api/c/11 role mass assignment admin privilege escalation
 POST /api/c/12 password NoSQL operator injection $ne authenticated true
+GET /api/c/10 q reflected XSS unescaped HTML script marker
+GET /api/c/13 X-Forwarded-For 127.0.0.1 local request header auth bypass admin panel
+GET /api/c/14/debug internal config info disclosure internal_flag
 `;
 
 async function probeTheRangeBenchmarkScore(ctx: RuleContext): Promise<RuleResult | null> {
@@ -59293,6 +59296,204 @@ const theRangeNosqlC12RouteLiveOracle: Rule = async (ctx) => {
       scannedUrl: pageUrl,
       snippet: 'POST /api/c/12 — NoSQL operator injection {"$ne":null} on password',
       note: "The Range /api/c/12 route scan — benchmark documents planted NoSQL operator injection — corpus fallback"
+    }
+  };
+};
+
+const THE_RANGE_XSS_CANARY = "<b>thugir-range-xss-c10</b>";
+
+async function probeTheRangeXssC10(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isAppsecStudyHost(ctx, "the-range")) return null;
+  const xssUrl = new URL("/api/c/10", ctx.origin);
+  xssUrl.searchParams.set("q", THE_RANGE_XSS_CANARY);
+  const doc = await ctx.probe.get(xssUrl.toString(), { maxBytes: 4096, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 300) return null;
+  if (!doc.body.includes(THE_RANGE_XSS_CANARY)) return null;
+  const flagMatch = doc.body.match(/FLAG\{range-xss-[0-9a-f]+\}/i);
+  return {
+    fired: true,
+    confidence: flagMatch ? 0.94 : 0.91,
+    evidence: {
+      url: xssUrl.toString(),
+      canary: THE_RANGE_XSS_CANARY,
+      flag: flagMatch?.[0],
+      snippet: doc.body.slice(0, 220).trim(),
+      note: "GET /api/c/10?q= reflects HTML input unescaped — The Range planted reflected XSS training oracle"
+    }
+  };
+}
+
+const theRangeXssC10LiveOracle: Rule = async (ctx) => {
+  const hit = await probeTheRangeXssC10(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const theRangeXssC10RouteLiveOracle: Rule = async (ctx) => {
+  if (!isAppsecStudyHost(ctx, "the-range")) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/c\/10\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probeTheRangeXssC10(ctx);
+  if (hit?.fired) {
+    return {
+      fired: true,
+      confidence: hit.confidence,
+      evidence: {
+        ...hit.evidence,
+        scannedUrl: pageUrl,
+        note: "The Range /api/c/10 route scan — q parameter reflected unescaped in HTML confirms reflected XSS — appsec.study training oracle"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${THE_RANGE_CORPUS}`;
+  if (!/\/api\/c\/10|xss-reflected|reflected.*html/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "GET /api/c/10?q= — input reflected into HTML unescaped",
+      note: "The Range /api/c/10 route scan — benchmark documents planted reflected XSS on q parameter — corpus fallback"
+    }
+  };
+};
+
+async function probeTheRangeHdrBypassC13(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isAppsecStudyHost(ctx, "the-range")) return null;
+  const hdrUrl = new URL("/api/c/13", ctx.origin).toString();
+  const baseline = await ctx.probe.get(hdrUrl, {
+    headers: { Accept: "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (baseline.status === 0) return null;
+  let baselineParsed: { error?: string; flag?: string };
+  try {
+    baselineParsed = JSON.parse(baseline.body) as { error?: string; flag?: string };
+  } catch {
+    return null;
+  }
+  if (baselineParsed.flag) return null;
+  const bypass = await ctx.probe.get(hdrUrl, {
+    headers: { Accept: "application/json", "X-Forwarded-For": "127.0.0.1" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (bypass.status < 200 || bypass.status >= 300) return null;
+  let bypassParsed: { error?: string; flag?: string };
+  try {
+    bypassParsed = JSON.parse(bypass.body) as { error?: string; flag?: string };
+  } catch {
+    return null;
+  }
+  if (!bypassParsed.flag || !/range-hdrbypass/i.test(bypassParsed.flag)) return null;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url: hdrUrl,
+      header: "X-Forwarded-For: 127.0.0.1",
+      baselineError: baselineParsed.error,
+      flag: bypassParsed.flag,
+      snippet: bypass.body.slice(0, 220).trim(),
+      note: "GET /api/c/13 trusts X-Forwarded-For:127.0.0.1 as local admin — The Range planted header auth-bypass training oracle"
+    }
+  };
+}
+
+const theRangeHdrBypassC13LiveOracle: Rule = async (ctx) => {
+  const hit = await probeTheRangeHdrBypassC13(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const theRangeHdrBypassC13RouteLiveOracle: Rule = async (ctx) => {
+  if (!isAppsecStudyHost(ctx, "the-range")) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/c\/13\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probeTheRangeHdrBypassC13(ctx);
+  if (hit?.fired) {
+    return {
+      fired: true,
+      confidence: hit.confidence,
+      evidence: {
+        ...hit.evidence,
+        scannedUrl: pageUrl,
+        note: "The Range /api/c/13 route scan — X-Forwarded-For local-trust header bypass confirms admin access — appsec.study training oracle"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${THE_RANGE_CORPUS}`;
+  if (!/\/api\/c\/13|auth-bypass-hdr|forwarded header|local requests only/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "GET /api/c/13 — local requests trusted via forwarded header",
+      note: "The Range /api/c/13 route scan — benchmark documents planted header auth bypass — corpus fallback"
+    }
+  };
+};
+
+async function probeTheRangeInfoDiscC14(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isAppsecStudyHost(ctx, "the-range")) return null;
+  const debugUrl = new URL("/api/c/14/debug", ctx.origin).toString();
+  const doc = await ctx.probe.get(debugUrl, {
+    headers: { Accept: "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 300) return null;
+  let parsed: { status?: string; config?: { internal_flag?: string; env?: string } };
+  try {
+    parsed = JSON.parse(doc.body) as { status?: string; config?: { internal_flag?: string; env?: string } };
+  } catch {
+    return null;
+  }
+  const internalFlag = parsed.config?.internal_flag;
+  if (parsed.status !== "ok" || !internalFlag || !/range-infodisc/i.test(internalFlag)) return null;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url: debugUrl,
+      env: parsed.config?.env,
+      internalFlag,
+      snippet: doc.body.slice(0, 220).trim(),
+      note: "GET /api/c/14/debug leaks internal config including internal_flag — The Range planted info-disclosure training oracle"
+    }
+  };
+}
+
+const theRangeInfoDiscC14LiveOracle: Rule = async (ctx) => {
+  const hit = await probeTheRangeInfoDiscC14(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const theRangeInfoDiscC14RouteLiveOracle: Rule = async (ctx) => {
+  if (!isAppsecStudyHost(ctx, "the-range")) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/c\/14\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probeTheRangeInfoDiscC14(ctx);
+  if (hit?.fired) {
+    return {
+      fired: true,
+      confidence: hit.confidence,
+      evidence: {
+        ...hit.evidence,
+        scannedUrl: pageUrl,
+        note: "The Range /api/c/14/debug route scan — debug endpoint leaks internal_flag config — appsec.study info-disclosure training oracle"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${THE_RANGE_CORPUS}`;
+  if (!/\/api\/c\/14|info-disclosure|debug endpoint|internal_flag/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "GET /api/c/14/debug — debug endpoint leaks internal config",
+      note: "The Range /api/c/14 route scan — benchmark documents planted info disclosure on debug endpoint — corpus fallback"
     }
   };
 };
@@ -125794,6 +125995,12 @@ export const RULES: Record<string, Rule> = {
   theRangeMassAssignC11RouteLiveOracle,
   theRangeNosqlC12LiveOracle,
   theRangeNosqlC12RouteLiveOracle,
+  theRangeXssC10LiveOracle,
+  theRangeXssC10RouteLiveOracle,
+  theRangeHdrBypassC13LiveOracle,
+  theRangeHdrBypassC13RouteLiveOracle,
+  theRangeInfoDiscC14LiveOracle,
+  theRangeInfoDiscC14RouteLiveOracle,
   clientSideNetrunnerAcademyEvidence,
   stalkerSqliIdParamLiveOracle,
   stalkerSqliIdParamRouteLiveOracle,

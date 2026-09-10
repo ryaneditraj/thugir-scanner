@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:the-range.appsec.study",
+      "slug": "the-range-xss-c10-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/c/10?q=<b>thugir-range-xss-c10</b> reflects HTML marker unescaped in body with FLAG{range-xss-5e6f7a8b} comment; the-range.appsec.study/ findings 12→18 (+the-range-xss-c10-live-oracle +route); benchmark juice-shop.herokuapp.com 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-range.appsec.study",
+      "slug": "the-range-hdr-bypass-c13-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/c/13 returns 403 without header; X-Forwarded-For:127.0.0.1 returns FLAG{range-hdrbypass-7e8f9a0b}; the-range.appsec.study/ findings 12→18 (+the-range-hdr-bypass-c13-live-oracle +route); benchmark 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-range.appsec.study",
+      "slug": "the-range-info-disc-c14-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/c/14/debug returns {\"status\":\"ok\",\"config\":{\"internal_flag\":\"FLAG{range-infodisc-c1d2e3f4}\"}}; the-range.appsec.study/api/c/14/debug findings 12→19 (+the-range-info-disc-c14-live-oracle +route); benchmark 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-range.appsec.study",
       "slug": "the-range-redirect-c9-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /api/c/9?url=https://... returns HTTP 302 Location to attacker URL (challenges.js C9 open redirect); the-range.appsec.study 502 at ship time — live oracle + route + corpus fallback; benchmark juice-shop.herokuapp.com 51 findings 6/6 maintained"

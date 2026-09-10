@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-10T13:10:14.518Z",
+  "updated_at": "2026-09-10T13:22:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -16,19 +16,19 @@
     }
   },
   "total_sites_scanned": 3394,
-  "total_findings": 38385,
+  "total_findings": 38421,
   "critical_findings": 68,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2291,
-  "discovery_findings": 28794,
-  "improvements_shipped": 1756,
-  "last_run": "2026-09-10T13:10:14.518Z",
+  "discovery_findings": 28806,
+  "improvements_shipped": 1759,
+  "last_run": "2026-09-10T13:22:00.000Z",
   "last_run_summary": {
     "hour_utc": "13",
     "benchmark": {
-      "oracle_url": "https://juice-shop.demo.escape.tech",
-      "oracle_findings": 52,
+      "oracle_url": "https://juice-shop.herokuapp.com",
+      "oracle_findings": 51,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,40 +48,38 @@
           ]
         }
       },
-      "note": "Heroku primary+staging 503 — escape.tech fallback 6/6 (52 findings, secret-resend present)"
+      "note": "Stable 6/6 first-pass recall (51 findings) — no category gaps"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 38,
-      "focus": "appsec.study DVWA SQLi + Northwind IDOR + MongoLeak NoSQLi + XmlGov SOAP + EdgeCam IoT + queue drain streamline/frontdesk/dvwu-csrf",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 4,
+      "findings": 75,
+      "focus": "the-range c10/c13/c14 live oracles — completes all 14 planted challenge classes",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.demo.escape.tech: benchmark recall 6/6 (52 findings, gap=[]) — Heroku dynos 503",
-      "dvwa.appsec.study/vulnerabilities/sqli/: 6 findings — phpinfo + SQLi module misconfig oracles",
-      "frontdesk.appsec.study: 4 findings — SQL error disclosure + HTTP 403 bypass probe",
-      "dvwu.vercel.app/labs/csrf: 11 findings — notices LFI route oracle + CSRF lab surface",
-      "northwind/mongoleak/xmlgov/edgecam: thin 3-4 finding unauth passes — need post-login oracles"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, gap=[])",
+      "the-range.appsec.study/: 18 findings — all 14 challenge live oracles + benchmark score (was 12)",
+      "the-range.appsec.study/api/c/10: 19 findings — reflected XSS c10 live+route oracle",
+      "the-range.appsec.study/api/c/13: 19 findings — X-Forwarded-For header auth-bypass c13 live+route oracle",
+      "the-range.appsec.study/api/c/14/debug: 19 findings — debug internal_flag info-disclosure c14 live+route oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "juice-shop Heroku primary+staging 503 — rely on escape.tech fallback until dynos wake",
-      "northwind/mongoleak/xmlgov appsec.study: unauth passes miss IDOR/NoSQLi/XXE live oracles — need authenticated session probes",
-      "edgecam IoT lab: default-cred + header-bypass oracles need device-admin login flow",
-      "streamline WebSocket CSWSH/SSTI oracles require WS transport — REST-only pass thin"
+      "the-range complete — 14/14 planted classes now have live oracles",
+      "northwind/mongoleak/xmlgov appsec.study: unauth passes miss IDOR/NoSQLi/XXE live oracles — need authenticated session probes"
     ]
   },
   "discovery_highlights": {
+    "juice-shop.herokuapp.com": 51,
+    "the-range.appsec.study/": 18,
+    "the-range.appsec.study/api/c/10": 19,
+    "the-range.appsec.study/api/c/13": 19,
+    "the-range.appsec.study/api/c/14/debug": 19,
     "juice-shop.demo.escape.tech": 52,
+    "boxcutter.appsec.study/api/auth/token": 17,
     "dvwa.appsec.study/vulnerabilities/sqli/": 6,
-    "dvwu.vercel.app/labs/csrf": 11,
-    "frontdesk.appsec.study": 4,
-    "edgecam.appsec.study": 4,
-    "streamline.appsec.study": 4,
-    "northwind.appsec.study/api/accounts/1": 3,
-    "mongoleak.appsec.study/api/auth/login": 3,
-    "xmlgov.appsec.study/service": 3
+    "dvwu.vercel.app/labs/csrf": 11
   }
 }
