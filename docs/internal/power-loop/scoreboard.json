@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-10T14:12:00.000Z",
+  "updated_at": "2026-09-10T14:20:38.996Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 3395,
-  "total_findings": 38429,
+  "total_sites_scanned": 3406,
+  "total_findings": 38542,
   "critical_findings": 71,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2291,
-  "discovery_findings": 28814,
+  "discovery_urls_added": 2296,
+  "discovery_findings": 28874,
   "improvements_shipped": 1762,
-  "last_run": "2026-09-10T14:12:00.000Z",
+  "last_run": "2026-09-10T14:20:38.996Z",
   "last_run_summary": {
     "hour_utc": "14",
     "benchmark": {
@@ -32,7 +32,7 @@
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 603,
+      "probes_run": 602,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,26 +48,30 @@
           ]
         }
       },
-      "note": "Heroku primary+staging 503; Escape.tech fallback 6/6 (53 findings) — no category gaps"
+      "note": "Heroku primary timeout + staging 503 — escape.tech fallback 6/6 (53 findings, secret-resend present)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 15,
-      "focus": "northwind IDOR + mongoleak NoSQL auth bypass + xmlgov SOAP XXE live oracles",
+      "urls_added": 5,
+      "urls_scanned": 11,
+      "findings": 68,
+      "focus": "engine northwind/mongoleak/xmlgov live oracles + maze/mobicare/nimbus/tenanthub/shellshock + dvwu queue drain",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.demo.escape.tech: benchmark recall 6/6 (53 findings, gap=[])",
-      "northwind.appsec.study/api/accounts/1: 5 findings — demo bearer reads account/3 balance 8450 (+northwind-accounts-idor live+route)",
-      "mongoleak.appsec.study/api/auth/login: 5 findings — password {$ne:null} operator injection auth bypass (+mongoleak-nosql-auth-bypass live+route)",
-      "xmlgov.appsec.study/service: 5 findings — ImportDocument CDATA XXE reads /etc/hostname (+xmlgov-xxe-import-document live+route)"
+      "juice-shop.demo.escape.tech: benchmark recall 6/6 (53 findings, gap=[], secret-resend present)",
+      "northwind.appsec.study/api/accounts/1: 5 findings — demo bearer reads account/3 balance (+northwind-accounts-idor live+route)",
+      "mongoleak.appsec.study/api/auth/login: 5 findings — password {$ne:null} NoSQL auth bypass (+mongoleak-nosql-auth-bypass live+route)",
+      "xmlgov.appsec.study/service: 5 findings — ImportDocument CDATA XXE reads /etc/hostname (+xmlgov-xxe-import-document live+route)",
+      "maze.appsec.study/api/manifest: 8 findings — openapi manifest + exposed .git/.env on procedural maze lab",
+      "dvwu.vercel.app/labs/idor: 11 findings — dvwu-idor-route-live-oracle + dashboard IDOR"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "edgecam/streamline/frontdesk appsec.study labs still need route-specific live oracles",
-      "appsec.study labs restart every 2h — intermittent 502 between cycles"
+      "juice-shop Heroku primary timeout + staging 503 — escape.tech fallback required for stable benchmark",
+      "mobicare/nimbus/tenanthub/shellshock: thin unauth passes (3-4 findings) — need OTP login, file IDOR, cross-tenant, Shellshock CGI oracles",
+      "maze.appsec.study: manifest-only scan misses procedural vuln-chain fingerprinting",
+      "edgecam/streamline/frontdesk appsec.study labs still need route-specific live oracles"
     ]
   },
   "discovery_highlights": {
@@ -75,11 +79,11 @@
     "northwind.appsec.study/api/accounts/1": 5,
     "mongoleak.appsec.study/api/auth/login": 5,
     "xmlgov.appsec.study/service": 5,
+    "maze.appsec.study/api/manifest": 8,
+    "dvwu.vercel.app/labs/idor": 11,
+    "dvwu.vercel.app/labs/nosql-injection": 11,
+    "dvwu.vercel.app/labs/open-redirect": 9,
     "the-range.appsec.study/": 18,
-    "the-range.appsec.study/api/c/10": 19,
-    "the-range.appsec.study/api/c/13": 19,
-    "the-range.appsec.study/api/c/14/debug": 19,
-    "boxcutter.appsec.study/api/auth/token": 17,
-    "dvwa.appsec.study/vulnerabilities/sqli/": 6
+    "the-range.appsec.study/api/c/10": 19
   }
 }

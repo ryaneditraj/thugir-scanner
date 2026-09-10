@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-10T13:05:00.000Z",
+  "updated_at": "2026-09-10T14:15:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://maze.appsec.study/api/manifest",
+      "source": "zzzteph/appsec.study maze — procedural self-mutating vuln chain manifest oracle GET /api/manifest (appsec.study catalog; web search 14 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://mobicare.appsec.study/",
+      "source": "zzzteph/appsec.study MobiCare — telecom OTP-any-code ATO + subscriber IDOR lab (appsec.study catalog; web search 14 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://nimbus.appsec.study/",
+      "source": "zzzteph/appsec.study Nimbus — cloud file-share IDOR/share-bypass/XXE/thumbnail cmd-inj lab (appsec.study catalog; web search 14 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://tenanthub.appsec.study/",
+      "source": "zzzteph/appsec.study TenantHub — multi-tenant B2B cross-org IDOR + import injection lab (appsec.study catalog; web search 14 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://shellshock.appsec.study/",
+      "source": "zzzteph/appsec.study Shellshock — CVE-2014-6271 bash CGI RCE repro (appsec.study catalog; web search 14 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://dvwa.appsec.study/vulnerabilities/sqli/",
       "source": "zzzteph/appsec.study DVWA fork — classic SQLi module at low security (appsec.study catalog; web search 13 UTC discovery)",
