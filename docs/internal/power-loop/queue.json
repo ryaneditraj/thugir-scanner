@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-10T01:08:00.000Z",
+  "updated_at": "2026-09-10T02:15:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://owasp.andreabrioschi.it/",
+      "source": "OWASP Interactive Learning Lab \u2014 A01:2025 Broken Access Control interactive demos (owasp.andreabrioschi.it; web search 02 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/auth/oidc-client",
+      "source": "NeuraLegion/brokencrystals \u2014 OIDC clientSecret disclosure GET /api/auth/oidc-client (swagger-json + pattern corpus; web search 02 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-fauxbank.vercel.app/api/auth/login",
+      "source": "alfredang/pentest-fauxbank \u2014 weak-credentials login oracle POST /api/auth/login alice/password (README lesson #3; web search 02 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/rest/delivery-address/1",
+      "source": "OWASP Juice Shop demo \u2014 delivery-address BOLA oracle GET /rest/delivery-address/:id (Pwning Juice Shop solutions; web search 02 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/users/oidc",
+      "source": "NeuraLegion/brokencrystals \u2014 OIDC users route credential disclosure chain GET /api/users/oidc (swagger-json; web search 02 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://ginandjuice.shop/order/details?orderId=0254809",
       "source": "PortSwigger Gin & Juice Shop \u2014 unauthenticated order IDOR oracle GET /order/details?orderId= (pentest-2026-ginandjuice FINDING-006; web search 23 UTC discovery)",
