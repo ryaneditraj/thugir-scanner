@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-10T21:03:32.815Z",
+  "updated_at": "2026-09-10T22:04:25.485Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/patients/search?ssn=test",
+      "source": "atlas-crew/Chimera — classic SQLi oracle GET /api/v1/patients/search?ssn= (vuln-api README USE_DATABASE; web search 22 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/auth/login-vulnerable",
+      "source": "atlas-crew/Chimera — auth bypass SQLi oracle POST /api/v1/auth/login-vulnerable (vuln-api README; web search 22 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/admin/execute",
+      "source": "atlas-crew/Chimera — command injection RCE oracle POST /api/v1/admin/execute (developer-guide; web search 22 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/chat/init",
+      "source": "ctfsec/pwnshop — username enumeration via chat/init POST (PWN-037 companion to forgot-password; web search 22 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/api/v1/products",
+      "source": "ctfsec/pwnshop — unauthenticated product API + stored XSS review chain GET /api/v1/products (README Key URLs; web search 22 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://nimbus.appsec.study/api/files/1",
       "source": "zzzteph/appsec.study Nimbus — cloud file-share file IDOR oracle GET /api/files/:id (share-password bypass + path traversal; appsec.study catalog; web search 21 UTC discovery)",
@@ -1873,6 +1898,31 @@
     }
   ],
   "discovery_urls": [
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/patients/search?ssn=test",
+      "source": "atlas-crew/Chimera — classic SQLi oracle GET /api/v1/patients/search?ssn= (vuln-api README USE_DATABASE; web search 22 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/auth/login-vulnerable",
+      "source": "atlas-crew/Chimera — auth bypass SQLi oracle POST /api/v1/auth/login-vulnerable (vuln-api README; web search 22 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/admin/execute",
+      "source": "atlas-crew/Chimera — command injection RCE oracle POST /api/v1/admin/execute (developer-guide; web search 22 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/chat/init",
+      "source": "ctfsec/pwnshop — username enumeration via chat/init POST (PWN-037 companion to forgot-password; web search 22 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/api/v1/products",
+      "source": "ctfsec/pwnshop — unauthenticated product API + stored XSS review chain GET /api/v1/products (README Key URLs; web search 22 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-55",
       "source": "OWASP WrongSecrets — Challenge 55 SSH private key in .ssh/wrongsecrets.keys oracle (Heroku demo README: challenges 54-66 available)",
