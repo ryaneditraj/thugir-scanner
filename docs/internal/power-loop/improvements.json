@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:reggie.appsec.study",
+      "slug": "reggie-run-rce-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/register captcha:true then POST /api/login then POST /api/run cmd=id returns {\"output\":\"uid=0(root) gid=0(root) groups=0(root)\\n\"}; reggie.appsec.study/ findings 4→6 (+reggie-run-rce-live-oracle +reggie-register-login-jwt-live-oracle); /api/run route 7 (+reggie-run-rce-route-live-oracle); benchmark juice-shop.herokuapp.com 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:reggie.appsec.study",
+      "slug": "reggie-register-login-jwt-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/register + POST /api/login with captcha:true returns access+refresh JWT pair (eyJ...); reggie.appsec.study/ findings 4→6; benchmark 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:lstalker.appsec.study",
+      "slug": "lstalker-sqli-union-creds-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /?id=0 union select login,password from users dumps admin cleartext creds in img src; lstalker.appsec.study/ findings 7→9 (+lstalker-sqli-union-creds live+route); /admin/panel/ route 11 (+lstalker-admin-eval-rce-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:polyglot.appsec.study",
       "slug": "polyglot-preview-ssti-live-oracle",
       "status": "shipped",

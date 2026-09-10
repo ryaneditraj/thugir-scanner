@@ -91300,5 +91300,184 @@ export const genericPatterns: Pattern[] = [
       "Our /api/manifest route scan confirms fetch SSRF. Show route-specific egress filtering.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "reggie-run-rce-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Reggie /api/run command execution live oracle",
+    description:
+      "POST /api/run on reggie.appsec.study after register+login with a JWT access token executes arbitrary shell commands via the cmd parameter — the Reggie post-login RCE training oracle.",
+    impactOneline:
+      "Authenticated command execution endpoints let attackers run arbitrary OS commands as the service user.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "reggieRunRceLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never expose shell execution to web-authenticated users.",
+      steps: [
+        "Remove /api/run or replace with a fixed allowlist of maintenance actions.",
+        "Run diagnostic commands only from an isolated admin shell, not HTTP APIs.",
+        "Run Reggie only on isolated appsec.study training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/run endpoint executes shell commands after register+login. Show command execution removal and safe diagnostics design.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "reggie-run-rce-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Reggie /api/run route command execution live oracle",
+    description:
+      "When scanning /api/run on reggie.appsec.study, register+login then POST with cmd=id returns uid=0(root) — route-specific post-login RCE training oracle.",
+    impactOneline:
+      "Route-specific confirmation that Reggie maintenance API runs arbitrary shell commands after JWT login.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "reggieRunRceRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove shell execution from authenticated maintenance routes.",
+      steps: [
+        "Disable /api/run on any shared training host.",
+        "Use fixed diagnostic actions instead of passing raw cmd strings."
+      ]
+    },
+    fixPrompt:
+      "Our /api/run route scan confirms root command execution. Show route-specific shell invocation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "reggie-register-login-jwt-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "medium",
+    title: "Reggie register-then-login JWT live oracle",
+    description:
+      "POST /api/register then /api/login on reggie.appsec.study with captcha checkbox returns short-lived JWT access and refresh tokens — the Reggie multi-step auth training oracle.",
+    impactOneline:
+      "Weak captcha gates and register-then-login JWT flows are common auth bypass targets in code-split SPAs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "reggieRegisterLoginJwtLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use server-validated CAPTCHA and secure JWT refresh handling.",
+      steps: [
+        "Validate captcha server-side with single-use tokens, not client checkbox booleans.",
+        "Bind refresh tokens to device/session and rotate on each use.",
+        "Set appropriate JWT expiry and revoke refresh tokens on logout."
+      ]
+    },
+    fixPrompt:
+      "Our /api/register and /api/login accept a client-side captcha checkbox and return JWT access+refresh. Show captcha validation and refresh-token hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "lstalker-sqli-union-creds-live-oracle",
+    platform: "generic",
+    category: "SQL injection",
+    severityDefault: "critical",
+    title: "lstalker UNION credential dump live oracle",
+    description:
+      "GET /?id=0 union select login,password from users on lstalker.appsec.study dumps cleartext admin credentials — the lstalker SQLi-to-creds lateral-movement training oracle.",
+    impactOneline:
+      "SQL injection that leaks cleartext passwords enables immediate admin account takeover without cracking.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "lstalkerSqliUnionCredsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries and hash passwords with a strong algorithm.",
+      steps: [
+        "Replace string-concatenated SQL with bound parameters.",
+        "Store password hashes instead of cleartext credentials.",
+        "Run lstalker only on isolated appsec.study training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /?id= parameter is UNION-injectable and dumps cleartext users.password. Show parameterized queries and password hashing.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "lstalker-sqli-union-creds-route-live-oracle",
+    platform: "generic",
+    category: "SQL injection",
+    severityDefault: "critical",
+    title: "lstalker UNION credential dump route live oracle",
+    description:
+      "When scanning lstalker.appsec.study, UNION on /?id= dumps cleartext admin credentials — route-specific SQLi lateral-movement training oracle.",
+    impactOneline:
+      "Route-specific confirmation that lstalker picture gallery id parameter is UNION-injectable into users table.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "lstalkerSqliUnionCredsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block UNION injection on gallery id lookups.",
+      steps: [
+        "Cast id to integer and use prepared statements.",
+        "Hash stored passwords and rotate any exposed credentials."
+      ]
+    },
+    fixPrompt:
+      "Our lstalker route scan confirms UNION credential dump. Show route-specific SQLi remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "lstalker-admin-eval-rce-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "lstalker admin panel eval RCE live oracle",
+    description:
+      "POST /admin/panel/ on lstalker.appsec.study with admin session runs eval($_POST['code']) — the lstalker hidden-admin RCE lateral-movement training oracle.",
+    impactOneline:
+      "Authenticated eval endpoints let attackers execute arbitrary PHP and fully compromise the host.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "lstalkerAdminEvalRceLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove eval and never expose code execution to authenticated users.",
+      steps: [
+        "Delete eval($_POST['code']) from admin panels.",
+        "Use fixed admin actions instead of arbitrary code execution.",
+        "Run lstalker only on isolated appsec.study training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /admin/panel/ endpoint runs eval on POST code. Show eval removal and safe admin tooling.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "lstalker-admin-eval-rce-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "lstalker admin panel eval RCE route live oracle",
+    description:
+      "When scanning /admin/panel/ on lstalker.appsec.study, authenticated eval(code) executes arbitrary PHP — route-specific lateral-movement RCE training oracle.",
+    impactOneline:
+      "Route-specific confirmation that lstalker hidden admin panel exposes eval-based code execution.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "lstalkerAdminEvalRceRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block eval on /admin/panel routes.",
+      steps: [
+        "Remove eval from admin panel handlers.",
+        "Require strong auth and audit all admin actions."
+      ]
+    },
+    fixPrompt:
+      "Our /admin/panel route scan confirms eval RCE. Show route-specific code execution remediation.",
+    version: 1,
+    enabled: true
   }
 ];
