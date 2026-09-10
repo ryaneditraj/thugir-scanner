@@ -10493,6 +10493,24 @@
       "slug": "graph-appsec-recent-users-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: POST /graphql {\"query\":\"{ recentUsers { email role passwordHash } }\"} returns 10 users with passwordHash without auth; graph.appsec.study/graphql findings 0→7 (+graph-appsec-recent-users-live-oracle +graph-appsec-recent-users-route-live-oracle); benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:stalker.appsec.study",
+      "slug": "stalker-sqli-id-param-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /?id=1' returns PDOException SQLSTATE unrecognized token in /app/index.php:53; stalker.appsec.study/ findings 7→9 (+stalker-sqli-id-param-live-oracle +stalker-sqli-id-param-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:boxcutter.appsec.study",
+      "slug": "boxcutter-config-secrets-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /static/js/config.js returns BOXCUTTER.integrations with stripeSecretKey sk_live_, awsSecretAccessKey, githubToken ghp_, jwtSigningSecret; boxcutter.appsec.study/ findings 19→21 (+boxcutter-config-secrets-live-oracle +boxcutter-config-secrets-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:wordpress.appsec.study",
+      "slug": "wordpress-appsec-author-enum-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /?author=1 returns <title>admin – Acme Corp — Member Portal</title> (HTML entity &#8211; decoded); wordpress.appsec.study/ findings 4→6 (+wordpress-appsec-author-enum-live-oracle +wordpress-appsec-author-enum-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
     }
   ]
 }

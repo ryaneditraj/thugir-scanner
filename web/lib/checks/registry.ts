@@ -58564,6 +58564,198 @@ const theRangeBenchmarkScoreRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const STALKER_CORPUS = `
+Stalker Cats stalker.appsec.study PHP SQLite training lab
+GET /?id= parameter injectable PDOException SQL error in index.php
+`;
+
+async function probeStalkerSqliIdParam(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isAppsecStudyHost(ctx, "stalker")) return null;
+  const sqliUrl = new URL("/", ctx.origin);
+  sqliUrl.searchParams.set("id", "1'");
+  const doc = await ctx.probe.get(sqliUrl.toString(), { maxBytes: 4096, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 600) return null;
+  const sqliHit =
+    /PDOException|SQLSTATE\[/i.test(doc.body) &&
+    /unrecognized token|syntax error|sqlite/i.test(doc.body) &&
+    /index\.php/i.test(doc.body);
+  if (!sqliHit) return null;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url: sqliUrl.toString(),
+      snippet: doc.body.slice(0, 220).trim(),
+      note: "GET /?id=1' triggers PDOException SQLite syntax error — Stalker Cats SQL injection training oracle"
+    }
+  };
+}
+
+const stalkerSqliIdParamLiveOracle: Rule = async (ctx) => {
+  const hit = await probeStalkerSqliIdParam(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const stalkerSqliIdParamRouteLiveOracle: Rule = async (ctx) => {
+  if (!isAppsecStudyHost(ctx, "stalker")) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const hit = await probeStalkerSqliIdParam(ctx);
+  if (hit?.fired) {
+    return {
+      fired: true,
+      confidence: hit.confidence,
+      evidence: {
+        ...hit.evidence,
+        scannedUrl: pageUrl,
+        note: "Stalker Cats route scan — /?id= parameter SQL injection confirmed via PDOException — appsec.study SQLi training oracle"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${STALKER_CORPUS}`;
+  if (!/\?id=|PDOException|stalker cats/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "GET /?id= — injectable id parameter with SQLite PDO errors",
+      note: "Stalker Cats route scan — PHP SQLite lab documents injectable id query parameter — corpus fallback"
+    }
+  };
+};
+
+const BOXCUTTER_CORPUS = `
+Boxcutter Store boxcutter.appsec.study e-commerce training lab
+/static/js/config.js exposes stripeSecretKey awsSecretAccessKey githubToken jwtSigningSecret client-side
+POST /api/orders creates orders without authentication reflected XSS in /search?q=
+`;
+
+async function probeBoxcutterConfigSecrets(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isAppsecStudyHost(ctx, "boxcutter")) return null;
+  const configUrl = new URL("/static/js/config.js", ctx.origin).toString();
+  const doc = await ctx.probe.get(configUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 300) return null;
+  const secretsHit =
+    /BOXCUTTER\.integrations/i.test(doc.body) &&
+    /stripeSecretKey\s*:\s*["']sk_live_/i.test(doc.body) &&
+    /awsSecretAccessKey\s*:/i.test(doc.body) &&
+    /githubToken\s*:\s*["']ghp_/i.test(doc.body) &&
+    /jwtSigningSecret\s*:/i.test(doc.body);
+  if (!secretsHit) return null;
+  return {
+    fired: true,
+    confidence: 0.95,
+    evidence: {
+      url: configUrl,
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "GET /static/js/config.js returns stripe secret key, AWS credentials, GitHub PAT, and JWT signing secret — Boxcutter client-side secret exposure oracle"
+    }
+  };
+}
+
+const boxcutterConfigSecretsLiveOracle: Rule = async (ctx) => {
+  const hit = await probeBoxcutterConfigSecrets(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const boxcutterConfigSecretsRouteLiveOracle: Rule = async (ctx) => {
+  if (!isAppsecStudyHost(ctx, "boxcutter")) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const hit = await probeBoxcutterConfigSecrets(ctx);
+  if (hit?.fired) {
+    return {
+      fired: true,
+      confidence: hit.confidence,
+      evidence: {
+        ...hit.evidence,
+        scannedUrl: pageUrl,
+        note: "Boxcutter Store route scan — /static/js/config.js leaks payment and cloud API secrets in browser bundle — appsec.study secret exposure training oracle"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${BOXCUTTER_CORPUS}`;
+  if (!/config\.js|stripeSecretKey|BOXCUTTER\.integrations/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "/static/js/config.js — client-side stripe/AWS/GitHub/JWT secrets",
+      note: "Boxcutter Store route scan — runtime config documents client-side secret keys — corpus fallback"
+    }
+  };
+};
+
+const WORDPRESS_APPSEC_CORPUS = `
+WordPress wordpress.appsec.study Acme Corp member portal training lab
+?author=1 user enumeration reveals admin username in archive title
+POST /xmlrpc.php system.listMethods exposes wp.getUsersBlogs pingback.ping
+`;
+
+async function probeWordpressAppsecAuthorEnum(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isAppsecStudyHost(ctx, "wordpress")) return null;
+  const authorUrl = new URL("/", ctx.origin);
+  authorUrl.searchParams.set("author", "1");
+  const doc = await ctx.probe.get(authorUrl.toString(), { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 300) return null;
+  const titleMatch = doc.body.match(/<title>([^<]+)<\/title>/i);
+  const rawTitle = titleMatch?.[1]?.trim() ?? "";
+  const title = rawTitle
+    .replace(/&#8211;|&#8212;|&ndash;|&mdash;/gi, "–")
+    .replace(/&[#a-z0-9]+;/gi, " ")
+    .trim();
+  const authorHit =
+    title.length > 0 &&
+    !/not found|error|404/i.test(title) &&
+    /^[a-z0-9._-]{2,32}\s*[–—-]/i.test(title);
+  if (!authorHit) return null;
+  const username = title.split(/\s*[–—-]/)[0]?.trim();
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: authorUrl.toString(),
+      username,
+      title,
+      snippet: title,
+      note: `GET /?author=1 exposes WordPress username '${username}' via author archive title — wordpress.appsec.study user enumeration training oracle`
+    }
+  };
+}
+
+const wordpressAppsecAuthorEnumLiveOracle: Rule = async (ctx) => {
+  const hit = await probeWordpressAppsecAuthorEnum(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const wordpressAppsecAuthorEnumRouteLiveOracle: Rule = async (ctx) => {
+  if (!isAppsecStudyHost(ctx, "wordpress")) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const hit = await probeWordpressAppsecAuthorEnum(ctx);
+  if (hit?.fired) {
+    return {
+      fired: true,
+      confidence: hit.confidence,
+      evidence: {
+        ...hit.evidence,
+        scannedUrl: pageUrl,
+        note: "WordPress appsec.study route scan — /?author=1 author archive leaks registered username — user enumeration training oracle"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${WORDPRESS_APPSEC_CORPUS}`;
+  if (!/author=|xmlrpc\.php|wp-login/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "GET /?author=1 — WordPress author archive username enumeration",
+      note: "WordPress appsec.study route scan — author enumeration via ?author= query parameter — corpus fallback"
+    }
+  };
+};
+
 const pwnshopVerifyOtpBruteforceLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
   if (!pwnshopRouteTierAllows(ctx, "verify-otp")) return NEGATIVE;
@@ -124603,6 +124795,12 @@ export const RULES: Record<string, Rule> = {
   graphAppsecRecentUsersRouteLiveOracle,
   theRangeBenchmarkScoreLiveOracle,
   theRangeBenchmarkScoreRouteLiveOracle,
+  stalkerSqliIdParamLiveOracle,
+  stalkerSqliIdParamRouteLiveOracle,
+  boxcutterConfigSecretsLiveOracle,
+  boxcutterConfigSecretsRouteLiveOracle,
+  wordpressAppsecAuthorEnumLiveOracle,
+  wordpressAppsecAuthorEnumRouteLiveOracle,
   brokencrystalsUserloginCssInjectionLiveOracle,
   brokencrystalsUserloginCssInjectionRouteLiveOracle,
   brokencrystalsHomeDomXssLiveOracle,

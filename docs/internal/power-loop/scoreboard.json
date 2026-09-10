@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-10T05:27:00.000Z",
+  "updated_at": "2026-09-10T06:30:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 3315,
-  "total_findings": 37395,
-  "critical_findings": 64,
+  "total_sites_scanned": 3318,
+  "total_findings": 37412,
+  "critical_findings": 65,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2251,
-  "discovery_findings": 28389,
-  "improvements_shipped": 1735,
-  "last_run": "2026-09-10T05:27:00.000Z",
+  "discovery_findings": 28406,
+  "improvements_shipped": 1738,
+  "last_run": "2026-09-10T06:30:00.000Z",
   "last_run_summary": {
-    "hour_utc": "05",
+    "hour_utc": "06",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 51,
@@ -48,37 +48,34 @@
           ]
         }
       },
-      "note": "Primary Heroku stable 6/6 (51 findings, secret-resend present) — no category gaps"
+      "note": "Primary Heroku stable 6/6 (51 findings) — no category gaps"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 74,
-      "focus": "queue drain pwnshop path-traversal + seclab SSTI/SQLi/cmdi + vulnbank login + finbot CTF + zen-demo-java execute/create",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 36,
+      "focus": "appsec.study queue drain — stalker SQLi + boxcutter config secrets + wordpress author enum live oracles",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, gap=[], secret-resend present)",
-      "vulnbank.org/login: 35 findings — AI chat token-gate + transaction BOLA oracles",
-      "owasp-finbot-ctf.org/ctf/api/v1/challenges: 9 findings — agentic AI CTF challenge API",
-      "pwnshop.ctfsecurity.com/download: 5 findings — path traversal PWN-038 live oracle",
-      "seclab.vercel.app/labs/sqli: 6 findings — SQLi search + labs route oracles"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, gap=[])",
+      "stalker.appsec.study: 9 findings — stalker-sqli-id-param live+route oracles (PDOException on /?id=1')",
+      "boxcutter.appsec.study: 21 findings — boxcutter-config-secrets live+route oracles (/static/js/config.js)",
+      "wordpress.appsec.study: 6 findings — wordpress-appsec-author-enum live+route oracles (/?author=1)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "boxcutter/wordpress/loggie/stalker/dvga2-import_paste queued — behind priority_discovery_urls backlog",
+      "loggie.appsec.study queued — captcha-gated /api/login; SPA-only surface needs deeper probe",
       "latty6.appsec.study DNS unreachable; prompt-injection-demo-bice.vercel.app deployment not found"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 51,
+    "stalker.appsec.study": 9,
+    "boxcutter.appsec.study": 21,
+    "wordpress.appsec.study": 6,
     "vulnbank.org/login": 35,
-    "owasp-finbot-ctf.org/ctf/api/v1/challenges": 9,
-    "seclab.vercel.app/labs/sqli": 6,
-    "pwnshop.ctfsecurity.com/download": 5,
-    "seclab.vercel.app/labs/ssti": 5,
-    "zen-demo-java.fly.dev/pages/execute": 5,
-    "zen-demo-java.fly.dev/pages/create": 5
+    "owasp-finbot-ctf.org/ctf/api/v1/challenges": 9
   }
 }

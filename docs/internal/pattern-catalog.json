@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-10T05:11:28.181Z",
-  "total": 3507,
-  "uniqueSlugs": 3499,
+  "generatedAt": "2026-09-10T06:15:03.450Z",
+  "total": 3513,
+  "uniqueSlugs": 3505,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3489,
+    "generic": 3495,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3422,
+    "deep": 3428,
     "continuous": 0
   },
   "byCategory": {
@@ -24,7 +24,7 @@
     "Source exposure": 7,
     "Misconfiguration": 2,
     "Information exposure": 1,
-    "Information disclosure": 165,
+    "Information disclosure": 167,
     "Security misconfiguration": 290,
     "Broken authentication": 233,
     "Injection": 586,
@@ -48,13 +48,14 @@
     "Denial of service": 7,
     "Cryptographic failure": 4,
     "XSS": 3,
-    "SQL injection": 1,
+    "SQL injection": 3,
     "Session management": 2,
     "Authentication": 7,
     "Unrestricted file upload": 1,
     "Cryptographic failures": 1,
     "XML external entity": 1,
-    "Mass assignment": 2
+    "Mass assignment": 2,
+    "Sensitive data": 2
   },
   "slugs": [
     "aevum-consent-review-unauth-live-oracle",
@@ -125,6 +126,8 @@
     "bingoctf-auth-gated-ctf-route-live-oracle",
     "bolt-demo-mode-shipped",
     "bolt-public-env-prefix-leak",
+    "boxcutter-config-secrets-live-oracle",
+    "boxcutter-config-secrets-route-live-oracle",
     "brokencrystals-admin-login-bfla-live-oracle",
     "brokencrystals-admin-login-bfla-route-live-oracle",
     "brokencrystals-adminpermission-route-live-oracle",
@@ -2801,6 +2804,8 @@
     "stack-database-url-in-bundle",
     "stack-neon-url-in-bundle",
     "stack-vercel-env-exposure",
+    "stalker-sqli-id-param-live-oracle",
+    "stalker-sqli-id-param-route-live-oracle",
     "supabase-anon-key-no-rls",
     "supabase-service-role-in-bundle",
     "support-reliability-lab-admin-console-live-oracle",
@@ -3331,6 +3336,8 @@
     "whoopspay-transactions-bola-route-live-oracle",
     "windsurf-public-env-leak",
     "wizer-ctf-idor-task-manager-probe",
+    "wordpress-appsec-author-enum-live-oracle",
+    "wordpress-appsec-author-enum-route-live-oracle",
     "wrongsecrets-actuator-auditevents-live-oracle",
     "wrongsecrets-actuator-auditevents-route-live-oracle",
     "wrongsecrets-challenge-0-opening-live-oracle",

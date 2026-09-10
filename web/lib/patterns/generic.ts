@@ -89698,5 +89698,158 @@ export const genericPatterns: Pattern[] = [
       "Our /api/score route scan confirms public vulnerability coverage metadata. Show route-specific benchmark API hardening.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "stalker-sqli-id-param-live-oracle",
+    platform: "generic",
+    category: "SQL injection",
+    severityDefault: "high",
+    title: "Stalker Cats SQLi id parameter live oracle",
+    description:
+      "GET /?id=1' on stalker.appsec.study triggers a PDOException SQLite syntax error — the Stalker Cats PHP SQL injection training lab oracle.",
+    impactOneline:
+      "Injectable id parameters let attackers read or modify database rows and escalate to full data compromise.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "stalkerSqliIdParamLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries and never concatenate user input into SQL.",
+      steps: [
+        "Replace string-concatenated SQL with prepared statements.",
+        "Validate id parameters as integers before querying.",
+        "Run Stalker Cats only on isolated appsec.study training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /?id= parameter triggers PDOException SQLite errors. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "stalker-sqli-id-param-route-live-oracle",
+    platform: "generic",
+    category: "SQL injection",
+    severityDefault: "high",
+    title: "Stalker Cats SQLi id parameter route live oracle",
+    description:
+      "When scanning stalker.appsec.study, GET /?id=1' confirms injectable SQLite id parameter via PDOException — route-specific SQLi training oracle.",
+    impactOneline:
+      "Route-specific confirmation that the Stalker Cats id query parameter is vulnerable to SQL injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "stalkerSqliIdParamRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries on all database lookups.",
+      steps: [
+        "Bind id parameters as integers in prepared statements.",
+        "Disable verbose SQL errors in production responses."
+      ]
+    },
+    fixPrompt:
+      "Our Stalker Cats route scan confirms SQL injection on /?id=. Show route-specific parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "boxcutter-config-secrets-live-oracle",
+    platform: "generic",
+    category: "Sensitive data",
+    severityDefault: "critical",
+    title: "Boxcutter Store client config secrets live oracle",
+    description:
+      "GET /static/js/config.js on boxcutter.appsec.study returns stripe secret key, AWS credentials, GitHub PAT, and JWT signing secret in the browser bundle — Boxcutter secret exposure training oracle.",
+    impactOneline:
+      "Client-side payment and cloud API secrets let attackers forge payments, access cloud resources, and impersonate users.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "boxcutterConfigSecretsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never ship secret keys in client-side JavaScript bundles.",
+      steps: [
+        "Move stripeSecretKey and AWS keys to server-side environment variables only.",
+        "Rotate any keys that were exposed in /static/js/config.js.",
+        "Run Boxcutter Store only on isolated appsec.study training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /static/js/config.js exposes stripe, AWS, GitHub, and JWT secrets. Show server-side secret handling remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "boxcutter-config-secrets-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data",
+    severityDefault: "critical",
+    title: "Boxcutter Store client config secrets route live oracle",
+    description:
+      "When scanning boxcutter.appsec.study, /static/js/config.js leaks payment and cloud API secrets in BOXCUTTER.integrations — route-specific secret exposure training oracle.",
+    impactOneline:
+      "Route-specific confirmation that Boxcutter runtime config exposes live-format secret keys to any visitor.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "boxcutterConfigSecretsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Keep all secret keys server-side and out of static assets.",
+      steps: [
+        "Remove BOXCUTTER.integrations secret fields from client bundles.",
+        "Use publishable-only Stripe keys in the browser."
+      ]
+    },
+    fixPrompt:
+      "Our Boxcutter route scan confirms client-side secret keys in config.js. Show route-specific secret handling remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "wordpress-appsec-author-enum-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "WordPress appsec.study author enumeration live oracle",
+    description:
+      "GET /?author=1 on wordpress.appsec.study returns an author archive page title exposing the registered WordPress username — user enumeration training oracle.",
+    impactOneline:
+      "Leaked usernames halve the credential space for brute-force and password-spray attacks against wp-login.php.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wordpressAppsecAuthorEnumLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable author archives or require authentication for user listings.",
+      steps: [
+        "Block or redirect ?author= queries in WordPress.",
+        "Use security plugins to hide usernames from archive pages.",
+        "Run wordpress.appsec.study only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /?author=1 endpoint leaks WordPress usernames in page titles. Show author enumeration remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "wordpress-appsec-author-enum-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "WordPress appsec.study author enumeration route live oracle",
+    description:
+      "When scanning wordpress.appsec.study, GET /?author=1 confirms username disclosure via author archive title — route-specific WordPress user enumeration training oracle.",
+    impactOneline:
+      "Route-specific confirmation that WordPress author archives leak registered usernames to unauthenticated visitors.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wordpressAppsecAuthorEnumRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable public author archives on member portals.",
+      steps: [
+        "Redirect ?author= requests away from public pages.",
+        "Require login before showing author metadata."
+      ]
+    },
+    fixPrompt:
+      "Our WordPress route scan confirms username enumeration via ?author=. Show route-specific author archive hardening.",
+    version: 1,
+    enabled: true
   }
 ];
