@@ -59261,6 +59261,181 @@ const prismQuerySqliRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+async function probePrismReportsPreviewSsti(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isAppsecStudyHost(ctx, "prism")) return null;
+  const token = await prismLoginDemo(ctx);
+  if (!token) return null;
+  const previewUrl = new URL("/api/reports/preview", ctx.origin).toString();
+  const doc = await ctx.probe.get(previewUrl, {
+    method: "POST",
+    body: JSON.stringify({
+      template: "{{7*7}}",
+      sample: { title: "Sales", total: 123456, rows: 40 }
+    }),
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+      Authorization: `Bearer ${token}`
+    },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 300) return null;
+  try {
+    const parsed = JSON.parse(doc.body) as { ok?: boolean; rendered?: string };
+    if (!parsed.ok || parsed.rendered !== "49") return null;
+    return {
+      fired: true,
+      confidence: 0.94,
+      evidence: {
+        url: previewUrl,
+        probe: "{{7*7}}",
+        rendered: parsed.rendered,
+        snippet: doc.body.slice(0, 220).trim(),
+        note: "POST /api/reports/preview template={{7*7}} evaluates Nunjucks server-side to 49 — Prism report-template SSTI training oracle"
+      }
+    };
+  } catch {
+    return null;
+  }
+}
+
+const prismReportsPreviewSstiLiveOracle: Rule = async (ctx) => {
+  const hit = await probePrismReportsPreviewSsti(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const prismReportsPreviewSstiRouteLiveOracle: Rule = async (ctx) => {
+  if (!isAppsecStudyHost(ctx, "prism")) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/reports\/(?:preview|\d+)\b|report template|report builder/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probePrismReportsPreviewSsti(ctx);
+  if (hit?.fired) {
+    return {
+      fired: true,
+      confidence: hit.confidence,
+      evidence: {
+        ...hit.evidence,
+        scannedUrl: pageUrl,
+        note: "Prism /api/reports/preview route scan — report template evaluates {{7*7}} server-side — appsec.study SSTI training oracle"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${PRISM_CORPUS}`;
+  if (!/\/api\/reports\/preview|report template|report builder|SSTI/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "POST /api/reports/preview — report template rendered server-side with Nunjucks",
+      note: "Prism /api/reports/preview route scan — BI lab documents report-template SSTI surface — corpus fallback"
+    }
+  };
+};
+
+async function probePrismDashboardIdor(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isAppsecStudyHost(ctx, "prism")) return null;
+  const token = await prismLoginDemo(ctx);
+  if (!token) return null;
+  const authHeaders = { Accept: "application/json", Authorization: `Bearer ${token}` };
+  const meDoc = await ctx.probe.get(new URL("/api/me", ctx.origin).toString(), {
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    headers: authHeaders
+  });
+  if (meDoc.status < 200 || meDoc.status >= 300) return null;
+  let demoUserId = 0;
+  try {
+    const me = JSON.parse(meDoc.body) as { id?: number; username?: string };
+    demoUserId = Number(me.id);
+    if (!Number.isFinite(demoUserId) || me.username !== "demo") return null;
+  } catch {
+    return null;
+  }
+  for (const dashboardId of ["2", "3", "4"]) {
+    const dashboardUrl = new URL(`/api/dashboards/${dashboardId}`, ctx.origin).toString();
+    const doc = await ctx.probe.get(dashboardUrl, {
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      headers: authHeaders
+    });
+    if (doc.status < 200 || doc.status >= 300) continue;
+    let parsed: {
+      id?: number | string;
+      owner_id?: number;
+      name?: string;
+      is_public?: number;
+      description?: string;
+    };
+    try {
+      parsed = JSON.parse(doc.body) as {
+        id?: number | string;
+        owner_id?: number;
+        name?: string;
+        is_public?: number;
+        description?: string;
+      };
+    } catch {
+      continue;
+    }
+    const ownerId = Number(parsed.owner_id);
+    if (!Number.isFinite(ownerId) || ownerId === demoUserId) continue;
+    if (Number(parsed.is_public) === 1) continue;
+    if (!parsed.name || !/confidential|restricted|private/i.test(`${parsed.name} ${parsed.description ?? ""}`)) {
+      continue;
+    }
+    return {
+      fired: true,
+      confidence: 0.93,
+      evidence: {
+        url: dashboardUrl,
+        dashboardId,
+        ownerId,
+        demoUserId,
+        name: parsed.name,
+        snippet: doc.body.slice(0, 220).trim(),
+        note: `GET /api/dashboards/${dashboardId} with demo bearer token returns private dashboard owner_id=${ownerId} (${parsed.name}) — Prism dashboard IDOR training oracle`
+      }
+    };
+  }
+  return null;
+}
+
+const prismDashboardIdorLiveOracle: Rule = async (ctx) => {
+  const hit = await probePrismDashboardIdor(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const prismDashboardIdorRouteLiveOracle: Rule = async (ctx) => {
+  if (!isAppsecStudyHost(ctx, "prism")) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/dashboards\/\d+\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probePrismDashboardIdor(ctx);
+  if (hit?.fired) {
+    return {
+      fired: true,
+      confidence: hit.confidence,
+      evidence: {
+        ...hit.evidence,
+        scannedUrl: pageUrl,
+        note: "Prism /api/dashboards/{id} route scan — demo session reads another analyst's private dashboard — appsec.study dashboard IDOR training oracle"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${PRISM_CORPUS}`;
+  if (!/\/api\/dashboards\/|dashboard IDOR|private dashboard/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "GET /api/dashboards/:id — missing owner check on private dashboard reads",
+      note: "Prism /api/dashboards/{id} route scan — BI lab documents dashboard IDOR surface — corpus fallback"
+    }
+  };
+};
+
 const PAYSTREAM_CORPUS = `
 Paystream paystream.appsec.study HR payroll portal training lab
 POST /api/auth/login demo demo credentials GET /api/payslips/:id payslip IDOR any employee payslip
@@ -62267,6 +62442,87 @@ const cogworkWorkflowsIdorRouteLiveOracle: Rule = async (ctx) => {
       scannedUrl: pageUrl,
       snippet: "GET /api/workflows/:id — missing owner check on private workflow reads",
       note: "Cogwork /api/workflows/{id} route scan — automation lab documents workflow IDOR surface — corpus fallback"
+    }
+  };
+};
+
+const COGWORK_DESER_MARKER = "thugir-cogwork-deser-oracle";
+
+async function probeCogworkWorkflowsImportDeser(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isAppsecStudyHost(ctx, "cogwork")) return null;
+  const token = await cogworkLoginDemo(ctx);
+  if (!token) return null;
+  const importUrl = new URL("/api/workflows/import", ctx.origin).toString();
+  const serialized = JSON.stringify({ marker: COGWORK_DESER_MARKER, probe: 49 });
+  const doc = await ctx.probe.get(importUrl, {
+    method: "POST",
+    body: JSON.stringify({ data: serialized }),
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+      Authorization: `Bearer ${token}`
+    },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 300) return null;
+  try {
+    const parsed = JSON.parse(doc.body) as {
+      ok?: boolean;
+      imported?: { marker?: string; probe?: number };
+    };
+    if (
+      parsed.ok !== true ||
+      parsed.imported?.marker !== COGWORK_DESER_MARKER ||
+      Number(parsed.imported?.probe) !== 49
+    ) {
+      return null;
+    }
+    return {
+      fired: true,
+      confidence: 0.94,
+      evidence: {
+        url: importUrl,
+        marker: COGWORK_DESER_MARKER,
+        snippet: doc.body.slice(0, 220).trim(),
+        note: "POST /api/workflows/import unserializes attacker-controlled node-serialize data via serialize.unserialize — Cogwork workflow-import deserialization training oracle"
+      }
+    };
+  } catch {
+    return null;
+  }
+}
+
+const cogworkWorkflowsImportDeserLiveOracle: Rule = async (ctx) => {
+  const hit = await probeCogworkWorkflowsImportDeser(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const cogworkWorkflowsImportDeserRouteLiveOracle: Rule = async (ctx) => {
+  if (!isAppsecStudyHost(ctx, "cogwork")) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/workflows\/import\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probeCogworkWorkflowsImportDeser(ctx);
+  if (hit?.fired) {
+    return {
+      fired: true,
+      confidence: hit.confidence,
+      evidence: {
+        ...hit.evidence,
+        scannedUrl: pageUrl,
+        note: "Cogwork /api/workflows/import route scan — node-serialize unserialize on attacker data — appsec.study deserialization training oracle"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${COGWORK_CORPUS}`;
+  if (!/\/api\/workflows\/import|node-serialize|deserialization/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "POST /api/workflows/import — node-serialize unserialize on attacker-controlled data",
+      note: "Cogwork /api/workflows/import route scan — automation lab documents node-serialize deserialization surface — corpus fallback"
     }
   };
 };
@@ -128499,6 +128755,10 @@ export const RULES: Record<string, Rule> = {
   shellshockCgiRceRouteLiveOracle,
   prismQuerySqliLiveOracle,
   prismQuerySqliRouteLiveOracle,
+  prismReportsPreviewSstiLiveOracle,
+  prismReportsPreviewSstiRouteLiveOracle,
+  prismDashboardIdorLiveOracle,
+  prismDashboardIdorRouteLiveOracle,
   paystreamPayslipIdorLiveOracle,
   paystreamPayslipIdorRouteLiveOracle,
   polyglotPreviewSstiLiveOracle,
@@ -128570,6 +128830,8 @@ export const RULES: Record<string, Rule> = {
   rollhousePromoRedeemAbuseRouteLiveOracle,
   cogworkWorkflowsIdorLiveOracle,
   cogworkWorkflowsIdorRouteLiveOracle,
+  cogworkWorkflowsImportDeserLiveOracle,
+  cogworkWorkflowsImportDeserRouteLiveOracle,
   frontdeskReservationsIdorLiveOracle,
   frontdeskReservationsIdorRouteLiveOracle,
   brokencrystalsUserloginCssInjectionLiveOracle,

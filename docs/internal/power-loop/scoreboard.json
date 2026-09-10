@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-10T22:06:30.000Z",
+  "updated_at": "2026-09-10T22:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 3478,
-  "total_findings": 39444,
-  "critical_findings": 81,
+  "total_sites_scanned": 3479,
+  "total_findings": 39466,
+  "critical_findings": 87,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2331,
-  "discovery_findings": 29153,
-  "improvements_shipped": 1783,
-  "last_run": "2026-09-10T22:06:30.000Z",
+  "discovery_findings": 29175,
+  "improvements_shipped": 1786,
+  "last_run": "2026-09-10T22:15:00.000Z",
   "last_run_summary": {
     "hour_utc": "22",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 51,
+      "oracle_findings": 52,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 596,
+      "probes_run": 598,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,42 +48,46 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (51 findings, 39 juice-shop live oracles incl secret-resend + jwt-alg-none + captcha-bypass)"
+      "note": "Stable 6/6 recall (52 findings, secret-resend present); no category gaps"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 5,
-      "findings": 29,
-      "focus": "Chimera SQLi/cmd-injection oracles (patients/search, login-vulnerable, admin/execute) + pwnshop chat/init enumeration + products API",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 22,
+      "focus": "appsec.study Prism SSTI + dashboard IDOR + Cogwork node-serialize import deserialization",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, gap=[], secret-resend present)",
-      "chimera.atlascrew.dev/api/v1/patients/search: 7 findings — classic SQLi oracle on healthcare patient search",
-      "chimera.atlascrew.dev/api/v1/auth/login-vulnerable: 7 findings — auth bypass SQLi oracle",
-      "chimera.atlascrew.dev/api/v1/admin/execute: 7 findings — command injection RCE oracle",
-      "pwnshop.ctfsecurity.com/chat/init: 5 findings — username enumeration via chat init (PWN-037)",
-      "pwnshop.ctfsecurity.com/api/v1/products: 3 findings — unauthenticated product API exposure"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, gap=[], secret-resend present)",
+      "prism.appsec.study/api/reports/1: 5→8 findings — POST /api/reports/preview template={{7*7}}→49 Nunjucks SSTI (+prism-reports-preview-ssti-live-oracle +route +prism-dashboard-idor-live-oracle)",
+      "prism.appsec.study/api/dashboards/2: 5→8 findings — demo session reads Jordan's Exec Board CONFIDENTIAL dashboard (+prism-dashboard-idor-live-oracle +route)",
+      "cogwork.appsec.study/api/workflows/import: 0→6 findings — node-serialize unserialize round-trip on import (+cogwork-workflows-import-deser-live-oracle +route)",
+      "meridian.appsec.study/oauth/authorize: OAuth redirect_uri bypass still needs authenticated client_id discovery"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
+      "meridian OAuth redirect_uri bypass — needs valid registered redirect_uri + session cookie flow oracle",
+      "cogwork /api/me/settings prototype pollution auth bypass confirmed but oracle not yet shipped",
       "Chimera endpoints return generic misconfig/CORS findings — SQLi/cmd-injection live oracles may need USE_DATABASE=true on hosted instance",
-      "pwnshop chat/init: enumeration oracle present but LLM prompt-injection chain (PWN-031/032) needs POST /chat session flow",
-      "latty6/latty5/latty2: DNS unreachable from cloud agent (queue drain errors)"
+      "latty6/latty5/latty2: DNS unreachable from cloud agent (even-hour restart cycle)"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 51,
+    "juice-shop.herokuapp.com": 52,
+    "prism.appsec.study/api/reports/1": 8,
+    "prism.appsec.study/api/dashboards/2": 8,
+    "cogwork.appsec.study/api/workflows/import": 6,
     "chimera.atlascrew.dev/api/v1/patients/search": 7,
     "chimera.atlascrew.dev/api/v1/auth/login-vulnerable": 7,
     "chimera.atlascrew.dev/api/v1/admin/execute": 7,
-    "pwnshop.ctfsecurity.com/chat/init": 5,
-    "pwnshop.ctfsecurity.com/api/v1/products": 3,
+    "shellshock.appsec.study/cgi-bin/status.cgi": 15,
     "rollhouse.appsec.study/api/wallet": 5,
     "cogwork.appsec.study/api/workflows/1": 5,
     "frontdesk.appsec.study/api/reservations/1": 5,
-    "prism.appsec.study/api/reports/1": 5,
-    "shellshock.appsec.study/cgi-bin/status.cgi": 15
+    "pwnshop.ctfsecurity.com/chat/init": 5,
+    "shoppy.appsec.study": 8,
+    "ghost.appsec.study": 5,
+    "refreshy.appsec.study": 5
   }
 }

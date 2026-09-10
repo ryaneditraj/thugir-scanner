@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:prism.appsec.study",
+      "slug": "prism-reports-preview-ssti-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/auth/login demo/demo then POST /api/reports/preview template={{7*7}} returns ok:true rendered:49 (Nunjucks SSTI); prism.appsec.study/api/reports/1 findings 5→8 (+prism-reports-preview-ssti-live-oracle +route +prism-dashboard-idor-live-oracle); benchmark juice-shop.herokuapp.com 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:prism.appsec.study",
+      "slug": "prism-dashboard-idor-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/auth/login demo/demo then GET /api/dashboards/2 returns owner_id=2 name=Exec Board — CONFIDENTIAL while demo user id=1; prism.appsec.study/api/dashboards/2 findings 5→8 (+prism-dashboard-idor-live-oracle +route); benchmark 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:cogwork.appsec.study",
+      "slug": "cogwork-workflows-import-deser-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/auth/login demo/demo then POST /api/workflows/import with benign serialized marker returns ok:true imported round-trip via node-serialize unserialize; cogwork.appsec.study/api/workflows/import findings 0→6 (+cogwork-workflows-import-deser-live-oracle +route); benchmark 52 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:rollhouse.appsec.study",
       "slug": "rollhouse-promo-redeem-abuse-live-oracle",
       "status": "shipped",

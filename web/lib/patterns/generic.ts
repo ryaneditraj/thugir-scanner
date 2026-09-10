@@ -91913,5 +91913,158 @@ export const genericPatterns: Pattern[] = [
       "Our frontdesk /api/reservations/:id route scan confirms reservation IDOR. Show route-specific guest authorization.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "prism-reports-preview-ssti-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Prism report-template SSTI live oracle",
+    description:
+      "POST /api/reports/preview on prism.appsec.study evaluates Nunjucks report templates server-side — template={{7*7}} returns rendered 49 — the Prism BI report-builder SSTI training oracle.",
+    impactOneline:
+      "Server-side template injection in report previews lets attackers reach code execution through the report builder.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "prismReportsPreviewSstiLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never evaluate user-authored report templates with a full template engine.",
+      steps: [
+        "Render reports from fixed templates with bound data objects only.",
+        "Sandbox or remove expression evaluation from preview endpoints.",
+        "Run Prism only on isolated appsec.study training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our POST /api/reports/preview endpoint evaluates user templates with Nunjucks. Show safe report rendering without SSTI.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "prism-reports-preview-ssti-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Prism report-template SSTI route live oracle",
+    description:
+      "When scanning /api/reports/preview or /api/reports/:id on prism.appsec.study, report templates evaluate {{7*7}} server-side — route-specific SSTI training oracle.",
+    impactOneline:
+      "Route-specific confirmation that Prism report-builder routes expose server-side template injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "prismReportsPreviewSstiRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block SSTI on report preview routes.",
+      steps: [
+        "Reject template expressions in preview POST bodies.",
+        "Use static report layouts with sanitized merge fields."
+      ]
+    },
+    fixPrompt:
+      "Our prism /api/reports/preview route scan confirms report-template SSTI. Show route-specific sandboxing.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "prism-dashboard-idor-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Prism dashboard IDOR live oracle",
+    description:
+      "GET /api/dashboards/:id on prism.appsec.study with a demo session returns another analyst's private confidential dashboard — the Prism BI dashboard IDOR training oracle.",
+    impactOneline:
+      "Missing dashboard ownership checks leak private executive and HR analytics dashboards.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "prismDashboardIdorLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce dashboard owner checks on by-id reads.",
+      steps: [
+        "Compare dashboard.owner_id to the authenticated user before returning JSON.",
+        "Return 404 for cross-user private dashboard access.",
+        "Run Prism only on isolated appsec.study training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our GET /api/dashboards/:id leaks other users' private dashboards. Show owner-scoped authorization.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "prism-dashboard-idor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Prism dashboard IDOR route live oracle",
+    description:
+      "When scanning /api/dashboards/:id on prism.appsec.study, demo session reads another user's confidential dashboard — route-specific BI IDOR training oracle.",
+    impactOneline:
+      "Route-specific confirmation that Prism dashboard routes expose cross-user private analytics.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "prismDashboardIdorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Scope dashboard routes to the authenticated owner.",
+      steps: [
+        "Reject cross-user dashboard fetches with consistent 404 responses.",
+        "Audit is_public flags before returning dashboard detail JSON."
+      ]
+    },
+    fixPrompt:
+      "Our prism /api/dashboards/:id route scan confirms dashboard IDOR. Show route-specific ownership checks.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "cogwork-workflows-import-deser-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Cogwork workflow-import deserialization live oracle",
+    description:
+      "POST /api/workflows/import on cogwork.appsec.study calls node-serialize unserialize on attacker-controlled data strings — the Cogwork workflow automation insecure deserialization training oracle.",
+    impactOneline:
+      "Untrusted serialized workflow blobs can execute gadget chains and lead to remote code execution.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "cogworkWorkflowsImportDeserLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never deserialize untrusted workflow blobs with node-serialize.",
+      steps: [
+        "Replace serialize.unserialize with versioned JSON schema validation.",
+        "Remove node-serialize from import paths and block _$$ND_FUNC$$_ gadget markers.",
+        "Run cogwork only on isolated appsec.study training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our POST /api/workflows/import unserializes attacker data with node-serialize. Show safe workflow import without RCE gadgets.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "cogwork-workflows-import-deser-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Cogwork workflow-import deserialization route live oracle",
+    description:
+      "When scanning /api/workflows/import on cogwork.appsec.study, serialized workflow data is passed to node-serialize unserialize — route-specific deserialization training oracle.",
+    impactOneline:
+      "Route-specific confirmation that Cogwork import routes accept unsafe node-serialize payloads.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "cogworkWorkflowsImportDeserRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block unsafe deserialization on workflow import routes.",
+      steps: [
+        "Reject import bodies containing _$$ND_FUNC$$_ markers.",
+        "Use signed JSON workflow schemas instead of serialize strings."
+      ]
+    },
+    fixPrompt:
+      "Our cogwork /api/workflows/import route scan confirms node-serialize deserialization. Show route-specific import hardening.",
+    version: 1,
+    enabled: true
   }
 ];
