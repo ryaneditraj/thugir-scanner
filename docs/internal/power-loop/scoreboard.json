@@ -15,19 +15,19 @@
       ]
     }
   },
-  "total_sites_scanned": 3436,
-  "total_findings": 39012,
+  "total_sites_scanned": 3442,
+  "total_findings": 39046,
   "critical_findings": 75,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2311,
-  "discovery_findings": 28994,
+  "discovery_urls_added": 2316,
+  "discovery_findings": 29028,
   "improvements_shipped": 1774,
   "last_run": "2026-09-10T18:30:00.000Z",
   "last_run_summary": {
     "hour_utc": "18",
     "benchmark": {
-      "oracle_url": "https://juice-shop.herokuapp.com",
+      "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": 52,
       "oracle_recall": "6/6",
       "gap": [],
@@ -48,40 +48,43 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall on primary Heroku (52 findings)"
+      "note": "Primary Heroku timeout (600s) → staging fallback 6/6 (52 findings, secret-resend present)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 2,
-      "findings": 15,
-      "focus": "reggie register→login→/api/run RCE + lstalker UNION cred dump + admin panel eval lateral-movement oracles",
+      "urls_added": 5,
+      "urls_scanned": 6,
+      "findings": 34,
+      "focus": "latty5 LFI chain + captcha post-login RCE + shoppy REST BOLA + HelpDeskAI LLM chat + Streamline WebSocket CSWSH + reggie/lstalker lateral-movement oracles",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, gap=[])",
-      "reggie.appsec.study/: 4→6 findings — POST /api/register+captcha then /api/login then /api/run cmd=id uid=0(root) (+reggie-run-rce +reggie-register-login-jwt live oracles)",
-      "reggie.appsec.study/api/run: 7 findings (+reggie-run-rce-route-live-oracle)",
-      "lstalker.appsec.study/: 7→9 findings — GET /?id=0 union select login,password from users dumps cleartext admin creds (+lstalker-sqli-union-creds live+route)",
-      "lstalker.appsec.study/admin/panel/: 11 findings (+lstalker-admin-eval-rce-route-live-oracle)"
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (52 findings, gap=[]; primary Heroku timed out)",
+      "shoppy.appsec.study/api/products/1: 7 findings — sequential IDOR on product-by-ID REST oracle",
+      "captcha.appsec.study: 5 findings — unauth API routes + dir discovery (post-login RCE chain not exercised)",
+      "streamline.appsec.study/ws: 4 findings — WS endpoint + sensitive JS endpoints (CSWSH oracle needs WS transport)",
+      "helpdeskai.appsec.study/api/chat: 3 findings — thin unauth pass (LLM prompt-injection oracle needs POST body chain)",
+      "reggie.appsec.study/: 6 findings — POST /api/register+captcha then /api/login then /api/run cmd=id (+reggie-run-rce live oracles)",
+      "lstalker.appsec.study/: 9 findings — UNION cred dump + admin panel eval RCE chain (+lstalker-sqli-union-creds live+route)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "latty2-4/latty7/latty1: intermittent DNS/reachability from cloud agent",
-      "frontdesk/streamline/edgecam: queued appsec.study edge-case labs not yet probed",
-      "wordpress/freact/fvue/fangular: thin passes — need framework-specific route oracles"
+      "latty5/latty2-4: DNS unreachable from cloud agent (even-hour restart cycle)",
+      "captcha/loggie: misses post-login code-split RCE — needs captcha-gated login JWT chain oracles",
+      "helpdeskai: misses prompt injection + RAG exfiltration — needs LLM chat POST oracle with agent-trace validation",
+      "streamline/ws: misses CSWSH + sender spoofing — needs WebSocket handshake oracle"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 52,
+    "juice-shop-staging.herokuapp.com": 52,
+    "shoppy.appsec.study/api/products/1": 7,
     "lstalker.appsec.study/admin/panel/": 11,
     "lstalker.appsec.study": 9,
     "reggie.appsec.study/api/run": 7,
+    "captcha.appsec.study": 5,
     "reggie.appsec.study": 6,
-    "maze.appsec.study/api/manifest": 12,
-    "polyglot.appsec.study/": 6,
-    "prism.appsec.study/api/query/run": 6,
-    "paystream.appsec.study/api/payslips/2": 5,
-    "the-range.appsec.study/": 18
+    "streamline.appsec.study/ws": 4,
+    "helpdeskai.appsec.study/api/chat": 3,
+    "maze.appsec.study/api/manifest": 12
   }
 }

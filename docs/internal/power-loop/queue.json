@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-10T17:05:00.000Z",
+  "updated_at": "2026-09-10T18:15:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://latty5.appsec.study",
+      "source": "zzzteph/appsec.study latty-5 — docs portal LFI (?file=../) → HS256 JWT secret → forge admin → unrestricted .js upload → webshell RCE chain (appsec.study lateral-movement catalog; web search 18 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://captcha.appsec.study",
+      "source": "zzzteph/appsec.study captcha — reCAPTCHA-style PoW/image captcha → post-login code-split RCE surface (appsec.study lateral-movement catalog; web search 18 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://shoppy.appsec.study/api/products/1",
+      "source": "zzzteph/appsec.study shoppy — REST twin of graph: BOLA/IDOR on product-by-ID GET /api/products/:id (appsec.study catalog; web search 18 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://helpdeskai.appsec.study/api/chat",
+      "source": "zzzteph/appsec.study HelpDeskAI — LLM prompt injection + RAG exfiltration oracle POST /api/chat (OWASP LLM Top 10; appsec.study catalog; web search 18 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://streamline.appsec.study/ws",
+      "source": "zzzteph/appsec.study Streamline — WebSocket CSWSH + sender-spoofing oracle on /ws transport (appsec.study edge-case catalog; web search 18 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://reggie.appsec.study",
       "source": "zzzteph/appsec.study reggie — register→login captcha chain then code-split post-login RCE (appsec.study lateral-movement catalog; web search 17 UTC discovery)",
