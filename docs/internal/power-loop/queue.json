@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-10T02:15:00.000Z",
+  "updated_at": "2026-09-10T03:12:00.000Z",
   "priority_discovery_urls": [
     {
       "url": "https://owasp.andreabrioschi.it/",
@@ -12566,6 +12566,31 @@
       "url": "https://ginandjuice.shop/resources/subscribe",
       "source": "PortSwigger Gin & Juice Shop \u2014 newsletter subscribe XSS/SSTI oracle GET /resources/subscribe (ginandjuice.shop/vulnerabilities path table; web search 01 UTC discovery)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://nomnom.appsec.study",
+      "source": "zzzteph/appsec.study \u2014 REST API testing lab (~117 Swagger endpoints: BOLA, SSRF, SQLi, JWT, XXE; appsec.study catalog; web search 03 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://the-range.appsec.study",
+      "source": "zzzteph/appsec.study \u2014 calibrated scanner benchmark with planted vulns per class + coverage scoring POST /api/score (appsec.study catalog; web search 03 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://latty6.appsec.study",
+      "source": "zzzteph/appsec.study \u2014 API security delivery lab: broken auth, BOLA, SSRF, SSTI, business logic (OpenAPI /docs; web search 03 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://graph.appsec.study",
+      "source": "zzzteph/appsec.study \u2014 GraphQL Apollo API lab: pervasive BOLA/IDOR, SQLi, mass assignment, stored XSS (appsec.study catalog; web search 03 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://netrunner-academy.vercel.app",
+      "source": "yehan-s/netrunner-academy \u2014 interactive web security simulator with 30+ CTF levels (SQLi, XSS, IDOR, JWT, GraphQL; GitHub README; web search 03 UTC discovery)",
+      "auth": "oss_deploy"
     }
   ]
 }
