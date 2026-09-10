@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-10T15:06:24.832Z",
+  "updated_at": "2026-09-10T16:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://wordpress.appsec.study",
+      "source": "zzzteph/appsec.study WordPress — unauth SQLi admin-ajax, file upload RCE, LFI, BFLA export + ticket IDOR (appsec.study catalog; web search 16 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://latty7.appsec.study",
+      "source": "zzzteph/appsec.study latty-7 — UUID IDOR menu hierarchy cross-partner CRUD (appsec.study catalog; web search 16 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://freact.appsec.study",
+      "source": "zzzteph/appsec.study frontend-str-react — dangerouslySetInnerHTML, javascript: href, props-spread injection sinks (appsec.study catalog; web search 16 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://fvue.appsec.study",
+      "source": "zzzteph/appsec.study frontend-str-vue — v-html, javascript: href, runtime-compiler CSTI sinks (appsec.study catalog; web search 16 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://fangular.appsec.study",
+      "source": "zzzteph/appsec.study frontend-str-angular — bypassSecurityTrust HTML/URL/ResourceUrl, open redirect, JIT CSTI sinks (appsec.study catalog; web search 16 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://prism.appsec.study",
       "source": "zzzteph/appsec.study Prism — analytics BI report-builder SQLi/SSTI/IDOR lab (appsec.study catalog; web search 15 UTC discovery)",

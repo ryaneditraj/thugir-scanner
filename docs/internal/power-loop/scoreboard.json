@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-10T15:12:23.181Z",
+  "updated_at": "2026-09-10T16:11:30.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 3423,
-  "total_findings": 38768,
+  "total_sites_scanned": 3430,
+  "total_findings": 38844,
   "critical_findings": 74,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2301,
-  "discovery_findings": 28936,
+  "discovery_urls_added": 2306,
+  "discovery_findings": 28960,
   "improvements_shipped": 1765,
-  "last_run": "2026-09-10T15:12:23.181Z",
+  "last_run": "2026-09-10T16:11:30.000Z",
   "last_run_summary": {
-    "hour_utc": "15",
+    "hour_utc": "16",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 52,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 598,
+      "probes_run": 596,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -54,33 +54,34 @@
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 62,
-      "focus": "mobicare OTP bypass + nimbus file IDOR + tenanthub cross-tenant ticket live oracles",
-      "improvements_shipped_this_run": 3
+      "findings": 24,
+      "focus": "wordpress WP-plugin lab + framework-specific XSS sink labs (freact/fvue/fangular) + maze manifest rescan",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, gap=[])",
-      "mobicare.appsec.study/: 4 findings — OTP verify accepts arbitrary code (+mobicare-otp-bypass live+route)",
-      "nimbus.appsec.study/api/files/4: 5 findings — demo bearer reads owner_id=2 confidential file (+nimbus-files-idor live+route)",
-      "tenanthub.appsec.study/api/tickets/5: 5 findings — demo member reads org_id=3 ticket (+tenanthub-cross-tenant-ticket live+route)",
-      "juicy.appsec.study: 6 findings — AWS AKID in bundle + dom-eval-xss + postMessage innerHTML sink",
-      "brokencrystals.com/api/fetch: 31 findings — brokencrystals-api-fetch SSRF live+route oracles"
+      "wordpress.appsec.study: 6 findings — author enumeration live+route oracles; misses planted SQLi/upload RCE/LFI",
+      "freact.appsec.study: 2 findings — dangerous-html-sinks + missing headers (React-specific CSTI sinks not triggered)",
+      "maze.appsec.study/api/manifest: 10 findings — .env/.git/openapi exposure on manifest oracle",
+      "mobicare.appsec.study/: 4 findings — OTP verify accepts arbitrary code (mobicare-otp-bypass live oracle)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "shellshock.appsec.study: Cloudflare 1012 blocks Shellshock User-Agent injection — needs corpus fallback oracle",
-      "prism/paystream/polyglot: thin unauth passes — need authenticated route oracles for SQLi/SSTI/IDOR chains",
-      "maze.appsec.study: manifest-only scan misses procedural vuln-chain fingerprinting"
+      "latty7.appsec.study + latty1.appsec.study: scanner reachability error despite HTTP 200 from curl — retry with route-specific oracles",
+      "wordpress.appsec.study: thin pass — author enum only; need admin-ajax SQLi + plugin upload RCE + wp-config LFI oracles",
+      "freact/fvue/fangular: generic sink/header checks only — need framework-specific DOM-XSS/CSTI route oracles with hidden params",
+      "maze.appsec.study: manifest scan gets openapi/.git/.env but misses procedural vuln-chain fingerprinting"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 52,
+    "wordpress.appsec.study": 6,
+    "maze.appsec.study/api/manifest": 10,
     "mobicare.appsec.study/": 4,
-    "nimbus.appsec.study/api/files/4": 5,
-    "tenanthub.appsec.study/api/tickets/5": 5,
-    "juicy.appsec.study": 6,
+    "freact.appsec.study": 2,
+    "fvue.appsec.study": 1,
+    "fangular.appsec.study": 1,
     "brokencrystals.com/api/fetch?url=https://httpbin.org/get": 31,
-    "northwind.appsec.study/api/accounts/1": 5,
     "the-range.appsec.study/": 18
   }
 }
