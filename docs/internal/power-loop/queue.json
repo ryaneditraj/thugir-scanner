@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-10T05:22:00.000Z",
+  "updated_at": "2026-09-10T06:27:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://vwad.owasp.org/app/damn-vulnerable-restaurant/",
+      "source": "OWASP VWAD \u2014 Damn Vulnerable RESTaurant API Game FastAPI/PostgreSQL Docker CTF (theowni/Damn-Vulnerable-RESTaurant-API-Game; web search 06 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vwad.owasp.org/app/goof/",
+      "source": "OWASP VWAD \u2014 Snyk Goof Express/MongoDB todo app (NoSQLi, XSS, open redirect, hardcoded secrets; snyk-labs/nodejs-goof; web search 06 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://qa.brokencrystals.com/api/file/aws?path=http://169.254.169.254/latest/meta-data/",
+      "source": "NeuraLegion/brokencrystals QA \u2014 SSRF metadata oracle GET /api/file/aws (improvements corpus; web search 06 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/ecommerce/products/search?q=test",
+      "source": "atlas-crew/Chimera \u2014 reflected XSS search oracle GET /api/v1/ecommerce/products/search (vulnerability-inventory CHM-ECOM; web search 06 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/banking/transfer",
+      "source": "atlas-crew/Chimera \u2014 business-logic transfer manipulation oracle POST /api/v1/banking/transfer (CHM-BANK-001; web search 06 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://owasp.andreabrioschi.it/",
       "source": "OWASP Interactive Learning Lab \u2014 A01:2025 Broken Access Control interactive demos (owasp.andreabrioschi.it; web search 02 UTC discovery)",
