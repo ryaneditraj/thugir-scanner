@@ -100,8 +100,18 @@ const FAQ: [string, React.ReactNode][] = [
 export default async function HomePage() {
   const settings = await loadMaskedSettings();
   const price = settings.pricing;
+  const faqLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: FAQ.filter((item): item is [string, string] => typeof item[1] === "string").map(([name, text]) => ({
+      "@type": "Question",
+      name,
+      acceptedAnswer: { "@type": "Answer", text }
+    }))
+  };
   return (
     <div className="lightsite">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
       {/* HERO — thesis + URL-first + floating product showcase */}
       <section className="hero">
         <div className="hero-inner" data-reveal>

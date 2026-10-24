@@ -1,6 +1,33 @@
 import type { Metadata } from "next";
+import { Bricolage_Grotesque, Fraunces, IBM_Plex_Mono, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import SiteHeader from "@/components/SiteHeader";
+
+const display = Bricolage_Grotesque({
+  subsets: ["latin"],
+  weight: ["600", "700", "800"],
+  variable: "--font-display",
+  display: "swap"
+});
+const serif = Fraunces({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  style: ["normal", "italic"],
+  variable: "--font-serif",
+  display: "swap"
+});
+const sans = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-body",
+  display: "swap"
+});
+const mono = IBM_Plex_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  variable: "--font-mono",
+  display: "swap"
+});
 
 const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://scanner.thugirlabs.com";
 
@@ -11,13 +38,31 @@ export const metadata: Metadata = {
     template: "%s | Thugir Scanner"
   },
   description:
-    "Scan your live web app for the specific misconfigurations AI coding assistants ship by default — exposed secrets, open databases, broken access control. Every finding is backed by captured evidence before it's flagged.",
+    "Thugir Scanner is an evidence-backed security scanner for AI-built web apps. It checks live URLs for exposed secrets, open databases, downloadable .env and .git files, and missing security headers, and it withholds a finding unless the check captured proof.",
+  keywords: [
+    "AI app security scanner",
+    "vibe coding security",
+    "Lovable security scan",
+    "Bolt.new security",
+    "Supabase RLS scanner",
+    "exposed API key scanner",
+    "evidence-based vulnerability scanner",
+    "Thugir Scanner",
+    "Thugir Labs"
+  ],
   openGraph: {
     type: "website",
     siteName: "Thugir Scanner",
     title: "Thugir Scanner — Security for AI-built apps",
     description:
-      "We test for the exact mistakes AI builders leave behind, and we verify each finding with captured evidence before reporting it."
+      "Evidence-backed checks for the misconfigurations AI coding tools leave in live web apps. A finding is reported only when the scanner captured proof.",
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Thugir Scanner — evidence-backed security checks for AI-built apps" }]
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Thugir Scanner — Security for AI-built apps",
+    description: "Evidence-backed security checks for AI-built web apps.",
+    images: ["/og-image.png"]
   },
   robots: { index: true, follow: true }
 };
@@ -43,15 +88,7 @@ const FOOTER: Record<string, [string, string][]> = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <head>
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Fraunces:ital,opsz,wght@1,9..144,400;1,9..144,500;1,9..144,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
-          rel="stylesheet"
-        />
-      </head>
+    <html lang="en" className={`${display.variable} ${serif.variable} ${sans.variable} ${mono.variable}`}>
       <body>
         <div className="bg-fx" aria-hidden="true" />
         <SiteHeader />

@@ -2,18 +2,18 @@
 
 import { useState, useMemo } from "react";
 import { useSearchParams } from "next/navigation";
+import { safeNextPath } from "@/lib/auth/safe-next";
 import { getBrowserSupabase } from "@/lib/supabase/client";
 
 export default function LoginForm() {
   const searchParams = useSearchParams();
-  const nextPath = searchParams.get("next") || "/dashboard";
+  const nextPath = safeNextPath(searchParams.get("next"));
   const redirectTo = useMemo(() => {
     const origin =
       typeof window !== "undefined"
         ? window.location.origin
         : process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
-    const path = nextPath.startsWith("/") ? nextPath : "/dashboard";
-    return `${origin}${path}`;
+    return `${origin}${nextPath}`;
   }, [nextPath]);
 
   const [email, setEmail] = useState("");

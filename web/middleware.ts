@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
+import { IS_DEV_MODE } from "./lib/devmode";
 
 // Guards authenticated surfaces. Unauthenticated requests to /dashboard, /scans, /admin
 // are redirected to /login. The deeper admin role + 2FA check happens in the admin layout
@@ -8,7 +9,7 @@ const PROTECTED = [/^\/dashboard/, /^\/scans\//, /^\/admin/];
 
 export async function middleware(req: NextRequest) {
   // DEV_MODE: auth is bypassed everywhere so protected surfaces are reachable without Supabase.
-  if (process.env.DEV_MODE === "1") return NextResponse.next();
+  if (IS_DEV_MODE) return NextResponse.next();
 
   const path = req.nextUrl.pathname;
   if (!PROTECTED.some((re) => re.test(path))) return NextResponse.next();

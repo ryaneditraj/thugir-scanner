@@ -13,29 +13,13 @@ import threading
 
 from fastapi import FastAPI, Header, HTTPException, Request
 
+import job_auth
 import runner
 import supabase_io as db
+from target_guard import UnsafeTargetError, guard_target
 
 app = FastAPI(title="Thugir Deep Scan Worker")
 WORKER_ID = f"{socket.gethostname()}:{os.getpid()}"
-
-
-def _verify_qstash(body: bytes, signature: str | None) -> bool:
-    """Verify the QStash signature. Falls back to a shared-secret header in dev only."""
-    if signature:
-        try:
-            from qstash import Receiver
-
-            receiver = Receiver(
-                current_signing_key=os.environ["QSTASH_CURRENT_SIGNING_KEY"],
-                next_signing_key=os.environ["QSTASH_NEXT_SIGNING_KEY"],
-            )
-            receiver.verify(signature=signature, body=body.decode("utf-8"))
-            return True
-        except Exception:
-            return False
-    # Dev-only fallback: a shared secret header. Disabled unless explicitly allowed.
-    return os.getenv("ALLOW_UNSIGNED_JOBS") == "1"
 
 
 def _process(job: dict) -> None:
@@ -113,7 +97,7 @@ def health() -> dict:
 @app.post("/run")
 async def run(request: Request, upstash_signature: str | None = Header(default=None)) -> dict:
     body = await request.body()
-    if not _verify_qstash(body, upstash_signature):
+    if not job_auth.verify_qstash(body, upstash_signature):
         raise HTTPException(status_code=401, detail="invalid signature")
 
     import json
@@ -121,6 +105,10 @@ async def run(request: Request, upstash_signature: str | None = Header(default=N
     job = json.loads(body.decode("utf-8"))
     if not job.get("scanId") or not job.get("targetUrl"):
         raise HTTPException(status_code=400, detail="missing scanId/targetUrl")
+    try:
+        guard_target(job["targetUrl"])
+    except UnsafeTargetError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
 
     # Run the (potentially minutes-long) scan in a background thread so QStash gets a fast 202.
     threading.Thread(target=_process, args=(job,), daemon=True).start()

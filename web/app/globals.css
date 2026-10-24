@@ -42,10 +42,10 @@
   --line: rgba(230, 244, 246, 0.11);
   --line-2: rgba(230, 244, 246, 0.055);
 
-  --display: "Bricolage Grotesque", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --serif: "Fraunces", Georgia, "Times New Roman", serif;
-  --body: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --display: var(--font-display), "Bricolage Grotesque", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --serif: var(--font-serif), "Fraunces", Georgia, "Times New Roman", serif;
+  --body: var(--font-body), "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --mono: var(--font-mono), "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 
   --maxw: 1160px;
   --gutter: clamp(20px, 5vw, 56px);

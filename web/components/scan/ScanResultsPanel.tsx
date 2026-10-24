@@ -76,7 +76,7 @@ export default function ScanResultsPanel({
       )}
 
       {unlocked.map((f, i) => (
-        <FindingCard key={f.id ?? f.patternSlug ?? f.title} finding={f} index={i} defaultOpen={i === 0 && f.severity === "critical"} />
+        <FindingCard key={f.id ?? f.patternSlug ?? f.title} finding={f} index={i} defaultOpen={i === 0} />
       ))}
 
       {lockedFindings.length > 0 && (

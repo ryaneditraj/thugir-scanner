@@ -2,7 +2,9 @@
 // Free checks are single-request and cheap; this enforces timeouts, byte caps, and an
 // SSRF/abuse guard that refuses to fetch private / loopback / metadata hosts.
 
+import { lookup } from "node:dns/promises";
 import https from "node:https";
+import { isBlockedHostname, isBlockedIpAddress } from "./ssrf";
 
 export interface FetchedDoc {
   url: string;
@@ -58,11 +60,6 @@ function describeFetchError(e: unknown): string {
   return "no response";
 }
 
-const PRIVATE_HOST_RE =
-  /^(localhost|127\.|0\.0\.0\.0|10\.|192\.168\.|169\.254\.|::1|fc00:|fe80:)/i;
-const PRIVATE_172_RE = /^172\.(1[6-9]|2\d|3[0-1])\./;
-const METADATA_HOSTS = new Set(["metadata.google.internal", "169.254.169.254"]);
-
 // Well-known third-party platforms a user almost certainly does not own. The free flow
 // refuses these so the tool can't be pointed at major infrastructure by an anonymous-ish
 // account. (Authorized testing of your own property still goes through Deep Scan, which
@@ -95,12 +92,7 @@ export function normalizeTarget(input: string): URL {
     throw new BlockedTargetError("Only http/https targets are allowed");
   }
   const host = u.hostname.toLowerCase();
-  if (
-    PRIVATE_HOST_RE.test(host) ||
-    PRIVATE_172_RE.test(host) ||
-    METADATA_HOSTS.has(host) ||
-    !host.includes(".")
-  ) {
+  if (isBlockedHostname(host)) {
     throw new BlockedTargetError("Refusing to scan private/internal hosts");
   }
   if (THIRD_PARTY_APEX.has(host) || THIRD_PARTY_APEX.has(apexOf(host))) {
@@ -293,23 +285,105 @@ async function fetchDocOnce(
   }
 }
 
-export async function fetchDoc(
-  url: string,
-  opts: {
-    timeoutMs?: number;
-    maxBytes?: number;
-    method?: string;
-    body?: string;
-    headers?: Record<string, string>;
-    /** When "manual", redirect responses are returned without following Location. */
-    redirect?: RequestRedirect;
-  } = {}
-): Promise<FetchedDoc> {
-  const first = await fetchDocOnce(url, UA, opts);
+const REDIRECT_STATUSES = new Set([301, 302, 303, 307, 308]);
+const MAX_REDIRECTS = 5;
+const DNS_TTL_MS = 15_000;
+const dnsVerdict = new Map<string, { at: number; blocked: boolean }>();
+
+export type FetchOptions = {
+  timeoutMs?: number;
+  maxBytes?: number;
+  method?: string;
+  body?: string;
+  headers?: Record<string, string>;
+  /** When "manual", redirect responses are returned without following Location. */
+  redirect?: RequestRedirect;
+};
+
+/** Reject non-http(s) URLs and hosts that are private before any socket is opened. */
+export async function assertSafeFetchUrl(raw: string): Promise<URL> {
+  let url: URL;
+  try {
+    url = new URL(raw);
+  } catch {
+    throw new BlockedTargetError("Invalid URL");
+  }
+  if (url.protocol !== "http:" && url.protocol !== "https:") {
+    throw new BlockedTargetError("Only http/https targets are allowed");
+  }
+  if (isBlockedHostname(url.hostname)) {
+    throw new BlockedTargetError("Refusing to scan private/internal hosts");
+  }
+  const host = url.hostname.toLowerCase().replace(/\.$/, "");
+  const now = Date.now();
+  const cached = dnsVerdict.get(host);
+  if (cached && now - cached.at < DNS_TTL_MS) {
+    if (cached.blocked) {
+      throw new BlockedTargetError("Refusing to scan hosts that resolve to private/internal addresses");
+    }
+    return url;
+  }
+  try {
+    const records = await lookup(host, { all: true, verbatim: true });
+    const blocked = records.length === 0 || records.some((record) => isBlockedIpAddress(record.address));
+    dnsVerdict.set(host, { at: now, blocked });
+    if (blocked) {
+      throw new BlockedTargetError("Refusing to scan hosts that resolve to private/internal addresses");
+    }
+  } catch (e) {
+    if (e instanceof BlockedTargetError) throw e;
+    // Resolution failed. fetchDocOnce reports the DNS error and does not connect.
+  }
+  return url;
+}
+
+/** Resolve one redirect and refuse private or non-http destinations before the next hop. */
+export function resolveSafeRedirect(current: string, location: string): URL {
+  let next: URL;
+  try {
+    next = new URL(location, current);
+  } catch {
+    throw new BlockedTargetError("Refusing redirect to an invalid URL");
+  }
+  if (next.protocol !== "http:" && next.protocol !== "https:") {
+    throw new BlockedTargetError("Refusing redirect to a non-http URL");
+  }
+  if (isBlockedHostname(next.hostname)) {
+    throw new BlockedTargetError("Refusing to scan private/internal hosts");
+  }
+  return next;
+}
+
+async function fetchWithUaFallback(url: string, opts: FetchOptions): Promise<FetchedDoc> {
+  const manual = { ...opts, redirect: "manual" as const };
+  const first = await fetchDocOnce(url, UA, manual);
   if (!isVercelSecurityCheckpoint(first)) return first;
-  const retry = await fetchDocOnce(url, BROWSER_UA, opts);
+  const retry = await fetchDocOnce(url, BROWSER_UA, manual);
   if (retry.status > 0 && !isVercelSecurityCheckpoint(retry)) return retry;
   return first;
+}
+
+export async function fetchDoc(url: string, opts: FetchOptions = {}): Promise<FetchedDoc> {
+  const follow = (opts.redirect ?? "follow") === "follow";
+  let current = url;
+  let method = opts.method;
+  let body = opts.body;
+  for (let hop = 0; hop <= MAX_REDIRECTS; hop++) {
+    await assertSafeFetchUrl(current);
+    const doc = await fetchWithUaFallback(current, { ...opts, method, body });
+    const settled = { ...doc, url, finalUrl: doc.finalUrl || current };
+    if (!follow || !REDIRECT_STATUSES.has(doc.status)) return settled;
+    const location = doc.headers["location"];
+    if (!location) return settled;
+    if (hop === MAX_REDIRECTS) return { ...settled, error: settled.error ?? "too many redirects" };
+    const next = resolveSafeRedirect(current, location);
+    if (doc.status === 301 || doc.status === 302 || doc.status === 303) {
+      method = "GET";
+      body = undefined;
+    }
+    current = next.toString();
+  }
+  throw new BlockedTargetError("Refusing redirect to an invalid URL");
 }
 
 /** raw.githack.com deploy base: https://raw.githack.com/{owner}/{repo}/{branch}/ */

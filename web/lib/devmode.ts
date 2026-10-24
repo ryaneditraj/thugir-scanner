@@ -4,8 +4,9 @@ import type { Tier } from "./patterns/types";
 // or Razorpay: auth is bypassed with a fake user, scans are not persisted, and protected
 // routes are reachable. This lets the real scan engine + blur gate be tested end-to-end.
 //
-// NEVER enable this in production. It is opt-in via the DEV_MODE env var only.
-export const IS_DEV_MODE = process.env.DEV_MODE === "1";
+// NEVER enable this in production. NODE_ENV=production ignores DEV_MODE so a
+// deployed app cannot skip auth because the variable was copied into the host.
+export const IS_DEV_MODE = process.env.DEV_MODE === "1" && process.env.NODE_ENV !== "production";
 
 export const DEV_USER = {
   id: "00000000-0000-0000-0000-000000000000",
