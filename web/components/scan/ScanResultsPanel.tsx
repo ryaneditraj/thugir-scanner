@@ -18,7 +18,9 @@ export default function ScanResultsPanel({
   findings,
   locked,
   showShare = true,
-  hideHeader = false
+  hideHeader = false,
+  summaryMarkdown,
+  shareNote
 }: {
   scanId?: string | null;
   target: string;
@@ -31,6 +33,8 @@ export default function ScanResultsPanel({
   locked?: LockedPreview | null;
   showShare?: boolean;
   hideHeader?: boolean;
+  summaryMarkdown?: string;
+  shareNote?: string;
 }) {
   const sorted = [...findings].sort(
     (a, b) => (SEV_ORDER[a.severity] ?? 9) - (SEV_ORDER[b.severity] ?? 9)
@@ -41,7 +45,9 @@ export default function ScanResultsPanel({
 
   return (
     <section className="scan-results-shell">
-      {showShare && <ScanShareBar scanId={scanId} target={target} />}
+      {showShare && (
+        <ScanShareBar scanId={scanId} target={target} summaryMarkdown={summaryMarkdown} note={shareNote} />
+      )}
 
       {!hideHeader && (
         <p className="result-head">

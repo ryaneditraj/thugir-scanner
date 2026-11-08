@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 
 const LINKS: [string, string][] = [
+  ["Sample", "/demo"],
   ["What we check", "/#checks"],
   ["How it's confirmed", "/#confirmed"],
   ["Pricing", "/#pricing"]

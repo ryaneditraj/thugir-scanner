@@ -778,7 +778,7 @@ function reachFailureMessage(target: URL, reason?: string): string {
 }
 
 // Apply a single secret_regex pattern to the combined text.
-function scanSecret(pattern: Pattern, combined: string): PatternFinding | null {
+export function scanSecret(pattern: Pattern, combined: string): PatternFinding | null {
   if (pattern.detectorKind !== "secret_regex") return null;
   const cfg = pattern.detectorConfig as { regex: string; validate?: string; secretName: string };
   const re = compile(cfg.regex);

@@ -61,7 +61,8 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Thugir Scanner — Security for AI-built apps",
-    description: "Evidence-backed security checks for AI-built web apps.",
+    description:
+      "Evidence-backed security checks for AI-built web apps. A finding is reported only when the check captured proof.",
     images: ["/og-image.png"]
   },
   robots: { index: true, follow: true }

@@ -29,7 +29,9 @@ No phone number, age, school, or street address for the maintainer was found in 
 
 ## Known dependency advisories
 
-`npm audit` still reports Next.js issues whose patched release is 16.4.3. This app stays on the Next.js 14 line in this change. Upgrading across that major is a separate task. TODO(Ryan): schedule the Next.js 16 upgrade and re-run the audit.
+`npm audit` reports Next.js advisories whose patched release is 16.4.5, a semver major. This app stays on Next.js 14.2.35. The production server does not use `next/image`. Auth still calls synchronous `cookies()` from `next/headers`, and request gating lives in `middleware.ts`. Jumping to 16 changes both of those APIs, so it is a separate change, not part of the launch pass. TODO(Ryan): upgrade to Next.js 16.4.5 or newer and re-run `npm audit`.
+
+The critical Next.js advisories in that audit are remote code execution in the image optimizer (AVIF and SVG) and on Windows-hosted servers. The high advisories include server-component denial of service, middleware bypass on the Pages Router with i18n, and server-action issues. Treat the 14 line as unpatched until the upgrade lands.
 
 `puppeteer-core` is a dev dependency used by lab checks. Its transitive advisories currently require a major upgrade. It is not part of the production server path.
 

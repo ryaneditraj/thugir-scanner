@@ -9,7 +9,7 @@
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
-    "test": "node scripts/test-framework.mjs && tsx scripts/test-security.ts",
+    "test": "node scripts/test-framework.mjs && tsx scripts/test-security.ts && tsx scripts/test-fixture.ts",
     "demo": "tsx scripts/demo.ts",
     "scan": "tsx scripts/scan-url.ts",
     "test:framework": "node scripts/test-framework.mjs",

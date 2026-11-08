@@ -13,6 +13,8 @@
 
 Maintained by [Ryan Editraj](https://github.com/ryaneditraj). One flagship repository: the scanner you can run. The marketing site and the optional Deep Scan engine stay separate and are linked below.
 
+Launch lines, the hooks that are safe to say, and a twenty-second storyboard are in [docs/LAUNCH.md](docs/LAUNCH.md). The in-app sample is `/demo`: an invented page, real detectors, no network.
+
 ## What it actually does
 
 The free tier runs inside this repo. It fetches a page and a capped set of same-origin scripts, fingerprints the stack, and applies checks that require a positive signal: a secret pattern in the bundle, a real `.env` or `.git` response, an open database read, a missing security header, a public source map. Deep-tier checks are counted and titled for a free response. Their evidence and fix text are omitted on the server, not hidden in CSS.
@@ -21,7 +23,7 @@ The free tier runs inside this repo. It fetches a page and a capped set of same-
 |---|---|
 | **Free starter scan** | TypeScript engine in `web/lib/checks`. No worker, no database, no account when `DEV_MODE=1`. |
 | **Evidence gate** | `web/lib/findings/gate.ts` drops gated fields before the JSON response is built. |
-| **Pattern library** | 2,639 code-defined patterns in this tree. 85 are enabled for the free tier. New checks can also be rows in Supabase. |
+| **Pattern library** | 2,639 code-defined patterns in this tree. 2,634 are enabled. 85 of those run on the free tier. New checks can also be rows in Supabase. |
 | **SSRF guard** | Private, loopback, link-local, and metadata targets are refused, including obfuscated IP forms and redirects. |
 | **Deep Scan worker** | Python service in `worker/`. It runs only with a signed job, and it refuses private targets. The TCSF engine it imports is **not** in this repo. |
 | **Accounts and billing** | Supabase auth, Razorpay webhook signatures, ownership checks (file, meta tag, DNS TXT, well-known). Optional for local development. |
@@ -37,25 +39,27 @@ These are captures from this tree, not mockups.
 </p>
 
 <p>
-  <img src="docs/assets/scan-example.png" alt="Free-tier scan of https://example.com from the local app" width="100%" />
+  <img src="docs/assets/demo.png" alt="Labeled sample: free-tier detectors on an in-memory fixture" width="100%" />
 </p>
 
 <p>
-  <img src="docs/assets/how-it-works.png" alt="How scans work page" width="100%" />
+  <img src="docs/assets/demo-mobile.png" alt="Labeled sample at a phone width" width="390" />
 </p>
 
 <p>
   <img src="docs/assets/home-mobile.png" alt="Homepage at a phone width" width="390" />
 </p>
 
-The offline engine demo (`npm run demo`) prints real detector output against a synthetic bundle. A shortened run from this tree:
+`/demo` and `npm run demo` run the same detectors on that fixture. A shortened run from this tree:
 
 ```text
 detected platform: lovable
 signals: lovable, supabase
 [CRITICAL] Supabase service_role JWT exposed in client bundle
-    evidence: {"secretName":"Supabase service_role JWT","sampleRedacted":"eyJhbG...3456"}
-A deep-tier finding shown to a free user includes evidence? false
+    evidence: {"secretName":"Supabase service_role JWT","sampleRedacted":"eyJhbG...-key"}
+[MEDIUM] Critical security headers missing
+    evidence: Content-Security-Policy, X-Frame-Options, Strict-Transport-Security, X-Content-Type-Options, Referrer-Policy
+A deep-tier copy of the first finding, shown to a free caller, includes evidence? false
 ```
 
 ## Architecture
@@ -179,7 +183,7 @@ Already in this tree:
 Still open, and not claimed as done:
 
 - Vendor or publish `thugir-node` so Deep Scan runs without a private checkout
-- Next.js 16 upgrade. The current 14.x line has published advisories whose fix is 16.4.3. See [SECURITY.md](SECURITY.md)
+- Next.js 16 upgrade. The current 14.2.35 line has published advisories whose fix is 16.4.5. See [SECURITY.md](SECURITY.md)
 - A public verification-badge pass. `/verify` exists; the internal roadmap still lists a quality pass
 - One-click scan links, and a way for an analyst to disable a noisy pattern without a deploy
 - TODO(Ryan): pricing, uptime, and any customer reference, once those are true

@@ -28,7 +28,13 @@ const SEV_STYLE: Record<string, { bg: string; color: string }> = {
   medium: { bg: "#6cbbe6", color: "#0a2028" }
 };
 
-export default function HeroShowcase() {
+export default function HeroShowcase({
+  freeChecks,
+  libraryChecks
+}: {
+  freeChecks: number;
+  libraryChecks: number;
+}) {
   return (
     <div className="hs" aria-hidden="true">
       {/* LEFT — live findings feed */}
@@ -67,20 +73,20 @@ export default function HeroShowcase() {
         <span className="hs-grab" aria-hidden="true" />
         <div className="hs-chart-top">
           <div className="hs-stat">
-            <div className="hs-pct">Proof</div>
+            <div className="hs-pct">{freeChecks}</div>
             <div className="hs-stat-label">
-              <i className="dot ok" /> Before a finding is shown
+              <i className="dot ok" /> Free-tier checks in this repo
             </div>
           </div>
         </div>
         <ul className="hs-metrics">
           <li>
-            <span className="hs-m-num ok">On</span>
-            <span className="hs-m-lbl">Captured evidence</span>
+            <span className="hs-m-num ok">{libraryChecks}</span>
+            <span className="hs-m-lbl">Enabled patterns</span>
           </li>
           <li>
-            <span className="hs-m-num">Off</span>
-            <span className="hs-m-lbl">Guesses withheld</span>
+            <span className="hs-m-num">On</span>
+            <span className="hs-m-lbl">Evidence required</span>
           </li>
         </ul>
         <div className="hs-check">
