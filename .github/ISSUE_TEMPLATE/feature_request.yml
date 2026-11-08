@@ -1,0 +1,19 @@
+name: Feature request
+description: A check, fix, or documentation change that belongs in this scanner.
+title: "feat: "
+labels: []
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What fails or is missing today, in this repository.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: How we would know it works
+      description: The proof a check should capture, or the test that should pass. Do not invent benchmark numbers.
+    validations:
+      required: true

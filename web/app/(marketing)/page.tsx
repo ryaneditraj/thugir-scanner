@@ -1,5 +1,6 @@
 import ScanForm from "@/components/ScanForm";
 import HeroShowcase from "@/components/HeroShowcase";
+import { patternsForTier, STATIC_PATTERNS } from "@/lib/patterns";
 import { loadMaskedSettings } from "@/lib/settings/store";
 
 export const dynamic = "force-dynamic";
@@ -55,7 +56,7 @@ const EXHIBITS: { ref: string; title: string; body: React.ReactNode; tag: string
     ref: "EXHIBIT F",
     title: "Attackers can forge payments or reach other users' data",
     body: (
-      <>Unverified payment webhooks accept forged "paid" events, and resources fetched by sequential ID without an ownership check (<span className="term">IDOR</span>) expose other accounts. Confirmed on Deep Scan.</>
+      <>Unverified payment webhooks and resources fetched by sequential ID (<span className="term">IDOR</span>) are Deep Scan checks. They run only after the domain is verified, and their evidence stays off the free response.</>
     ),
     tag: "deep scan",
     tagClass: "low"
@@ -90,18 +91,31 @@ const FLOW: [string, string][] = [
 ];
 
 const FAQ: [string, React.ReactNode][] = [
-  ["Do I need an account?", "Yes — a free account is required to run a scan, so every request is attributable and rate-limited. There's nothing to install; you scan your live URL from the browser."],
-  ["How is this different from a generic scanner?", "Generic scanners run thousands of CVE checks and bury you in maybes. We target the specific misconfigurations AI coding assistants leave behind, and we confirm each one with captured evidence before it's flagged."],
-  ["Is it safe to run against production?", "The free scan is read-only and single-request. Deep Scan's active probing only runs against domains you've verified you own or are authorized to test."],
-  ["What do I get for free vs. Deep Scan?", "The free scan confirms the highest-impact issues on one page with full evidence and fixes. Structural checks that need authenticated or multi-step probing (IDOR, broken auth, webhook forgery) are sealed and unlock with a Deep Scan."]
+  ["Do I need an account?", "On a deployed server, yes. The free scan requires a session so the request can be rate-limited. Locally, DEV_MODE=1 skips that session and is ignored when NODE_ENV=production. There is nothing to install."],
+  ["How is a finding different from an alert?", "A free-tier finding is returned only when the check captured a positive signal: a matched secret, a response, a header, or a row. Deep-tier evidence is omitted from the free JSON. It is not hidden with CSS."],
+  ["Is it safe to run against production?", "The free scan is a read-only pass plus a small set of fixed-path probes, and it refuses private and metadata addresses. Scan only a host you own or are authorized to test. Active Deep Scan probing runs after domain ownership is verified."],
+  ["What is the sample on /demo?", "An in-memory page with invented secrets. The detectors in this repository run against that page and the report shows their output. It does not fetch a network host, and it is not a customer result."]
 ];
 
 
 export default async function HomePage() {
   const settings = await loadMaskedSettings();
   const price = settings.pricing;
+  const libraryChecks = STATIC_PATTERNS.filter((p) => p.enabled).length;
+  const freeChecks = patternsForTier("free").length;
+  const deepChecks = libraryChecks - freeChecks;
+  const faqLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: FAQ.filter((item): item is [string, string] => typeof item[1] === "string").map(([name, text]) => ({
+      "@type": "Question",
+      name,
+      acceptedAnswer: { "@type": "Answer", text }
+    }))
+  };
   return (
     <div className="lightsite">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
       {/* HERO — thesis + URL-first + floating product showcase */}
       <section className="hero">
         <div className="hero-inner" data-reveal>
@@ -115,13 +129,14 @@ export default async function HomePage() {
             Security for AI-built apps
           </span>
           <h1>
-            Find the flaws <em>AI builders</em> ship,
-            <br />
-            <em>before</em> attackers do
+            Proof, or it is <em>not</em> a finding.
           </h1>
           <p className="hero-sub">
-            Evidence-backed vulnerability findings for vibe-coded apps — trusted proof, not noisy
-            alerts, in about ten seconds.
+            Thugir Scanner checks an AI-built web app for exposed secrets, open databases, and
+            missing headers. The free tier reports a hit only when that check captured evidence.
+          </p>
+          <p className="hero-proof">
+            {freeChecks} free-tier checks · {libraryChecks.toLocaleString("en-US")} enabled patterns · evidence stays off the free response
           </p>
           <div className="scan-wrap">
             <ScanForm />
@@ -129,7 +144,7 @@ export default async function HomePage() {
         </div>
 
         <div className="hero-stage" data-reveal>
-          <HeroShowcase />
+          <HeroShowcase freeChecks={freeChecks} libraryChecks={libraryChecks} />
         </div>
       </section>
 
@@ -195,57 +210,43 @@ export default async function HomePage() {
       <section className="section" id="sample">
         <div className="sample">
           <div className="sample-aside" data-reveal>
-            <h2>What one finding looks like.</h2>
+            <h2>See the engine on a labeled sample.</h2>
             <p className="lead">
-              Not a severity pill and a one-liner. Every confirmed issue ships with the captured
-              evidence, the plain-English impact, the steps to reproduce, and the exact fix text.
+              <a href="/demo">/demo</a> runs the free-tier detectors against an invented page that
+              never leaves the server. The report is their output: redacted secret samples and the
+              headers that page did not send.
             </p>
             <p className="disclaimer">
-              Representative example for illustration — values redacted. Your report contains the
-              real captured request/response from your own app.
+              Synthetic fixture. Not a customer, not a benchmark, and not a scan of a live site.
+              Record that page if you need a demo without pointing the scanner at someone else.
             </p>
+            <a className="btn btn-primary" href="/demo">
+              Open the labeled sample
+            </a>
           </div>
-          <div className="finding-doc" data-reveal>
-            <div className="fd-head">
-              <span className="fd-id">EXHIBIT A · CONFIRMED</span>
-              <span className="tag verified">verified</span>
-            </div>
-            <div className="fd-body">
-              <h3>Environment file reachable over HTTP</h3>
-              <p>
-                A production request for <code>/.env</code> returns the file's contents instead of a
-                404, exposing live credentials to anyone on the internet.
-              </p>
-
-              <div className="fd-label">Evidence captured</div>
-              <div className="fd-evidence">{`$ GET https://my-app.com/.env
-< HTTP/2 `}<span className="ok">200</span>{`
-< content-type: application/octet-stream
-
-DATABASE_URL=postgres://`}<span className="rd">██████████</span>{`
-STRIPE_SECRET_KEY=sk_live_`}<span className="rd">████████</span>{`
-JWT_SECRET=`}<span className="rd">██████████</span></div>
-
-              <div className="fd-label">Impact</div>
-              <p>
-                The database URL and Stripe live key grant full read/write to customer data and the
-                ability to move money. Treat every value in the file as compromised.
-              </p>
-
-              <div className="fd-label">Reproduce</div>
-              <ol className="fd-steps">
-                <li>Open <code>https://my-app.com/.env</code> in a browser.</li>
-                <li>Observe a 200 response with <code>KEY=VALUE</code> lines.</li>
-              </ol>
-
-              <div className="fd-label">Fix</div>
-              <div className="fd-fix">
-                Stop serving dotfiles from the web root, redeploy so <code>/.env</code> returns 404,
-                then rotate <code>DATABASE_URL</code>, <code>STRIPE_SECRET_KEY</code> and{" "}
-                <code>JWT_SECRET</code> — they must be considered leaked.
+          <ol className="demo-beats" data-reveal>
+            <li>
+              <span>01</span>
+              <div>
+                <h3>Read the banner</h3>
+                <p>It says the page is synthetic before any finding does.</p>
               </div>
-            </div>
-          </div>
+            </li>
+            <li>
+              <span>02</span>
+              <div>
+                <h3>Open the first hit</h3>
+                <p>The evidence block is what the detector returned, redacted.</p>
+              </div>
+            </li>
+            <li>
+              <span>03</span>
+              <div>
+                <h3>Copy the summary</h3>
+                <p>The paste starts with SYNTHETIC FIXTURE, so a caption cannot drift.</p>
+              </div>
+            </li>
+          </ol>
         </div>
       </section>
 
@@ -253,7 +254,10 @@ JWT_SECRET=`}<span className="rd">██████████</span></div>
       <section className="section" id="pricing">
         <div className="sec-head" data-reveal>
           <h2>Start free. Go <em>deep</em> when you ship.</h2>
-          <p className="lead">Launch pricing — concrete limits per tier so you know what you're getting before you spend a minute.</p>
+          <p className="lead">
+            Prices below are the defaults in this repository. Confirm them before you quote them.
+            Limits are what the code enforces.
+          </p>
         </div>
         <div className="pricing" data-reveal>
           <div className="plan">
@@ -261,11 +265,10 @@ JWT_SECRET=`}<span className="rd">██████████</span></div>
             <div className="price">{price.free.price}{price.free.period && <small> {price.free.period}</small>}</div>
             <p className="pdesc">The highest-impact checks against one page.</p>
             <ul className="specs">
-              <li className="inc">1 page</li>
-              <li className="inc">Highest-impact, evidence-gated checks</li>
-              <li className="inc">Full impact + fix text</li>
-              <li className="inc">~10 second scan</li>
-              <li>Free account required</li>
+              <li className="inc">One page, plus up to 12 same-origin scripts</li>
+              <li className="inc">{freeChecks} free-tier checks, evidence-gated</li>
+              <li className="inc">Impact and fix text on unlocked findings</li>
+              <li>Account required on a deployed server</li>
             </ul>
             <a className="btn btn-ghost" href="/login">Create account &amp; scan</a>
           </div>
@@ -275,11 +278,10 @@ JWT_SECRET=`}<span className="rd">██████████</span></div>
             <div className="price">{price.deep.price} <small>{price.deep.period}</small></div>
             <p className="pdesc">Authenticated, multi-page crawl with the full engine.</p>
             <ul className="specs">
-              <li className="inc">Up to 25 pages</li>
-              <li className="inc">30+ checks incl. IDOR, broken auth, webhook forgery</li>
-              <li className="inc">Authenticated crawl</li>
-              <li className="inc">All severities, evidence-gated</li>
-              <li className="inc">Typical run: 3–8 minutes</li>
+              <li className="inc">{deepChecks} more enabled patterns than the free tier</li>
+              <li className="inc">Evidence stays off the free response</li>
+              <li className="inc">Worker job, after domain verification</li>
+              <li className="inc">Private and metadata targets refused</li>
             </ul>
             <a className="btn btn-primary" href="/dashboard">Unlock Deep Scan</a>
           </div>
@@ -289,9 +291,8 @@ JWT_SECRET=`}<span className="rd">██████████</span></div>
             <p className="pdesc">Scheduled re-scans so regressions don't ship silently.</p>
             <ul className="specs">
               <li className="inc">Everything in Deep Scan</li>
-              <li className="inc">Weekly automatic re-scans</li>
-              <li className="inc">Alerts on new findings</li>
-              <li className="inc">History + trend tracking</li>
+              <li className="inc">Re-scan on an interval you set, 1–168 hours</li>
+              <li className="inc">Needs the database and cron secret configured</li>
             </ul>
             <a className="btn btn-ghost" href="/dashboard">Start continuous</a>
           </div>
@@ -318,9 +319,9 @@ JWT_SECRET=`}<span className="rd">██████████</span></div>
 
       {/* CTA */}
       <section className="section cta" data-reveal>
-        <h2>See what your app is <em>leaking</em>.</h2>
+        <h2>See what the check can <em>prove</em>.</h2>
         <p className="lead">
-          One page, about ten seconds, evidence attached. Create a free account and run it.
+          Open the labeled sample, or scan a host you are allowed to test. A finding ships with its evidence.
         </p>
         <div className="cta-actions">
           <a className="btn btn-primary btn-arrow" href="/#scan">Run a free scan</a>

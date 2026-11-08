@@ -5,21 +5,42 @@ import { useState } from "react";
 export default function ScanShareBar({
   scanId,
   target,
-  showVerify = true
+  showVerify = true,
+  summaryMarkdown,
+  note
 }: {
   scanId: string | null | undefined;
   target: string;
   showVerify?: boolean;
+  summaryMarkdown?: string;
+  note?: string;
 }) {
   const [copied, setCopied] = useState<string | null>(null);
+
+  async function copy(text: string, which: string) {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(which);
+      setTimeout(() => setCopied(null), 1800);
+    } catch {
+      /* clipboard unavailable */
+    }
+  }
 
   if (!scanId) {
     return (
       <div className="scan-share-bar scan-share-muted">
-        <p>
-          Report saved to your account in production. In local <code>DEV_MODE</code>, scans are not
-          persisted — connect Supabase to keep history.
-        </p>
+        <div className="scan-share-copy">
+          <span className="scan-share-label">{note ? "Share card" : "Not saved"}</span>
+          <p>{note ?? "This result is not stored. Connect Supabase to keep a report link."}</p>
+        </div>
+        {summaryMarkdown && (
+          <div className="scan-share-actions">
+            <button type="button" className="btn btn-primary btn-sm" onClick={() => copy(summaryMarkdown, "summary")}>
+              {copied === "summary" ? "Copied" : "Copy summary"}
+            </button>
+          </div>
+        )}
       </div>
     );
   }
@@ -29,16 +50,6 @@ export default function ScanShareBar({
       ? `${window.location.origin}/scans/${scanId}`
       : `/scans/${scanId}`;
   const verifyUrl = `/verify/${scanId}`;
-
-  async function copy(text: string, which: string) {
-    try {
-      await navigator.clipboard.writeText(text);
-      setCopied(which);
-      setTimeout(() => setCopied(null), 1800);
-    } catch {
-      /* noop */
-    }
-  }
 
   return (
     <div className="scan-share-bar">
@@ -60,8 +71,13 @@ export default function ScanShareBar({
           className="btn btn-ghost btn-sm"
           onClick={() => copy(reportUrl, "report")}
         >
-          {copied === "report" ? "✓ Link copied" : "Copy report link"}
+          {copied === "report" ? "Copied" : "Copy report link"}
         </button>
+        {summaryMarkdown && (
+          <button type="button" className="btn btn-ghost btn-sm" onClick={() => copy(summaryMarkdown, "summary")}>
+            {copied === "summary" ? "Copied" : "Copy summary"}
+          </button>
+        )}
         {showVerify && (
           <button
             type="button"

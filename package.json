@@ -1,0 +1,17 @@
+{
+  "name": "thugir-scanner",
+  "private": true,
+  "description": "Evidence-backed security scanner for AI-built web apps.",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "npm --prefix web run dev",
+    "test": "npm --prefix web test && npm run test:worker",
+    "test:worker": "python3 -m unittest discover -s worker -t worker -p 'test_*.py'",
+    "lint": "npm --prefix web run lint",
+    "typecheck": "npm --prefix web run typecheck",
+    "demo": "npm --prefix web run demo",
+    "scan": "npm --prefix web run scan --"
+  }
+}

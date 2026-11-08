@@ -1,0 +1,30 @@
+name: Bug report
+description: Something in Thugir Scanner is wrong, and you can show it.
+title: "bug: "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Describe a defect in this repository. Do not include secrets, tokens, or personal contact details.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you ran, what you expected, and what you got.
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps
+      description: Commands or clicks. If a scan is involved, name a target you are authorized to test.
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Commit or version
+      placeholder: git rev-parse --short HEAD
+    validations:
+      required: true

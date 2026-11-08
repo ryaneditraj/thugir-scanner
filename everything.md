@@ -4,7 +4,7 @@ Complete reference for everything implemented in this project.
 
 **Product:** Thugir Scanner by Thugir Labs  
 **Version:** 0.1.0  
-**License:** Proprietary © 2026 Thugir Labs
+**License:** MIT © 2026 Ryan Editraj. See [LICENSE](LICENSE). `services/thugir-agent` is third-party MIT code; see [NOTICE](NOTICE).
 
 ---
 

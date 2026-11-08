@@ -1,0 +1,13 @@
+Thugir Scanner
+Copyright (c) 2026 Ryan Editraj
+
+The scanner in this repository (web/, worker/, supabase/, scripts/, docs/) is
+released under the MIT License in the root LICENSE file.
+
+services/thugir-agent is a vendored copy of VulnClaw.
+Copyright (c) 2026 UncleC. MIT License. See services/thugir-agent/LICENSE.
+That tree is included as an optional agent. It is not relicensed, and it is
+not claimed as original Thugir Labs code.
+
+The Deep Scan engine referred to as thugir-node / TCSF is not vendored here.
+scripts/sync-engine.sh can check it out separately when that repository is available.

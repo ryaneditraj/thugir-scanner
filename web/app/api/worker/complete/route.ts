@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { safeEqual } from "@/lib/security/compare";
 import { getServiceSupabase } from "@/lib/supabase/server";
 import { computeScanDelta, formatDeltaText, type FindingRow } from "@/lib/monitors/delta";
 import { sendEmail } from "@/lib/email/send";
@@ -32,8 +33,8 @@ export async function POST(req: NextRequest) {
   }
 
   const headerSecret = req.headers.get("x-worker-secret");
-  const secret = headerSecret ?? body.secret;
-  if (!expected || secret !== expected) {
+  const secret = headerSecret ?? body.secret ?? "";
+  if (!expected || !safeEqual(secret, expected)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 

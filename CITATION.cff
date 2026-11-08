@@ -1,0 +1,23 @@
+cff-version: 1.2.0
+title: Thugir Scanner
+message: If you use Thugir Scanner in academic work, please cite this repository.
+type: software
+authors:
+  - given-names: Ryan
+    family-names: Editraj
+    alias: ryaneditraj
+repository-code: https://github.com/ryaneditraj/thugir-scanner
+url: https://www.thugirlabs.com
+license: MIT
+version: 0.1.0
+date-released: 2026-10-24
+keywords:
+  - cybersecurity
+  - vulnerability-scanner
+  - ai-built-apps
+  - evidence
+  - web-security
+abstract: >-
+  Thugir Scanner is an evidence-backed security scanner for AI-built web apps.
+  The free tier runs in this repository and reports a finding only when the
+  check captured proof.

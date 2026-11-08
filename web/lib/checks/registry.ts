@@ -40907,13 +40907,13 @@ const vulnshopLoginJwtRouteLiveOracle: Rule = async (ctx) => {
       }
     };
   }
-  const module = vulnshopModuleEvidence(ctx, /\/login\b/i);
-  if (!module) return NEGATIVE;
+  const labModule = vulnshopModuleEvidence(ctx, /\/login\b/i);
+  if (!labModule) return NEGATIVE;
   return {
     fired: true,
-    confidence: module.confidence,
+    confidence: labModule.confidence,
     evidence: {
-      ...module.evidence,
+      ...labModule.evidence,
       scannedUrl: pageUrl,
       note: "VulnShop /login route scan — JWT is_admin broken access control with forgeable weak signing secret documented in SPA"
     }
@@ -40984,13 +40984,13 @@ const vulnshopProductsSqliRouteLiveOracle: Rule = async (ctx) => {
       }
     };
   }
-  const module = vulnshopModuleEvidence(ctx, /\/products\b/i);
-  if (!module) return NEGATIVE;
+  const labModule = vulnshopModuleEvidence(ctx, /\/products\b/i);
+  if (!labModule) return NEGATIVE;
   return {
     fired: true,
-    confidence: module.confidence,
+    confidence: labModule.confidence,
     evidence: {
-      ...module.evidence,
+      ...labModule.evidence,
       scannedUrl: pageUrl,
       note: "VulnShop /products route scan — SQL injection via product search parameter documented in SPA"
     }
@@ -41117,13 +41117,13 @@ const vulnshopOrdersIdorRouteLiveOracle: Rule = async (ctx) => {
       }
     };
   }
-  const module = vulnshopModuleEvidence(ctx, /\/orders\b/i);
-  if (!module) return NEGATIVE;
+  const labModule = vulnshopModuleEvidence(ctx, /\/orders\b/i);
+  if (!labModule) return NEGATIVE;
   return {
     fired: true,
-    confidence: module.confidence,
+    confidence: labModule.confidence,
     evidence: {
-      ...module.evidence,
+      ...labModule.evidence,
       scannedUrl: pageUrl,
       note: "VulnShop /orders route scan — IDOR via unauthenticated order lookup by sequential IDs documented in SPA"
     }
@@ -41226,13 +41226,13 @@ const vulnshopProfileMassAssignmentRouteLiveOracle: Rule = async (ctx) => {
       }
     };
   }
-  const module = vulnshopModuleEvidence(ctx, /\/profile\b/i);
-  if (!module) return NEGATIVE;
+  const labModule = vulnshopModuleEvidence(ctx, /\/profile\b/i);
+  if (!labModule) return NEGATIVE;
   return {
     fired: true,
-    confidence: module.confidence,
+    confidence: labModule.confidence,
     evidence: {
-      ...module.evidence,
+      ...labModule.evidence,
       scannedUrl: pageUrl,
       note: "VulnShop /profile route scan — mass-assignment via client-supplied balance field documented in SPA"
     }
@@ -41285,13 +41285,13 @@ const vulnshopAdminPanelRouteLiveOracle: Rule = async (ctx) => {
       }
     };
   }
-  const module = vulnshopModuleEvidence(ctx, /\/admin\b/i);
-  if (!module) return NEGATIVE;
+  const labModule = vulnshopModuleEvidence(ctx, /\/admin\b/i);
+  if (!labModule) return NEGATIVE;
   return {
     fired: true,
-    confidence: module.confidence,
+    confidence: labModule.confidence,
     evidence: {
-      ...module.evidence,
+      ...labModule.evidence,
       scannedUrl: pageUrl,
       note: "VulnShop /admin route scan — JWT is_admin bypass and zero-auth debug routes documented in SPA"
     }
@@ -41315,13 +41315,13 @@ const vulnshopUsersEnumerationRouteLiveOracle: Rule = async (ctx) => {
       }
     };
   }
-  const module = vulnshopModuleEvidence(ctx, /\/users\b/i);
-  if (!module) return NEGATIVE;
+  const labModule = vulnshopModuleEvidence(ctx, /\/users\b/i);
+  if (!labModule) return NEGATIVE;
   return {
     fired: true,
-    confidence: module.confidence,
+    confidence: labModule.confidence,
     evidence: {
-      ...module.evidence,
+      ...labModule.evidence,
       scannedUrl: pageUrl,
       note: "VulnShop /users route scan — unauthenticated user enumeration with plaintext passwords via admin and debug routes documented in SPA"
     }
@@ -41474,13 +41474,13 @@ const vulnshopJwtLoginRouteLiveOracle: Rule = async (ctx) => {
       }
     };
   }
-  const module = vulnshopModuleEvidence(ctx, /\/jwt-login\b/i);
-  if (module) {
+  const labModule = vulnshopModuleEvidence(ctx, /\/jwt-login\b/i);
+  if (labModule) {
     return {
       fired: true,
-      confidence: module.confidence,
+      confidence: labModule.confidence,
       evidence: {
-        ...module.evidence,
+        ...labModule.evidence,
         scannedUrl: pageUrl,
         note: "VulnShop /jwt-login route scan — JWT alg:none bypass documented in SPA or README markers"
       }
@@ -41558,13 +41558,13 @@ const vulnshopBuyTicketRouteLiveOracle: Rule = async (ctx) => {
       }
     };
   }
-  const module = vulnshopModuleEvidence(ctx, /\/buy-ticket\b/i);
-  if (module) {
+  const labModule = vulnshopModuleEvidence(ctx, /\/buy-ticket\b/i);
+  if (labModule) {
     return {
       fired: true,
-      confidence: module.confidence,
+      confidence: labModule.confidence,
       evidence: {
-        ...module.evidence,
+        ...labModule.evidence,
         scannedUrl: pageUrl,
         note: "VulnShop /buy-ticket route scan — race condition on ticket counter documented in SPA or README markers"
       }
@@ -41997,13 +41997,13 @@ function vulnshopRouteOracleWithFallback(
         }
       };
     }
-    const module = vulnshopModuleEvidence(ctx, pathRe);
-    if (module) {
+    const labModule = vulnshopModuleEvidence(ctx, pathRe);
+    if (labModule) {
       return {
         fired: true,
-        confidence: module.confidence,
+        confidence: labModule.confidence,
         evidence: {
-          ...module.evidence,
+          ...labModule.evidence,
           scannedUrl: pageUrl,
           note: `${routeNote} (SPA documentation markers)`
         }

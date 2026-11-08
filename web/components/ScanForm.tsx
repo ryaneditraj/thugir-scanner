@@ -3,15 +3,15 @@
 import { useEffect, useState } from "react";
 import ScanResultsPanel from "@/components/scan/ScanResultsPanel";
 import type { LockedPreview, ScanAiSummary, ScanFinding, ScanMeta } from "@/components/scan/types";
+import { reportMarkdown } from "@/lib/share/report-markdown";
 
-const SCAN_STEPS = [
-  "Loading page like a browser",
-  "Fingerprinting the stack",
-  "Scanning bundle for exposed secrets",
-  "Probing .env / .git / config paths",
-  "Testing database access rules",
-  "Checking security headers",
-  "Verifying evidence before flagging"
+const PASS_CHECKS = [
+  "Fetch the page and a capped set of same-origin scripts",
+  "Fingerprint the stack from what was fetched",
+  "Match secret patterns only when the text hits",
+  "Probe a fixed set of paths such as .env and .git",
+  "Read security headers on the response",
+  "Drop any hit that did not capture evidence"
 ];
 
 interface FreeResult {
@@ -30,7 +30,6 @@ export default function ScanForm() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<FreeResult | null>(null);
-  const [step, setStep] = useState(0);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -38,15 +37,6 @@ export default function ScanForm() {
     const prefill = params.get("scan");
     if (prefill) setUrl(prefill);
   }, []);
-
-  useEffect(() => {
-    if (!loading) return;
-    setStep(0);
-    const id = window.setInterval(() => {
-      setStep((s) => (s < SCAN_STEPS.length - 1 ? s + 1 : s));
-    }, 900);
-    return () => clearInterval(id);
-  }, [loading]);
 
   async function run(e: React.FormEvent) {
     e.preventDefault();
@@ -102,11 +92,14 @@ export default function ScanForm() {
         <div className="scan-progress" role="status" aria-live="polite">
           <div className="scan-progress-head">
             <span className="scan-progress-spin" aria-hidden="true" />
-            Scanning {url || "your app"}…
+            Running the free-tier pass on {url || "that URL"}
           </div>
+          <p className="scan-progress-note">
+            One request. These are the checks in that pass, not a live status feed.
+          </p>
           <ul className="scan-steps">
-            {SCAN_STEPS.map((label, i) => (
-              <li key={label} className={i < step ? "done" : i === step ? "active" : ""}>
+            {PASS_CHECKS.map((label) => (
+              <li key={label}>
                 <span className="sdot" aria-hidden="true" />
                 {label}
               </li>
@@ -116,10 +109,10 @@ export default function ScanForm() {
       )}
 
       <div className="scan-actions">
-        <a className="demo-link btn-arrow" href="/demo">
-          See a sample report
+        <a className="demo-link" href="/demo">
+          Open the labeled sample
         </a>
-        <span className="scan-note">No https:// needed · free account · ~10s · read-only</span>
+        <span className="scan-note">Read-only · only scan a host you are allowed to test</span>
       </div>
       <p className="consent">
         By running a scan you confirm you’re authorized to test this site. Scans are logged to your
@@ -143,6 +136,13 @@ export default function ScanForm() {
             meta={result.meta}
             findings={result.findings}
             locked={result.locked}
+            shareNote="Local runs are not stored. Copy the summary if you want to keep this result."
+            summaryMarkdown={reportMarkdown({
+              synthetic: false,
+              target: result.target,
+              detectedPlatform: result.detectedPlatform,
+              findings: result.findings
+            })}
           />
         </div>
       )}
